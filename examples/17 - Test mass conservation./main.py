@@ -71,9 +71,9 @@ for i in range(N_m):
             summa += m_k * dm_k * K[k, i, j]
 
         machine_precision = abs(summa) < 1e-12
-        # b.append(machine_precision)
+        b.append(machine_precision)
         # b.append(np.log(abs(summa)))
-        b.append(abs(summa))
+        # b.append(abs(summa))
         if machine_precision:
             summa_2 += 1
         print(f"{i=}\t{j=}\t{machine_precision}\t{summa=}")
