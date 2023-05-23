@@ -38,5 +38,6 @@ if __name__ == "__main__":
         kernels,
         symmetrize_kernels=True,
         kernel_subplot_titles=["$K_{kij}$"],
+        cmap_limits=(-1, 1),
     )
     p.show()

@@ -75,6 +75,7 @@ if __name__ == "__main__":
     p = InteractiveKernelLayerPlot(
         kernels,
         kernel_subplot_titles=kernel_subplot_titles,
+        cmap_limits=(-1, 1),
     )
     p.show()
 

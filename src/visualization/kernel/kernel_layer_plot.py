@@ -14,6 +14,7 @@ class KernelLayerPlot():
         figsize=None,
         symmetrize_kernels=False,
         kernel_subplot_titles=[],
+        cmap_limits=None,
     ):
         # Pre-define `figsize` for 1, 2, or 3 kernels.
         if figsize is None:
@@ -39,8 +40,13 @@ class KernelLayerPlot():
         assert_equal_kernel_shapes(kernels)
         self.kernels = kernels
         # Define colormap norm for colorbar.
-        vmax = max([float(np.abs(K).max()) for K in self.kernels])
-        self.cmap_norm = colors.TwoSlopeNorm(vmin=-vmax, vcenter=0, vmax=vmax)
+        if cmap_limits is None:
+            vmax = max([float(np.abs(K).max()) for K in self.kernels])
+            vmin = -vmax
+        else:
+            vmin = cmap_limits[0]
+            vmax = cmap_limits[1]
+        self.cmap_norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
         # Define field for list of subplot titles.
         self.kernel_subplot_titles = kernel_subplot_titles
         # Initialize display of plot.
