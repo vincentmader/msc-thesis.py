@@ -1,4 +1,5 @@
 .DS_Store
+/.venv
 /figures
 /src/solver/kees_solvers
 /src/visualization/mpl-styles
