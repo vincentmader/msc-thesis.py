@@ -90,6 +90,8 @@ class Kernel():
     def K_frag(self, mg, R_coll):
         indices, masses = mg.indices(), mg.grid_cell_boundaries()
         #                                 ^ TODO Use bounds or centers?
+        
+        dm = masses[1:] - masses[:-1]
 
         fragmentation_variants = self.cfg.enable_fragmentation_variant
 
@@ -104,7 +106,7 @@ class Kernel():
 
                 if "naive/pulverization" in fragmentation_variants:
 
-                    X = 10
+                    X = 10 # TODO Play around with this value, observe changes!
                     k = 0
                     m_k = masses[k]
                     if min(i, j) > X:
@@ -123,11 +125,6 @@ class Kernel():
                 if "mrn" in fragmentation_variants:
 
                     q = -11/6
-    
-                    # # This is the lowest bin at which fragmentation can occur.
-                    X = 10  # (chosen arbitrarily at the moment)
-                    if min(i, j) <= X: # Skip fragmentation for masses lower than `X`.
-                        continue
 
                     # Define total mass that needs to be "moved".
                     m_tot = m_i + m_j
@@ -135,30 +132,34 @@ class Kernel():
                     # Define range of masses resulting from fragmentation event.
                     m_min = masses[0]
                     m_max = m_tot
-                    # m_max = max(m_i, m_j)
-                    # ^ Note: This is not the maximum allowed mass, but the "first non-allowed".
-                    # m_max = max(masses[max(0, i-1)], masses[max(0, j-1)])
-                    # ^ Note: Maybe it is necessary to define it like this? (change ">=" to ">" then)
+                    k_min = mg.index_from_value(m_min)
+                    k_max = mg.index_from_value(m_max)
+                    k_max = min(mg.N_x-1, k_max)
+    
+                    # This is the lowest bin at which fragmentation can occur.
+                    if min(i, j) < k_min:
+                        continue
 
-                    A = (q+2) * m_tot / (m_max**(q+2) - m_min**(q+2))  # TODO Calculate from numerical integral
+                    top = m_i * dm[i] * R_coll[i, j] + m_j * dm[j] * R_coll[i, j]
+                    bottom = sum([masses[k] * dm[k] * masses[k]**q for k in range(k_min, k_max)])
+                    A = top / bottom
 
                     # Remove mass from bins corresponding to initial masses.
                     K[i, i, j] -= R_coll[i, j]
-                    # ^ Note: Move this into the for loop? (with fraction `f` as prefactor?)
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
                     for k, m_k in zip(indices, masses):
-                        if m_k >= m_max: # <- Note: See note above. ">=" instead of ">" here.
+                        if m_k > m_max:
                             continue
 
-                        # Define fraction `f` of mass `m_tot` landing in bin `k`.
-                        n = A * m_k**q
-                        f = n / m_tot
-
                         # Add mass to bin.
-                        eps = (m_i + m_j) / m_k
-                        K[k, i, j] += R_coll[i, j] * f * th * eps
+                        n = A * m_k**q
+                        K[k, i, j] += R_coll[i, j] * n
+
+                        # f = n / m_tot
+                        # eps = (m_i + m_j) / m_k
+                        # K[k, i, j] += R_coll[i, j] * f * #th #* eps
 
                 # 3. "Splitting"
                 # ═════════════════════════════════════════════════════════════════
