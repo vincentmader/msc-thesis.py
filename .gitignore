@@ -1,1 +1,4 @@
 .DS_Store
+__pycache__
+src/solver/kees_solvers
+src/visualization/mpl-styles

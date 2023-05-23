@@ -1,0 +1,90 @@
+import numpy as np
+from tqdm import tqdm
+from utils.errors import handle_unknown_solver
+from disk.time_grid import TimeGrid
+from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
+
+
+class Solver:
+    def __init__(self, cfg):
+        self.cfg = cfg
+        self.time_axis = TimeGrid(cfg)
+
+    def run(self, mg, ns, K):
+        solver = self.cfg.solver_variant
+        N_m = mg.N_x
+
+        nsubst = 1  # Nr of time substeps between storage of result
+        niter = 4   # Nr of iterations for implicit time step
+
+        tg = self.time_axis
+        N_t = tg.N_x
+        time = tg.grid_cell_centers()  # todo
+        # T_START, T_END, N_t = 1e0, 1e9, 200
+        # time = np.linspace(0, T_END, N_t)
+        # time = T_START * (T_END / T_START)**np.linspace(0, 1, N_t)
+
+        # MUST be kept logarithmically spaced
+        mgrain = mg.grid_cell_boundaries()[:-1]
+        # mgrain = m_min * (m_max / m_min)**np.linspace(0, 1, N_m)
+        migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
+        migrain = np.hstack((  # TODO Move elsewhere.
+            migrain[0]**2 / migrain[1],
+            migrain,
+            migrain[-1]**2 / migrain[-2]
+        ))
+        dmgrain = migrain[1:] - migrain[:-1]
+
+        # Create initial distribution: Nr of particles per interval dmass per volume.
+        # n_dust = np.zeros(N_m)
+        # n_dust[0] = 1.0 / dmgrain[0]  TODO
+        # n_dust[30] = 1.0 / dmgrain[30]
+        # Convert this to number of particles per mass bin per volume
+        # N_dust = n_dust * dmgrain
+
+        # TODO use bounds or center?
+        N_dust = mg.grid_cell_boundaries()[:-1] * ns
+        # def run_solver(N_dust):
+        N_dust_store = np.zeros((N_t, N_m))
+        N_dust_store[0, :] = N_dust.copy()
+        s = np.zeros((N_m))
+        rmat = np.zeros((N_m, N_m))
+        for itime in tqdm(range(1, N_t)):
+            dt = (time[itime] - time[itime - 1]) / nsubst
+            for j in range(nsubst):
+                if solver == "explicit_euler":
+                    dNdt = (
+                        K[:, :, :] * N_dust[None, :, None] *
+                        N_dust[None, None, :]
+                    ).sum(axis=2).sum(axis=1)
+                    N_dust += dNdt * dt
+                elif solver == "implicit_euler":
+                    N_dust = solve_react_0d_equation(
+                        N_dust, s, rmat=rmat, kmat=K,
+                        dt=dt, niter=niter, method="backwardeuler"
+                    )
+                elif solver == "implicit_radau":
+                    N_dust = solve_react_0d_equation(
+                        N_dust, s, rmat=rmat, kmat=K,
+                        dt=dt, niter=niter, method="radau"
+                    )
+                else:
+                    handle_unknown_solver(solver)
+                N_dust_store[itime, :] = N_dust.copy()
+
+        # Translate back to physical units
+        f = N_dust_store / dmgrain
+        m2f = f * mgrain**2
+        return N_dust_store, f, m2f
+
+
+# def dndt(mg, n, K):
+#     N_m = mg.N_x
+#     dndt = np.zeros((N_m))
+#     for k in range(N_m):
+#         dndt_k = 0
+#         for i in range(N_m):
+#             for j in range(N_m):
+#                 dndt_k += K[k][i][j] * n[i] * n[j]
+#         dndt[k] = dndt_k
+#     return dndt

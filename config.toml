@@ -1,0 +1,51 @@
+[disk]
+  stellar_mass = 1          # given in units of M_sun
+  stellar_luminosity = 1    # given in units of L_sun
+  disk_mass_ratio = 0.01    # given as ratio M_disk/M_star
+  dust_to_gas_ratio = 0.01  # given as ratio M_dust/M_gas
+  distance_to_star = 10     # given in AUs
+  flaring_angle = 0.05      # given in rad
+  enable_physical_gas_density=true
+
+[radial_discretization]
+  radial_min_value = 1e-2   # given in AUs
+  radial_max_value = 1e+2   # given in AUs
+  radial_resolution = 100   # given as nr. of bins in radial grid
+  radial_axis_scale = "log"
+
+[mass_discretization]
+  mass_min_value = 1e-15    # given in kg  (a=1e-4 cm -> m=10e-15 kg)
+  mass_max_value = 1e+6     # given in kg  (a=1e+3 cm -> m=10e+6  kg)
+  mass_resolution = 50      # given as nr. of bins in mass grid
+  mass_axis_scale = "log"
+  mass_open_boundary = false  # TODO Assure correct usage (or remove?)
+
+[time_discretization]
+  time_min_value = 1        # given in s
+  time_max_value = 3e+18    # given in s   (t=100 My -> t=3e+15 s)
+  time_resolution = 100     # given as nr. of bins in time grid
+  time_axis_scale = "log"
+
+[kernel]
+  enable_coagulation = true
+  enable_fragmentation = true
+  enable_cancellation_handling = true 
+  enable_physical_cross_sections = true
+  enable_physical_relative_velocities = [
+    "brownian_motion",
+    "radial_drift",
+    "turbulence",
+    "azimuthal",
+  # "differential_settling",  # NOTE keep turned off for now
+  ]
+  enable_fragmentation_variant = [
+    "naive/pulverization",
+    # "mrn",
+  ]
+
+[solver]
+  solver_variant = "implicit_radau"
+  # ^ Options: "explicit_euler", "implicit_euler", "implicit_radau"
+
+[plotting]
+  mpl_dark_mode = false
