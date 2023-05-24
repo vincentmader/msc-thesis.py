@@ -23,9 +23,8 @@ def dirac_delta(cfg):
         # Is linear interpolation good enough here? -> Yes!
     else:
         RHO_g = 1
-    DM = dm * m[x_0]
 
-    M = RHO_g / m[x_0] / DM
+    M = RHO_g / m[x_0] / dm
 
     n0 = np.zeros([mg.N_x])
     n0[x_0] = M
@@ -48,9 +47,9 @@ def mrn_distribution(cfg):
     m_max = m[-1]
 
     R = cfg.distance_to_star
-    RHO_g = np.interp(R, r[:-1], rho_g) 
-    DM = dm * m[x_0]
-    M = RHO_g / m[x_0] / DM
+    RHO_g = np.interp(R, r[:-1], rho_g)
+
+    M = RHO_g / m[x_0] / dm
 
     q = -11/6
     n0 = np.ones(mg.N_x) * m**q

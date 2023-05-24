@@ -25,7 +25,7 @@ class DiscreteAxis:
     def indices(self):
         return np.arange(0, self.N_x, 1)
 
-    def grid_cell_boundaries(self):
+    def grid_cell_boundaries(self) -> np.ndarray:
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         indices = np.linspace(0, 1, N_x + 1)
         if self.scale == "lin":
@@ -34,7 +34,7 @@ class DiscreteAxis:
             return x_min * (x_max / x_min) ** indices
         handle_unknown_scale(self.scale)
 
-    def grid_cell_centers(self):
+    def grid_cell_centers(self) -> np.ndarray:
         xs = self.grid_cell_boundaries()
         if self.scale == "lin":
             return (xs[:-1] + xs[1:]) / 2
@@ -42,15 +42,11 @@ class DiscreteAxis:
             return np.sqrt(xs[:-1] * xs[1:])
         handle_unknown_scale(self.scale)
 
-    def grid_cell_width(self) -> float:
-        x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
-        if self.scale == "lin":
-            return (x_max - x_min) / N_x
-        if self.scale == "log":
-            return (x_max / x_min)**(1 / N_x)
-        handle_unknown_scale(self.scale)
+    def grid_cell_widths(self) -> np.ndarray:
+        grid_cell_boundaries = self.grid_cell_boundaries()
+        return grid_cell_boundaries[1:] - grid_cell_boundaries[:-1]
 
-    def index_from_value(self, x):
+    def index_from_value(self, x) -> int:
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
             d_x = (x_max - x_min) / N_x
@@ -62,7 +58,7 @@ class DiscreteAxis:
             return res.astype(int)
         handle_unkown_scale(self.scale)
 
-    def value_from_index(self, i):
+    def value_from_index(self, i) -> float:
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
             d_x = (x_max - x_min) / N_x
