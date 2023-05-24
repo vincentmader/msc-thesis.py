@@ -27,11 +27,11 @@ class DiscreteAxis:
 
     def grid_cell_boundaries(self):
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
-        xs = np.linspace(0, 1, N_x + 1)
+        indices = np.linspace(0, 1, N_x + 1)
         if self.scale == "lin":
-            return x_min + (x_max - x_min) * xs
+            return x_min + (x_max - x_min) * indices
         if self.scale == "log":
-            return x_min * (x_max / x_min) ** xs
+            return x_min * (x_max / x_min) ** indices
         handle_unknown_scale(self.scale)
 
     def grid_cell_centers(self):
@@ -61,9 +61,11 @@ class DiscreteAxis:
         handle_unkown_scale(self.scale)
 
     def value_from_index(self, i):
-        x_min, dx = self.x_min, self.grid_cell_width()
+        x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
-            return x_min + dx * i
+            d_x = (x_max - x_min) / N_x
+            return x_min + d_x * i
         if self.scale == "log":
-            return x_min * dx**i
+            q_x = (x_max / x_min)**(1 / N_x)
+            return x_min * q_x**i
         handle_unkown_scale(self.scale)
