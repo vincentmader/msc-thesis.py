@@ -15,7 +15,7 @@ def dirac_delta(cfg):
     rho_g = disk.midplane_gas_volume_density(r[:-1], Sigma_g)
 
     m = mg.grid_cell_centers()
-    dm = mg.grid_cell_width()
+    dm = mg.grid_cell_widths()[x_0]
 
     R = cfg.distance_to_star
     if cfg.enable_physical_gas_density:
@@ -42,7 +42,7 @@ def mrn_distribution(cfg):
     rho_g = disk.midplane_gas_volume_density(r[:-1], Sigma_g)
 
     m = mg.grid_cell_centers()
-    dm = mg.grid_cell_width()
+    dm = mg.grid_cell_widths()[x_0]
 
     m_min = m[0]
     m_max = m[-1]
