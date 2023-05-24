@@ -3,7 +3,20 @@ from utils.errors import handle_unknown_scale
 
 
 class DiscreteAxis:
+
     def __init__(self, x_min, x_max, N_x, scale):
+        """
+        Create a new `DiscreteAxis` object.
+
+        Args:
+            x_min:  This is the lower boundary of the discretized axis.
+            x_max:  This is the upper boundary of the discretized axis.
+            N_x:    This is the number of grid-points (bins) in the discretized axis.
+            scale:  This should be either "lin" (linear) or "log" (logarithmic).
+
+        Returns:
+            None
+        """
         self.x_min = x_min
         self.x_max = x_max
         self.N_x = N_x
