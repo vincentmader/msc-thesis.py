@@ -24,6 +24,8 @@ class Kernel():
 
         K = np.zeros(shape=[N_m] * 3)
 
+        m_max = mg.value_from_index(N_m - 1)
+
         # Loop over all mass pairs.  TODO Use bounds or centers here?
         indices, masses = mg.indices(), mg.grid_cell_boundaries()[:-1]
         for i, m_i in zip(indices, masses):
@@ -35,6 +37,8 @@ class Kernel():
 
                 # Calculate combined mass after hit-and-stick collision.
                 m_k = m_i + m_j
+                if m_k >= m_max:
+                    continue
 
                 # If a non-linear grid is used, the corresponding index will
                 # not necessarily be an integer. Therefore, the resulting mass
