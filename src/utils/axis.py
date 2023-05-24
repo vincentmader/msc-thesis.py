@@ -35,11 +35,11 @@ class DiscreteAxis:
         handle_unknown_scale(self.scale)
 
     def grid_cell_centers(self):
-        x = self.grid_cell_boundaries()
+        xs = self.grid_cell_boundaries()
         if self.scale == "lin":
-            return (x[:-1] + x[1:]) / 2
+            return (xs[:-1] + xs[1:]) / 2
         if self.scale == "log":
-            return np.sqrt(x[:-1] * x[1:])
+            return np.sqrt(xs[:-1] * xs[1:])
         handle_unknown_scale(self.scale)
 
     def grid_cell_width(self) -> float:
