@@ -51,12 +51,14 @@ class DiscreteAxis:
         handle_unknown_scale(self.scale)
 
     def index_from_value(self, x):
-        x_min, dx = self.x_min, self.grid_cell_width()
+        x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
-            res = (x - x_min) / dx
+            d_x = (x_max - x_min) / N_x
+            res = (x - x_min) / d_x
             return res.astype(int)
         if self.scale == "log":
-            res = np.log(x / x_min) / np.log(dx)
+            q_x = (x_max / x_min)**(1 / N_x)
+            res = np.log(x / x_min) / np.log(q_x)
             return res.astype(int)
         handle_unkown_scale(self.scale)
 
