@@ -99,12 +99,11 @@ class Disk:
 
 
 def disk_mass_from_distribution(
-    m: np.ndarray,
     n: np.ndarray,
+    m: np.ndarray,
+    dm: np.ndarray,
 ):
-    dm = m[1:] - m[:-1]
-    m_tot = np.sum(m[:-1] * dm * n[:-1])  # TODO Is it correct like this?
-    # m_tot = np.sum(m**2 * n)
+    m_tot = np.sum(m * dm * n)  # TODO Is it correct like this?
     return m_tot
 
 

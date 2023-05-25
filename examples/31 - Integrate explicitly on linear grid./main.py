@@ -39,7 +39,9 @@ cfg = Config(
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
-m = mg.grid_cell_boundaries()[:-1]  # TODO use bounds or centers?
+m = mg.grid_cell_centers()
+boundaries = mg.grid_cell_boundaries()
+dm = boundaries[1:] - boundaries[:-1]
 
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)
@@ -93,7 +95,7 @@ if __name__ == "__main__":
 
     # Prepare abscissa & ordinate for plot of disk mass error.
     t = tg.grid_cell_centers()
-    Ms = [disk_mass_from_distribution(m, n) for n in f]
+    Ms = [disk_mass_from_distribution(n, m, dm) for n in f]
 
     # Create plots.
     plot_1(m, m2f, dm2f)
