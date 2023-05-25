@@ -22,9 +22,6 @@ class DiscreteAxis:
         self.N_x = N_x
         self.scale = scale
 
-    def indices(self):
-        return np.arange(0, self.N_x, 1)
-
     def grid_cell_boundaries(self) -> np.ndarray:
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         indices = np.linspace(0, 1, N_x + 1)
@@ -62,8 +59,10 @@ class DiscreteAxis:
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
             d_x = (x_max - x_min) / N_x
-            return x_min + d_x * i
+            res = x_min + d_x * i
+            return np.float64(res)
         if self.scale == "log":
             q_x = (x_max / x_min)**(1 / N_x)
-            return x_min * q_x**i
+            res = x_min * q_x**i
+            return np.float64(res)
         handle_unkown_scale(self.scale)
