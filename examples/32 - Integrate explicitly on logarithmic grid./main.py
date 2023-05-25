@@ -40,7 +40,7 @@ cfg = Config(
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
-m = mg.grid_cell_boundaries()[:-1]
+m = mg.grid_cell_centers()
 boundaries = mg.grid_cell_boundaries()
 dm = boundaries[1:] - boundaries[:-1]
 
