@@ -46,7 +46,7 @@ class DiscreteAxis:
         grid_cell_boundaries = self.grid_cell_boundaries()
         return grid_cell_boundaries[1:] - grid_cell_boundaries[:-1]
 
-    def index_from_value(self, x) -> int:
+    def index_from_value(self, x):
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
             d_x = (x_max - x_min) / N_x
@@ -58,7 +58,7 @@ class DiscreteAxis:
             return res.astype(int)
         handle_unkown_scale(self.scale)
 
-    def value_from_index(self, i) -> float:
+    def value_from_index(self, i):
         x_min, x_max, N_x = self.x_min, self.x_max, self.N_x
         if self.scale == "lin":
             d_x = (x_max - x_min) / N_x

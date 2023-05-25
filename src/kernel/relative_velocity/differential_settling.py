@@ -3,9 +3,7 @@ import numpy as np
 
 def dv_differential_settling(cfg, disk, disk_region):
     mg = disk.mass_axis
-    indices = mg.indices()
-    masses = mg.grid_cell_boundaries()
-    # ^ TODO Use bounds or centers?
+    masses = mg.grid_cell_centers()
 
     Omega_K = disk_region.Omega_K
     stopping_times = disk_region.stopping_time(masses)
@@ -13,8 +11,8 @@ def dv_differential_settling(cfg, disk, disk_region):
     settling_velocities = v_sett(stopping_times, Omega_K, scale_heights)
 
     dv = np.zeros(shape=[mg.N_x] * 2)
-    for i, _ in zip(indices, masses):
-        for j, _ in zip(indices, masses):
+    for i, _ in enumerate(masses):
+        for j, _ in enumerate(masses):
 
             v_i = settling_velocities[i]
             v_j = settling_velocities[j]

@@ -1,11 +1,11 @@
 import os
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import MassGrid
-    from utils.plotting import plt_show_then_close
 except ModuleNotFoundError as e:
     raise e
 
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         cfg.mass_axis_scale = scale
 
         mg = MassGrid(cfg)
-        i = mg.indices()
+        i = np.arange(0, mg.N_x, mg.N_x)
         m = mg.grid_cell_boundaries()[:-1]
         # ^ NOTE: Using bounds (not centers) here,
         #   since centers are indexed by x.5 values.

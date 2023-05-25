@@ -5,7 +5,6 @@ from disk.dust_particle import particle_radius_from_mass
 
 def dv_radial_drift(cfg, disk, disk_region):
     mg = disk.mass_axis
-    indices = mg.indices()
 
     del_ln_P_g_del_ln_r = disk_region.gas_pressure_gradient
     delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
@@ -19,9 +18,9 @@ def dv_radial_drift(cfg, disk, disk_region):
               delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r)
 
     dv = np.zeros(shape=[mg.N_x] * 2)
-    for i in indices:
+    for i, _ in enumerate(masses):
         v_i = v_r[i]
-        for j in indices:
+        for j, _ in enumerate(masses):
             v_j = v_r[j]
 
             dv[i, j] = np.abs(v_j - v_i)

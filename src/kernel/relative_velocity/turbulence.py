@@ -7,8 +7,7 @@ from disk.dust_particle import particle_radius_from_mass
 
 def dv_turbulence(cfg, disk, disk_region):
     mg = disk.mass_axis
-    indices = mg.indices()
-    masses = mg.grid_cell_boundaries()  # TODO Use bounds or centers?
+    masses = mg.grid_cell_centers()
     radii = particle_radius_from_mass(masses)
 
     T_mid = disk_region.T_mid
@@ -30,8 +29,8 @@ def dv_turbulence(cfg, disk, disk_region):
 
     def v3():
         dv = np.zeros(shape=[mg.N_x] * 2)
-        for i, m_i in zip(indices, masses):
-            for j, m_j in zip(indices, masses):
+        for i, _ in enumerate(masses):
+            for j, _ in enumerate(masses):
                 t_i = t_stop[i]
                 t_j = t_stop[j]
                 dv[i, j] = ormelcuzzi(t_i, t_j, rho_g, T_mid, vturb0, tturb0)

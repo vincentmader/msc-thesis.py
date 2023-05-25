@@ -8,8 +8,7 @@ E_d = 1    # Kees 2023-03-21
 
 def dv_azimuthal(cfg, disk, disk_region):
     mg = disk.mass_axis
-    indices = mg.indices()
-    masses = mg.grid_cell_centers()  # TODO Use bounds or centers?
+    masses = mg.grid_cell_centers()
     radii = particle_radius_from_mass(masses)
 
     stopping_times = disk_region.stopping_time(radii)
@@ -17,8 +16,8 @@ def dv_azimuthal(cfg, disk, disk_region):
     u = u_n(disk_region)
 
     dv = np.zeros(shape=[mg.N_x] * 2)
-    for i, _ in zip(indices, masses):
-        for j, _ in zip(indices, masses):
+    for i, _ in enumerate(masses):
+        for j, _ in enumerate(masses):
 
             St_i = stokes_nrs[i]
             St_j = stokes_nrs[j]

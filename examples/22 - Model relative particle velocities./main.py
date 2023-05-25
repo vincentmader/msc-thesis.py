@@ -43,8 +43,7 @@ if cfg.mpl_dark_mode:
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
 N_m = mg.N_x
-indices = mg.indices()
-masses = mg.grid_cell_boundaries()  # TODO Use bounds or centers?
+masses = mg.grid_cell_centers()  # TODO Use bounds or centers?
 
 # Calculate particle radii from masses.
 radii = particle_radius_from_mass(masses)
@@ -77,28 +76,28 @@ plot_setups = [
 ]
 
 
-def upper_half(m):
-    res = m
-    for i in range(len(m)):
-        for j in range(len(m)):
-            if i < j:
-                res[i, j] = None
-    return res
+# def upper_half(m):
+#     res = m
+#     for i in range(len(m)):
+#         for j in range(len(m)):
+#             if i < j:
+#                 res[i, j] = None
+#     return res
 
 
-def foo():
-    ticks, locs = [], []
-    ns = []  # n = order of magnitude
-    for i, m in enumerate(mg.grid_cell_boundaries()):
-        n = int(np.log10(m))
-        if n not in ns:
-            ns.append((i, n))
-    for i, n in ns:
-        m = 10**n
-        locs.append(i)
-        ticks.append(m)
-    ticks = ['%.0e' % i for i in ticks]
-    return locs[::10], ticks[::10]
+# def foo():
+#     ticks, locs = [], []
+#     ns = []  # n = order of magnitude
+#     for i, m in enumerate(mg.grid_cell_boundaries()):
+#         n = int(np.log10(m))
+#         if n not in ns:
+#             ns.append((i, n))
+#     for i, n in ns:
+#         m = 10**n
+#         locs.append(i)
+#         ticks.append(m)
+#     ticks = ['%.0e' % i for i in ticks]
+#     return locs[::10], ticks[::10]
 
 
 def plot(dv, title):

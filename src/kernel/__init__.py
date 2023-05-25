@@ -26,10 +26,10 @@ class Kernel():
 
         m_max = mg.value_from_index(N_m - 1)
 
-        # Loop over all mass pairs.  TODO Use bounds or centers here?
-        indices, masses = mg.indices(), mg.grid_cell_boundaries()[:-1]
-        for i, m_i in zip(indices, masses):
-            for j, m_j in zip(indices, masses):
+        # Loop over all mass pairs.
+        masses = mg.grid_cell_boundaries()[:-1]
+        for i, m_i in enumerate(masses):
+            for j, m_j in enumerate(masses):
                 th = heaviside_theta(i - j)
 
                 # Get collision rate for mass pair.
@@ -92,17 +92,16 @@ class Kernel():
         return K
 
     def K_frag(self, mg, R_coll):
-        indices, masses = mg.indices(), mg.grid_cell_boundaries()
-        #                                 ^ TODO Use bounds or centers?
-        
-        dm = masses[1:] - masses[:-1]
+        masses = mg.grid_cell_centers()
+        boundaries = mg.grid_cell_boundaries()
+        dm = boundaries[1:] - boundaries[:-1]
 
         fragmentation_variants = self.cfg.enable_fragmentation_variant
 
         K = np.zeros(shape=[mg.N_x] * 3)
 
-        for i, m_i in zip(indices, masses):
-            for j, m_j in zip(indices, masses):
+        for i, m_i in enumerate(masses):
+            for j, m_j in enumerate(masses):
                 th = heaviside_theta(i - j)
 
                 # 1. "Pulverization"
@@ -153,7 +152,7 @@ class Kernel():
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
-                    for k, m_k in zip(indices, masses):
+                    for k, m_k in enumerate(masses):
                         if m_k > m_max:
                             continue
 
