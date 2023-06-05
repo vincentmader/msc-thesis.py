@@ -138,7 +138,7 @@ class Kernel():
                     k_min = mg.index_from_value(m_min)
                     k_max = mg.index_from_value(m_max)
                     k_max = min(mg.N_x-1, k_max)
-    
+
                     # This is the lowest bin at which fragmentation can occur.
                     if min(i, j) < k_min:
                         continue
