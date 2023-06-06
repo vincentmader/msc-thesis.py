@@ -78,12 +78,17 @@ for i in range(N_m):
         print(f"{i=}\t{j=}\t{machine_precision}\t{summa=}")
     a.append(b)
 print(f"\n{summa_2} = / {N_m**2} = {round(summa_2/N_m**2*100)} %")
-a = np.array(a)
+b = np.array(a)
 
 # Create plot & show it.
 # plt.imshow(a, cmap="brg")
 # plt.ylabel("$i$", rotation=0)
 # plt.xlabel("$j$")
+
+from kernel import test_mass_conservation
+a = test_mass_conservation(kernel)
+
+assert a.all() == b.all()
 
 p = InteractiveKernelLayerPlot(
     [K], kernel_subplot_titles=["$K_{kij}$"],
