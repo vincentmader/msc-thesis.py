@@ -8,6 +8,7 @@ from utils.functions import heaviside_theta
 class Kernel():
 
     def __init__(self, cfg):
+
         self.cfg = cfg
 
         # Define discrete axis for radial distance from star, as well as for mass.
@@ -48,6 +49,7 @@ class Kernel():
         self.K = K
 
     def _K_coag(self, mg, R_coll):
+
         N_m = mg.N_x
         m_max = mg.value_from_index(N_m - 1)
 
@@ -120,6 +122,7 @@ class Kernel():
         return {"gain": K_gain, "loss": K_loss}
 
     def _K_frag(self, mg, R_coll):
+
         masses = mg.grid_cell_centers()
         boundaries = mg.grid_cell_boundaries()
         dm = boundaries[1:] - boundaries[:-1]
@@ -133,7 +136,7 @@ class Kernel():
             for j, m_j in enumerate(masses):
                 th = heaviside_theta(i - j)
 
-                # 1. "Pulverization"
+                # 1. Most basic/naive fragmentation implementation: "Pulverization"
                 # ═════════════════════════════════════════════════════════════════
 
                 if "naive/pulverization" in fragmentation_variants:
@@ -146,12 +149,7 @@ class Kernel():
                         K_loss[i, i, j] -= R_coll[i, j]
                         K_gain[k, i, j] += R_coll[i, j] * th * eps
 
-                # todo Implement other variants of fragmentation.
-                # - Cratering
-                # - Erosion (Watch out for cancellation.)
-                # - ...
-
-                # 2. MRN
+                # 2. Mass redistribution following the MRN model
                 # ═════════════════════════════════════════════════════════════════
 
                 if "mrn" in fragmentation_variants:
@@ -188,28 +186,5 @@ class Kernel():
                         # Add mass to bin.
                         n = A * m_k**q
                         K_gain[k, i, j] += R_coll[i, j] * n
-
-                        # f = n / m_tot
-                        # eps = (m_i + m_j) / m_k
-                        # K[k, i, j] += R_coll[i, j] * f * #th #* eps
-
-                # 3. "Splitting"
-                # ═════════════════════════════════════════════════════════════════
-
-                # if min(i, j) > X:
-                #     l, h = min(i, j), max(i, j)
-
-                #     m_ll = masses[l] / 2
-                #     k_l = mass_grid.index_from_value(m_ll)
-                #     m_hh = masses[h] / 2
-                #     k_h = mass_grid.index_from_value(m_hh)
-
-                #     eps_l = masses[l] / m_ll
-                #     eps_h = masses[h] / m_hh
-
-                #     K[l, i, j] -= R[i, j]
-                #     K[k_l, i, j] += R[i, j] * th * eps_l
-                #     K[h, i, j] -= R[i, j]
-                # K[k_h, i, j] += R[i, j] * th * eps_h
 
         return {"gain": K_gain, "loss": K_loss}
