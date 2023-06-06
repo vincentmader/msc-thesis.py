@@ -11,30 +11,33 @@ class Kernel():
 
         self.cfg = cfg
 
-        # Define discrete axis for radial distance from star, as well as for mass.
+        # Define discrete axes for...
+        # ...radial distance of disk region of interest from central star.
         rg = RadialGrid(cfg)
+        # ...particle mass.
         mg = MassGrid(cfg)
-        N_m = mg.N_x
-        
-        # Define disk, the position of interest in it, & the disk properties there.
+        N_m = mg.N_x  # <- This is the number of bins in the mass grid.
+        # Define protoplanetary disk, & the position of interest in it.
         disk = Disk(cfg, rg, mg)
         disk_region = DiskRegion(cfg, disk)
+        # Define particle collision rates.
         if cfg.enable_physical_relative_velocities:
             R_coll = collision_rate(cfg, disk, disk_region)
-        else:
+        else:  # In the most simple case, the rates are just set to 1.
             R_coll = np.ones(shape=[mg.N_x]*2)
 
-        # Define kernel sub-components (gain & loss, for coag. & frag.)
+        # Define gain & loss kernel sub-components for...
+        # ...stick-and-hit coagulation processes.
         K_coag = self._K_coag(mg, R_coll)
-        K_frag = self._K_frag(mg, R_coll)
         K_coag_gain = K_coag["gain"]
         K_coag_loss = K_coag["loss"]
+        K_coag = K_coag_gain + K_coag_loss
+        # ...fragmentation processes.
+        K_frag = self._K_frag(mg, R_coll)
         K_frag_gain = K_frag["gain"]
         K_frag_loss = K_frag["loss"]
-        K_coag = K_coag_gain + K_coag_loss
         K_frag = K_frag_gain + K_frag_loss
-
-        # Define total kernel & apply coagulation & fragmentation processes.
+        # Define total kernel.
         K = np.zeros(shape=[N_m] * 3)
         K += K_coag if cfg.enable_coagulation else 0
         K += K_frag if cfg.enable_fragmentation else 0
