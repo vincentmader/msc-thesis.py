@@ -23,14 +23,14 @@ class DiscreteAxis:
 
     def grid_cell_boundaries(self) -> np.ndarray:
         x_min, x_max, N = self.x_min, self.x_max, self.N
-        indices = np.linspace(0, 1, N + 1)  # TODO Rename: These are not "indices".
+        indices = np.arange(0, N + 1, 1)
         if self.scale == "lin":
-            x = x_min + (x_max - x_min) * indices
-            assert x[0] == x_min and x[-1] == x_max
+            x = x_min + (x_max - x_min) * (indices / N)
+            assert x[0] == x_min and x[N] == x_max
             return x
         if self.scale == "log":
-            x = x_min * (x_max / x_min) ** indices
-            assert x[0] == x_min and x[-1] == x_max
+            x = x_min * (x_max / x_min) ** (indices / N)
+            assert x[0] == x_min and x[N] == x_max
             return x
         raise Exception(f"Axis scale '{self.scale}' unknown.")
 
@@ -60,6 +60,7 @@ class DiscreteAxis:
 
     def value_from_index(self, i) -> np.float64:
         x_min, x_max, N = self.x_min, self.x_max, self.N
+        assert 0 <= i < N
         if self.scale == "lin":
             d_x = (x_max - x_min) / N
             res = x_min + d_x * i
