@@ -22,13 +22,13 @@ def dv_turbulence(cfg, disk, disk_region):
     tturb0 = 1 / Omega_K  # lturb0 / vturb0
 
     def v1():
-        return np.zeros(shape=[mg.N_x] * 2)
+        return np.zeros(shape=[mg.N] * 2)
 
     def v2():
         return dv_tu_voelk(t_stop, t_stop, rho_g, T_mid, vn, tn)
 
     def v3():
-        dv = np.zeros(shape=[mg.N_x] * 2)
+        dv = np.zeros(shape=[mg.N] * 2)
         for i, _ in enumerate(masses):
             for j, _ in enumerate(masses):
                 t_i = t_stop[i]

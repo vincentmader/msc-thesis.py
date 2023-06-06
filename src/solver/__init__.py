@@ -12,13 +12,13 @@ class Solver:
 
     def run(self, mg, ns, K):
         solver = self.cfg.solver_variant
-        N_m = mg.N_x
+        N_m = mg.N
 
         nsubst = 1  # Nr of time substeps between storage of result
         niter = 4   # Nr of iterations for implicit time step
 
         tg = self.time_axis
-        N_t = tg.N_x
+        N_t = tg.N
         time = tg.grid_cell_centers()  # todo
         # T_START, T_END, N_t = 1e0, 1e9, 200
         # time = np.linspace(0, T_END, N_t)
@@ -79,7 +79,7 @@ class Solver:
 
 
 # def dndt(mg, n, K):
-#     N_m = mg.N_x
+#     N_m = mg.N
 #     dndt = np.zeros((N_m))
 #     for k in range(N_m):
 #         dndt_k = 0

@@ -26,7 +26,7 @@ def dirac_delta(cfg):
 
     M = RHO_g / m[x_0] / dm
 
-    n0 = np.zeros([mg.N_x])
+    n0 = np.zeros([mg.N])
     n0[x_0] = M
 
     return n0
@@ -52,7 +52,7 @@ def mrn_distribution(cfg):
     M = RHO_g / m[x_0] / dm
 
     q = -11/6
-    n0 = np.ones(mg.N_x) * m**q
+    n0 = np.ones(mg.N) * m**q
 
     A = 1/(q+2) * (m_max**(q+2) - m_min**(q+2))
     n0 = n0 * M / A

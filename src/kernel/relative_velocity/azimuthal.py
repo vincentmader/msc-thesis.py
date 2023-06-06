@@ -15,7 +15,7 @@ def dv_azimuthal(cfg, disk, disk_region):
     stokes_nrs = disk_region.stokes_nr(radii, stopping_times)
     u = u_n(disk_region)
 
-    dv = np.zeros(shape=[mg.N_x] * 2)
+    dv = np.zeros(shape=[mg.N] * 2)
     for i, _ in enumerate(masses):
         for j, _ in enumerate(masses):
 

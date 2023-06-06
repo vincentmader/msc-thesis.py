@@ -35,7 +35,7 @@ SLIDER_POSITION = [0.05, 0.3, 0.02, 0.4]
 
 # Define discrete mass axis.
 mg = MassGrid(cfg)
-N_m = mg.N_x
+N_m = mg.N
 masses = mg.grid_cell_boundaries() # NOTE <- This was changed! Do everywhere?
 dms = masses[1:] - masses[:-1]
 

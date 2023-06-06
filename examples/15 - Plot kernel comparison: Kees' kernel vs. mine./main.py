@@ -28,7 +28,7 @@ cfg = Config(
 
 # Define discrete mass axis.
 mg = MassGrid(cfg)
-N_m = mg.N_x
+N_m = mg.N
 
 # Define collision rate.
 # Here: Set to 1 for simplicity.

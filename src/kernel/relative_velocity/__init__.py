@@ -16,8 +16,8 @@ def relative_velocity(
     disk_region: DiskRegion,
 ):
     if cfg.enable_physical_relative_velocities == []:
-        # return 35 * np.ones(shape=[disk.mass_axis.N_x] * 2)
-        return np.ones(shape=[disk.mass_axis.N_x] * 2)
+        # return 35 * np.ones(shape=[disk.mass_axis.N] * 2)
+        return np.ones(shape=[disk.mass_axis.N] * 2)
 
     dvs = []
     for dv_name in cfg.enable_physical_relative_velocities:

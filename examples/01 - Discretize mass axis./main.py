@@ -97,7 +97,7 @@ if __name__ == "__main__":
         cfg.mass_axis_scale = scale
 
         mg = MassGrid(cfg)
-        i = np.arange(0, mg.N_x, 1)
+        i = np.arange(0, mg.N, 1)
         m = mg.grid_cell_centers()
         # ^ NOTE: Used bounds (not centers) here,
         #   since centers are indexed by x.5 values.

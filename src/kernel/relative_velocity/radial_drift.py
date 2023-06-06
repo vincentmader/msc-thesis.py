@@ -17,7 +17,7 @@ def dv_radial_drift(cfg, disk, disk_region):
     v_r = u_r(cfg, disk_region, stokes_nrs,
               delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r)
 
-    dv = np.zeros(shape=[mg.N_x] * 2)
+    dv = np.zeros(shape=[mg.N] * 2)
     for i, _ in enumerate(masses):
         v_i = v_r[i]
         for j, _ in enumerate(masses):

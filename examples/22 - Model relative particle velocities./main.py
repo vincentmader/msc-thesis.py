@@ -42,7 +42,7 @@ if cfg.mpl_dark_mode:
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
-N_m = mg.N_x
+N_m = mg.N
 masses = mg.grid_cell_centers()  # TODO Use bounds or centers?
 
 # Calculate particle radii from masses.

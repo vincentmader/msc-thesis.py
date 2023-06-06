@@ -16,7 +16,6 @@ class Kernel():
         rg = RadialGrid(cfg)
         # ...particle mass.
         mg = MassGrid(cfg)
-        N_m = mg.N_x  # <- This is the number of bins in the mass grid.
         # Define protoplanetary disk, & the position of interest in it.
         disk = Disk(cfg, rg, mg)
         disk_region = DiskRegion(cfg, disk)
@@ -24,7 +23,7 @@ class Kernel():
         if cfg.enable_physical_relative_velocities:
             R_coll = collision_rate(cfg, disk, disk_region)
         else:  # In the most simple case, the rates are just set to 1.
-            R_coll = np.ones(shape=[mg.N_x]*2)
+            R_coll = np.ones(shape=[mg.N]*2)
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
@@ -38,7 +37,7 @@ class Kernel():
         K_frag_loss = K_frag["loss"]
         K_frag = K_frag_gain + K_frag_loss
         # Define total kernel.
-        K = np.zeros(shape=[N_m] * 3)
+        K = np.zeros(shape=[mg.N] * 3)
         K += K_coag if cfg.enable_coagulation else 0
         K += K_frag if cfg.enable_fragmentation else 0
 
@@ -53,7 +52,7 @@ class Kernel():
 
     def _K_coag(self, mg, R_coll):
 
-        N_m = mg.N_x
+        N_m = mg.N
         m_max = mg.value_from_index(N_m - 1)
 
         K_gain = np.zeros(shape=[N_m] * 3)
@@ -129,11 +128,12 @@ class Kernel():
         masses = mg.grid_cell_centers()
         boundaries = mg.grid_cell_boundaries()
         dm = boundaries[1:] - boundaries[:-1]
+        N_m = mg.N
 
         fragmentation_variants = self.cfg.enable_fragmentation_variant
 
-        K_gain = np.zeros(shape=[mg.N_x] * 3)
-        K_loss = np.zeros(shape=[mg.N_x] * 3)
+        K_gain = np.zeros(shape=[N_m] * 3)
+        K_loss = np.zeros(shape=[N_m] * 3)
 
         for i, m_i in enumerate(masses):
             for j, m_j in enumerate(masses):
@@ -167,7 +167,7 @@ class Kernel():
                     m_max = m_tot
                     k_min = mg.index_from_value(m_min)
                     k_max = mg.index_from_value(m_max)
-                    k_max = min(mg.N_x-1, k_max)
+                    k_max = min(N_m-1, k_max)
 
                     # This is the lowest bin at which fragmentation can occur.
                     if min(i, j) < k_min:

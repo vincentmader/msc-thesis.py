@@ -6,12 +6,12 @@ from disk.dust_particle import particle_radius_from_mass
 
 def collision_cross_section(cfg, mg):
     if cfg.enable_physical_cross_sections is False:
-        return np.ones(shape=[mg.N_x] * 2)
+        return np.ones(shape=[mg.N] * 2)
 
     masses = mg.grid_cell_centers()
     radii = particle_radius_from_mass(masses)
 
-    sigma = np.ones(shape=[mg.N_x] * 2)
+    sigma = np.ones(shape=[mg.N] * 2)
     for i, a_i in enumerate(radii):
         for j, a_j in enumerate(radii):
             sigma[i, j] = sigma_ij(a_i, a_j)

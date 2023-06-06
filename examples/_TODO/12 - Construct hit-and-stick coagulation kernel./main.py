@@ -60,7 +60,7 @@ if __name__ == "__main__":
         ax=ax_slider,
         label="$k$",
         valmin=0,
-        valmax=mg.N_x - 1,
+        valmax=mg.N - 1,
         valstep=1,
         valinit=k,
         orientation="vertical"

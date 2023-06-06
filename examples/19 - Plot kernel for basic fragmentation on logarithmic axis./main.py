@@ -37,7 +37,7 @@ mg = MassGrid(cfg)
 
 # Define collision rate. 
 # Here: Set to 1 for simplicity.
-R_coll = np.ones(shape=[mg.N_x]*2)
+R_coll = np.ones(shape=[mg.N]*2)
 
 # Define kernel.
 kernel = Kernel(cfg)

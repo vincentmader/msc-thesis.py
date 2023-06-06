@@ -10,7 +10,7 @@ def dv_brownian_motion(cfg, disk, disk_region):
     masses = mg.grid_cell_centers()
 
     T_mid = disk_region.T_mid
-    dv = np.zeros(shape=[mg.N_x] * 2)
+    dv = np.zeros(shape=[mg.N] * 2)
     for i, m_i in enumerate(masses):
         for j, m_j in enumerate(masses):
 

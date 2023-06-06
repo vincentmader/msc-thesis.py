@@ -10,7 +10,7 @@ def dv_differential_settling(cfg, disk, disk_region):
     scale_heights = 1  # TODO
     settling_velocities = v_sett(stopping_times, Omega_K, scale_heights)
 
-    dv = np.zeros(shape=[mg.N_x] * 2)
+    dv = np.zeros(shape=[mg.N] * 2)
     for i, _ in enumerate(masses):
         for j, _ in enumerate(masses):
 
