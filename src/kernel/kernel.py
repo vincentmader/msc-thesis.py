@@ -47,6 +47,8 @@ class Kernel():
         self.K_coag_loss = K_coag_loss
         self.K_frag_gain = K_frag_gain
         self.K_frag_loss = K_frag_loss
+        self.K_gain = K_frag_gain + K_coag_gain
+        self.K_loss = K_frag_loss + K_coag_loss
         self.K_coag = K_coag
         self.K_frag = K_frag
         self.K = K
