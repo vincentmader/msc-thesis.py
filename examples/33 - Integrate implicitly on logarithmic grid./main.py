@@ -43,14 +43,14 @@ solver = Solver(cfg)
 
 
 def plot_1(m, m2f, dm2f):
-    ylims = [1e-30, 1e2]
+    ylims = [1e-40, 1e2]
     plot = InteractiveSliderLinePlot(
         cfg,
         m, m2f, dm2f,
         title="Temporal Evolution of Particle Mass Distribution Function",
         ylabel_1="$m_i^2 n_i$ [kg m $^{-3}$]",
         xlabel_1="mass $m_i$ [kg]",
-        ylabel_2=r"$\frac{dn_i}{dt}\cdot\Delta t$",
+        ylabel_2=r"$\frac{dn_i}{dt}$",
         xlabel_2="mass $m_i$ [kg]",
         xlims_1=(m[0], m[-1]),
         xlims_2=(m[0], m[-1]),
@@ -81,6 +81,7 @@ if __name__ == "__main__":
     dm2f = list(dm2f)
     dm2f.append(dm2f[-1]) # TODO Fix array shapes in a better way than this.
     dm2f = np.array(dm2f)
+    dm2f = [dm2f[i] / tg.grid_cell_widths()[i] for i, _ in enumerate(dm2f)]
 
     # Prepare abscissa & ordinate for plot of disk mass error.
     t = tg.grid_cell_centers()
