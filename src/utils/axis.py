@@ -60,7 +60,6 @@ class DiscreteAxis:
 
     def value_from_index(self, i) -> np.float64:
         x_min, x_max, N = self.x_min, self.x_max, self.N
-        assert 0 <= i < N
         if self.scale == "lin":
             d_x = (x_max - x_min) / N
             res = x_min + d_x * i
