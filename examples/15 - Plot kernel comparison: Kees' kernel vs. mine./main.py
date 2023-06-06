@@ -16,8 +16,8 @@ except ModuleNotFoundError as e:
 cfg = Config(
     mass_axis_scale="lin",
     mass_resolution=50,
-    mass_min_value=2,
-    mass_max_value=52,
+    mass_min_value=1,
+    mass_max_value=51,
     enable_coagulation=True,
     enable_fragmentation=False,
     enable_cancellation_handling=False,
