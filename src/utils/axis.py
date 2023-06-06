@@ -1,5 +1,4 @@
 import numpy as np
-from utils.errors import handle_unknown_scale
 
 
 class DiscreteAxis:
@@ -29,7 +28,7 @@ class DiscreteAxis:
             return x_min + (x_max - x_min) * indices
         if self.scale == "log":
             return x_min * (x_max / x_min) ** indices
-        handle_unknown_scale(self.scale)
+        raise Exception(f"Axis scale '{self.scale}' unknown.")
 
     def grid_cell_centers(self) -> np.ndarray:
         xs = self.grid_cell_boundaries()
@@ -37,13 +36,13 @@ class DiscreteAxis:
             return (xs[:-1] + xs[1:]) / 2
         if self.scale == "log":
             return np.sqrt(xs[:-1] * xs[1:])
-        handle_unknown_scale(self.scale)
+        raise Exception(f"Axis scale '{self.scale}' unknown.")
 
     def grid_cell_widths(self) -> np.ndarray:
         grid_cell_boundaries = self.grid_cell_boundaries()
         return grid_cell_boundaries[1:] - grid_cell_boundaries[:-1]
 
-    def index_from_value(self, x):
+    def index_from_value(self, x) -> int:
         x_min, x_max, N = self.x_min, self.x_max, self.N
         if self.scale == "lin":
             d_x = (x_max - x_min) / N
@@ -53,9 +52,9 @@ class DiscreteAxis:
             q_x = (x_max / x_min)**(1 / N)
             res = np.log(x / x_min) / np.log(q_x)
             return res.astype(int)
-        handle_unkown_scale(self.scale)
+        raise Exception(f"Axis scale '{self.scale}' unknown.")
 
-    def value_from_index(self, i):
+    def value_from_index(self, i) -> np.float64:
         x_min, x_max, N = self.x_min, self.x_max, self.N
         if self.scale == "lin":
             d_x = (x_max - x_min) / N
@@ -65,4 +64,4 @@ class DiscreteAxis:
             q_x = (x_max / x_min)**(1 / N)
             res = x_min * q_x**i
             return np.float64(res)
-        handle_unkown_scale(self.scale)
+        raise Exception(f"Axis scale '{self.scale}' unknown.")

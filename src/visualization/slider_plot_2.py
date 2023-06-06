@@ -1,8 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
-from utils.errors import handle_unknown_scale
-
 
 SLIDER_COORDS = [0.925, 0.3, 0.04, 0.4]  # todo: move elsewhere ?
 FIGSIZE = (6, 6)
@@ -73,7 +71,7 @@ class InteractiveSliderLinePlot:
         elif self.cfg.mass_axis_scale == "log":
             self.ax_1.loglog(x, y_1, label=self.label)
         else:
-            handle_unknown_scale(self.cfg.mass_axis_scale)
+            raise Exception(f"Axis scale '{self.cfg.mass_axis_scale}' unknown.")
 
         # Plot derivative of particle mass distribution.
         if self.cfg.mass_axis_scale == "lin":
@@ -83,7 +81,7 @@ class InteractiveSliderLinePlot:
             self.ax_2.loglog(x, -y_2, 'b', label="neg.")
             self.ax_2.legend()
         else:
-            handle_unknown_scale(self.cfg.mass_axis_scale)
+            raise Exception(f"Axis scale '{self.cfg.mass_axis_scale}' unknown.")
 
         self.set_labels()
         self.set_xlims()
