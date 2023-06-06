@@ -5,10 +5,9 @@ import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from disk import MassGrid, Disk, RadialGrid, mass_distribution, DiskRegion, TimeGrid
+    from disk import MassGrid, RadialGrid, mass_distribution, TimeGrid
     from disk.disk import disk_mass_from_distribution
     from kernel import Kernel
-    from kernel.collision_rate import collision_rate
     from solver import Solver
     from utils.plotting import plt_show_then_close
     from visualization.mass_error import DiskMassErrorPlot

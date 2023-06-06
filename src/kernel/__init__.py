@@ -1,7 +1,7 @@
 import numpy as np
 
 from disk import MassGrid, Disk, RadialGrid, DiskRegion
-from kernel.collision_rate import collision_rate
+from dust.collision_rate import collision_rate
 from utils.functions import heaviside_theta
 
 

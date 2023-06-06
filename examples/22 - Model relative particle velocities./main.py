@@ -2,20 +2,17 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
-import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, MassGrid, RadialGrid, DiskRegion
     from disk.dust_particle import particle_radius_from_mass
-    from kernel import Kernel
-    from kernel.collision_rate import collision_rate
-    from kernel.relative_velocity import dv_azimuthal
-    from kernel.relative_velocity import dv_brownian_motion
-    from kernel.relative_velocity import dv_differential_settling
-    from kernel.relative_velocity import dv_radial_drift
-    from kernel.relative_velocity import dv_turbulence
-    from kernel.relative_velocity import relative_velocity
+    from dust.relative_velocity import dv_azimuthal
+    from dust.relative_velocity import dv_brownian_motion
+    from dust.relative_velocity import dv_differential_settling
+    from dust.relative_velocity import dv_radial_drift
+    from dust.relative_velocity import dv_turbulence
+    from dust.relative_velocity import relative_velocity
     from utils.plotting import plt_show_then_close
 except ModuleNotFoundError as e:
     raise e
@@ -51,11 +48,6 @@ radii = particle_radius_from_mass(masses)
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)
 disk_region = DiskRegion(cfg, disk)
-R_coll = collision_rate(cfg, disk, disk_region)
-
-# Define kernel.
-kernel = Kernel(cfg)
-K = kernel.K(mg, R_coll)
 
 # Calculate relative velocities.
 dv_br = dv_brownian_motion(cfg, disk, disk_region)

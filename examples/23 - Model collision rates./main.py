@@ -6,7 +6,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import MassGrid, Disk, RadialGrid, DiskRegion
-    from kernel.collision_rate import collision_rate
+    from dust.collision_rate import collision_rate
 except ModuleNotFoundError as e:
     raise e
 
