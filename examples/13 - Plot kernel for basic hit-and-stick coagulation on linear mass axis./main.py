@@ -31,13 +31,9 @@ cfg = Config(
 # Define discrete mass axis.
 mg = MassGrid(cfg)
 
-# Define collision rate. 
-# Here: Set to 1 for simplicity.
-R_coll = np.ones(shape=[mg.N_x]*2)
-
 # Define kernel.
 kernel = Kernel(cfg)
-K = kernel.K(mg, R_coll)
+K = kernel.K
 
 
 if __name__ == "__main__":

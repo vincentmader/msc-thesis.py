@@ -16,8 +16,8 @@ except ModuleNotFoundError as e:
 cfg = Config(
     mass_axis_scale="lin",
     mass_resolution=50,
-    mass_min_value=1,
-    mass_max_value=51,
+    mass_min_value=2,
+    mass_max_value=52,
     enable_coagulation=True,
     enable_fragmentation=False,
     enable_cancellation_handling=False,
@@ -36,7 +36,7 @@ R_coll = np.ones(shape=[N_m]*2)
 
 # Define kernel according to definition in `../../src/kernel/__init__.py`.
 kernel = Kernel(cfg)
-Kkij_vinc = kernel.K(mg, R_coll)
+Kkij_vinc = kernel.K
 Kkij_vinc = np.array([0.5 * (K_k + K_k.T) for K_k in Kkij_vinc])
 
 # Define kernel according to Kees' definition in `./kees_kernel.py`.

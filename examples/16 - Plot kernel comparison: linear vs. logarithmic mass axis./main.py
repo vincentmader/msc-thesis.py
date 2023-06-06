@@ -34,13 +34,9 @@ if __name__ == "__main__":
         # Define discrete mass axis.
         mg = MassGrid(cfg)
 
-        # Define collision rate.
-        # Here: Set to 1 for simplicity.
-        R_coll = np.ones(shape=[mg.N_x]*2)
-
         # Define kernel.
         kernel = Kernel(cfg)
-        K_1 = kernel.K(mg, R_coll)
+        K_1 = kernel.K
         K_2 = np.array([0.5 * (K_k + K_k.T) for K_k in K_1])
 
         # Define list of kernels to plot.

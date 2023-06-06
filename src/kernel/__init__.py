@@ -1,5 +1,7 @@
 import numpy as np
 
+from disk import MassGrid, Disk, RadialGrid, DiskRegion
+from kernel.collision_rate import collision_rate
 from utils.functions import heaviside_theta
 
 
@@ -8,23 +10,49 @@ class Kernel():
     def __init__(self, cfg):
         self.cfg = cfg
 
-    def K(self, mg, R_coll):
-        cfg = self.cfg
-
+        # Define discrete axis for radial distance from star, as well as for mass.
+        rg = RadialGrid(cfg)
+        mg = MassGrid(cfg)
         N_m = mg.N_x
-        # Create 3D array of 0s with `N_m` entries in each dimension.
-        K = np.zeros(shape=[N_m] * 3)
-        # Apply coagulation & fragmentation processes.
-        K += self.K_coag(mg, R_coll) if cfg.enable_coagulation else 0
-        K += self.K_frag(mg, R_coll) if cfg.enable_fragmentation else 0
-        return K
+        
+        # Define disk, the position of interest in it, & the disk properties there.
+        disk = Disk(cfg, rg, mg)
+        disk_region = DiskRegion(cfg, disk)
+        if cfg.enable_physical_relative_velocities:
+            R_coll = collision_rate(cfg, disk, disk_region)
+        else:
+            R_coll = np.ones(shape=[mg.N_x]*2)
 
-    def K_coag(self, mg, R_coll):
+        # Define kernel sub-components (gain & loss, for coag. & frag.)
+        K_coag = self._K_coag(mg, R_coll)
+        K_frag = self._K_frag(mg, R_coll)
+        K_coag_gain = K_coag["gain"]
+        K_coag_loss = K_coag["loss"]
+        K_frag_gain = K_frag["gain"]
+        K_frag_loss = K_frag["loss"]
+        K_coag = K_coag_gain + K_coag_loss
+        K_frag = K_frag_gain + K_frag_loss
+
+        # Define total kernel & apply coagulation & fragmentation processes.
+        K = np.zeros(shape=[N_m] * 3)
+        K += K_coag if cfg.enable_coagulation else 0
+        K += K_frag if cfg.enable_fragmentation else 0
+
+        # Save kernel components to class object fields.
+        self.K_coag_gain = K_coag_gain
+        self.K_coag_loss = K_coag_loss
+        self.K_frag_gain = K_frag_gain
+        self.K_frag_loss = K_frag_loss
+        self.K_coag = K_coag
+        self.K_frag = K_frag
+        self.K = K
+
+    def _K_coag(self, mg, R_coll):
         N_m = mg.N_x
-
-        K = np.zeros(shape=[N_m] * 3)
-
         m_max = mg.value_from_index(N_m - 1)
+
+        K_gain = np.zeros(shape=[N_m] * 3)
+        K_loss = np.zeros(shape=[N_m] * 3)
 
         # Loop over all mass pairs.
         masses = mg.grid_cell_boundaries()[:-1]
@@ -69,11 +97,11 @@ class Kernel():
                 if not near_upper_bound:
                     # Handle cancellation.
                     if handle_cancellation:
-                        K[k_l, i, j] -= R * th * eps
-                        K[k_l, i, j] -= R/2 if i==j else 0
+                        K_loss[k_l, i, j] -= R * th * eps
+                        K_loss[k_l, i, j] -= R/2 if i==j else 0
                     # Handle "trivial" (non-cancelling) case.
                     else:
-                        K[i, i, j] -= R if i<N_m-2 else 0
+                        K_loss[i, i, j] -= R if i<N_m-2 else 0
 
                 # Add "gain" term to kernel.
                 # ─────────────────────────────────────────────────────────────
@@ -83,22 +111,23 @@ class Kernel():
                 if not near_upper_bound:
                     # Handle cancellation.
                     if handle_cancellation:
-                        K[k_h, i, j] += R * th * eps
+                        K_gain[k_h, i, j] += R * th * eps
                     # Handle "trivial" (non-cancelling) case.
                     else:
-                        K[k_l, i, j] += R * th * (1 - eps)
-                        K[k_h, i, j] += R * th * eps
+                        K_gain[k_l, i, j] += R * th * (1 - eps)
+                        K_gain[k_h, i, j] += R * th * eps
 
-        return K
+        return {"gain": K_gain, "loss": K_loss}
 
-    def K_frag(self, mg, R_coll):
+    def _K_frag(self, mg, R_coll):
         masses = mg.grid_cell_centers()
         boundaries = mg.grid_cell_boundaries()
         dm = boundaries[1:] - boundaries[:-1]
 
         fragmentation_variants = self.cfg.enable_fragmentation_variant
 
-        K = np.zeros(shape=[mg.N_x] * 3)
+        K_gain = np.zeros(shape=[mg.N_x] * 3)
+        K_loss = np.zeros(shape=[mg.N_x] * 3)
 
         for i, m_i in enumerate(masses):
             for j, m_j in enumerate(masses):
@@ -114,8 +143,8 @@ class Kernel():
                     m_k = masses[k]
                     if min(i, j) > X:
                         eps = (m_i + m_j) / m_k
-                        K[i, i, j] -= R_coll[i, j]
-                        K[k, i, j] += R_coll[i, j] * th * eps
+                        K_loss[i, i, j] -= R_coll[i, j]
+                        K_gain[k, i, j] += R_coll[i, j] * th * eps
 
                 # todo Implement other variants of fragmentation.
                 # - Cratering
@@ -148,7 +177,7 @@ class Kernel():
                     A = top / bottom
 
                     # Remove mass from bins corresponding to initial masses.
-                    K[i, i, j] -= R_coll[i, j]
+                    K_loss[i, i, j] -= R_coll[i, j]
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
@@ -158,7 +187,7 @@ class Kernel():
 
                         # Add mass to bin.
                         n = A * m_k**q
-                        K[k, i, j] += R_coll[i, j] * n
+                        K_gain[k, i, j] += R_coll[i, j] * n
 
                         # f = n / m_tot
                         # eps = (m_i + m_j) / m_k
@@ -183,4 +212,4 @@ class Kernel():
                 #     K[h, i, j] -= R[i, j]
                 # K[k_h, i, j] += R[i, j] * th * eps_h
 
-        return K
+        return {"gain": K_gain, "loss": K_loss}
