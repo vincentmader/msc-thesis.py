@@ -64,7 +64,7 @@ class InteractiveSliderLinePlot:
         # dt = self.x[1:] - self.x[:-1]   # NOTE Use this to plot dn/dt
         # dt = np.append(dt, dt[-1])      #      instead of dn/dt*DT
         # y_2 = y_2 / dt                      #
-        
+
         # Plot particle mass distribution.
         if self.cfg.mass_axis_scale == "lin":
             self.ax_1.plot(x, y_1, label=self.label)
