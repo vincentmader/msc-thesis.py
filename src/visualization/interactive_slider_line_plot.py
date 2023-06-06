@@ -8,6 +8,7 @@ FIGSIZE = (6, 6)
 
 
 class InteractiveSliderLinePlot:
+
     def __init__(
         self,
         cfg,

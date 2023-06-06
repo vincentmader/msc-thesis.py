@@ -6,6 +6,7 @@ from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
 
 
 class Solver:
+
     def __init__(self, cfg):
         self.cfg = cfg
         self.time_axis = TimeGrid(cfg)

@@ -2,6 +2,7 @@ from utils.axis import DiscreteAxis
 
 
 class TimeGrid(DiscreteAxis):
+
     def __init__(self, cfg):
         super().__init__(
             cfg.time_min_value,

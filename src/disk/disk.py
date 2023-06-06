@@ -9,6 +9,7 @@ from .mass_grid import MassGrid
 
 
 class Disk:
+
     def __init__(
         self,
         cfg: Config,

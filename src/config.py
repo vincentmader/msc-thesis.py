@@ -13,6 +13,7 @@ PATH_TO_FIGURES = os.path.join(dirname, "..", "figures")
 
 
 class Config():
+
     def __init__(
         self,
         stellar_mass=None,

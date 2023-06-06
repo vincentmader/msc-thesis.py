@@ -2,6 +2,7 @@ from utils.axis import DiscreteAxis
 
 
 class RadialGrid(DiscreteAxis):
+
     def __init__(self, cfg):
         super().__init__(
             cfg.radial_min_value,
