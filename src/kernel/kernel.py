@@ -16,6 +16,7 @@ class Kernel():
         rg = RadialGrid(cfg)
         # ...particle mass.
         mg = MassGrid(cfg)
+        self.mg = mg
         # Define protoplanetary disk, & the position of interest in it.
         disk = Disk(cfg, rg, mg)
         disk_region = DiskRegion(cfg, disk)
@@ -27,12 +28,12 @@ class Kernel():
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
-        K_coag = self._K_coag(mg, R_coll)
+        K_coag = self._K_coag(R_coll)
         K_coag_gain = K_coag["gain"]
         K_coag_loss = K_coag["loss"]
         K_coag = K_coag_gain + K_coag_loss
         # ...fragmentation processes.
-        K_frag = self._K_frag(mg, R_coll)
+        K_frag = self._K_frag(R_coll)
         K_frag_gain = K_frag["gain"]
         K_frag_loss = K_frag["loss"]
         K_frag = K_frag_gain + K_frag_loss
@@ -50,8 +51,9 @@ class Kernel():
         self.K_frag = K_frag
         self.K = K
 
-    def _K_coag(self, mg, R_coll):
+    def _K_coag(self, R_coll):
 
+        mg = self.mg
         N_m = mg.N
         m_max = mg.value_from_index(N_m - 1)
 
@@ -123,8 +125,9 @@ class Kernel():
 
         return {"gain": K_gain, "loss": K_loss}
 
-    def _K_frag(self, mg, R_coll):
+    def _K_frag(self, R_coll):
 
+        mg = self.mg
         masses = mg.grid_cell_centers()
         boundaries = mg.grid_cell_boundaries()
         dm = boundaries[1:] - boundaries[:-1]
