@@ -23,7 +23,7 @@ class DiscreteAxis:
 
     def grid_cell_boundaries(self) -> np.ndarray:
         x_min, x_max, N = self.x_min, self.x_max, self.N
-        indices = np.linspace(0, 1, N + 1)
+        indices = np.linspace(0, 1, N + 1)  # TODO Rename: These are not "indices".
         if self.scale == "lin":
             return x_min + (x_max - x_min) * indices
         if self.scale == "log":
