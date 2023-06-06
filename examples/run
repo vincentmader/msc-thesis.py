@@ -43,7 +43,9 @@ def get_example_id(examples):
         print(INFO_TEXT_1)
         for example_id, dir_name in examples.items():
             split = dir_name.split(" - ")
-            example_id = colored(split[0], "blue")
+            if example_id < 10:
+                example_id = f" {example_id}"
+            example_id = colored(example_id, "blue")
             example_name = split[1]
             text = " - ".join([example_id, example_name])
             print(text)
