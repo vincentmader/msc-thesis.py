@@ -43,14 +43,9 @@ m = mg.grid_cell_centers()
 boundaries = mg.grid_cell_boundaries()
 dm = boundaries[1:] - boundaries[:-1]
 
-# Define disk, the position of interest in it, & the disk properties there.
-disk = Disk(cfg, rg, mg)
-disk_region = DiskRegion(cfg, disk)
-R_coll = collision_rate(cfg, disk, disk_region) # TODO Define dynamically based on cfg.
-
 # Define kernel.
 kernel = Kernel(cfg)
-K = kernel.K(mg, R_coll)
+K = kernel.K
 
 # Define temporal domain & solver.
 tg = TimeGrid(cfg)
