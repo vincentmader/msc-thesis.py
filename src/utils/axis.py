@@ -25,9 +25,13 @@ class DiscreteAxis:
         x_min, x_max, N = self.x_min, self.x_max, self.N
         indices = np.linspace(0, 1, N + 1)  # TODO Rename: These are not "indices".
         if self.scale == "lin":
-            return x_min + (x_max - x_min) * indices
+            x = x_min + (x_max - x_min) * indices
+            assert x[0] == x_min and x[-1] == x_max
+            return x
         if self.scale == "log":
-            return x_min * (x_max / x_min) ** indices
+            x = x_min * (x_max / x_min) ** indices
+            assert x[0] == x_min and x[-1] == x_max
+            return x
         raise Exception(f"Axis scale '{self.scale}' unknown.")
 
     def grid_cell_centers(self) -> np.ndarray:
