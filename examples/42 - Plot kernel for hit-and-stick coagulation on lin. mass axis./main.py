@@ -48,3 +48,7 @@ if __name__ == "__main__":
         kernel_subplot_titles=["$K_{kij}$"],
     )
     p.show()
+
+    from visualization.new import KernelGainVsLossPlot
+    p = KernelGainVsLossPlot(kernel, enable_slider=True)
+    p.show()
