@@ -26,32 +26,33 @@ class Kernel():
         else:  # In the most simple case, the rates are just set to 1.
             R_coll = np.ones(shape=[mg.N]*2)
 
+        # Initialize 
+        self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
+        self.K_coag_loss = np.zeros(shape=[mg.N] * 3)
+        self.K_frag_gain = np.zeros(shape=[mg.N] * 3)
+        self.K_frag_loss = np.zeros(shape=[mg.N] * 3)
+        self.K_gain = np.zeros(shape=[mg.N] * 3)
+        self.K_loss = np.zeros(shape=[mg.N] * 3)
+
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
         K_coag = self._K_coag(R_coll)
-        K_coag_gain = K_coag["gain"]
-        K_coag_loss = K_coag["loss"]
-        K_coag = K_coag_gain + K_coag_loss
+        if cfg.enable_coagulation:
+            self.K_coag_gain += K_coag["gain"]
+            self.K_coag_loss += K_coag["loss"]
+            self.K_gain += K_coag["gain"]
+            self.K_loss += K_coag["loss"]
         # ...fragmentation processes.
         K_frag = self._K_frag(R_coll)
-        K_frag_gain = K_frag["gain"]
-        K_frag_loss = K_frag["loss"]
-        K_frag = K_frag_gain + K_frag_loss
+        if cfg.enable_fragmentation:
+            self.K_frag_gain += K_frag["gain"]
+            self.K_frag_loss += K_frag["loss"]
+            self.K_gain += K_frag["gain"]
+            self.K_loss += K_frag["loss"]
         # Define total kernel.
-        K = np.zeros(shape=[mg.N] * 3)
-        K += K_coag if cfg.enable_coagulation else 0
-        K += K_frag if cfg.enable_fragmentation else 0
-
-        # Save kernel components to class object fields.
-        self.K_coag_gain = K_coag_gain
-        self.K_coag_loss = K_coag_loss
-        self.K_frag_gain = K_frag_gain
-        self.K_frag_loss = K_frag_loss
-        self.K_gain = K_frag_gain + K_coag_gain
-        self.K_loss = K_frag_loss + K_coag_loss
-        self.K_coag = K_coag
-        self.K_frag = K_frag
-        self.K = K
+        self.K_coag = self.K_coag_gain + self.K_coag_loss
+        self.K_frag = self.K_frag_gain + self.K_frag_loss
+        self.K = self.K_coag + self.K_frag
 
     def _K_coag(self, R_coll):
 
