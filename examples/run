@@ -7,22 +7,22 @@ from termcolor import colored
 
 
 INFO_TEXT_1 = f"""
-{colored("╭────────────────────────────╮", "cyan")}
-{colored("│ VINCENTMADER/MSC-THESIS.PY │", "cyan")}
-{colored("╰────────────────────────────╯", "cyan")}
-
-Below, you find a list of examples on how to use this module:
+ {colored("╭────────────────────────────╮", "cyan")}
+ {colored("│ VINCENTMADER/MSC-THESIS.PY │", "cyan")}
+ {colored("╰────────────────────────────╯", "cyan")}
+ 
+ Below, you find a list of examples on how to use this module:
 """
 
 INFO_TEXT_2 = f"""
-To run one of the examples, please enter the corresponding example ID 
-(highlighted in {colored("blue", "blue")}) in the prompt below,\
-and confirm with the <Enter> key.
-
-By default, the example will be run using `../.venv/bin/python3`.
-If, instead, you would like to use iPython, just append an `i` to the ID.
-
-Example: `./run 22i` would execute example 22 in interactive python mode.
+ To run one of the examples, please enter the corresponding example ID 
+ (highlighted in {colored("blue", "blue")}) in the prompt below,\
+ and confirm with the <Enter> key.
+ 
+ By default, the example will be run using `../.venv/bin/python3`.
+ If, instead, you would like to use iPython, just append an `i` to the ID.
+ 
+ Example: `./run 22i` would execute example 22 in interactive python mode.
 """
 
 
@@ -47,10 +47,10 @@ def get_example_id(examples):
                 example_id = f" {example_id}"
             example_id = colored(example_id, "blue")
             example_name = split[1]
-            text = " - ".join([example_id, example_name])
+            text = " " + " - ".join([example_id, example_name])
             print(text)
         print(INFO_TEXT_2)
-        return input(colored(">> ", "green"))
+        return input(colored(" >> ", "green"))
 
     if len(sys.argv) > 1:
         return get_example_id_from_cli_arg()
