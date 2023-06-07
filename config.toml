@@ -39,8 +39,8 @@
   # "differential_settling",  # NOTE keep turned off for now
   ]
   enable_fragmentation_variant = [
-    "naive/pulverization",
-    # "mrn",
+    # "naive/pulverization",
+    "mrn",
   ]
 
 [solver]
