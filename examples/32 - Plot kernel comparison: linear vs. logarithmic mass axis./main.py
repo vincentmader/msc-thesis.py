@@ -6,7 +6,7 @@ try:
     from config import Config
     from disk import MassGrid
     from kernel import Kernel
-    from visualization.kernel.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
+    from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
 except ModuleNotFoundError as e:
     raise e
 

@@ -1,12 +1,11 @@
 import os
 import sys
-import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
     from disk import MassGrid
     from kernel import Kernel
-    from visualization.kernel.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
+    from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
 except ModuleNotFoundError as e:
     raise e
 
