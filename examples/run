@@ -6,7 +6,7 @@ import sys
 from termcolor import colored
 
 
-INFO_TEXT_1 = f"""
+INFO_TEXT_1 = f"""\
  {colored("╭────────────────────────────╮", "cyan")}
  {colored("│ VINCENTMADER/MSC-THESIS.PY │", "cyan")}
  {colored("╰────────────────────────────╯", "cyan")}
