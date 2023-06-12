@@ -6,7 +6,7 @@ from matplotlib import colors
 FIGSIZE = (12, 6)
 SLIDER_RECT = [0.05, 0.5, 0.01, 0.5]
 COLORBAR_GEOMETRY = [0.5, 0.95, 0.3, 0.01]
-LOG_CMAP_VMIN = 1e-20
+LOG_CMAP_VMIN = 1e-14
 
 
 class KernelGainVsLossPlot:
