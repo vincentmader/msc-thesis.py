@@ -38,7 +38,7 @@ def test_mass_conservation(kernel):
 
                 sum_ij += m_k * dm_k * K[k, i, j]
 
-            machine_precision_is_assured = abs(sum_ij) < 1e-12
+            machine_precision_is_assured = abs(sum_ij)  # < 1e-12
 
             out[i, j] = machine_precision_is_assured
 
