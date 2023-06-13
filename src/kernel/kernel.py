@@ -26,7 +26,7 @@ class Kernel():
         else:  # In the most simple case, the rates are just set to 1.
             R_coll = np.ones(shape=[mg.N]*2)
 
-        # Initialize 
+        # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
         self.K_coag_loss = np.zeros(shape=[mg.N] * 3)
         self.K_frag_gain = np.zeros(shape=[mg.N] * 3)
