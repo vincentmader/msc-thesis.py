@@ -8,6 +8,7 @@ try:
     from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
+    from visualization.kernel.v2.kernel_gain_vs_loss import KernelGainVsLossPlot
 except ModuleNotFoundError as e:
     raise e
 
@@ -18,6 +19,10 @@ cfg = Config(
     mass_resolution=50,
     mass_min_value=2,
     mass_max_value=52,
+
+    # mass_min_value=1e-4,
+    # mass_max_value=1e+4,
+
     enable_coagulation=True,
     enable_fragmentation=False,
     enable_cancellation_handling=False,
