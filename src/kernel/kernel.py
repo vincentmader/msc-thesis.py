@@ -131,9 +131,9 @@ class Kernel():
     def _K_frag(self, R_coll):
 
         mg = self.mg
-        masses = mg.grid_cell_centers()
-        boundaries = mg.grid_cell_boundaries()
-        dm = boundaries[1:] - boundaries[:-1]
+        mc = mg.grid_cell_centers()
+        mb = mg.grid_cell_boundaries()
+        dm = mb[1:] - mb[:-1]
         N_m = mg.N
 
         fragmentation_variants = self.cfg.enable_fragmentation_variant
@@ -141,8 +141,8 @@ class Kernel():
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        for i, m_i in enumerate(masses):
-            for j, m_j in enumerate(masses):
+        for i, m_i in enumerate(mc):
+            for j, m_j in enumerate(mc):
                 th = heaviside_theta(i - j)
 
                 # 1. Most basic/naive fragmentation implementation: "Pulverization"
@@ -152,7 +152,7 @@ class Kernel():
 
                     X = 10 # TODO Play around with this value, observe changes!
                     k = 0
-                    m_k = masses[k]
+                    m_k = mc[k]
                     if min(i, j) > X:
                         eps = (m_i + m_j) / m_k
                         K_loss[i, i, j] -= R_coll[i, j]
@@ -169,7 +169,7 @@ class Kernel():
                     m_tot = m_i + m_j
 
                     # Define range of masses resulting from fragmentation event.
-                    m_min = masses[0]
+                    m_min = mc[0]
                     m_max = m_tot
                     k_min = mg.index_from_value(m_min)
                     k_max = mg.index_from_value(m_max)
@@ -180,7 +180,7 @@ class Kernel():
                         continue
 
                     top = m_i * dm[i] * R_coll[i, j] + m_j * dm[j] * R_coll[i, j]
-                    bottom = sum([masses[k] * dm[k] * masses[k]**q for k in range(k_min, k_max)])
+                    bottom = sum([mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)])
                     A = top / bottom
 
                     # Remove mass from bins corresponding to initial masses.
@@ -188,7 +188,7 @@ class Kernel():
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
-                    for k, m_k in enumerate(masses):
+                    for k, m_k in enumerate(mc):
                         if m_k > m_max:
                             continue
 
