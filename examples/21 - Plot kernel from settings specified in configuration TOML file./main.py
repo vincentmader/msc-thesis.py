@@ -38,5 +38,5 @@ if __name__ == "__main__":
     p.show()
 
     # Plot `\sum_{ij} m_k \Delta m_k K_kij`.
-    p = KernelMassConservationPlot(kernel)
-    p.show()
+    # p = KernelMassConservationPlot(kernel)
+    # p.show()
