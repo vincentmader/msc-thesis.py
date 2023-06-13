@@ -25,20 +25,23 @@ class Solver:
         # time = np.linspace(0, T_END, N_t)
         # time = T_START * (T_END / T_START)**np.linspace(0, 1, N_t)
 
-        # MUST be kept logarithmically spaced
-        mgrain = mg.grid_cell_boundaries()[:-1]
+        # mgrain = mg.grid_cell_boundaries()[:-1]
         # mgrain = m_min * (m_max / m_min)**np.linspace(0, 1, N_m)
-        migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
-        migrain = np.hstack((  # TODO Move elsewhere.
-            migrain[0]**2 / migrain[1],
-            migrain,
-            migrain[-1]**2 / migrain[-2]
-        ))
-        dmgrain = migrain[1:] - migrain[:-1]
+        # migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
+        # migrain = np.hstack((  
+        #     migrain[0]**2 / migrain[1],
+        #     migrain,
+        #     migrain[-1]**2 / migrain[-2]
+        # ))
+        # dmgrain = migrain[1:] - migrain[:-1]
+
+        mgrain = mg.grid_cell_boundaries()
+        migrain = mg.grid_cell_centers()
+        dmgrain = mg.grid_cell_widths() # NOTE Mass bins: Using boundary difference instead of centers.
 
         # Create initial distribution: Nr of particles per interval dmass per volume.
         # n_dust = np.zeros(N_m)
-        # n_dust[0] = 1.0 / dmgrain[0]  TODO
+        # n_dust[0] = 1.0 / dmgrain[0]
         # n_dust[30] = 1.0 / dmgrain[30]
         # Convert this to number of particles per mass bin per volume
         # N_dust = n_dust * dmgrain
@@ -76,7 +79,7 @@ class Solver:
 
         # Translate back to physical units
         f = N_dust_store / dmgrain
-        m2f = f * mgrain**2
+        m2f = f * migrain**2  # NOTE Mas bins: Using `migrain` instead of `mgrain`.
         return N_dust_store, f, m2f
 
 
