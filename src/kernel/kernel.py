@@ -65,6 +65,11 @@ class Kernel():
 
         masses = mg.grid_cell_centers()  # TODO Mass bins: Use centers instead of boundaries?
         masses = mg.grid_cell_boundaries()[:-1]
+        # NOTE for Kees:
+        # The 1st of the two definitions above is what seems more sensible to me.
+        # Using it (i.e. commenting out the 2nd line) leads to a crash of the solver though.
+        # The 2nd of the two definitions does not really make sense in my opinion.
+        # Still, when using it the solver runs without problems.
 
         # Loop over all mass pairs.
         for i, m_i in enumerate(masses):
