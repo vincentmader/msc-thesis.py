@@ -35,9 +35,10 @@ class Solver:
         # ))
         # dmgrain = migrain[1:] - migrain[:-1]
 
-        mgrain = mg.grid_cell_boundaries()
-        migrain = mg.grid_cell_centers()
-        dmgrain = mg.grid_cell_widths() # NOTE Mass bins: Using boundary difference instead of centers.
+        # The commented-out lines from above are replaced by calling the methods
+        # of the `DiscreteAxis` class instead, this should lead to the same result.
+        mgrain = mg.grid_cell_centers()
+        dmgrain = mg.grid_cell_widths()
 
         # Create initial distribution: Nr of particles per interval dmass per volume.
         # n_dust = np.zeros(N_m)
@@ -47,7 +48,7 @@ class Solver:
         # N_dust = n_dust * dmgrain
 
         # Convert `n -> N` (number of particles per mass bin per volume).
-        N_dust = mg.grid_cell_widths() * ns
+        N_dust = dmgrain * ns
 
         # def run_solver(N_dust):
         N_dust_store = np.zeros((N_t, N_m))
@@ -79,7 +80,7 @@ class Solver:
 
         # Translate back to physical units
         f = N_dust_store / dmgrain
-        m2f = f * migrain**2  # NOTE Mas bins: Using `migrain` instead of `mgrain`.
+        m2f = f * mgrain**2
         return N_dust_store, f, m2f
 
 
