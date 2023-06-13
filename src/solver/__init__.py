@@ -43,8 +43,9 @@ class Solver:
         # Convert this to number of particles per mass bin per volume
         # N_dust = n_dust * dmgrain
 
-        # TODO use bounds or center?
-        N_dust = mg.grid_cell_boundaries()[:-1] * ns
+        # Convert `n -> N` (number of particles per mass bin per volume).
+        N_dust = mg.grid_cell_widths() * ns
+
         # def run_solver(N_dust):
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
