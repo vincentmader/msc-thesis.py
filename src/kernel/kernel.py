@@ -63,8 +63,10 @@ class Kernel():
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        # Loop over all mass pairs.
+        masses = mg.grid_cell_centers()  # TODO Mass bins: Use centers instead of boundaries?
         masses = mg.grid_cell_boundaries()[:-1]
+
+        # Loop over all mass pairs.
         for i, m_i in enumerate(masses):
             for j, m_j in enumerate(masses):
                 th = heaviside_theta(i - j)
