@@ -12,9 +12,6 @@ class DiscreteAxis:
             x_max:  This is the upper boundary of the discretized axis.
             N:      This is the number of grid-points (bins) in the discretized axis.
             scale:  This should be either "lin" (linear) or "log" (logarithmic).
-
-        Returns:
-            None
         """
         self.x_min = x_min
         self.x_max = x_max
