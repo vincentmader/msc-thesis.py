@@ -72,9 +72,9 @@ def get_example_from_id(examples, example_id):
 
 def run_example(example, interactive_python):
     if interactive_python:
-        python = "ipython -i --no-confirm-exit" 
+        python = "ipython -i --no-confirm-exit"
     else:
-        python = "python3"
+        python = "../../.venv/bin/python3"
     cmd = f"cd \"{example}\" && {python} main.py"
     os.system(cmd)
 
