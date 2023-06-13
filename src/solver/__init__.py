@@ -11,7 +11,7 @@ class Solver:
         self.cfg = cfg
         self.time_axis = TimeGrid(cfg)
 
-    def run(self, mg, ns, K):
+    def run(self, mg, n_dust, K):
         solver = self.cfg.solver_variant
         N_m = mg.N
 
@@ -48,7 +48,7 @@ class Solver:
         # N_dust = n_dust * dmgrain
 
         # Convert `n -> N` (number of particles per mass bin per volume).
-        N_dust = dmgrain * ns
+        N_dust = dmgrain * n_dust
 
         # def run_solver(N_dust):
         N_dust_store = np.zeros((N_t, N_m))
