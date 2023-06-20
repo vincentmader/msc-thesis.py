@@ -145,7 +145,7 @@ def plot_separately():
     for dv, title in plot_setups:
         plt.figure(figsize=FIGSIZE_SINGLE)
         plot(dv, title)
-        path = os.path.join(PATH_TO_FIGURES, "22", f"dv_{title}.pdf")
+        path = os.path.join(PATH_TO_FIGURES, "13", f"dv_{title}.pdf")
         plt.savefig(path)
         plt.close()
 
@@ -155,11 +155,12 @@ def plot_together():
     for idx, (dv, title) in enumerate(plot_setups):
         plt.subplot(2, 3, idx + 1)
         plot(dv, title)
-    path = os.path.join(PATH_TO_FIGURES, "22", "relative_velocities.pdf")
+    path = os.path.join(PATH_TO_FIGURES, "13", "relative_velocities.pdf")
     plt.savefig(path)
     plt_show_then_close()
 
 
 if __name__ == "__main__":
+    os.makedirs("../../figures/13", exist_ok=True)
     plot_separately()
     plot_together()

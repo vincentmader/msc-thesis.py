@@ -66,12 +66,13 @@ def plot_4(_, m, scale):
 
 
 def plot(i, m, scale, plot_separately=False, show_plot=False):
+    os.makedirs("../../figures/11", exist_ok=True)
     plots = [plot_1, plot_2, plot_3, plot_4]
     if plot_separately:
         for idx, plot in enumerate(plots):
             plt.figure(figsize=FIGSIZE)
             plot(i, m, scale)
-            path = os.path.join(PATH_TO_FIGURES, "01", f"discrete-mass-axis_{scale}-scale-{idx}.pdf")
+            path = os.path.join(PATH_TO_FIGURES, "11", f"discrete-mass-axis_{scale}-scale-{idx}.pdf")
             plt.savefig(path)
             if show_plot:
                 plt.show()
@@ -82,7 +83,7 @@ def plot(i, m, scale, plot_separately=False, show_plot=False):
             plt.subplot(2, 2, idx + 1)
             plot(i, m, scale)
         plt.tight_layout()
-        path = os.path.join(PATH_TO_FIGURES, "01", f"discrete-mass-axis_{scale}-scale.pdf")
+        path = os.path.join(PATH_TO_FIGURES, "11", f"discrete-mass-axis_{scale}-scale.pdf")
         plt.savefig(path)
         if show_plot:
             plt.show()

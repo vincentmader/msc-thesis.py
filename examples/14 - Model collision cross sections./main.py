@@ -40,6 +40,7 @@ if __name__ == "__main__":
     plt.title(r"collision cross section $\sigma_{ij}$")
 
     # Save plot.
+    os.makedirs("../../figures/21", exist_ok=True)
     path = os.path.join(PATH_TO_FIGURES, "21", "collision_cross_section.pdf")
     plt.savefig(path)
     plt.show()

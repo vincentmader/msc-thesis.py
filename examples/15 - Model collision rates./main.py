@@ -47,6 +47,7 @@ if __name__ == "__main__":
     plt.xlabel("$j$")
 
     # Save plot.
+    os.makedirs("../../figures/23", exist_ok=True)
     path = os.path.join(PATH_TO_FIGURES, "23", "collision_rate.pdf")
     plt.savefig(path)
     plt.show()

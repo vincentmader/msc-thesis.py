@@ -29,7 +29,7 @@ def plot_1(m, St):
     plt.xlabel("mass $m$ [kg]")
     plt.ylabel(r"$St$")
     plt.legend()
-    path = os.path.join(PATH_TO_FIGURES, "03", "stokes_number.pdf")
+    path = os.path.join(PATH_TO_FIGURES, "12", "stokes_number.pdf")
     plt.savefig(path)
     plt_show_then_close()
 
@@ -40,7 +40,7 @@ def plot_2(m, Re):
     plt.xlabel("mass $m$ [kg]")
     plt.ylabel(r"$Re$")
     plt.legend()
-    path = os.path.join(PATH_TO_FIGURES, "03", "reynolds_number.pdf")
+    path = os.path.join(PATH_TO_FIGURES, "12", "reynolds_number.pdf")
     plt.savefig(path)
     plt_show_then_close()
 
@@ -51,7 +51,7 @@ def plot_3(m, t_stop):
     plt.ylabel(r"$\tau_{stop}$ [s]")
     plt.xlabel(r"$m$ [kg]")
     plt.legend()
-    path = os.path.join(PATH_TO_FIGURES, "03", "stopping_time.pdf")
+    path = os.path.join(PATH_TO_FIGURES, "12", "stopping_time.pdf")
     plt.savefig(path)
     plt_show_then_close()
 
@@ -64,6 +64,7 @@ if __name__ == "__main__":
     u = disk_region.v_K  # TODO Is this correct?
     reynolds_nrs = disk_region.reynolds_nr(masses, u)
 
+    os.makedirs("../../figures/12", exist_ok=True)
     plot_1(masses, stokes_nrs)
     plot_2(masses, reynolds_nrs)
     plot_3(masses, stopping_times)

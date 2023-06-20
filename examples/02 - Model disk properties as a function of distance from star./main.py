@@ -116,6 +116,7 @@ PLOTS = {
 }
 
 if __name__ == "__main__":
+    os.makedirs("../../figures/02", exist_ok=True)
     for title, plot in PLOTS.items():
         fig, ax = plt.subplots(figsize=FIGSIZE)
         plot()
