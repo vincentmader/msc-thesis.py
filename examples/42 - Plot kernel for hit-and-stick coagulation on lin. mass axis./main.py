@@ -48,6 +48,6 @@ if __name__ == "__main__":
     )
     p.show()
 
-    from visualization.new import KernelGainVsLossPlot
+    from visualization.kernel.v2.kernel_gain_vs_loss import KernelGainVsLossPlot
     p = KernelGainVsLossPlot(kernel, enable_slider=True)
     p.show()
