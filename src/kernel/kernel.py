@@ -57,17 +57,16 @@ class Kernel():
     def _K_coag(self, R_coll):
 
         mg = self.mg
+        mc = mg.grid_cell_centers
         N_m = mg.N
         m_max = mg.value_from_index(N_m - 1)
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        masses = mg.grid_cell_centers
-
         # Loop over all mass pairs.
-        for i, m_i in enumerate(masses):
-            for j, m_j in enumerate(masses):
+        for i, m_i in enumerate(mc):
+            for j, m_j in enumerate(mc):
                 th = heaviside_theta(i - j)
 
                 # Get collision rate for mass pair.
