@@ -82,6 +82,8 @@ class Kernel():
                 # has to be split onto the two neighboring bins, with indices:
                 k_l = mg.index_from_value(m_k)  #  := index of next-lower bin
                 k_h = k_l + 1                   #  := index of next-higher bin
+                if k_h == N_m:
+                    continue  # NOTE: This is not needed!
 
                 # Calculate masses corresponding to the two neighboring bins.
                 m_l = mg.value_from_index(k_l)
