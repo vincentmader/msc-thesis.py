@@ -58,8 +58,8 @@ class Kernel():
 
         mg = self.mg
         mc = mg.grid_cell_centers
+        m_max = mc[-1]
         N_m = mg.N
-        m_max = mg.value_from_index(N_m - 1)
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
