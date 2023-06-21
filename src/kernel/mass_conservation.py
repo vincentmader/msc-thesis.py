@@ -18,8 +18,8 @@ def test_mass_conservation(kernel):
     N_m = assert_cubic_kernel_shape(K)
     assert N_m == mg.N
 
-    mc = mg.grid_cell_centers()
-    mb = mg.grid_cell_boundaries()
+    mc = mg.grid_cell_centers
+    mb = mg.grid_cell_boundaries
     dm = mb[1:] - mb[:-1]
 
     out = np.zeros(shape=[N_m]*2)

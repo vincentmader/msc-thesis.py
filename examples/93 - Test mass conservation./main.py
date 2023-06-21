@@ -36,7 +36,7 @@ SLIDER_POSITION = [0.05, 0.3, 0.02, 0.4]
 # Define discrete mass axis.
 mg = MassGrid(cfg)
 N_m = mg.N
-masses = mg.grid_cell_boundaries() # NOTE <- This was changed! Do everywhere?
+masses = mg.grid_cell_boundaries # NOTE <- This was changed! Do everywhere?
 dms = masses[1:] - masses[:-1]
 
 # Define kernel.
@@ -44,7 +44,7 @@ kernel = Kernel(cfg)
 K = kernel.K
 K = np.array([0.5 * (K_k + K_k.T) for K_k in K])
 # from kees_kernel import create_coag_kernel
-# mgrain = mg.grid_cell_boundaries()[:-1]  # TODO Use mgrain instead of mg as well?
+# mgrain = mg.grid_cell_boundaries[:-1]  # TODO Use mgrain instead of mg as well?
 # K = create_coag_kernel(mgrain, R_coll)
 
 # print(dms)

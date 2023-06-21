@@ -57,7 +57,7 @@ def plot_3(m, t_stop):
 
 
 if __name__ == "__main__":
-    masses = mg.grid_cell_boundaries()  # TODO Use boundaries or centers?
+    masses = mg.grid_cell_boundaries  # TODO Use boundaries or centers?
     radii = particle_radius_from_mass(masses)
     stopping_times = disk_region.stopping_time(radii)
     stokes_nrs = disk_region.stokes_nr(masses, stopping_times)

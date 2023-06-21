@@ -63,8 +63,8 @@ class Kernel():
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        masses = mg.grid_cell_boundaries()[:-1]
-        masses = mg.grid_cell_centers() 
+        masses = mg.grid_cell_boundaries[:-1]
+        masses = mg.grid_cell_centers
         # ^ TODO Mass bins: Use centers instead of boundaries?
         # ^ NOTE for Kees:
         # The 2nd of the two definitions above is what seems more sensible to me.
@@ -139,8 +139,8 @@ class Kernel():
     def _K_frag(self, R_coll):
 
         mg = self.mg
-        mc = mg.grid_cell_centers()
-        mb = mg.grid_cell_boundaries()
+        mc = mg.grid_cell_centers
+        mb = mg.grid_cell_boundaries
         dm = mb[1:] - mb[:-1]
         N_m = mg.N
 

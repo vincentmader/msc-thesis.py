@@ -8,7 +8,7 @@ E_d = 1    # Kees 2023-03-21
 
 def dv_azimuthal(cfg, disk, disk_region):
     mg = disk.mass_axis
-    masses = mg.grid_cell_centers()
+    masses = mg.grid_cell_centers
     radii = particle_radius_from_mass(masses)
 
     stopping_times = disk_region.stopping_time(radii)

@@ -10,12 +10,12 @@ def dirac_delta(cfg):
     mg = MassGrid(cfg)
     rg = RadialGrid(cfg)
     disk = Disk(cfg, rg, mg)
-    r = rg.grid_cell_centers() # TODO: Use centers or bounds?
+    r = rg.grid_cell_centers # TODO: Use centers or bounds?
     Sigma_g = disk.gas_surface_density(r)
     rho_g = disk.midplane_gas_volume_density(r[:-1], Sigma_g)
 
-    m = mg.grid_cell_centers()
-    dm = mg.grid_cell_widths()[x_0]
+    m = mg.grid_cell_centers
+    dm = mg.grid_cell_widths[x_0]
 
     R = cfg.distance_to_star
     if cfg.enable_physical_gas_density:
@@ -36,12 +36,12 @@ def mrn_distribution(cfg):
     mg = MassGrid(cfg)
     rg = RadialGrid(cfg)
     disk = Disk(cfg, rg, mg)
-    r = rg.grid_cell_centers() # TODO: Use centers or bounds?
+    r = rg.grid_cell_centers # TODO: Use centers or bounds?
     Sigma_g = disk.gas_surface_density(r)
     rho_g = disk.midplane_gas_volume_density(r[:-1], Sigma_g)
 
-    m = mg.grid_cell_centers()
-    dm = mg.grid_cell_widths()[x_0]
+    m = mg.grid_cell_centers
+    dm = mg.grid_cell_widths[x_0]
 
     m_min = m[0]
     m_max = m[-1]

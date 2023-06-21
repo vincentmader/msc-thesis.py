@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         mg = MassGrid(cfg)
         i = np.arange(0, mg.N, 1)
-        m = mg.grid_cell_centers()
+        m = mg.grid_cell_centers
         # ^ NOTE: Used bounds (not centers) here,
         #   since centers are indexed by x.5 values.
         plot(i, m, scale, plot_separately=False, show_plot=True)

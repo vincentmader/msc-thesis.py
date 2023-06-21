@@ -20,12 +20,12 @@ class Solver:
 
         tg = self.time_axis
         N_t = tg.N
-        time = tg.grid_cell_centers()  # todo
+        time = tg.grid_cell_centers  # todo
         # T_START, T_END, N_t = 1e0, 1e9, 200
         # time = np.linspace(0, T_END, N_t)
         # time = T_START * (T_END / T_START)**np.linspace(0, 1, N_t)
 
-        # mgrain = mg.grid_cell_boundaries()[:-1]
+        # mgrain = mg.grid_cell_boundaries[:-1]
         # mgrain = m_min * (m_max / m_min)**np.linspace(0, 1, N_m)
         # migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
         # migrain = np.hstack((  
@@ -37,8 +37,8 @@ class Solver:
 
         # The commented-out lines from above are replaced by calling the methods
         # of the `DiscreteAxis` class instead, this should lead to the same result.
-        mgrain = mg.grid_cell_centers()
-        dmgrain = mg.grid_cell_widths()
+        mgrain = mg.grid_cell_centers
+        dmgrain = mg.grid_cell_widths
 
         # Create initial distribution: Nr of particles per interval dmass per volume.
         # n_dust = np.zeros(N_m)

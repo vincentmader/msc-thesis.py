@@ -22,8 +22,8 @@ cfg = Config()
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
-m = mg.grid_cell_centers()
-boundaries = mg.grid_cell_boundaries()
+m = mg.grid_cell_centers
+boundaries = mg.grid_cell_boundaries
 dm = boundaries[1:] - boundaries[:-1]
 
 # Define kernel.
@@ -37,7 +37,7 @@ solver = Solver(cfg)
 # ─────────────────────────────────────────────────────────────────────────────
 # from kees_kernel import create_coag_kernel
 # Cij = kernel.R_coll(disk, disk_region)
-# mgrain = mg.grid_cell_boundaries()[:-1]
+# mgrain = mg.grid_cell_boundaries[:-1]
 # K = create_coag_kernel(mgrain, Cij) # Kees
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -81,10 +81,10 @@ if __name__ == "__main__":
     dm2f = list(dm2f)
     dm2f.append(dm2f[-1]) # TODO Fix array shapes in a better way than this.
     dm2f = np.array(dm2f)
-    dm2f = [dm2f[i] / tg.grid_cell_widths()[i] for i, _ in enumerate(dm2f)]
+    dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
 
     # Prepare abscissa & ordinate for plot of disk mass error.
-    t = tg.grid_cell_centers()
+    t = tg.grid_cell_centers
     Ms = [disk_mass_from_distribution(n, m, dm) for n in f]
 
     # Create plots.

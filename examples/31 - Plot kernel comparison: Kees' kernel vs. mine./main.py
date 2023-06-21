@@ -44,7 +44,7 @@ Kkij_vinc = kernel.K
 Kkij_vinc = np.array([0.5 * (K_k + K_k.T) for K_k in Kkij_vinc])
 
 # Define kernel according to Kees' definition in `./kees_kernel.py`.
-mgrain = mg.grid_cell_boundaries()[:-1]  # TODO Use mgrain instead of mg as well?
+mgrain = mg.grid_cell_boundaries[:-1]  # TODO Use mgrain instead of mg as well?
 Kkij_kees = create_coag_kernel(mgrain, R_coll)  # NOTE: R_coll was originally named Cij
 
 # Define comparison metrics.

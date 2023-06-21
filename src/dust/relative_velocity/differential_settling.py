@@ -3,7 +3,7 @@ import numpy as np
 
 def dv_differential_settling(cfg, disk, disk_region):
     mg = disk.mass_axis
-    masses = mg.grid_cell_centers()
+    masses = mg.grid_cell_centers
 
     Omega_K = disk_region.Omega_K
     stopping_times = disk_region.stopping_time(masses)

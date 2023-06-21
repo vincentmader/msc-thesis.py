@@ -40,7 +40,7 @@ if cfg.mpl_dark_mode:
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
 N_m = mg.N
-masses = mg.grid_cell_centers()  # TODO Use bounds or centers?
+masses = mg.grid_cell_centers  # TODO Use bounds or centers?
 
 # Calculate particle radii from masses.
 radii = particle_radius_from_mass(masses)
@@ -80,7 +80,7 @@ plot_setups = [
 # def foo():
 #     ticks, locs = [], []
 #     ns = []  # n = order of magnitude
-#     for i, m in enumerate(mg.grid_cell_boundaries()):
+#     for i, m in enumerate(mg.grid_cell_boundaries):
 #         n = int(np.log10(m))
 #         if n not in ns:
 #             ns.append((i, n))
