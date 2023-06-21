@@ -88,6 +88,7 @@ class Kernel():
                 # Calculate masses corresponding to the two neighboring bins.
                 m_l = mg.value_from_index(k_l)
                 m_h = mg.value_from_index(k_h)
+                assert m_k >= m_l and m_k <= m_h
 
                 # Decide whether near-zero cancellation handling is required.
                 might_cancel = (k_l == i)
