@@ -134,8 +134,7 @@ class Kernel():
 
         mg = self.mg
         mc = mg.grid_cell_centers
-        mb = mg.grid_cell_boundaries
-        dm = mb[1:] - mb[:-1]
+        dm = mg.grid_cell_widths
         N_m = mg.N
 
         fragmentation_variants = self.cfg.enable_fragmentation_variant
