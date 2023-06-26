@@ -17,8 +17,6 @@ cfg = Config(
     # mass_max_value=50,
     # mass_resolution=50,
     # mass_axis_scale="lin",
-    enable_coagulation=True,
-    enable_fragmentation=False,
     # enable_fragmentation_variant=[
     #     "naive/pulverization",
     #     # "mrn",
