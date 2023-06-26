@@ -62,14 +62,14 @@ def plot_3(m, t_stop):
 
 
 if __name__ == "__main__":
-    masses = mg.grid_cell_boundaries  # TODO Use boundaries or centers?
-    radii = particle_radius_from_mass(masses)
+    mc = mg.grid_cell_centers
+    radii = particle_radius_from_mass(mc)
     stopping_times = disk_region.stopping_time(radii)
-    stokes_nrs = disk_region.stokes_nr(masses, stopping_times)
+    stokes_nrs = disk_region.stokes_nr(mc, stopping_times)
     u = disk_region.v_K  # TODO Is this correct?
-    reynolds_nrs = disk_region.reynolds_nr(masses, u)
+    reynolds_nrs = disk_region.reynolds_nr(mc, u)
 
     os.makedirs("../../figures/12", exist_ok=True)
-    plot_1(masses, stokes_nrs)
-    plot_2(masses, reynolds_nrs)
-    plot_3(masses, stopping_times)
+    plot_1(mc, stokes_nrs)
+    plot_2(mc, reynolds_nrs)
+    plot_3(mc, stopping_times)
