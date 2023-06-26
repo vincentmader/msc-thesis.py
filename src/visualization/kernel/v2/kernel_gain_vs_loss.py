@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib import colors
 
 
@@ -67,7 +66,7 @@ class KernelGainVsLossPlot:
         assert scale in ["lin", "log"], f"Invalid scale: {scale}"
         K_k = K[k]
         K_k = 0.5 * (K_k + K_k.T)
-        K_k[K_k==0] = 1e-20 # TODO
+        K_k[K_k == 0] = 1e-20  # TODO
         title = title if scale == "lin" else f"\log({title})"
         title = f"${title}$"
         plt.title(title)
@@ -103,8 +102,8 @@ class KernelGainVsLossPlot:
         rect = center_rect(SLIDER_RECT, orientation)
         ax = self.fig.add_axes(rect)
         slider = Slider(
-            ax=ax, orientation=orientation, label="$k$", # todo: Make label customizable?
-            valmin=0, valmax=self.mg.N-1, valstep=1, valinit=k,
+            ax=ax, orientation=orientation, label="$k$",  # todo: Make label customizable?
+            valmin=0, valmax=self.mg.N - 1, valstep=1, valinit=k,
         )
         slider.on_changed(self.slider_on_changed)
         self.slider = slider
@@ -115,12 +114,15 @@ class KernelGainVsLossPlot:
         self.draw(slider_val)
 
 
-def center_rect(rect, orientation): 
-    assert orientation in ["vertical", "horizontal"], f"Invalid orientation: {orientation}"
+def center_rect(rect, orientation):
+    is_valid = orientation in ["vertical", "horizontal"]
+    assert is_valid, f"Invalid orientation: {orientation}"
+
     if orientation == "vertical":
-        return [rect[0] - rect[2], rect[1] - rect[3]/2, rect[2]*2, rect[3]]
+        return [rect[0] - rect[2], rect[1] - rect[3] / 2, rect[2] * 2, rect[3]]
     if orientation == "horizontal":
-        return [rect[0] - rect[2]/2, rect[1] - rect[3], rect[2], rect[3]*2]
+        return [rect[0] - rect[2] / 2, rect[1] - rect[3], rect[2], rect[3] * 2]
+
 
 def cmap_limits(kernel) -> list[float]:
     scale = kernel.mg.scale
@@ -132,7 +134,7 @@ def cmap_limits(kernel) -> list[float]:
         vmin = min([K_gain.min(), K_loss.min()])
         vmax = max([K_gain.max(), K_loss.max()])
     elif scale == "log":
-        K_loss = -K_loss # TODO needed?
+        K_loss = -K_loss  # TODO needed?
         vmin = LOG_CMAP_VMIN
         vmax = max([K_gain.max(), K_loss.max()])
     else:
