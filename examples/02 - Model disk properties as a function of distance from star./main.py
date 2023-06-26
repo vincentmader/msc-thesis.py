@@ -1,18 +1,18 @@
 import os
 import sys
 import matplotlib.pyplot as plt
+from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from disk import Disk, MassGrid
-    from utils.axis import DiscreteAxis
-    from utils.plotting import plt_show_then_close
-    from utils.physics import kepler_frequency
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from constants import AU
+    from disk import Disk, MassGrid
+    from utils.axis import DiscreteAxis
+    from utils.physics import kepler_frequency
 except ModuleNotFoundError as e:
     raise e
 
-FIGSIZE = (10, 5)
+
 cfg = Config()
 mg = MassGrid(cfg)
 r_min, r_max = cfg.radial_min_value, cfg.radial_max_value
@@ -24,8 +24,14 @@ disk = Disk(cfg, rg, mg)
 Sigma_g = disk.gas_surface_density(rb)
 M_star = cfg.stellar_mass
 
+FIGSIZE = (10, 5)
 if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
+
+
+def assure_existence_of_figure_directory():
+    path_to_figures = Path(PATH_TO_FIGURES, "02")
+    os.makedirs(path_to_figures, exist_ok=True)
 
 
 def plot_1():
@@ -105,6 +111,19 @@ def plot_8():
     plt.legend()
 
 
+def create_figure(plotter_function):
+    _, ax = plt.subplots(figsize=FIGSIZE)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plotter_function()
+
+    path = os.path.join(PATH_TO_FIGURES, "02", f"{title}.pdf")
+    plt.savefig(path)
+    plt.show()
+    plt.close()
+
+
 PLOTS = {
     "gas_surface_density": plot_1,
     "midplane_temperature": plot_2,
@@ -116,13 +135,8 @@ PLOTS = {
     "pressure_gradient": plot_8,
 }
 
+
 if __name__ == "__main__":
-    os.makedirs("../../figures/02", exist_ok=True)
-    for title, plot in PLOTS.items():
-        fig, ax = plt.subplots(figsize=FIGSIZE)
-        plot()
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        path = os.path.join(PATH_TO_FIGURES, "02", f"{title}.pdf")
-        plt.savefig(path)
-        plt_show_then_close()
+    assure_existence_of_figure_directory()
+    for title, plotter_function in PLOTS.items():
+        create_figure(plotter_function)
