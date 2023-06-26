@@ -18,10 +18,10 @@ mg = MassGrid(cfg)
 r_min, r_max = cfg.radial_min_value, cfg.radial_max_value
 N_r, scale = cfg.radial_resolution, cfg.radial_axis_scale
 rg = DiscreteAxis(r_min, r_max, N_r, scale)
-r = rg.grid_cell_centers
-r_bounds = rg.grid_cell_boundaries
+rc = rg.grid_cell_centers
+rb = rg.grid_cell_boundaries
 disk = Disk(cfg, rg, mg)
-Sigma_g = disk.gas_surface_density(r_bounds)
+Sigma_g = disk.gas_surface_density(rb)
 M_star = cfg.stellar_mass
 
 if cfg.mpl_dark_mode:
@@ -33,76 +33,77 @@ def plot_1():
     plt.ylabel("$\Sigma_g$ [kg/m$^2$]")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$\Sigma_g\sim\frac{1}{r}$"
-    plt.loglog(r / AU, Sigma_g, label=label)
+    plt.loglog(rc / AU, Sigma_g, label=label)
     plt.legend()
 
 
 def plot_2():
-    T_mid = disk.midplane_temperature(r)
+    T_mid = disk.midplane_temperature(rc)
     plt.title("midplane temperature $T_{mid}$")
     plt.ylabel("$T_{mid}$ [K]")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$T_{mid}=\frac{f}{2}\cdot L_{star}\cdot(4\pi\cdot r^2\cdot\sigma_{SB})^{-1/4}$"
-    plt.loglog(r / AU, T_mid, label=label)
+    plt.loglog(rc / AU, T_mid, label=label)
     plt.legend()
 
 
 def plot_3():
-    c_s = disk.sound_speed(r)
+    c_s = disk.sound_speed(rc)
     plt.title("sound speed $c_s$")
     plt.ylabel("$c_s$ [m/s]")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$c_s=\sqrt{\frac{k_BT}{2.3\cdot m_p}}$"
-    plt.loglog(r / AU, c_s, label=label)
+    plt.loglog(rc / AU, c_s, label=label)
     plt.legend()
 
 
 def plot_4():
-    H_p = disk.scale_height(r)
+    H_p = disk.scale_height(rc)
     plt.title("disk scale height $H_p$")
     plt.ylabel("$H_p$ [AU]")
     plt.xlabel("distance from star $r$ [AU]")
-    plt.loglog(r / AU, H_p / AU, label=r"$H_p=\frac{c_s}{\Omega_K}$")
+    plt.loglog(rc / AU, H_p / AU, label=r"$H_p=\frac{c_s}{\Omega_K}$")
     plt.legend()
 
 
 def plot_5():
-    rho_g = disk.midplane_gas_volume_density(r, Sigma_g)
+    rho_g = disk.midplane_gas_volume_density(rc, Sigma_g)
     plt.title(r"gas volume density $\rho_g$")
     plt.ylabel(r"$\rho_g$ [kg/m$^3$]")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$\rho_g =\frac{\Sigma_g}{\sqrt{2\pi}\cdot H_p}$"
-    plt.loglog(r / AU, rho_g, label=label)
+    plt.loglog(rc / AU, rho_g, label=label)
     plt.legend()
 
 
 def plot_6():
-    P = disk.midplane_gas_pressure(r, Sigma_g)
+    P = disk.midplane_gas_pressure(rc, Sigma_g)
     plt.title("midplane gas pressure $P$")
     plt.ylabel("$P$ [Pa]")
     plt.xlabel("distance from star $r$ [AU]")
-    plt.loglog(r / AU, P, label=r"$P=\rho_g^{mid}\cdot c_s^2$")
+    plt.loglog(rc / AU, P, label=r"$P=\rho_g^{mid}\cdot c_s^2$")
     plt.legend()
 
 
 def plot_7():
-    Omega_K = kepler_frequency(r, M_star)
+    Omega_K = kepler_frequency(rc, M_star)
     plt.title("Kepler frequency $\Omega_K$")
     plt.ylabel("$\Omega_K$ [1/s]")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$\Omega_K=\sqrt{\frac{G\cdot M_{star}}{r^3}}$"
-    plt.loglog(r / AU, Omega_K, label=label)
+    plt.loglog(rc / AU, Omega_K, label=label)
     plt.legend()
 
 
 def plot_8():
-    del_ln_P_g_del_ln_r = disk.del_ln_P_g_del_ln_r(r, Sigma_g)
+    del_ln_P_g_del_ln_r = disk.del_ln_P_g_del_ln_r(rc, Sigma_g)
     plt.title("Logarithmic pressure gradient")
     plt.ylabel(r"$\frac{\partial\log P_g}{\partial\log r}$")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$\frac{\partial\log P_g}{\partial\log r}$"
-    plt.semilogx(r / AU, del_ln_P_g_del_ln_r, label=label)
+    plt.semilogx(rc / AU, del_ln_P_g_del_ln_r, label=label)
     plt.legend()
+
 
 PLOTS = {
     "gas_surface_density": plot_1,
