@@ -39,7 +39,7 @@ def plot_2(i, m, scale):
 
 
 def plot_3(i, _, _scale):
-    y = mg.index_from_value(mg.value_from_index(i))
+    y = [mg.index_from_value(mg.value_from_index(i)) for i in i]
     plt.plot(i, y)
     plt.title(r"$i\to m\to i$ conversion")
     plt.xlabel("index $i$")
@@ -51,7 +51,7 @@ def plot_3(i, _, _scale):
 
 
 def plot_4(_, m, scale):
-    y = mg.value_from_index(mg.index_from_value(m))
+    y = [mg.value_from_index(mg.index_from_value(m)) for m in m]
     if scale == "lin":
         plt.plot(m, y)
     else:
