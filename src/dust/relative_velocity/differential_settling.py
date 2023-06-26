@@ -18,6 +18,8 @@ def dv_differential_settling(cfg, disk, disk_region):
             v_j = settling_velocities[j]
             dv[i, j] = np.abs(v_i - v_j)
 
+    return np.zeros(shape=[mg.N] * 2)
+    # ^ TODO Do not return this, but the actual `dv` instead.
     return dv
 
 
