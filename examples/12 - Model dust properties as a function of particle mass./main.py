@@ -24,7 +24,9 @@ if cfg.mpl_dark_mode:
 
 def plot_1(m, St):
     plt.figure(figsize=FIGSIZE)
-    plt.loglog(m, St, label=r"$St=\frac{\pi}{2}\cdot\frac{\rho_s\cdot a}{\Sigma_g}$") # TODO Include both cases.
+    # TODO Include both cases.
+    plt.loglog(
+        m, St, label=r"$St=\frac{\pi}{2}\cdot\frac{\rho_s\cdot a}{\Sigma_g}$")
     plt.title("Stokes' nr. vs. mass $m$")
     plt.xlabel("mass $m$ [kg]")
     plt.ylabel(r"$St$")
@@ -33,9 +35,10 @@ def plot_1(m, St):
     plt.savefig(path)
     plt_show_then_close()
 
+
 def plot_2(m, Re):
     plt.figure(figsize=FIGSIZE)
-    plt.loglog(m, Re, label=r"$Re=\frac{2au}{\nu_{mol}}$") # TODO Specify 'u'.
+    plt.loglog(m, Re, label=r"$Re=\frac{2au}{\nu_{mol}}$")  # TODO Specify 'u'.
     plt.title("Reynold's nr. vs. mass $m$")
     plt.xlabel("mass $m$ [kg]")
     plt.ylabel(r"$Re$")
@@ -44,9 +47,11 @@ def plot_2(m, Re):
     plt.savefig(path)
     plt_show_then_close()
 
+
 def plot_3(m, t_stop):
     plt.figure(figsize=FIGSIZE)
-    plt.loglog(m, t_stop, label=r"$\tau_{stop}=\frac{\rho_s\cdot a}{\rho_g\cdot u_{th}}$")
+    plt.loglog(
+        m, t_stop, label=r"$\tau_{stop}=\frac{\rho_s\cdot a}{\rho_g\cdot u_{th}}$")
     plt.title(r"stopping time $\tau_{stop}$ (Epstein regime)")
     plt.ylabel(r"$\tau_{stop}$ [s]")
     plt.xlabel(r"$m$ [kg]")
