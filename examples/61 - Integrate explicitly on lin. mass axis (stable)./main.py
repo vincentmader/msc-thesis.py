@@ -38,9 +38,8 @@ cfg = Config(
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = RadialGrid(cfg)
 mg = MassGrid(cfg)
-m = mg.grid_cell_centers
-boundaries = mg.grid_cell_boundaries
-dm = boundaries[1:] - boundaries[:-1]
+mc = mg.grid_cell_centers
+dm = mg.grid_cell_widths
 
 # Define kernel.
 kernel = Kernel(cfg)
@@ -83,14 +82,14 @@ if __name__ == "__main__":
 
     # Calculate temporal derivative of mass distribution.
     dm2f = m2f[1:] - m2f[:-1]
-    dm2f = list(dm2f) 
-    dm2f.append(dm2f[-1]) # TODO Fix array shapes in a better way than this.
+    dm2f = list(dm2f)
+    dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
     dm2f = np.array(dm2f)
 
     # Prepare abscissa & ordinate for plot of disk mass error.
     t = tg.grid_cell_centers
-    Ms = [disk_mass_from_distribution(n, m, dm) for n in f]
+    Ms = [disk_mass_from_distribution(n, mc, dm) for n in f]
 
     # Create plots.
-    plot_1(m, m2f, dm2f)
+    plot_1(mc, m2f, dm2f)
     plot_2(t, Ms)
