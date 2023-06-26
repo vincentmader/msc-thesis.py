@@ -171,9 +171,10 @@ class Kernel():
                     m_tot = m_i + m_j
 
                     # Define range of masses resulting from fragmentation event.
-                    m_min = mc[0]
+                    # m_min = mc[0]
+                    # k_min = mg.index_from_value(m_min)
                     m_max = m_tot
-                    k_min = mg.index_from_value(m_min)
+                    k_min = 0  # TODO
                     k_max = mg.index_from_value(m_max)
                     k_max = min(N_m - 1, k_max)
 
