@@ -29,7 +29,7 @@
 [kernel]
   enable_coagulation = true
   enable_fragmentation = true
-  enable_cancellation_handling = true 
+  enable_cancellation_handling = true
   enable_physical_cross_sections = true
   enable_physical_relative_velocities = [
     "brownian_motion",

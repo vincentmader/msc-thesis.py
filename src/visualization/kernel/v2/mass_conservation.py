@@ -22,7 +22,7 @@ class KernelMassConservationPlot():
         kernel = self.kernel
 
         self.ax.set_aspect('equal', adjustable='box')
-        
+
         vmin, vmax = 1e-14, 1e14
         plt.set_cmap("Reds")
         cmap_norm = colors.LogNorm(vmin=vmin, vmax=vmax)
