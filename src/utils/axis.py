@@ -51,28 +51,8 @@ class DiscreteAxis:
         xs = self.grid_cell_centers
         i = np.where((xs - x) < 0)[0][-1]
         return i
-        # x_min, x_max, N = self.x_min, self.x_max, self.N
-        # if self.scale == "lin":
-        #     d_x = (x_max - x_min) / N
-        #     res = (x - x_min) / d_x
-        #     return res.astype(int)
-        # if self.scale == "log":
-        #     q_x = (x_max / x_min)**(1 / N)
-        #     res = np.log(x / x_min) / np.log(q_x)
-        #     return res.astype(int)
-        # raise Exception(f"Axis scale '{self.scale}' unknown.")
 
     def value_from_index(self, i) -> np.float64:
         xs = self.grid_cell_centers
         x = xs[i]
         return np.float64(x)
-    #     x_min, x_max, N = self.x_min, self.x_max, self.N
-    #     if self.scale == "lin":
-    #         d_x = (x_max - x_min) / N
-    #         res = x_min + d_x * i
-    #         return np.float64(res)
-    #     if self.scale == "log":
-    #         q_x = (x_max / x_min)**(1 / N)
-    #         res = x_min * q_x**i
-    #         return np.float64(res)
-    #     raise Exception(f"Axis scale '{self.scale}' unknown.")
