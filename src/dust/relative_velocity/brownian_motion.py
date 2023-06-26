@@ -7,12 +7,12 @@ from utils.physics import reduced_mass
 
 def dv_brownian_motion(cfg, disk, disk_region):
     mg = disk.mass_axis
-    masses = mg.grid_cell_centers
+    mc = mg.grid_cell_centers
 
     T_mid = disk_region.T_mid
     dv = np.zeros(shape=[mg.N] * 2)
-    for i, m_i in enumerate(masses):
-        for j, m_j in enumerate(masses):
+    for i, m_i in enumerate(mc):
+        for j, m_j in enumerate(mc):
 
             beta = 1 / (k_B * T_mid)
             mu = reduced_mass(m_i, m_j)

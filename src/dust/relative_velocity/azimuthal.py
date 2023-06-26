@@ -8,16 +8,16 @@ E_d = 1    # Kees 2023-03-21
 
 def dv_azimuthal(cfg, disk, disk_region):
     mg = disk.mass_axis
-    masses = mg.grid_cell_centers
-    radii = particle_radius_from_mass(masses)
+    mc = mg.grid_cell_centers
+    radii = particle_radius_from_mass(mc)
 
     stopping_times = disk_region.stopping_time(radii)
     stokes_nrs = disk_region.stokes_nr(radii, stopping_times)
     u = u_n(disk_region)
 
     dv = np.zeros(shape=[mg.N] * 2)
-    for i, _ in enumerate(masses):
-        for j, _ in enumerate(masses):
+    for i, _ in enumerate(mc):
+        for j, _ in enumerate(mc):
 
             St_i = stokes_nrs[i]
             St_j = stokes_nrs[j]
