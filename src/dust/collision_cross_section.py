@@ -8,8 +8,8 @@ def collision_cross_section(cfg, mg):
     if cfg.enable_physical_cross_sections is False:
         return np.ones(shape=[mg.N] * 2)
 
-    masses = mg.grid_cell_centers
-    radii = particle_radius_from_mass(masses)
+    mc = mg.grid_cell_centers
+    radii = particle_radius_from_mass(mc)
 
     sigma = np.ones(shape=[mg.N] * 2)
     for i, a_i in enumerate(radii):
