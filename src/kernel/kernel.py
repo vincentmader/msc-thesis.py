@@ -24,7 +24,7 @@ class Kernel():
         if cfg.enable_physical_relative_velocities:
             R_coll = collision_rate(cfg, disk, disk_region)
         else:  # In the most simple case, the rates are just set to 1.
-            R_coll = np.ones(shape=[mg.N]*2)
+            R_coll = np.ones(shape=[mg.N] * 2)
 
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
@@ -80,8 +80,8 @@ class Kernel():
                 # If a non-linear grid is used, the corresponding index will
                 # not necessarily be an integer. Therefore, the resulting mass
                 # has to be split onto the two neighboring bins, with indices:
-                k_l = mg.index_from_value(m_k)  #  := index of next-lower bin
-                k_h = k_l + 1                   #  := index of next-higher bin
+                k_l = mg.index_from_value(m_k)  # := index of next-lower bin
+                k_h = k_l + 1                   # := index of next-higher bin
                 if k_h == N_m:
                     continue  # NOTE: This is not needed!
 
@@ -101,7 +101,7 @@ class Kernel():
                     eps = (m_i + m_j - m_l) / (m_h - m_l)
 
                 # Check whether one of the masses is in the upper-most 2 bins.
-                near_upper_bound = i>=N_m-2 or j>=N_m-2
+                near_upper_bound = i >= N_m - 2 or j >= N_m - 2
 
                 # Subtract "loss" term from kernel.
                 # ─────────────────────────────────────────────────────────────
@@ -110,16 +110,16 @@ class Kernel():
                     # Handle cancellation.
                     if handle_cancellation:
                         K_loss[k_l, i, j] -= R * th * eps
-                        K_loss[k_l, i, j] -= R/2 if i==j else 0
+                        K_loss[k_l, i, j] -= R / 2 if i == j else 0
                     # Handle "trivial" (non-cancelling) case.
                     else:
-                        K_loss[i, i, j] -= R if i<N_m-2 else 0
+                        K_loss[i, i, j] -= R if i < N_m - 2 else 0
 
                 # Add "gain" term to kernel.
                 # ─────────────────────────────────────────────────────────────
                 # Handle upper mass grid boundary.
-                k_l = N_m-2 if k_l > N_m-2 else k_l
-                k_h = N_m-2 if k_h > N_m-2 else k_h
+                k_l = N_m - 2 if k_l > N_m - 2 else k_l
+                k_h = N_m - 2 if k_h > N_m - 2 else k_h
                 if not near_upper_bound:
                     # Handle cancellation.
                     if handle_cancellation:
@@ -152,7 +152,7 @@ class Kernel():
 
                 if "naive/pulverization" in fragmentation_variants:
 
-                    X = 10 # TODO Play around with this value, observe changes!
+                    X = 10  # TODO Play around with this value, observe changes!
                     k = 0
                     m_k = mc[k]
                     if min(i, j) > X:
@@ -165,7 +165,7 @@ class Kernel():
 
                 if "mrn" in fragmentation_variants:
 
-                    q = -11/6
+                    q = -11 / 6
 
                     # Define total mass that needs to be "moved".
                     m_tot = m_i + m_j
@@ -175,14 +175,16 @@ class Kernel():
                     m_max = m_tot
                     k_min = mg.index_from_value(m_min)
                     k_max = mg.index_from_value(m_max)
-                    k_max = min(N_m-1, k_max)
+                    k_max = min(N_m - 1, k_max)
 
                     # This is the lowest bin at which fragmentation can occur.
                     if min(i, j) < k_min:
                         continue
 
-                    top = m_i * dm[i] * R_coll[i, j] + m_j * dm[j] * R_coll[i, j]
-                    bottom = sum([mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)])
+                    top = m_i * dm[i] * R_coll[i, j] + \
+                        m_j * dm[j] * R_coll[i, j]
+                    bottom = sum(
+                        [mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)])
                     A = top / bottom
 
                     # Remove mass from bins corresponding to initial masses.
