@@ -12,7 +12,16 @@ except ModuleNotFoundError as e:
 
 
 # Load configuration from `../../config.toml`.
-cfg = Config()
+cfg = Config(
+    # mass_min_value=1,
+    # mass_max_value=50,
+    # mass_resolution=50,
+    # mass_axis_scale="lin",
+    # enable_fragmentation_variant=[
+    #     "naive/pulverization",
+    #     # "mrn",
+    # ]
+)
 
 # Define kernel.
 kernel = Kernel(cfg)
