@@ -36,7 +36,7 @@ N_m = mg.N
 
 # Define collision rate.
 # Here: Set to 1 for simplicity.
-R_coll = np.ones(shape=[N_m]*2)
+R_coll = np.ones(shape=[N_m] * 2)
 
 # Define kernel according to definition in `../../src/kernel/__init__.py`.
 kernel = Kernel(cfg)
@@ -45,15 +45,16 @@ Kkij_vinc = np.array([0.5 * (K_k + K_k.T) for K_k in Kkij_vinc])
 
 # Define kernel according to Kees' definition in `./kees_kernel.py`.
 mgrain = mg.grid_cell_boundaries[:-1]  # TODO Use mgrain instead of mg as well?
-Kkij_kees = create_coag_kernel(mgrain, R_coll)  # NOTE: R_coll was originally named Cij
+# NOTE: R_coll was originally named Cij
+Kkij_kees = create_coag_kernel(mgrain, R_coll)
 
 # Define comparison metrics.
 Kkij_equal = (Kkij_vinc - Kkij_kees) < 1e-14
-    # Kkij_diff = Kkij_kees - Kkij_vinc
-    # Kkij_v2k = (Kkij_vinc - Kkij_kees) / Kkij_kees * 100
-    # Kkij_k2v = (Kkij_kees - Kkij_vinc) / Kkij_vinc * 100
-    # Kkij_log_v2k = np.log(Kkij_v2k)
-    # Kkij_log_k2v = np.log(Kkij_k2v)
+# Kkij_diff = Kkij_kees - Kkij_vinc
+# Kkij_v2k = (Kkij_vinc - Kkij_kees) / Kkij_kees * 100
+# Kkij_k2v = (Kkij_kees - Kkij_vinc) / Kkij_vinc * 100
+# Kkij_log_v2k = np.log(Kkij_v2k)
+# Kkij_log_k2v = np.log(Kkij_k2v)
 
 
 if __name__ == "__main__":
@@ -94,10 +95,10 @@ if __name__ == "__main__":
         Kk = Kkij_kees[k]
         for i in range(N_m):
             for j in range(N_m):
-                if Kv[i,j] == Kk[i,j]:
+                if Kv[i, j] == Kk[i, j]:
                     continue
                 count_of_different_entries += 1
-                rel_diff = (Kk[i,j]-Kv[i,j])/Kv[i,j]
+                rel_diff = (Kk[i, j] - Kv[i, j]) / Kv[i, j]
                 if np.abs(rel_diff) > 1e-12:
                     # print(k, i, j, "\tKk=", Kk[i,j], "\tKv=", Kv[i,j], "\t", rel_diff * 100, "%")
                     count_of_significantly_different_entries += 1
