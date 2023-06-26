@@ -58,7 +58,7 @@ class Kernel():
 
         mg = self.mg
         mc = mg.grid_cell_centers
-        m_max = mc[-1]
+        m_max = mg.x_max  # Note: This is NOT the same as `mc[-1]`.
         N_m = mg.N
 
         K_gain = np.zeros(shape=[N_m] * 3)
@@ -82,8 +82,8 @@ class Kernel():
                 # has to be split onto the two neighboring bins, with indices:
                 k_l = mg.index_from_value(m_k)  # := index of next-lower bin
                 k_h = k_l + 1                   # := index of next-higher bin
-                if k_h == N_m:
-                    continue  # NOTE: This is not needed!
+                if k_h >= N_m:
+                    continue
 
                 # Calculate masses corresponding to the two neighboring bins.
                 m_l = mg.value_from_index(k_l)
@@ -110,7 +110,9 @@ class Kernel():
                     # Handle cancellation.
                     if handle_cancellation:
                         K_loss[k_l, i, j] -= R * th * eps
-                        K_loss[k_l, i, j] -= R / 2 if i == j else 0
+                        K_loss[k_l, i, j] -= R * th if i == j else 0
+                        # ^ TODO Why is this term here?
+                        #        If removed, the solver crashes.
                     # Handle "trivial" (non-cancelling) case.
                     else:
                         K_loss[i, i, j] -= R if i < N_m - 2 else 0
