@@ -19,17 +19,16 @@ def test_mass_conservation(kernel):
     assert N_m == mg.N
 
     mc = mg.grid_cell_centers
-    mb = mg.grid_cell_boundaries
-    dm = mb[1:] - mb[:-1]
+    dm = mg.grid_cell_widths
 
-    out = np.zeros(shape=[N_m]*2)
+    out = np.zeros(shape=[N_m] * 2)
 
     for i in range(N_m):
         for j in range(N_m):
 
             sum_ij = 0
             for k in range(N_m):
-                m_k = mb[k] # <- TODO mc
+                m_k = mc[k]
                 dm_k = dm[k]
 
                 if kernel.cfg.mass_axis_scale == "lin" and np.abs(dm_k - 1) > 1e-14:
