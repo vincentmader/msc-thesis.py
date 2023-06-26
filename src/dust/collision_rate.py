@@ -12,4 +12,5 @@ def collision_rate(cfg, disk, disk_region):  # TODO Think re: inputs of this fun
     # Calculate reaction rate.
     # TODO Include reaction probability?
     R = sigma * dv  # NOTE Simplification was made here.
+    # TODO Include number density?
     return R
