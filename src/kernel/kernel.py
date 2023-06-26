@@ -16,6 +16,7 @@ class Kernel():
         rg = RadialGrid(cfg)
         # ...particle mass.
         mg = MassGrid(cfg)
+        mc = mg.grid_cell_centers
         self.mg = mg
         # Define protoplanetary disk, & the position of interest in it.
         disk = Disk(cfg, rg, mg)
@@ -25,6 +26,9 @@ class Kernel():
             R_coll = collision_rate(cfg, disk, disk_region)
         else:  # In the most simple case, the rates are just set to 1.
             R_coll = np.ones(shape=[mg.N] * 2)
+
+        if cfg.enable_cancellation_handling:
+            assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
