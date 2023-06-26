@@ -182,10 +182,23 @@ class Kernel():
                     if min(i, j) < k_min:
                         continue
 
+                    # NOTE:
+                    # - Consider the very first case `i == j == 0`.
+                    # - Here, the variable `bottom` will be set to zero.
+                    # - This will lead to a division by zero, i.e. `A = infinity`.
+                    # - Therefore, skip this case.
+                    # TODO:
+                    # - This depends on the definition of `k_min = 0`.
+                    # - When else can this happen?
+                    # - Handle those cases!
+                    if i == 0 and j == 0:
+                        continue
+
                     top = m_i * dm[i] * R_coll[i, j] + \
                         m_j * dm[j] * R_coll[i, j]
                     bottom = sum(
                         [mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)])
+                    assert bottom != 0
                     A = top / bottom
 
                     # Remove mass from bins corresponding to initial masses.
