@@ -1,3 +1,4 @@
+from pprint import pprint
 import os
 import sys
 try:
@@ -24,6 +25,7 @@ cfg = Config(
     #     # "mrn",
     # ]
 )
+pprint(cfg.__dict__)
 
 # Define kernel.
 kernel = Kernel(cfg)
