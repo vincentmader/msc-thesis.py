@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 import sys
 
 import numpy as np
@@ -7,6 +8,10 @@ try:
     from config import Config
     from disk import MassGrid, RadialGrid, mass_distribution, TimeGrid
     from disk.disk import disk_mass_from_distribution
+    # from disk.disk import Disk
+    # from disk.disk_region import DiskRegion
+    # from dust.collision_rate import collision_rate
+    # from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from solver import Solver
     from utils.plotting import plt_show_then_close
@@ -18,6 +23,7 @@ except ModuleNotFoundError as e:
 
 # Load configuration from `../../config.toml`.
 cfg = Config()
+pprint(cfg.__dict__)
 
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = RadialGrid(cfg)
@@ -35,10 +41,11 @@ tg = TimeGrid(cfg)
 solver = Solver(cfg)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# from kees_kernel import create_coag_kernel
-# Cij = kernel.R_coll(disk, disk_region)
-# mgrain = mg.grid_cell_boundaries[:-1]
-# K = create_coag_kernel(mgrain, Cij) # Kees
+# disk = Disk(cfg, rg, mg)
+# disk_region = DiskRegion(cfg, disk)
+# Cij = collision_rate(cfg, disk, disk_region)
+# mgrain = mg.grid_cell_centers
+# K = create_coag_kernel(mgrain, Cij)  # Kees
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -71,7 +78,7 @@ if __name__ == "__main__":
 
     # Initialize mass distribution.
     n0 = mass_distribution.dirac_delta(cfg)
-        # n0 = mass_distribution.mrn_distribution(cfg)
+    # n0 = mass_distribution.mrn_distribution(cfg)
 
     # Run the solver.
     N, f, m2f = solver.run(mg, n0, K)
@@ -79,7 +86,7 @@ if __name__ == "__main__":
     # Calculate temporal derivative of mass distribution.
     dm2f = m2f[1:] - m2f[:-1]
     dm2f = list(dm2f)
-    dm2f.append(dm2f[-1]) # TODO Fix array shapes in a better way than this.
+    dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
     dm2f = np.array(dm2f)
     dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
 
