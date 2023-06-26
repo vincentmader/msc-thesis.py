@@ -18,6 +18,12 @@
   mass_max_value = 1e+6     # given in kg  (a=1e+3 cm -> m=10e+6  kg)
   mass_resolution = 50      # given as nr. of bins in mass grid
   mass_axis_scale = "log"
+
+  # mass_min_value = 2    # given in kg  (a=1e-4 cm -> m=10e-15 kg)
+  # mass_max_value = 52     # given in kg  (a=1e+3 cm -> m=10e+6  kg)
+  # mass_resolution = 50      # given as nr. of bins in mass grid
+  # mass_axis_scale = "lin"
+
   mass_open_boundary = false  # TODO Assure correct usage (or remove?)
 
 [time_discretization]
