@@ -72,7 +72,8 @@ def plot(i, m, scale, plot_separately=False, show_plot=False):
         for idx, plot in enumerate(plots):
             plt.figure(figsize=FIGSIZE)
             plot(i, m, scale)
-            path = os.path.join(PATH_TO_FIGURES, "11", f"discrete-mass-axis_{scale}-scale-{idx}.pdf")
+            filename = f"discrete-mass-axis_{scale}-scale-{idx}.pdf"
+            path = os.path.join(PATH_TO_FIGURES, "11", filename)
             plt.savefig(path)
             if show_plot:
                 plt.show()
@@ -83,7 +84,8 @@ def plot(i, m, scale, plot_separately=False, show_plot=False):
             plt.subplot(2, 2, idx + 1)
             plot(i, m, scale)
         plt.tight_layout()
-        path = os.path.join(PATH_TO_FIGURES, "11", f"discrete-mass-axis_{scale}-scale.pdf")
+        filename = f"discrete-mass-axis_{scale}-scale.pdf"
+        path = os.path.join(PATH_TO_FIGURES, "11", filename)
         plt.savefig(path)
         if show_plot:
             plt.show()
