@@ -32,6 +32,7 @@ cfg = Config(
 
 # Define discrete mass axis.
 mg = MassGrid(cfg)
+mc = mg.grid_cell_centers
 N_m = mg.N
 
 # Define collision rate.
@@ -44,9 +45,7 @@ Kkij_vinc = kernel.K
 Kkij_vinc = np.array([0.5 * (K_k + K_k.T) for K_k in Kkij_vinc])
 
 # Define kernel according to Kees' definition in `./kees_kernel.py`.
-mgrain = mg.grid_cell_boundaries[:-1]  # TODO Use mgrain instead of mg as well?
-# NOTE: R_coll was originally named Cij
-Kkij_kees = create_coag_kernel(mgrain, R_coll)
+Kkij_kees = create_coag_kernel(mc, R_coll)
 
 # Define comparison metrics.
 Kkij_equal = (Kkij_vinc - Kkij_kees) < 1e-14
