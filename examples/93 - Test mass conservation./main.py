@@ -6,6 +6,7 @@ try:
     from config import Config
     from disk import MassGrid
     from kernel import Kernel
+    from kernel import test_mass_conservation
     from visualization.kernel.v1.kernel_layer_plot import KernelLayerPlot
     from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
 except ModuleNotFoundError as e:
@@ -36,15 +37,15 @@ SLIDER_POSITION = [0.05, 0.3, 0.02, 0.4]
 # Define discrete mass axis.
 mg = MassGrid(cfg)
 N_m = mg.N
-masses = mg.grid_cell_boundaries # NOTE <- This was changed! Do everywhere?
-dms = masses[1:] - masses[:-1]
+mc = mg.grid_cell_centers
+dm = mg.grid_cell_widths
 
 # Define kernel.
 kernel = Kernel(cfg)
 K = kernel.K
 K = np.array([0.5 * (K_k + K_k.T) for K_k in K])
 # from kees_kernel import create_coag_kernel
-# mgrain = mg.grid_cell_boundaries[:-1]  # TODO Use mgrain instead of mg as well?
+# mgrain = mg.grid_cell_centers  # TODO Use mgrain instead of mg as well?
 # K = create_coag_kernel(mgrain, R_coll)
 
 # print(dms)
@@ -60,12 +61,13 @@ for i in range(N_m):
     for j in range(N_m):
 
         summa = 0
-        for k in range(N_m - 1): # TODO
-            m_k = masses[k]
+        for k in range(N_m - 1):  # TODO
+            m_k = mc[k]
             # print(k, m_k)
-            dm_k = dms[k]
+            dm_k = dm[k]
             if cfg.mass_axis_scale == "lin" and np.abs(dm_k - 1) > 1e-14:
-                raise Exception(f"Grid spacing dm_k != 1 on linear grid, is this on purpose? (for {k=} -> {dm_k=})")
+                raise Exception(
+                    f"Grid spacing dm_k != 1 on linear grid, is this on purpose? (for {k=} -> {dm_k=})")
 
             summa += m_k * dm_k * K[k, i, j]
 
@@ -85,7 +87,6 @@ b = np.array(a)
 # plt.ylabel("$i$", rotation=0)
 # plt.xlabel("$j$")
 
-from kernel import test_mass_conservation
 a = test_mass_conservation(kernel)
 
 assert a.all() == b.all()
