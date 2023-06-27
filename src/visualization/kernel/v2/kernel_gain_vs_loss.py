@@ -69,7 +69,11 @@ class KernelGainVsLossPlot:
         K_k[K_k == 0] = 1e-20  # TODO
         title = title if scale == "lin" else f"\log({title})"
         title = f"${title}$"
+
         plt.title(title)
+        plt.xlabel("$j$")
+        plt.ylabel("$i$", rotation=0)
+
         ax = plt.gca()
         ax.set_aspect('equal', adjustable='box')
         vmin, vmax = self.cmap_limits

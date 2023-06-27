@@ -4,10 +4,13 @@ from kernel.mass_conservation import test_mass_conservation
 from matplotlib import colors
 
 
+FIGSIZE = (8, 8)
+
+
 class KernelMassConservationPlot():
 
     def __init__(self, cfg, mg, K):
-        self.fig = plt.figure()
+        self.fig = plt.figure(figsize=FIGSIZE)
         self.ax = plt.gca()
         self.K = K
         self.sum_ij = test_mass_conservation(cfg, mg, K)
@@ -27,6 +30,10 @@ class KernelMassConservationPlot():
         vmin, vmax = 1e-14, 1e14  # TODO Calculate dynamically.
         plt.set_cmap("Reds")
         cmap_norm = colors.LogNorm(vmin=vmin, vmax=vmax)
+
+        plt.xlabel("$j$")
+        plt.ylabel("$i$", rotation=0)
+        plt.title("$\sum_k K_{kij}\cdot m_k\cdot \Delta m_k$")
 
         return plt.pcolor(
             self.sum_ij,
