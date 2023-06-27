@@ -32,7 +32,7 @@ def test_mass_conservation(cfg, mg, K):
                     msg = f"Grid spacing dm_k != 1 on linear grid, is this on purpose? (for {k=} -> {dm_k=})"
                     raise Exception(msg)
 
-                sum_ij += m_k * dm_k * K[k, i, j]
+                sum_ij += m_k * K[k, i, j]
 
             machine_precision_is_assured = abs(sum_ij)  # < 1e-12
 
