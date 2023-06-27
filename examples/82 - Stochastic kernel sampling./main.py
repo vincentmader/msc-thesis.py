@@ -32,7 +32,7 @@ def prepare_p(arr):
     return p
 
 
-def main() :
+def main():
     # Define kernel.
     cfg = Config()
     kernel = Kernel(cfg)
