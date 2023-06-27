@@ -31,6 +31,8 @@ pprint(cfg.__dict__)
 kernel = Kernel(cfg)
 K = kernel.K
 
+mg = kernel.mg
+
 
 if __name__ == "__main__":
 
@@ -51,5 +53,5 @@ if __name__ == "__main__":
     p.show()
 
     # Plot `\sum_{ij} m_k \Delta m_k K_kij`.
-    p = KernelMassConservationPlot(kernel)
+    p = KernelMassConservationPlot(cfg, mg, K)
     p.show()

@@ -6,11 +6,11 @@ from matplotlib import colors
 
 class KernelMassConservationPlot():
 
-    def __init__(self, kernel):
+    def __init__(self, cfg, mg, K):
         self.fig = plt.figure()
         self.ax = plt.gca()
-        self.kernel = kernel
-        self.sum_ij = test_mass_conservation(kernel)
+        self.K = K
+        self.sum_ij = test_mass_conservation(cfg, mg, K)
 
         self.ax.format_coord = self.custom_format_coord
 
