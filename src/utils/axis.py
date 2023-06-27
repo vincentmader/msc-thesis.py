@@ -49,8 +49,7 @@ class DiscreteAxis:
 
     def index_from_value(self, x) -> int:
         xs = self.grid_cell_centers
-        i = np.where((xs - x) < 0)[0][-1]
-        # TODO Does this need to be "<" or "<="?
+        i = np.where((xs - x) <= 0)[0][-1]
         return i
 
     def value_from_index(self, i) -> np.float64:
