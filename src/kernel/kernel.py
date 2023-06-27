@@ -124,8 +124,6 @@ class Kernel():
                 # Add "gain" term to kernel.
                 # ─────────────────────────────────────────────────────────────
                 # Handle upper mass grid boundary.
-                k_l = N_m - 2 if k_l > N_m - 2 else k_l
-                k_h = N_m - 2 if k_h > N_m - 2 else k_h
                 if not near_upper_bound:
                     # Handle cancellation.
                     if handle_cancellation:
