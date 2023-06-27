@@ -8,6 +8,7 @@ try:
     from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
+    from visualization.kernel.v2.mass_conservation import KernelMassConservationPlot
 except ModuleNotFoundError as e:
     raise e
 
@@ -103,3 +104,13 @@ if __name__ == "__main__":
                     count_of_significantly_different_entries += 1
     print(f"{count_of_different_entries=}")
     print(f"{count_of_significantly_different_entries=}")
+
+    # Plot `\sum_{ij} m_k \Delta m_k K_kij`.
+    print("Showing mass conservation test for `K_kij_vinc`...")
+    p = KernelMassConservationPlot(cfg, mg, Kkij_vinc)
+    p.show()
+
+    # Plot `\sum_{ij} m_k \Delta m_k K_kij`.
+    print("Showing mass conservation test for `K_kij_kees`...")
+    p = KernelMassConservationPlot(cfg, mg, Kkij_kees)
+    p.show()
