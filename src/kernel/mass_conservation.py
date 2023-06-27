@@ -28,9 +28,9 @@ def test_mass_conservation(cfg, mg, K):
                 m_k = mc[k]
                 dm_k = dm[k]
 
-                if cfg.mass_axis_scale == "lin" and np.abs(dm_k - 1) > 1e-14:
-                    msg = f"Grid spacing dm_k != 1 on linear grid, is this on purpose? (for {k=} -> {dm_k=})"
-                    raise Exception(msg)
+                if cfg.mass_axis_scale == "lin":
+                    msg = f"dm_k != 1 on linear grid, is this on purpose? ({k=}, {dm_k=})"
+                    assert np.abs(dm_k - 1) <= 1e-14, msg
 
                 sum_ij += m_k * K[k, i, j]
 
