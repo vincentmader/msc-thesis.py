@@ -2,6 +2,7 @@ import os
 from pprint import pprint
 import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
@@ -15,7 +16,6 @@ try:
     # from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from solver import Solver
-    from utils.plotting import plt_show_then_close
     from visualization.mass_error import DiskMassErrorPlot
     from visualization.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
@@ -65,13 +65,15 @@ def plot_1(m, m2f, dm2f):
         ylims_2=ylims,
     )
     plot.draw()
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 def plot_2(x, y):
     plot = DiskMassErrorPlot(x, y)
     plot.draw()
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":

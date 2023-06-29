@@ -14,7 +14,6 @@ try:
     from dust.relative_velocity import dv_radial_drift
     from dust.relative_velocity import dv_turbulence
     from dust.relative_velocity import relative_velocity
-    from utils.plotting import plt_show_then_close
 except ModuleNotFoundError as e:
     raise e
 
@@ -158,7 +157,8 @@ def plot_together():
         plot(dv, title)
     path = os.path.join(PATH_TO_FIGURES, "13", "relative_velocities.pdf")
     plt.savefig(path)
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":
