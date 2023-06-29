@@ -3,7 +3,7 @@ from matplotlib.widgets import Slider
 
 
 SLIDER_COORDS = [0.925, 0.3, 0.04, 0.4]  # todo: move elsewhere ?
-FIGSIZE = (6, 6)
+FIGSIZE = (10, 10)
 
 
 class InteractiveSliderLinePlot:
@@ -71,7 +71,8 @@ class InteractiveSliderLinePlot:
         elif self.cfg.mass_axis_scale == "log":
             self.ax_1.loglog(x, y_1, label=self.label)
         else:
-            raise Exception(f"Axis scale '{self.cfg.mass_axis_scale}' unknown.")
+            raise Exception(
+                f"Axis scale '{self.cfg.mass_axis_scale}' unknown.")
 
         # Plot derivative of particle mass distribution.
         if self.cfg.mass_axis_scale == "lin":
@@ -81,7 +82,8 @@ class InteractiveSliderLinePlot:
             self.ax_2.loglog(x, -y_2, 'b', label="neg.")
             self.ax_2.legend()
         else:
-            raise Exception(f"Axis scale '{self.cfg.mass_axis_scale}' unknown.")
+            raise Exception(
+                f"Axis scale '{self.cfg.mass_axis_scale}' unknown.")
 
         self.set_labels()
         self.set_xlims()
@@ -111,6 +113,7 @@ class InteractiveSliderLinePlot:
     def set_labels(self):
         self.ax_1.set_title(self.title)
         self.ax_1.set_xlabel(self.xlabel_1)
-        self.ax_1.set_ylabel(self.ylabel_1) 
+        self.ax_1.set_ylabel(self.ylabel_1, rotation=0)
         self.ax_2.set_xlabel(self.xlabel_2)  # TODO Fix xticks.
-        self.ax_2.set_ylabel(self.ylabel_2)  # TODO Draw real derivative.
+        # TODO Draw real derivative.
+        self.ax_2.set_ylabel(self.ylabel_2, rotation=0)
