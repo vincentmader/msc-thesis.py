@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 
-from axis import TimeGrid
+from axis import DiscreteTimeAxis
 from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
 from utils.errors import handle_unknown_solver
 
@@ -10,7 +10,7 @@ class Solver:
 
     def __init__(self, cfg):
         self.cfg = cfg
-        self.time_axis = TimeGrid(cfg)
+        self.time_axis = DiscreteTimeAxis(cfg)
 
     def run(self, mg, n_dust, K):
         solver = self.cfg.solver_variant

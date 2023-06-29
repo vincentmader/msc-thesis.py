@@ -1,6 +1,6 @@
 import numpy as np
 
-from axis import MassGrid, RadialGrid
+from axis import DiscreteMassAxis, DiscreteRadialAxis
 from disk import Disk, DiskRegion
 from dust.collision_rate import collision_rate
 from utils.functions import heaviside_theta
@@ -14,9 +14,9 @@ class Kernel():
 
         # Define discrete axes for...
         # ...radial distance of disk region of interest from central star.
-        rg = RadialGrid(cfg)
+        rg = DiscreteRadialAxis(cfg)
         # ...particle mass.
-        mg = MassGrid(cfg)
+        mg = DiscreteMassAxis(cfg)
         mc = mg.grid_cell_centers
         self.mg = mg
         # Define protoplanetary disk, & the position of interest in it.

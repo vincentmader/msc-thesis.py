@@ -4,7 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import MassGrid, RadialGrid
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from dust.collision_rate import collision_rate
@@ -21,8 +21,8 @@ if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
 # Define discrete axis for radial distance from star, as well as for mass.
-rg = RadialGrid(cfg)
-mg = MassGrid(cfg)
+rg = DiscreteRadialAxis(cfg)
+mg = DiscreteMassAxis(cfg)
 
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)

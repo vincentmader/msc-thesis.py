@@ -3,7 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import MassGrid, RadialGrid
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from utils.plotting import plt_show_then_close
@@ -14,8 +14,8 @@ except ModuleNotFoundError as e:
 FIGSIZE = (10, 5)
 
 cfg = Config()
-mg = MassGrid(cfg)
-rg = RadialGrid(cfg)
+mg = DiscreteMassAxis(cfg)
+rg = DiscreteRadialAxis(cfg)
 disk = Disk(cfg, rg, mg)
 disk_region = DiskRegion(cfg, disk)
 

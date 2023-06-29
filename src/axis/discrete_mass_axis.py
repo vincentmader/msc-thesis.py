@@ -1,7 +1,7 @@
-from .axis import DiscreteAxis
+from .discrete_axis import DiscreteAxis
 
 
-class MassGrid(DiscreteAxis):
+class DiscreteMassAxis(DiscreteAxis):
 
     def __init__(self, cfg):
         super().__init__(

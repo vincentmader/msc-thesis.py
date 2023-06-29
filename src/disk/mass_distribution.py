@@ -1,6 +1,6 @@
 import numpy as np
 
-from axis import MassGrid, RadialGrid
+from axis import DiscreteMassAxis, DiscreteRadialAxis
 from disk import Disk
 
 
@@ -8,8 +8,8 @@ x_0 = 0
 
 
 def dirac_delta(cfg):
-    mg = MassGrid(cfg)
-    rg = RadialGrid(cfg)
+    mg = DiscreteMassAxis(cfg)
+    rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
     r = rg.grid_cell_centers  # TODO: Use centers or bounds?
     Sigma_g = disk.gas_surface_density(r)
@@ -34,8 +34,8 @@ def dirac_delta(cfg):
 
 
 def mrn_distribution(cfg):
-    mg = MassGrid(cfg)
-    rg = RadialGrid(cfg)
+    mg = DiscreteMassAxis(cfg)
+    rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
     r = rg.grid_cell_centers  # TODO: Use centers or bounds?
     Sigma_g = disk.gas_surface_density(r)

@@ -4,7 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import MassGrid, RadialGrid
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from disk.dust_particle import particle_radius_from_mass
@@ -38,8 +38,8 @@ if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
 # Define discrete axis for radial distance from star, as well as for mass.
-rg = RadialGrid(cfg)
-mg = MassGrid(cfg)
+rg = DiscreteRadialAxis(cfg)
+mg = DiscreteMassAxis(cfg)
 N_m = mg.N
 masses = mg.grid_cell_centers  # TODO Use bounds or centers?
 

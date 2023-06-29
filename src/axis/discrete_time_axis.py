@@ -1,7 +1,7 @@
-from .axis import DiscreteAxis
+from .discrete_axis import DiscreteAxis
 
 
-class TimeGrid(DiscreteAxis):
+class DiscreteTimeAxis(DiscreteAxis):
 
     def __init__(self, cfg):
         super().__init__(

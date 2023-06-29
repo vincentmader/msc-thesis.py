@@ -4,7 +4,7 @@ import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from axis import MassGrid
+    from axis import DiscreteMassAxis
     from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
@@ -32,7 +32,7 @@ cfg = Config(
 )
 
 # Define discrete mass axis.
-mg = MassGrid(cfg)
+mg = DiscreteMassAxis(cfg)
 mc = mg.grid_cell_centers
 N_m = mg.N
 

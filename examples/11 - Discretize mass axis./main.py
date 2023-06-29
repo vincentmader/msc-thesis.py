@@ -5,7 +5,7 @@ import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from axis import MassGrid
+    from axis import DiscreteMassAxis
 except ModuleNotFoundError as e:
     raise e
 
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     for scale in ["lin", "log"]:
         cfg.mass_axis_scale = scale
 
-        mg = MassGrid(cfg)
+        mg = DiscreteMassAxis(cfg)
         i = np.arange(0, mg.N, 1)
         m = mg.grid_cell_centers
         # ^ NOTE: Used bounds (not centers) here,

@@ -4,7 +4,7 @@ import sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import MassGrid, RadialGrid, TimeGrid
+    from axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
     from disk import mass_distribution
     from disk.disk import disk_mass_from_distribution
@@ -37,8 +37,8 @@ cfg = Config(
 )
 
 # Define discrete axis for radial distance from star, as well as for mass.
-rg = RadialGrid(cfg)
-mg = MassGrid(cfg)
+rg = DiscreteRadialAxis(cfg)
+mg = DiscreteMassAxis(cfg)
 mc = mg.grid_cell_centers
 dm = mg.grid_cell_widths
 
@@ -47,7 +47,7 @@ kernel = Kernel(cfg)
 K = kernel.K
 
 # Define temporal domain & solver.
-tg = TimeGrid(cfg)
+tg = DiscreteTimeAxis(cfg)
 solver = Solver(cfg)
 
 

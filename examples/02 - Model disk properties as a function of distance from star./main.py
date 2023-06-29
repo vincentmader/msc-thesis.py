@@ -7,15 +7,15 @@ try:
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from constants import AU
     from disk import Disk
-    from axis import MassGrid, RadialGrid
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from utils.physics import kepler_frequency
 except ModuleNotFoundError as e:
     raise e
 
 
 cfg = Config()
-mg = MassGrid(cfg)
-rg = RadialGrid(cfg)
+mg = DiscreteMassAxis(cfg)
+rg = DiscreteRadialAxis(cfg)
 rc = rg.grid_cell_centers
 rb = rg.grid_cell_boundaries
 disk = Disk(cfg, rg, mg)
