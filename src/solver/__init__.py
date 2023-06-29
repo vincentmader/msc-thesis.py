@@ -3,7 +3,9 @@ from tqdm import tqdm
 
 from axis import DiscreteTimeAxis
 from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
-from utils.errors import handle_unknown_solver
+
+
+SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 
 
 class Solver:
@@ -59,24 +61,23 @@ class Solver:
         for itime in tqdm(range(1, N_t)):
             dt = (time[itime] - time[itime - 1]) / nsubst
             for j in range(nsubst):
+                assert solver in SOLVERS, f"Unknown solver '{solver}'."
                 if solver == "explicit_euler":
                     dNdt = (
                         K[:, :, :] * N_dust[None, :, None] *
                         N_dust[None, None, :]
                     ).sum(axis=2).sum(axis=1)
                     N_dust += dNdt * dt
-                elif solver == "implicit_euler":
+                if solver == "implicit_euler":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
                         dt=dt, niter=niter, method="backwardeuler"
                     )
-                elif solver == "implicit_radau":
+                if solver == "implicit_radau":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
                         dt=dt, niter=niter, method="radau"
                     )
-                else:
-                    handle_unknown_solver(solver)
                 N_dust_store[itime, :] = N_dust.copy()
 
         # Translate back to physical units
