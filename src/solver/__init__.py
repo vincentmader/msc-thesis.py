@@ -1,8 +1,9 @@
 import numpy as np
 from tqdm import tqdm
-from utils.errors import handle_unknown_solver
-from disk.time_grid import TimeGrid
+
+from axis import TimeGrid
 from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
+from utils.errors import handle_unknown_solver
 
 
 class Solver:
@@ -28,7 +29,7 @@ class Solver:
         # mgrain = mg.grid_cell_boundaries[:-1]
         # mgrain = m_min * (m_max / m_min)**np.linspace(0, 1, N_m)
         # migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
-        # migrain = np.hstack((  
+        # migrain = np.hstack((
         #     migrain[0]**2 / migrain[1],
         #     migrain,
         #     migrain[-1]**2 / migrain[-2]

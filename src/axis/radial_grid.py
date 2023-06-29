@@ -1,4 +1,4 @@
-from utils.axis import DiscreteAxis
+from .axis import DiscreteAxis
 
 
 class RadialGrid(DiscreteAxis):

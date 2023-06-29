@@ -3,8 +3,9 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import MassGrid, RadialGrid
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import MassGrid, Disk, DiskRegion, RadialGrid
+    from disk import Disk, DiskRegion
     from utils.plotting import plt_show_then_close
     from disk.dust_particle import particle_radius_from_mass
 except ModuleNotFoundError as e:

@@ -5,8 +5,9 @@ import sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import MassGrid, RadialGrid, TimeGrid
     from config import Config
-    from disk import MassGrid, RadialGrid, mass_distribution, TimeGrid
+    from disk import mass_distribution
     from disk.disk import disk_mass_from_distribution
     # from disk.disk import Disk
     # from disk.disk_region import DiskRegion

@@ -5,7 +5,7 @@ import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import MassGrid
+    from axis import MassGrid
 except ModuleNotFoundError as e:
     raise e
 

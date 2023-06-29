@@ -4,8 +4,9 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import MassGrid, RadialGrid
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import Disk, MassGrid, RadialGrid, DiskRegion
+    from disk import Disk, DiskRegion
     from disk.dust_particle import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal
     from dust.relative_velocity import dv_brownian_motion

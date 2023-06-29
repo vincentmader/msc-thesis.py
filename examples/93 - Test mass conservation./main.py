@@ -3,8 +3,8 @@ import sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import MassGrid
     from config import Config
-    from disk import MassGrid
     from kernel import Kernel
     from kernel import test_mass_conservation
     from visualization.kernel.v1.kernel_layer_plot import KernelLayerPlot

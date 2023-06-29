@@ -4,8 +4,9 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import MassGrid, RadialGrid
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import MassGrid, Disk, RadialGrid, DiskRegion
+    from disk import Disk, DiskRegion
     from dust.collision_rate import collision_rate
 except ModuleNotFoundError as e:
     raise e
