@@ -7,5 +7,5 @@ def heaviside_theta(x):
 
 
 def root_mean_squared(arr):
-    # TODO Use np.sum instead?
-    return sum([i**2 for i in arr])**.5
+    squares = [i**2 for i in arr]
+    return sum(squares)**.5
