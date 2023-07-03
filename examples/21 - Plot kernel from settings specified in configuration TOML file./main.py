@@ -14,14 +14,22 @@ except ModuleNotFoundError as e:
 
 # Load configuration from `../../config.toml`.
 cfg = Config(
-    # mass_min_value=1,
-    # mass_max_value=50,
-    # mass_resolution=50,
     # mass_axis_scale="lin",
-    # enable_coagulation=True,
-    # enable_fragmentation=False,
+    # mass_resolution=50,
+    # mass_min_value=2,
+    # mass_max_value=52,
+
+    # # mass_min_value=1e-4,
+    # # mass_max_value=1e+4,
+
+    # # enable_coagulation=True,
+    # # enable_fragmentation=True,
+    # enable_cancellation_handling=True,
+    # enable_physical_cross_sections=False,
+    # enable_physical_relative_velocities=[],
+
     # enable_fragmentation_variant=[
-    #     "naive/pulverization",
+    #     # "naive/pulverization",
     #     # "mrn",
     # ]
 )

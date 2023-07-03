@@ -27,7 +27,8 @@ class Kernel():
         else:  # In the most simple case, the rates are just set to 1.
             R_coll = np.ones(shape=[mg.N] * 2)
 
-        if cfg.enable_cancellation_handling:
+        if cfg.enable_cancellation_handling and cfg.mass_axis_scale == "log":
+            # TODO Correct? (only needed for log?)
             assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
         # Initialize kernel matrices with zeros.
