@@ -6,6 +6,8 @@ from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
 
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
+N_subst = 1  # Nr of time substeps between storage of result
+N_iter = 4  # Nr of iterations for implicit time step
 
 
 class Solver:
@@ -17,9 +19,6 @@ class Solver:
     def run(self, mg, n_dust, K):
         solver = self.cfg.solver_variant
         N_m = mg.N
-
-        nsubst = 1  # Nr of time substeps between storage of result
-        niter = 4   # Nr of iterations for implicit time step
 
         tg = self.time_axis
         N_t = tg.N
@@ -59,8 +58,8 @@ class Solver:
         s = np.zeros((N_m))
         rmat = np.zeros((N_m, N_m))
         for itime in tqdm(range(1, N_t)):
-            dt = (time[itime] - time[itime - 1]) / nsubst
-            for j in range(nsubst):
+            dt = (time[itime] - time[itime - 1]) / N_subst
+            for j in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
                 if solver == "explicit_euler":
                     dNdt = (
@@ -71,12 +70,12 @@ class Solver:
                 if solver == "implicit_euler":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
-                        dt=dt, niter=niter, method="backwardeuler"
+                        dt=dt, niter=N_iter, method="backwardeuler"
                     )
                 if solver == "implicit_radau":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
-                        dt=dt, niter=niter, method="radau"
+                        dt=dt, niter=N_iter, method="radau"
                     )
                 N_dust_store[itime, :] = N_dust.copy()
 
