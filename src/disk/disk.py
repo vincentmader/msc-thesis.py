@@ -1,9 +1,11 @@
+from typing import Optional
+
 import numpy as np
 from numpy import pi as PI
 
+from axis import DiscreteMassAxis, DiscreteRadialAxis
 from config import Config
 from constants import AU, sigma_SB, k_B, m_p
-from axis import DiscreteMassAxis, DiscreteRadialAxis
 from utils.physics import kepler_frequency, mean_free_path, finite_difference
 
 
@@ -12,16 +14,18 @@ class Disk:
     def __init__(
         self,
         cfg: Config,
-        radial_axis: DiscreteRadialAxis,
-        mass_axis: DiscreteMassAxis,
+        radial_axis: Optional[DiscreteRadialAxis] = None,
+        mass_axis: Optional[DiscreteMassAxis] = None,
     ):
-        self.stellar_mass = cfg.stellar_mass
+        self.mass_axis = mass_axis if mass_axis is not None else DiscreteMassAxis(cfg)
+        self.radial_axis = radial_axis if radial_axis is not None else DiscreteRadialAxis(cfg)
+
         self.stellar_luminosity = cfg.stellar_luminosity
-        self.dust_to_gas = cfg.dust_to_gas_ratio
-        self.flaring_angle = cfg.flaring_angle
+        self.stellar_mass = cfg.stellar_mass
         self.disk_mass = cfg.disk_mass_ratio * cfg.stellar_mass
-        self.radial_axis = radial_axis
-        self.mass_axis = mass_axis
+        self.dust_to_gas = cfg.dust_to_gas_ratio
+
+        self.flaring_angle = cfg.flaring_angle
         self.mass_distribution = []  # TODO
 
     def gas_surface_density(self, r):
