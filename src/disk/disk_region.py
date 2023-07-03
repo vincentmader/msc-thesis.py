@@ -13,34 +13,31 @@ class DiskRegion:
         masses = mg.grid_cell_centers  # TODO
 
         rg = disk.radial_axis
-        rb = rg.grid_cell_boundaries
         rc = rg.grid_cell_centers
         r = cfg.distance_to_star
         i_r = rg.index_from_value(r)  # TODO
         r = rc[i_r]
 
-        Sigma_g = disk.gas_surface_density(rb)
+        Sigma_g = disk.gas_surface_density
         radii = particle_radius_from_mass(masses)
 
         M_star = disk.stellar_mass
-        T_mid = disk.midplane_temperature(rc)
-        c_s = disk.sound_speed(rc)
-        rho_g = disk.midplane_gas_volume_density(rc, Sigma_g)
+        T_mid = disk.midplane_temperature
+        c_s = disk.sound_speed
+        rho_g = disk.midplane_gas_volume_density
         Omega_K = kepler_frequency(rc, M_star)
         v_K = Omega_K * rc
-        n = disk.midplane_gas_volume_number_density(rho_g)  # TODO rename?
+        n = disk.midplane_gas_volume_number_density
         lambda_mfp = mean_free_path(n)
-        u_th = disk.thermal_velocity(rc)
-        H_p = disk.scale_height(rc)
-        P = disk.midplane_gas_pressure(rho_g, c_s)
-        nu_mol = disk.viscosity(u_th, lambda_mfp)
+        u_th = disk.thermal_velocity
+        H_p = disk.scale_height
+        nu_mol = disk.viscosity
 
-        P = disk.midplane_gas_pressure(rc, Sigma_g)  # TODO Do differently?
+        P = disk.midplane_gas_pressure
         logP, logr = np.log(P), np.log(rc)
         gas_pressure_gradient = finite_difference(logP, logr)
 
-        delr_Sigma_g_nu_g_sqrt_r = disk.delr_Sigma_g_nu_g_sqrt_r(rc, Sigma_g)[
-            i_r]
+        delr_Sigma_g_nu_g_sqrt_r = disk.delr_Sigma_g_nu_g_sqrt_r[i_r]
 
         self.r = r
         self.T_mid = T_mid[i_r]

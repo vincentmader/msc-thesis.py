@@ -11,16 +11,15 @@ def dirac_delta(cfg):
     mg = DiscreteMassAxis(cfg)
     rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
-    r = rg.grid_cell_centers  # TODO: Use centers or bounds?
-    Sigma_g = disk.gas_surface_density(r)
-    rho_g = disk.midplane_gas_volume_density(r[:-1], Sigma_g)
+    r = rg.grid_cell_centers  
+    rho_g = disk.midplane_gas_volume_density
 
     m = mg.grid_cell_centers
     dm = mg.grid_cell_widths[x_0]
 
     R = cfg.distance_to_star
     if cfg.enable_physical_gas_density:
-        RHO_g = np.interp(R, r[:-1], rho_g)
+        RHO_g = np.interp(R, r, rho_g)
         # Is linear interpolation good enough here? -> Yes!
     else:
         RHO_g = 1
@@ -37,9 +36,8 @@ def mrn_distribution(cfg):
     mg = DiscreteMassAxis(cfg)
     rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
-    r = rg.grid_cell_centers  # TODO: Use centers or bounds?
-    Sigma_g = disk.gas_surface_density(r)
-    rho_g = disk.midplane_gas_volume_density(r[:-1], Sigma_g)
+    r = rg.grid_cell_centers 
+    rho_g = disk.midplane_gas_volume_density
 
     m = mg.grid_cell_centers
     dm = mg.grid_cell_widths[x_0]
@@ -48,7 +46,7 @@ def mrn_distribution(cfg):
     m_max = m[-1]
 
     R = cfg.distance_to_star
-    RHO_g = np.interp(R, r[:-1], rho_g)
+    RHO_g = np.interp(R, r, rho_g)
 
     M = RHO_g / m[x_0] / dm
 

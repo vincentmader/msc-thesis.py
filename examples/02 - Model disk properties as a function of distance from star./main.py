@@ -19,7 +19,7 @@ rg = DiscreteRadialAxis(cfg)
 rc = rg.grid_cell_centers
 rb = rg.grid_cell_boundaries
 disk = Disk(cfg, rg, mg)
-Sigma_g = disk.gas_surface_density(rb)
+Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass
 
 FIGSIZE = (10, 5)
@@ -42,7 +42,7 @@ def plot_1():
 
 
 def plot_2():
-    T_mid = disk.midplane_temperature(rc)
+    T_mid = disk.midplane_temperature
     plt.title("midplane temperature $T_{mid}$")
     plt.ylabel("$T_{mid}$ [K]")
     plt.xlabel("distance from star $r$ [AU]")
@@ -52,7 +52,7 @@ def plot_2():
 
 
 def plot_3():
-    c_s = disk.sound_speed(rc)
+    c_s = disk.sound_speed
     plt.title("sound speed $c_s$")
     plt.ylabel("$c_s$ [m/s]")
     plt.xlabel("distance from star $r$ [AU]")
@@ -62,7 +62,7 @@ def plot_3():
 
 
 def plot_4():
-    H_p = disk.scale_height(rc)
+    H_p = disk.scale_height
     plt.title("disk scale height $H_p$")
     plt.ylabel("$H_p$ [AU]")
     plt.xlabel("distance from star $r$ [AU]")
@@ -71,7 +71,7 @@ def plot_4():
 
 
 def plot_5():
-    rho_g = disk.midplane_gas_volume_density(rc, Sigma_g)
+    rho_g = disk.midplane_gas_volume_density
     plt.title(r"gas volume density $\rho_g$")
     plt.ylabel(r"$\rho_g$ [kg/m$^3$]")
     plt.xlabel("distance from star $r$ [AU]")
@@ -81,7 +81,7 @@ def plot_5():
 
 
 def plot_6():
-    P = disk.midplane_gas_pressure(rc, Sigma_g)
+    P = disk.midplane_gas_pressure
     plt.title("midplane gas pressure $P$")
     plt.ylabel("$P$ [Pa]")
     plt.xlabel("distance from star $r$ [AU]")
@@ -100,7 +100,7 @@ def plot_7():
 
 
 def plot_8():
-    del_ln_P_g_del_ln_r = disk.del_ln_P_g_del_ln_r(rc, Sigma_g)
+    del_ln_P_g_del_ln_r = disk.del_ln_P_g_del_ln_r
     plt.title("Logarithmic pressure gradient")
     plt.ylabel(r"$\frac{\partial\log P_g}{\partial\log r}$")
     plt.xlabel("distance from star $r$ [AU]")
