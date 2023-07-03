@@ -115,6 +115,7 @@ def create_figure(plotter_function):
     ax.spines['right'].set_visible(False)
 
     plotter_function()
+    plt.xlim(rc[0] / AU, rc[-1] / AU)
 
     path = os.path.join(PATH_TO_FIGURES, "02", f"{title}.pdf")
     plt.savefig(path)
