@@ -113,7 +113,7 @@ class InteractiveSliderLinePlot:
     def set_labels(self):
         self.ax_1.set_title(self.title)
         self.ax_1.set_xlabel(self.xlabel_1)
-        self.ax_1.set_ylabel(self.ylabel_1, rotation=0)
+        self.ax_1.set_ylabel(self.ylabel_1)
         self.ax_2.set_xlabel(self.xlabel_2)  # TODO Fix xticks.
         # TODO Draw real derivative.
-        self.ax_2.set_ylabel(self.ylabel_2, rotation=0)
+        self.ax_2.set_ylabel(self.ylabel_2)
