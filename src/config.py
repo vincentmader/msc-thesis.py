@@ -30,7 +30,6 @@ class Config():
         mass_max_value=None,
         mass_resolution=None,
         mass_axis_scale=None,
-        mass_open_boundary=None,
         time_min_value=None,
         time_max_value=None,
         time_resolution=None,
@@ -83,8 +82,6 @@ class Config():
             mass_resolution = cfg_i["mass_resolution"]
         if mass_axis_scale is None:
             mass_axis_scale = cfg_i["mass_axis_scale"]
-        if mass_open_boundary is None:
-            mass_open_boundary = cfg_i["mass_open_boundary"]
 
         cfg_i = cfg["time_discretization"]
         if time_min_value is None:
@@ -130,7 +127,6 @@ class Config():
         self.radial_max_value = radial_max_value
         self.radial_resolution = radial_resolution
         self.radial_axis_scale = radial_axis_scale
-        self.mass_open_boundary = mass_open_boundary
         self.enable_coagulation = enable_coagulation
         self.enable_fragmentation = enable_fragmentation
         self.enable_physical_cross_sections = enable_physical_cross_sections

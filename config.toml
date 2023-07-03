@@ -24,8 +24,6 @@
   # mass_resolution = 50      # given as nr. of bins in mass grid
   # mass_axis_scale = "lin"
 
-  mass_open_boundary = false  # TODO Assure correct usage (or remove?)
-
 [time_discretization]
   time_min_value = 1        # given in s
   time_max_value = 3e+15    # given in s   (t=100 My -> t=3e+15 s)
