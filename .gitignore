@@ -5,3 +5,4 @@
 /src/visualization/mpl-styles
 __pycache__
 */.ipynb_checkpoints
+._*
