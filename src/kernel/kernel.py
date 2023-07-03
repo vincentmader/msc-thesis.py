@@ -209,15 +209,16 @@ class Kernel():
                     assert m_min > mg.x_min
                     assert m_max < mg.x_max
 
+                    # Remove mass from bins corresponding to initial masses.
+                    K_loss[i, i, j] -= R
+
+                    # TODO Calculate value to add to indices "receiving" mass.
                     top = m_i * dm[i] * R + m_j * dm[j] * R
                     bottom = sum(
                         [mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)]
                     )
                     assert bottom != 0
                     A = top / bottom
-
-                    # Remove mass from bins corresponding to initial masses.
-                    K_loss[i, i, j] -= R
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
