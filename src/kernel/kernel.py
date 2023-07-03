@@ -239,21 +239,19 @@ class Kernel():
                     # ─────────────────────────────────────────────────────────────────────────────
 
                     # K_loss[i, i, j] -= R
-                    # K_loss[j, i, j] -= R  
                     # ^ NOTE: I need to subtract from both `i` and `j`!
                     #   - Why is that?
                     #   - I did not have to dod that in the "naive/pulverization" variant.
 
                     # k = 0
                     # m_k = mc[k]
-                    # K_gain[k, i, j] += R * m_tot / m_k 
+                    # K_gain[k, i, j] += R * m_tot / m_k * th
 
                     # VARIANT C: Here, mass is conserved quite well! 
                     # ─────────────────────────────────────────────────────────────────────────────
 
                     # Remove mass from bins corresponding to initial masses.
                     K_loss[i, i, j] -= R 
-                    K_loss[j, i, j] -= R 
 
                     S = 0
                     for k in range(k_min, k_max):
@@ -263,6 +261,6 @@ class Kernel():
                     for k in range(k_min, k_max):
                         m_k = mc[k]
                         A = m_k**q / S
-                        K_gain[k, i, j] += R * m_tot / m_k * A
+                        K_gain[k, i, j] += R * m_tot / m_k * A * th
 
         return {"gain": K_gain, "loss": K_loss}
