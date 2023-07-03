@@ -152,6 +152,8 @@ class Kernel():
         for i, m_i in enumerate(mc):
             for j, m_j in enumerate(mc):
                 th = heaviside_theta(i - j)
+                
+                R = R_coll[i, j]
 
                 # 1. Most basic/naive fragmentation implementation: "Pulverization"
                 # ═════════════════════════════════════════════════════════════════
@@ -163,8 +165,8 @@ class Kernel():
                     m_k = mc[k]
                     if min(i, j) > X:
                         eps = (m_i + m_j) / m_k
-                        K_loss[i, i, j] -= R_coll[i, j]
-                        K_gain[k, i, j] += R_coll[i, j] * th * eps
+                        K_loss[i, i, j] -= R
+                        K_gain[k, i, j] += R * th * eps
 
                 # 2. Mass redistribution following the MRN model
                 # ═════════════════════════════════════════════════════════════════
@@ -200,24 +202,26 @@ class Kernel():
                     if i == 0 and j == 0:
                         continue
 
-                    top = m_i * dm[i] * R_coll[i, j] + \
-                        m_j * dm[j] * R_coll[i, j]
+                    top = m_i * dm[i] * R + m_j * dm[j] * R
                     bottom = sum(
-                        [mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)])
+                        [mc[k] * dm[k] * mc[k]**q for k in range(k_min, k_max)]
+                    )
                     assert bottom != 0
                     A = top / bottom
 
                     # Remove mass from bins corresponding to initial masses.
-                    K_loss[i, i, j] -= R_coll[i, j]
+                    K_loss[i, i, j] -= R
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
+                    # for k in range(k_min, k_max):
+                    #     m_k = mc[k]
                     for k, m_k in enumerate(mc):
                         if m_k > m_max:
                             continue
 
                         # Add mass to bin.
                         n = A * m_k**q
-                        K_gain[k, i, j] += R_coll[i, j] * n
+                        K_gain[k, i, j] += R * n
 
         return {"gain": K_gain, "loss": K_loss}
