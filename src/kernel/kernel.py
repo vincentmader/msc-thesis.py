@@ -170,37 +170,44 @@ class Kernel():
 
                 # 2. Mass redistribution following the MRN model
                 # ═════════════════════════════════════════════════════════════════
+                q = -11 / 6
 
                 if "mrn" in fragmentation_variants:
 
-                    q = -11 / 6
+                    # NOTE:
+                    # - Consider the very first case `i == j == 0`.
+                    # - Here, the variable `bottom` will be set to zero
+                    #   due to summation over an empty array.
+                    # - This will lead to a division by zero, i.e. `A = infinity`.
+                    # - Therefore, skip this case.
+                    if i == 0 and j == 0:
+                        continue
+                    # TODO:
+                    # - When else can this happen?
+                    # - Handle those cases!
 
                     # Define total mass that needs to be "moved".
                     m_tot = m_i + m_j
 
-                    # Define range of masses resulting from fragmentation event.
-                    # m_min = mc[0]
-                    # k_min = mg.index_from_value(m_min)
-                    m_max = m_tot
-                    k_min = 0  # TODO
-                    k_max = mg.index_from_value(m_max)
+                    # Define mass range resulting from fragmentation event.
+                    # Smallest resulting mass value -> First bin.
+                    k_min = 0
+                    # Largest resulting mass value -> Bin corresponding to `m_i + m_j`.
+                    k_max = mg.index_from_value(m_tot)
+                    # ^ NOTE: This is a somewhat arbitrary choice:
+                    #   - One could also choose `max(m_i, m_j)`,
+                    #   - or something completely different,
+                    #     as long as mass is conserved.
+
+                    # Make sure that all resulting masses are inside the grid.
                     k_max = min(N_m - 1, k_max)
+                    assert k_max < N_m
 
-                    # This is the lowest bin at which fragmentation can occur.
-                    # if min(i, j) < k_min: # NOTE: This is not the same `k_min` as below.
-                    #     continue
-
-                    # NOTE:
-                    # - Consider the very first case `i == j == 0`.
-                    # - Here, the variable `bottom` will be set to zero.
-                    # - This will lead to a division by zero, i.e. `A = infinity`.
-                    # - Therefore, skip this case.
-                    # TODO:
-                    # - This depends on the definition of `k_min = 0`.
-                    # - When else can this happen?
-                    # - Handle those cases!
-                    if i == 0 and j == 0:
-                        continue
+                    # Calculate corresponding mass values from bin indices.
+                    m_min = mc[k_min]
+                    m_max = mc[k_max]
+                    assert m_min > mg.x_min
+                    assert m_max < mg.x_max
 
                     top = m_i * dm[i] * R + m_j * dm[j] * R
                     bottom = sum(
@@ -214,11 +221,8 @@ class Kernel():
 
                     # Add mass to bins corresponding to resulting masses.
                     # Loop over all bins that are "receiving" mass.
-                    # for k in range(k_min, k_max):
-                    #     m_k = mc[k]
-                    for k, m_k in enumerate(mc):
-                        if m_k > m_max:
-                            continue
+                    for k in range(k_min, k_max):
+                        m_k = mc[k]
 
                         # Add mass to bin.
                         n = A * m_k**q
