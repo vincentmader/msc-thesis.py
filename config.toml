@@ -28,7 +28,7 @@
 
 [time_discretization]
   time_min_value = 1        # given in s
-  time_max_value = 3e+18    # given in s   (t=100 My -> t=3e+15 s)
+  time_max_value = 3e+15    # given in s   (t=100 My -> t=3e+15 s)
   time_resolution = 100     # given as nr. of bins in time grid
   time_axis_scale = "log"
 
