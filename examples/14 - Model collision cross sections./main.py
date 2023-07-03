@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import MassGrid
+    from axis import DiscreteMassAxis
     from dust.collision_cross_section import collision_cross_section
 except ModuleNotFoundError as e:
     raise e
@@ -14,7 +14,7 @@ except ModuleNotFoundError as e:
 cfg = Config()
 
 # Define discrete mass axis.
-mg = MassGrid(cfg)
+mg = DiscreteMassAxis(cfg)
 
 # Setup pyplot figure.
 FIGSIZE = (6, 5)

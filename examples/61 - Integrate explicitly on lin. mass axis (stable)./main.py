@@ -1,15 +1,16 @@
 import os
 import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
-    from disk import MassGrid, RadialGrid, mass_distribution, TimeGrid
+    from disk import mass_distribution
     from disk.disk import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver
-    from utils.plotting import plt_show_then_close
     from visualization.mass_error import DiskMassErrorPlot
     from visualization.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
@@ -36,8 +37,8 @@ cfg = Config(
 )
 
 # Define discrete axis for radial distance from star, as well as for mass.
-rg = RadialGrid(cfg)
-mg = MassGrid(cfg)
+rg = DiscreteRadialAxis(cfg)
+mg = DiscreteMassAxis(cfg)
 mc = mg.grid_cell_centers
 dm = mg.grid_cell_widths
 
@@ -46,7 +47,7 @@ kernel = Kernel(cfg)
 K = kernel.K
 
 # Define temporal domain & solver.
-tg = TimeGrid(cfg)
+tg = DiscreteTimeAxis(cfg)
 solver = Solver(cfg)
 
 
@@ -63,13 +64,15 @@ def plot_1(m, m2f, dm2f):
         xlims_2=(m[0], m[-1]),
     )
     plot.draw()
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 def plot_2(x, y):
     plot = DiskMassErrorPlot(x, y)
     plot.draw()
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":

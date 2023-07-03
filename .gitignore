@@ -4,5 +4,5 @@
 /src/solver/kees_solvers
 /src/visualization/mpl-styles
 __pycache__
-*/.ipynb_checkpoints
+.ipynb_checkpoints
 ._*

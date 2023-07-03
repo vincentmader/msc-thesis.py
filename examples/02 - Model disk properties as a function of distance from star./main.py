@@ -1,23 +1,21 @@
 import os
 import sys
-import matplotlib.pyplot as plt
 from pathlib import Path
+import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from constants import AU
-    from disk import Disk, MassGrid
-    from utils.axis import DiscreteAxis
+    from disk import Disk
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from utils.physics import kepler_frequency
 except ModuleNotFoundError as e:
     raise e
 
 
 cfg = Config()
-mg = MassGrid(cfg)
-r_min, r_max = cfg.radial_min_value, cfg.radial_max_value
-N_r, scale = cfg.radial_resolution, cfg.radial_axis_scale
-rg = DiscreteAxis(r_min, r_max, N_r, scale)
+mg = DiscreteMassAxis(cfg)
+rg = DiscreteRadialAxis(cfg)
 rc = rg.grid_cell_centers
 rb = rg.grid_cell_boundaries
 disk = Disk(cfg, rg, mg)

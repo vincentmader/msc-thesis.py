@@ -3,8 +3,8 @@ import sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import DiscreteMassAxis
     from config import Config
-    from disk import MassGrid
     from kernel import Kernel
     from kernel import test_mass_conservation
     from visualization.kernel.v1.kernel_layer_plot import KernelLayerPlot
@@ -35,7 +35,7 @@ FIGSIZE = (6, 5)
 SLIDER_POSITION = [0.05, 0.3, 0.02, 0.4]
 
 # Define discrete mass axis.
-mg = MassGrid(cfg)
+mg = DiscreteMassAxis(cfg)
 N_m = mg.N
 mc = mg.grid_cell_centers
 dm = mg.grid_cell_widths
@@ -87,7 +87,7 @@ b = np.array(a)
 # plt.ylabel("$i$", rotation=0)
 # plt.xlabel("$j$")
 
-a = test_mass_conservation(kernel)
+a = test_mass_conservation(cfg, mg, K)
 
 assert a.all() == b.all()
 

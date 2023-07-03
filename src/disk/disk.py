@@ -3,9 +3,8 @@ from numpy import pi as PI
 
 from config import Config
 from constants import AU, sigma_SB, k_B, m_p
-from utils.axis import DiscreteAxis
+from axis import DiscreteMassAxis, DiscreteRadialAxis
 from utils.physics import kepler_frequency, mean_free_path, finite_difference
-from .mass_grid import MassGrid
 
 
 class Disk:
@@ -13,8 +12,8 @@ class Disk:
     def __init__(
         self,
         cfg: Config,
-        radial_axis: DiscreteAxis,
-        mass_axis: MassGrid,
+        radial_axis: DiscreteRadialAxis,
+        mass_axis: DiscreteMassAxis,
     ):
         self.stellar_mass = cfg.stellar_mass
         self.stellar_luminosity = cfg.stellar_luminosity

@@ -1,11 +1,12 @@
 import os
 import sys
+
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import MassGrid, Disk, DiskRegion, RadialGrid
-    from utils.plotting import plt_show_then_close
+    from disk import Disk, DiskRegion
     from disk.dust_particle import particle_radius_from_mass
 except ModuleNotFoundError as e:
     raise e
@@ -13,8 +14,8 @@ except ModuleNotFoundError as e:
 FIGSIZE = (10, 5)
 
 cfg = Config()
-mg = MassGrid(cfg)
-rg = RadialGrid(cfg)
+mg = DiscreteMassAxis(cfg)
+rg = DiscreteRadialAxis(cfg)
 disk = Disk(cfg, rg, mg)
 disk_region = DiskRegion(cfg, disk)
 
@@ -33,7 +34,8 @@ def plot_1(m, St):
     plt.legend()
     path = os.path.join(PATH_TO_FIGURES, "12", "stokes_number.pdf")
     plt.savefig(path)
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 def plot_2(m, Re):
@@ -45,7 +47,8 @@ def plot_2(m, Re):
     plt.legend()
     path = os.path.join(PATH_TO_FIGURES, "12", "reynolds_number.pdf")
     plt.savefig(path)
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 def plot_3(m, t_stop):
@@ -58,7 +61,8 @@ def plot_3(m, t_stop):
     plt.legend()
     path = os.path.join(PATH_TO_FIGURES, "12", "stopping_time.pdf")
     plt.savefig(path)
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":

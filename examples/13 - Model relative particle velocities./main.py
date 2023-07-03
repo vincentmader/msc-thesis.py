@@ -4,8 +4,9 @@ import sys
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import Disk, MassGrid, RadialGrid, DiskRegion
+    from disk import Disk, DiskRegion
     from disk.dust_particle import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal
     from dust.relative_velocity import dv_brownian_motion
@@ -13,7 +14,6 @@ try:
     from dust.relative_velocity import dv_radial_drift
     from dust.relative_velocity import dv_turbulence
     from dust.relative_velocity import relative_velocity
-    from utils.plotting import plt_show_then_close
 except ModuleNotFoundError as e:
     raise e
 
@@ -37,8 +37,8 @@ if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
 # Define discrete axis for radial distance from star, as well as for mass.
-rg = RadialGrid(cfg)
-mg = MassGrid(cfg)
+rg = DiscreteRadialAxis(cfg)
+mg = DiscreteMassAxis(cfg)
 N_m = mg.N
 masses = mg.grid_cell_centers  # TODO Use bounds or centers?
 
@@ -157,7 +157,8 @@ def plot_together():
         plot(dv, title)
     path = os.path.join(PATH_TO_FIGURES, "13", "relative_velocities.pdf")
     plt.savefig(path)
-    plt_show_then_close()
+    plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":

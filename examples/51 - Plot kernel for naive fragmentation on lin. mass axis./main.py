@@ -2,8 +2,8 @@ import os
 import sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import DiscreteMassAxis
     from config import Config
-    from disk import MassGrid
     from kernel import Kernel
     from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
 except ModuleNotFoundError as e:
@@ -32,7 +32,7 @@ cfg = Config(
 )
 
 # Define discrete mass axis.
-mg = MassGrid(cfg)
+mg = DiscreteMassAxis(cfg)
 
 # Define kernel.
 kernel = Kernel(cfg)

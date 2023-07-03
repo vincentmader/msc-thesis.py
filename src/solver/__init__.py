@@ -1,15 +1,18 @@
 import numpy as np
 from tqdm import tqdm
-from utils.errors import handle_unknown_solver
-from disk.time_grid import TimeGrid
+
+from axis import DiscreteTimeAxis
 from solver.kees_solvers.coag.react_0d import solve_react_0d_equation
+
+
+SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 
 
 class Solver:
 
     def __init__(self, cfg):
         self.cfg = cfg
-        self.time_axis = TimeGrid(cfg)
+        self.time_axis = DiscreteTimeAxis(cfg)
 
     def run(self, mg, n_dust, K):
         solver = self.cfg.solver_variant
@@ -28,7 +31,7 @@ class Solver:
         # mgrain = mg.grid_cell_boundaries[:-1]
         # mgrain = m_min * (m_max / m_min)**np.linspace(0, 1, N_m)
         # migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
-        # migrain = np.hstack((  
+        # migrain = np.hstack((
         #     migrain[0]**2 / migrain[1],
         #     migrain,
         #     migrain[-1]**2 / migrain[-2]
@@ -58,24 +61,23 @@ class Solver:
         for itime in tqdm(range(1, N_t)):
             dt = (time[itime] - time[itime - 1]) / nsubst
             for j in range(nsubst):
+                assert solver in SOLVERS, f"Unknown solver '{solver}'."
                 if solver == "explicit_euler":
                     dNdt = (
                         K[:, :, :] * N_dust[None, :, None] *
                         N_dust[None, None, :]
                     ).sum(axis=2).sum(axis=1)
                     N_dust += dNdt * dt
-                elif solver == "implicit_euler":
+                if solver == "implicit_euler":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
                         dt=dt, niter=niter, method="backwardeuler"
                     )
-                elif solver == "implicit_radau":
+                if solver == "implicit_radau":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
                         dt=dt, niter=niter, method="radau"
                     )
-                else:
-                    handle_unknown_solver(solver)
                 N_dust_store[itime, :] = N_dust.copy()
 
         # Translate back to physical units
