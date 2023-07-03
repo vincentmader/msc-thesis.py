@@ -174,33 +174,29 @@ class Kernel():
 
                 if "mrn" in fragmentation_variants:
 
-                    # NOTE:
-                    # - Consider the very first case `i == j == 0`.
+                    # Consider the very first case `i == j == 0`.
                     # - Here, the variable `bottom` will be set to zero
                     #   due to summation over an empty array.
                     # - This will lead to a division by zero, i.e. `A = infinity`.
                     # - Therefore, skip this case.
                     if i == 0 and j == 0:
                         continue
-                    # TODO:
-                    # - When else can this happen?
-                    # - Handle those cases!
+                        # ^ TODO:
+                        #   - When else can this happen?
+                        #   - Handle those cases!
 
                     # Define total mass that needs to be "moved".
                     m_tot = m_i + m_j
 
                     # Define mass range resulting from fragmentation event.
-                    # Smallest resulting mass value -> First bin.
                     k_min = 0
-                    # Largest resulting mass value -> Bin corresponding to `m_i + m_j`.
                     k_max = mg.index_from_value(m_tot)
                     # ^ NOTE: This is a somewhat arbitrary choice:
-                    #   - One could also choose `max(m_i, m_j)`,
-                    #   - or something completely different,
-                    #     as long as mass is conserved.
+                    #   - One could also choose e.g. `m_max = max(m_i, m_j)`,
+                    #   - or something completely different, as long as mass is conserved.
 
-                    # Make sure that all resulting masses are inside the grid.
-                    k_max = min(N_m - 1, k_max)
+                    # Make sure that all resulting masses lie inside the grid.
+                    # k_max = min(N_m - 1, k_max)  # NOTE Interestingly, this is not needed.
                     assert k_max < N_m
 
                     # Calculate corresponding mass values from bin indices.
@@ -226,7 +222,6 @@ class Kernel():
                         m_k = mc[k]
 
                         # Add mass to bin.
-                        n = A * m_k**q
-                        K_gain[k, i, j] += R * n
+                        K_gain[k, i, j] += R * m_k**q * A
 
         return {"gain": K_gain, "loss": K_loss}
