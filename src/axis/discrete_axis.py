@@ -50,6 +50,7 @@ class DiscreteAxis:
     def index_from_value(self, x) -> int:
         xs = self.grid_cell_centers
         i = np.where((xs - x) <= 0)[0][-1]
+        # NOTE: I believe this automatically prevents an `i >= N`.
         return i
 
     def value_from_index(self, i) -> np.float64:
