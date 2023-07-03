@@ -187,8 +187,8 @@ class Kernel():
                     k_max = min(N_m - 1, k_max)
 
                     # This is the lowest bin at which fragmentation can occur.
-                    if min(i, j) < k_min:
-                        continue
+                    # if min(i, j) < k_min: # NOTE: This is not the same `k_min` as below.
+                    #     continue
 
                     # NOTE:
                     # - Consider the very first case `i == j == 0`.
