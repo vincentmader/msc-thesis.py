@@ -26,6 +26,11 @@ def dirac_delta(cfg):
 
     M = RHO_g / m[x_0] / dm
 
+    # COMPARISON: Kees' code
+    # Create initial distribution: Nr of particles per interval dmass per volume.
+    # n_dust = np.zeros(N_m)
+    # n_dust[0] = 1.0 / dmgrain[0]
+
     n0 = np.zeros([mg.N])
     n0[x_0] = M
 

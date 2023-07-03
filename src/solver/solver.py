@@ -20,39 +20,17 @@ class Solver:
         solver = self.cfg.solver_variant
         N_m = mg.N
 
-        tg = self.time_axis
-        N_t = tg.N
-        time = tg.grid_cell_centers  # todo
-        # T_START, T_END, N_t = 1e0, 1e9, 200
-        # time = np.linspace(0, T_END, N_t)
-        # time = T_START * (T_END / T_START)**np.linspace(0, 1, N_t)
-
-        # mgrain = mg.grid_cell_boundaries[:-1]
-        # mgrain = m_min * (m_max / m_min)**np.linspace(0, 1, N_m)
-        # migrain = np.sqrt(mgrain[1:] * mgrain[:-1])
-        # migrain = np.hstack((
-        #     migrain[0]**2 / migrain[1],
-        #     migrain,
-        #     migrain[-1]**2 / migrain[-2]
-        # ))
-        # dmgrain = migrain[1:] - migrain[:-1]
+        N_t = self.time_axis.N
+        time = self.time_axis.grid_cell_centers 
 
         # The commented-out lines from above are replaced by calling the methods
         # of the `DiscreteAxis` class instead, this should lead to the same result.
         mgrain = mg.grid_cell_centers
         dmgrain = mg.grid_cell_widths
 
-        # Create initial distribution: Nr of particles per interval dmass per volume.
-        # n_dust = np.zeros(N_m)
-        # n_dust[0] = 1.0 / dmgrain[0]
-        # n_dust[30] = 1.0 / dmgrain[30]
-        # Convert this to number of particles per mass bin per volume
-        # N_dust = n_dust * dmgrain
-
         # Convert `n -> N` (number of particles per mass bin per volume).
         N_dust = dmgrain * n_dust
 
-        # def run_solver(N_dust):
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
         s = np.zeros((N_m))
