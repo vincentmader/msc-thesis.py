@@ -50,7 +50,6 @@ solver = Solver(cfg)
 
 
 def plot_1(m, m2f, dm2f):
-    ylims = [1e-40, 1e2]
     plot = InteractiveSliderLinePlot(
         cfg,
         m, m2f, dm2f,
@@ -61,8 +60,8 @@ def plot_1(m, m2f, dm2f):
         xlabel_2="mass $m_i$ [kg]",
         xlims_1=(m[0], m[-1]),
         xlims_2=(m[0], m[-1]),
-        ylims_1=ylims,
-        ylims_2=ylims,
+        ylims_1=[1e-15, 1e2],
+        ylims_2=[1e-40, 1e2],
     )
     plot.draw()
     plt.show()
