@@ -32,6 +32,10 @@ class Kernel():
             # TODO Correct? (only needed for log?)
             assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
+        # Define probabilities for coagulation & fragmentation events.
+        P_coag = 0.5
+        P_frag = 0.5
+
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
         self.K_coag_loss = np.zeros(shape=[mg.N] * 3)
@@ -39,6 +43,7 @@ class Kernel():
         self.K_frag_loss = np.zeros(shape=[mg.N] * 3)
         self.K_gain = np.zeros(shape=[mg.N] * 3)
         self.K_loss = np.zeros(shape=[mg.N] * 3)
+        self.K = np.zeros(shape=[mg.N] * 3)
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
@@ -46,19 +51,21 @@ class Kernel():
         if cfg.enable_coagulation:
             self.K_coag_gain += K_coag["gain"]
             self.K_coag_loss += K_coag["loss"]
-            self.K_gain += K_coag["gain"]
-            self.K_loss += K_coag["loss"]
+            self.K_gain += P_coag * K_coag["gain"]
+            self.K_loss += P_coag * K_coag["loss"]
         # ...fragmentation processes.
         K_frag = self._K_frag(R_coll)
         if cfg.enable_fragmentation:
             self.K_frag_gain += K_frag["gain"]
             self.K_frag_loss += K_frag["loss"]
-            self.K_gain += K_frag["gain"]
-            self.K_loss += K_frag["loss"]
-        # Define total kernel.
+            self.K_gain += P_frag * K_frag["gain"]
+            self.K_loss += P_frag * K_frag["loss"]
+        # Define total coagulation & fragmentation sub-kernels.
         self.K_coag = self.K_coag_gain + self.K_coag_loss
         self.K_frag = self.K_frag_gain + self.K_frag_loss
-        self.K = self.K_coag + self.K_frag
+        # Define total kernel
+        self.K += P_coag * self.K_coag
+        self.K += P_frag * self.K_frag
 
     def _K_coag(self, R_coll):
 
