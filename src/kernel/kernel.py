@@ -174,17 +174,6 @@ class Kernel():
 
                 if "mrn" in fragmentation_variants:
 
-                    # Consider the very first case `i == j == 0`.
-                    # - Here, the variable `bottom` will be set to zero
-                    #   due to summation over an empty array.
-                    # - This will lead to a division by zero, i.e. `A = infinity`.
-                    # - Therefore, skip this case.
-                    if i == 0 and j == 0:
-                        continue
-                        # ^ TODO:
-                        #   - When else can this happen?
-                        #   - Handle those cases!
-
                     # Define total mass that needs to be "moved".
                     m_tot = m_i + m_j
 
