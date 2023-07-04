@@ -209,6 +209,7 @@ class Kernel():
                     for k in range(k_min, k_max):
                         m_k = mc[k]
                         S += m_k**q
+                    assert S != 0
 
                     # Add mass to bins "receiving" mass in fragmentation event.
                     for k in range(k_min, k_max):
