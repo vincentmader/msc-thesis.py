@@ -194,6 +194,9 @@ class Kernel():
                     # ^ NOTE: This is a somewhat arbitrary choice:
                     #   - One could also choose e.g. `m_max = max(m_i, m_j)`,
                     #   - or something completely different, as long as mass is conserved.
+                    # ^ NOTE:
+                    #    - If we set `k_max = 1`, we expect the same behavior as 
+                    #      in "naive/pulverization" (with X set to ~= 1 there).
 
                     # Make sure that all resulting masses lie inside the grid.
                     # k_max = min(N_m - 1, k_max)  # NOTE Interestingly, this is not needed.
