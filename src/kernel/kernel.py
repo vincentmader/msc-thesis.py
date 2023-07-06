@@ -187,7 +187,7 @@ class Kernel():
 
                 if "naive/pulverization" in fragmentation_variants:
 
-                    X = 10  # TODO Play around with this value, observe changes!
+                    X = 0  # TODO Play around with this value, observe changes!
                     k = 0
                     m_k = mc[k]
                     if min(i, j) > X:
