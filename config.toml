@@ -42,7 +42,7 @@
     "azimuthal",
   # "differential_settling",  # NOTE keep turned off for now
   ]
-  fragmentation_variants = [  # <- NOTE: You will probably only want to turn on one of these.
+  enable_fragmentation_variant = [
     # "naive/pulverization",
     "mrn",
   ]
