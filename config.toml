@@ -46,6 +46,10 @@
     # "naive/pulverization",
     "mrn",
   ]
+  collision_outcome_variant = [
+    "cutoff_velocity" ,               # Fragment if `v > v_cutoff`, else coagulate.
+    "maxwell_boltzmann_distribution", # Calculate probabilities from area under M.B. distr.
+  ]
 
 [solver]
   solver_variant = "implicit_radau"
