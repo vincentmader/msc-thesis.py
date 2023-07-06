@@ -1,6 +1,6 @@
 import numpy as np
 
-from disk.dust_particle import particle_radius_from_mass
+from dust import particle_radius_from_mass
 
 
 def dv_radial_drift(cfg, disk, disk_region):

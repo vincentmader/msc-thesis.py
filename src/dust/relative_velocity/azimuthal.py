@@ -1,6 +1,6 @@
 import numpy as np
 
-from disk.dust_particle import particle_radius_from_mass
+from dust import particle_radius_from_mass
 
 E_d = 0.5  # 2010 Birnstiel, TODO
 E_d = 1    # Kees 2023-03-21

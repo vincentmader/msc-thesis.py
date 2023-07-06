@@ -2,7 +2,7 @@ import numpy as np
 from numpy import pi as PI
 
 from constants import rho_s
-from disk.dust_particle import particle_radius_from_mass
+from dust import particle_radius_from_mass
 from utils.physics import mean_free_path, eddy_turnover_time, finite_difference, kepler_frequency
 
 

@@ -7,7 +7,7 @@ try:
     from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from disk.dust_particle import particle_radius_from_mass
+    from dust import particle_radius_from_mass
 except ModuleNotFoundError as e:
     raise e
 

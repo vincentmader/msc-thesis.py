@@ -2,7 +2,7 @@ import numpy as np
 from numpy import pi as PI
 
 from constants import m_p, k_B, alpha
-from disk.dust_particle import particle_radius_from_mass
+from dust import particle_radius_from_mass
 
 
 def dv_turbulence(cfg, disk, disk_region):

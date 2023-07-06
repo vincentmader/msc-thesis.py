@@ -3,7 +3,7 @@ import sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from disk.dust_particle import particle_mass_from_radius
+    from dust import particle_mass_from_radius
 except ModuleNotFoundError as e:
     raise e
 
