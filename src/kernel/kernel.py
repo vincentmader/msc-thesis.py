@@ -151,7 +151,7 @@ class Kernel():
         dm = mg.grid_cell_widths
         N_m = mg.N
 
-        fragmentation_variants = self.cfg.enable_fragmentation_variant
+        fragmentation_variants = self.cfg.fragmentation_variant
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
