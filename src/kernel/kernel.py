@@ -1,6 +1,7 @@
 import numpy as np
 
 from axis import DiscreteMassAxis, DiscreteRadialAxis
+from collision import collision_outcome_probabilities_from_maxwell_boltzmann
 from disk import Disk, DiskRegion
 from dust.collision_rate import collision_rate
 from utils.functions import heaviside_theta
@@ -33,8 +34,17 @@ class Kernel():
             assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
         # Define probabilities for coagulation & fragmentation events.
-        P_coag = 0.5
-        P_frag = 0.5
+        if cfg.collision_outcome_variant == "maxwell_boltzmann_distribution":
+            probs = collision_outcome_probabilities_from_maxwell_boltzmann()
+            P_coag, P_frag = probs
+        elif cfg.collision_outcome_variant == "cutoff_velocity":
+            # NOTE: Both kernels are multiplied with the same pre-factor of 1, 
+            #       but depending on an index pair `(i, j)`, only one of the two
+            #       outcomes' (coag. or frag.) term will be added to the kernel.
+            P_coag, P_frag = 1, 1
+        else:
+            # If no outcome variant is specified: Assume equal probabilities.
+            P_coag, P_frag = 0.5, 0.5
 
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
