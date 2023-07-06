@@ -148,7 +148,6 @@ class Kernel():
 
         mg = self.mg
         mc = mg.grid_cell_centers
-        dm = mg.grid_cell_widths
         N_m = mg.N
 
         fragmentation_variants = self.cfg.fragmentation_variants
