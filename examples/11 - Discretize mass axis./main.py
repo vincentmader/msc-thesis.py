@@ -9,7 +9,7 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-FIGSIZE = (6, 6)
+FIGSIZE = (5, 5)
 
 
 def plot_1(i, m, scale):
