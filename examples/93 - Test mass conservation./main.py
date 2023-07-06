@@ -23,7 +23,7 @@ cfg = Config(
     enable_fragmentation=False,
     enable_physical_cross_sections=False,
     enable_physical_relative_velocities=[],
-    enable_fragmentation_variant=[
+    fragmentation_variants=[
         # "naive/pulverization",
         # "mrn",
     ],
