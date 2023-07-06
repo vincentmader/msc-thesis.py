@@ -12,7 +12,7 @@ try:
     from disk.disk import disk_mass_from_distribution
     # from disk.disk import Disk
     # from disk.disk_region import DiskRegion
-    # from dust.collision_rate import collision_rate
+    # from collision import collision_rate
     # from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from solver import Solver

@@ -5,7 +5,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from axis import DiscreteMassAxis
-    from dust.collision_cross_section import collision_cross_section
+    from collision import collision_cross_section
 except ModuleNotFoundError as e:
     raise e
 

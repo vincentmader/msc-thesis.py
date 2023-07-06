@@ -1,5 +1,5 @@
 from .collision_cross_section import collision_cross_section
-from .relative_velocity import relative_velocity
+from dust.relative_velocity import relative_velocity
 
 
 def collision_rate(cfg, disk, disk_region):  # TODO Think re: inputs of this function

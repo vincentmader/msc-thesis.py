@@ -2,8 +2,8 @@ import numpy as np
 
 from axis import DiscreteMassAxis, DiscreteRadialAxis
 from collision import collision_outcome_probabilities_from_maxwell_boltzmann
+from collision import collision_rate
 from disk import Disk, DiskRegion
-from dust.collision_rate import collision_rate
 from utils.functions import heaviside_theta
 
 

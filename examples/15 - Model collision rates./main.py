@@ -7,7 +7,7 @@ try:
     from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from dust.collision_rate import collision_rate
+    from collision import collision_rate
 except ModuleNotFoundError as e:
     raise e
 
