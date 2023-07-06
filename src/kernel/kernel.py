@@ -35,17 +35,27 @@ class Kernel():
             assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
         # Define probabilities for coagulation & fragmentation events.
-        if cfg.collision_outcome_variant == "cutoff_velocity":
-            # If `v > v_cutoff`, assume fragmentation, else coagulation.
-            probs = collision_outcome_probabilities_from_cutoff_velocity()
-            P_coag, P_frag = probs
-        elif cfg.collision_outcome_variant == "maxwell_boltzmann_distribution":
-            # ...
-            probs = collision_outcome_probabilities_from_maxwell_boltzmann()
-            P_coag, P_frag = probs
+        # Case 1: Include only hit-and-stick coagulation.
+        if (cfg.enable_coagulation) and (not cfg.enable_fragmentation):
+            P_coag, P_frag = 1, 0
+        # Case 2: Include only fragmentation.
+        elif (not cfg.enable_coagulation) and (cfg.enable_fragmentation):
+            P_coag, P_frag = 0, 1
+        # Case 3: Include neither. 
+        #         (This case is useless, but included for completeness.)
+        elif (not cfg.enable_coagulation) and (not cfg.enable_fragmentation):
+            P_coag, P_frag = 0, 0
+        # Case 4: Include both.
         else:
-            # If no outcome variant is specified: Assume equal probabilities.
-            P_coag, P_frag = 0.5, 0.5
+            # Assume fragmentation if `v > v_cutoff`, else coagulation.
+            if cfg.collision_outcome_variant == "cutoff_velocity":
+                P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity()
+            # Calculate outcome probabilities from cutoff velocity & M.B. distribution.
+            elif cfg.collision_outcome_variant == "maxwell_boltzmann_distribution":
+                P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann()
+            # Assume equal probabilities.
+            else:
+                P_coag, P_frag = 0.5, 0.5
 
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
