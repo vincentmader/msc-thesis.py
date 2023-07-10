@@ -38,8 +38,8 @@ class Config():
         enable_coagulation: Optional[bool]=None,
         enable_fragmentation: Optional[bool]=None,
         enable_physical_gas_density: Optional[bool]=None,
-        enable_physical_cross_sections: Optional[bool]=None,
-        enable_physical_relative_velocities: Optional[list[str]]=None,
+        enable_physical_collisions: Optional[bool]=None,
+        relative_velocity_components: Optional[list[str]]=None,
         enable_cancellation_handling: Optional[bool]=None,
         fragmentation_variant: Optional[str]=None,
         fragmentation_velocity: Optional[float]=None,
@@ -101,10 +101,10 @@ class Config():
             enable_coagulation = cfg_i["enable_coagulation"]
         if enable_fragmentation is None:
             enable_fragmentation = cfg_i["enable_fragmentation"]
-        if enable_physical_cross_sections is None:
-            enable_physical_cross_sections = cfg_i["enable_physical_cross_sections"]
-        if enable_physical_relative_velocities is None:
-            enable_physical_relative_velocities = cfg_i["enable_physical_relative_velocities"]
+        if enable_physical_collisions is None:
+            enable_physical_collisions = cfg_i["enable_physical_collisions"]
+        if relative_velocity_components is None:
+            relative_velocity_components = cfg_i["relative_velocity_components"]
         if enable_cancellation_handling is None:
             enable_cancellation_handling = cfg_i["enable_cancellation_handling"]
         if fragmentation_variant is None:
@@ -136,8 +136,8 @@ class Config():
         self.radial_axis_scale = radial_axis_scale
         self.enable_coagulation = enable_coagulation
         self.enable_fragmentation = enable_fragmentation
-        self.enable_physical_cross_sections = enable_physical_cross_sections
-        self.enable_physical_relative_velocities = enable_physical_relative_velocities
+        self.enable_physical_collisions = enable_physical_collisions
+        self.relative_velocity_components = relative_velocity_components
         self.enable_cancellation_handling = enable_cancellation_handling
         self.enable_physical_gas_density = enable_physical_gas_density
         self.fragmentation_variant = fragmentation_variant

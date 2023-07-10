@@ -20,7 +20,7 @@ except ModuleNotFoundError as e:
 
 # Define configuration.
 cfg = Config(
-    # enable_physical_relative_velocities=[
+    # relative_velocity_components=[
     #     "brownian_motion",
     #     "differential_settling",
     #     "radial_drift",

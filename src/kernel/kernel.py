@@ -31,7 +31,7 @@ class Kernel():
         dv = relative_velocity(cfg, disk, disk_region)
 
         # Define particle collision rates.
-        if cfg.enable_physical_relative_velocities:
+        if cfg.enable_physical_collisions:
             R_coll = collision_rate(cfg, disk, disk_region)
         else:  # In the most simple case, the rates are just set to 1.
             R_coll = np.ones(shape=[mg.N] * 2)
@@ -56,7 +56,7 @@ class Kernel():
             if cfg.collision_outcome_variant == "cutoff_velocity":
                 P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity(cfg, dv)
             # Case 4.2: Calculate outcome probabilities from cutoff velocity & M.B. distribution.
-            elif cfg.collision_outcome_variant == "maxwell_boltzmann":
+            elif cfg.collision_outcome_variant == "mb_dist":
                 P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann(cfg, dv)
             # Case 4.3: Assume equal probabilities.
             else:

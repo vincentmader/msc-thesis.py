@@ -31,8 +31,8 @@ cfg = Config(
     enable_fragmentation=False,
     enable_cancellation_handling=False,
     enable_physical_gas_density=False,
-    enable_physical_cross_sections=False,
-    enable_physical_relative_velocities=[],
+    enable_physical_collisions=False,
+    relative_velocity_components=[],
     # ^ note: Enabling physical velocities leads to divergence.
 )
 

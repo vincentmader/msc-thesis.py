@@ -15,12 +15,12 @@ def relative_velocity(
     disk: Disk,
     disk_region: DiskRegion,
 ):
-    if cfg.enable_physical_relative_velocities == []:
+    if cfg.relative_velocity_components == []:
         # return 35 * np.ones(shape=[disk.mass_axis.N] * 2)
         return np.ones(shape=[disk.mass_axis.N] * 2)
 
     dvs = []
-    for dv_name in cfg.enable_physical_relative_velocities:
+    for dv_name in cfg.relative_velocity_components:
 
         if dv_name == "brownian_motion":
             dv_br = dv_brownian_motion(cfg, disk, disk_region)

@@ -5,7 +5,7 @@ from dust import particle_radius_from_mass
 
 
 def collision_cross_section(cfg, mg):
-    if cfg.enable_physical_cross_sections is False:
+    if cfg.enable_physical_collisions is False:
         return np.ones(shape=[mg.N] * 2)
 
     mc = mg.grid_cell_centers

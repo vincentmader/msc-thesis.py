@@ -25,8 +25,8 @@ cfg = Config(
     # # enable_coagulation=True,
     # # enable_fragmentation=True,
     # enable_cancellation_handling=True,
-    # enable_physical_cross_sections=False,
-    # enable_physical_relative_velocities=[],
+    # enable_physical_collisions=False,
+    # relative_velocity_components=[],
 
     # fragmentation_variant="mrn",
 )

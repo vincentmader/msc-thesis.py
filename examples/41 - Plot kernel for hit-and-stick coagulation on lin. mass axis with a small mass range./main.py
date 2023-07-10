@@ -23,8 +23,8 @@ cfg = Config(
     enable_coagulation=True,
     enable_fragmentation=False,
     enable_cancellation_handling=False,
-    enable_physical_cross_sections=False,
-    enable_physical_relative_velocities=[],
+    enable_physical_collisions=False,
+    relative_velocity_components=[],
 )
 
 # Define discrete mass axis.
