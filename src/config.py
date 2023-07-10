@@ -41,6 +41,7 @@ class Config():
         enable_physical_relative_velocities=None,
         enable_cancellation_handling=None,
         fragmentation_variants=None,
+        fragmentation_velocity=None,
         collision_outcome_variant=None,
         solver_variant=None,
         mpl_dark_mode=None,
@@ -107,6 +108,8 @@ class Config():
             enable_cancellation_handling = cfg_i["enable_cancellation_handling"]
         if fragmentation_variants is None:
             fragmentation_variants = cfg_i["fragmentation_variants"]
+        if fragmentation_velocity is None:
+            fragmentation_velocity = cfg_i["fragmentation_velocity"]
         if collision_outcome_variant is None:
             collision_outcome_variant = cfg_i["collision_outcome_variant"]
 
@@ -137,6 +140,7 @@ class Config():
         self.enable_cancellation_handling = enable_cancellation_handling
         self.enable_physical_gas_density = enable_physical_gas_density
         self.fragmentation_variants = fragmentation_variants
+        self.fragmentation_velocity = fragmentation_velocity
         self.collision_outcome_variant = collision_outcome_variant
         self.solver_variant = solver_variant
         self.stellar_mass = stellar_mass

@@ -5,6 +5,7 @@ from collision import collision_outcome_probabilities_from_cutoff_velocity
 from collision import collision_outcome_probabilities_from_maxwell_boltzmann
 from collision import collision_rate
 from disk import Disk, DiskRegion
+from dust.relative_velocity import relative_velocity
 from utils.functions import heaviside_theta
 
 
@@ -21,9 +22,14 @@ class Kernel():
         mg = DiscreteMassAxis(cfg)
         mc = mg.grid_cell_centers
         self.mg = mg
+
         # Define protoplanetary disk, & the position of interest in it.
         disk = Disk(cfg, rg, mg)
         disk_region = DiskRegion(cfg, disk)
+
+        # Define total relative dust particle velocities.
+        dv = relative_velocity(cfg, disk, disk_region)
+
         # Define particle collision rates.
         if cfg.enable_physical_relative_velocities:
             R_coll = collision_rate(cfg, disk, disk_region)
@@ -41,19 +47,18 @@ class Kernel():
         # Case 2: Include only fragmentation.
         elif (not cfg.enable_coagulation) and (cfg.enable_fragmentation):
             P_coag, P_frag = 0, 1
-        # Case 3: Include neither. 
-        #         (This case is useless, but included for completeness.)
+        # Case 3: Include neither (useless, but included for completeness).
         elif (not cfg.enable_coagulation) and (not cfg.enable_fragmentation):
             P_coag, P_frag = 0, 0
         # Case 4: Include both.
         else:
-            # Assume fragmentation if `v > v_cutoff`, else coagulation.
+            # Case 4.1: Assume fragmentation if `v > v_cutoff`, else coagulation.
             if cfg.collision_outcome_variant == "cutoff_velocity":
-                P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity()
-            # Calculate outcome probabilities from cutoff velocity & M.B. distribution.
+                P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity(cfg, dv)
+            # Case 4.2: Calculate outcome probabilities from cutoff velocity & M.B. distribution.
             elif cfg.collision_outcome_variant == "maxwell_boltzmann_distribution":
-                P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann()
-            # Assume equal probabilities.
+                P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann(cfg, dv)
+            # Case 4.3: Assume equal probabilities.
             else:
                 P_coag, P_frag = 0.5, 0.5
 
