@@ -28,10 +28,7 @@ cfg = Config(
     # enable_physical_cross_sections=False,
     # enable_physical_relative_velocities=[],
 
-    # fragmentation_variants=[
-    #     # "naive/pulverization",
-    #     # "mrn",
-    # ]
+    # fragmentation_variant="mrn",
 )
 pprint(cfg.__dict__)
 

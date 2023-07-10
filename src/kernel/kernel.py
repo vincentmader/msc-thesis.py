@@ -56,7 +56,7 @@ class Kernel():
             if cfg.collision_outcome_variant == "cutoff_velocity":
                 P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity(cfg, dv)
             # Case 4.2: Calculate outcome probabilities from cutoff velocity & M.B. distribution.
-            elif cfg.collision_outcome_variant == "maxwell_boltzmann_distribution":
+            elif cfg.collision_outcome_variant == "maxwell_boltzmann":
                 P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann(cfg, dv)
             # Case 4.3: Assume equal probabilities.
             else:
@@ -176,7 +176,7 @@ class Kernel():
         mc = mg.grid_cell_centers
         N_m = mg.N
 
-        fragmentation_variants = self.cfg.fragmentation_variants
+        fragmentation_variant = self.cfg.fragmentation_variant
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
@@ -190,7 +190,7 @@ class Kernel():
                 # 1. Most basic/naive fragmentation implementation: "Pulverization"
                 # ═════════════════════════════════════════════════════════════════
 
-                if "naive/pulverization" in fragmentation_variants:
+                if fragmentation_variant == "naive/pulverization":
 
                     X = 0  # TODO Play around with this value, observe changes!
                     k = 0
@@ -202,9 +202,9 @@ class Kernel():
 
                 # 2. Mass redistribution following the MRN model
                 # ═════════════════════════════════════════════════════════════════
-                q = -11 / 6
 
-                if "mrn" in fragmentation_variants:
+                elif fragmentation_variant == "mrn":
+                    q = -11 / 6
 
                     # Define total mass that needs to be "moved".
                     m_tot = m_i + m_j
@@ -240,5 +240,8 @@ class Kernel():
 
                     # Remove mass from bins corresponding to initial masses.
                     K_loss[i, i, j] -= R 
+
+                else: 
+                    pass
 
         return {"gain": K_gain, "loss": K_loss}

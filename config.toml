@@ -42,14 +42,14 @@
     "azimuthal",
   # "differential_settling",  # NOTE keep turned off for now
   ]
-  fragmentation_variants = [  # NOTE: You will probably only want to enable one of these.
-    # "naive/pulverization",
-    "mrn",
-  ]
-  collision_outcome_variant = "maxwell_boltzmann_distribution"  
-  # Options: 
-  # - "cutoff_velocity"                -> Fragment if `v > v_cutoff`, else coagulate.
-  # - "maxwell_boltzmann_distribution" -> Calculate probabilities from area under M.B. distr.
+  fragmentation_variant = "mrn"
+  # Variants: 
+  # - "mrn"
+  # - "naive/pulverization"
+  collision_outcome_variant = "maxwell_boltzmann"
+  # Variants: 
+  # - "cutoff_velocity"      -> Fragment if `v > v_cutoff`, else coagulate.
+  # - "maxwell_boltzmann"    -> Calculate probabilities from area under M.B. distr.
   fragmentation_velocity = 1  # given in m/s
 
 [solver]

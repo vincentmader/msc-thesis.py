@@ -1,5 +1,6 @@
 import os
 import toml
+from typing import Optional
 
 from constants import M_sun, L_sun, AU
 
@@ -16,35 +17,35 @@ class Config():
 
     def __init__(
         self,
-        stellar_mass=None,
-        stellar_luminosity=None,
-        disk_mass_ratio=None,
-        dust_to_gas_ratio=None,
-        distance_to_star=None,
-        flaring_angle=None,
-        radial_min_value=None,
-        radial_max_value=None,
-        radial_resolution=None,
-        radial_axis_scale=None,
-        mass_min_value=None,
-        mass_max_value=None,
-        mass_resolution=None,
-        mass_axis_scale=None,
-        time_min_value=None,
-        time_max_value=None,
-        time_resolution=None,
-        time_axis_scale=None,
-        enable_coagulation=None,
-        enable_fragmentation=None,
-        enable_physical_gas_density=None,
-        enable_physical_cross_sections=None,
-        enable_physical_relative_velocities=None,
-        enable_cancellation_handling=None,
-        fragmentation_variants=None,
-        fragmentation_velocity=None,
-        collision_outcome_variant=None,
-        solver_variant=None,
-        mpl_dark_mode=None,
+        stellar_mass: Optional[float]=None,
+        stellar_luminosity: Optional[float]=None,
+        disk_mass_ratio: Optional[float]=None,
+        dust_to_gas_ratio: Optional[float]=None,
+        distance_to_star: Optional[float]=None,
+        flaring_angle: Optional[float]=None,
+        radial_min_value: Optional[float]=None,
+        radial_max_value: Optional[float]=None,
+        radial_resolution: Optional[int]=None,
+        radial_axis_scale: Optional[str]=None,
+        mass_min_value: Optional[float]=None,
+        mass_max_value: Optional[float]=None,
+        mass_resolution: Optional[int]=None,
+        mass_axis_scale: Optional[str]=None,
+        time_min_value: Optional[float]=None,
+        time_max_value: Optional[float]=None,
+        time_resolution: Optional[int]=None,
+        time_axis_scale: Optional[str]=None,
+        enable_coagulation: Optional[bool]=None,
+        enable_fragmentation: Optional[bool]=None,
+        enable_physical_gas_density: Optional[bool]=None,
+        enable_physical_cross_sections: Optional[bool]=None,
+        enable_physical_relative_velocities: Optional[list[str]]=None,
+        enable_cancellation_handling: Optional[bool]=None,
+        fragmentation_variant: Optional[str]=None,
+        fragmentation_velocity: Optional[float]=None,
+        collision_outcome_variant: Optional[str]=None,
+        solver_variant: Optional[str]=None,
+        mpl_dark_mode: Optional[bool]=None,
     ):
         cfg = toml.load(path_to_config_toml)
 
@@ -106,8 +107,8 @@ class Config():
             enable_physical_relative_velocities = cfg_i["enable_physical_relative_velocities"]
         if enable_cancellation_handling is None:
             enable_cancellation_handling = cfg_i["enable_cancellation_handling"]
-        if fragmentation_variants is None:
-            fragmentation_variants = cfg_i["fragmentation_variants"]
+        if fragmentation_variant is None:
+            fragmentation_variant = cfg_i["fragmentation_variant"]
         if fragmentation_velocity is None:
             fragmentation_velocity = cfg_i["fragmentation_velocity"]
         if collision_outcome_variant is None:
@@ -139,7 +140,7 @@ class Config():
         self.enable_physical_relative_velocities = enable_physical_relative_velocities
         self.enable_cancellation_handling = enable_cancellation_handling
         self.enable_physical_gas_density = enable_physical_gas_density
-        self.fragmentation_variants = fragmentation_variants
+        self.fragmentation_variant = fragmentation_variant
         self.fragmentation_velocity = fragmentation_velocity
         self.collision_outcome_variant = collision_outcome_variant
         self.solver_variant = solver_variant
