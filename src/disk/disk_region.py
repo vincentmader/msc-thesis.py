@@ -1,7 +1,6 @@
 import numpy as np
 from numpy import pi as PI
 
-from constants import rho_s
 from dust import particle_radius_from_mass
 from utils.physics import mean_free_path, eddy_turnover_time, finite_difference, kepler_frequency
 
@@ -10,7 +9,7 @@ class DiskRegion:
     def __init__(self, cfg, disk):
 
         mg = disk.mass_axis
-        masses = mg.grid_cell_centers  # TODO
+        mc = mg.grid_cell_centers  # TODO
 
         rg = disk.radial_axis
         rc = rg.grid_cell_centers
@@ -18,9 +17,11 @@ class DiskRegion:
         i_r = rg.index_from_value(r)  # TODO
         r = rc[i_r]
 
+        rho_s = cfg.dust_particle_density
         Sigma_g = disk.gas_surface_density
-        radii = particle_radius_from_mass(masses)
+        radii = particle_radius_from_mass(mc, rho_s)
 
+        rho_s = cfg.dust_particle_density
         M_star = disk.stellar_mass
         T_mid = disk.midplane_temperature
         c_s = disk.sound_speed
@@ -58,7 +59,7 @@ class DiskRegion:
         self.delr_Sigma_g_nu_g_sqrt_r = delr_Sigma_g_nu_g_sqrt_r
         # TODO Rename?
 
-    def stopping_time(self, radii):
+    def stopping_time(self, radii, rho_s):
         u_th = self.u_th
         rho_g = self.rho_g
 
@@ -79,7 +80,7 @@ class DiskRegion:
         #     # todo: when epstein? see 2010 Birnstiel
         return t_s
 
-    def stokes_nr(self, a, t_stop):
+    def stokes_nr(self, a, t_stop, rho_s):
         Sigma_g = self.Sigma_g
         Omega_K = self.Omega_K
         tau_ed = eddy_turnover_time(Omega_K)

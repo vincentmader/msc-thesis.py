@@ -20,6 +20,7 @@ except ModuleNotFoundError as e:
 
 # Define configuration.
 cfg = Config(
+    mass_max_value=1e6,
     # relative_velocity_components=[
     #     "brownian_motion",
     #     "differential_settling",
@@ -42,8 +43,10 @@ mg = DiscreteMassAxis(cfg)
 N_m = mg.N
 masses = mg.grid_cell_centers  # TODO Use bounds or centers?
 
+rho_s = cfg.dust_particle_density
+
 # Calculate particle radii from masses.
-radii = particle_radius_from_mass(masses)
+radii = particle_radius_from_mass(masses, rho_s)
 
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)
@@ -123,12 +126,12 @@ def plot(dv, title):
         j = int(y)
         m_i = masses[i]
         m_j = masses[j]
-        a_i = particle_radius_from_mass(m_i)
-        a_j = particle_radius_from_mass(m_j)
-        t_s_i = disk_region.stopping_time(a_i)
-        t_s_j = disk_region.stopping_time(a_j)
-        St_i = disk_region.stokes_nr(m_i, t_s_i)
-        St_j = disk_region.stokes_nr(m_j, t_s_j)
+        a_i = particle_radius_from_mass(m_i, rho_s)
+        a_j = particle_radius_from_mass(m_j, rho_s)
+        t_s_i = disk_region.stopping_time(a_i, rho_s)
+        t_s_j = disk_region.stopping_time(a_j, rho_s)
+        St_i = disk_region.stokes_nr(m_i, t_s_i, rho_s)
+        St_j = disk_region.stokes_nr(m_j, t_s_j, rho_s)
         m_i, m_j = format_num(m_i), format_num(m_j)
         a_i, a_j = format_num(a_i), format_num(a_j)
         St_i, St_j = format_num(St_i), format_num(St_j)

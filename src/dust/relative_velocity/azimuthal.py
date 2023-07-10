@@ -9,10 +9,11 @@ E_d = 1    # Kees 2023-03-21
 def dv_azimuthal(cfg, disk, disk_region):
     mg = disk.mass_axis
     mc = mg.grid_cell_centers
-    radii = particle_radius_from_mass(mc)
+    rho_s = cfg.dust_particle_density
+    radii = particle_radius_from_mass(mc, rho_s)
 
-    stopping_times = disk_region.stopping_time(radii)
-    stokes_nrs = disk_region.stokes_nr(radii, stopping_times)
+    stopping_times = disk_region.stopping_time(radii, rho_s)
+    stokes_nrs = disk_region.stokes_nr(radii, stopping_times, rho_s)
     u = u_n(disk_region)
 
     dv = np.zeros(shape=[mg.N] * 2)

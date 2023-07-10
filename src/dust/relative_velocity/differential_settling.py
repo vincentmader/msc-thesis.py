@@ -5,8 +5,10 @@ def dv_differential_settling(cfg, disk, disk_region):
     mg = disk.mass_axis
     mc = mg.grid_cell_centers
 
+    rho_s = cfg.dust_particle_density
+
     Omega_K = disk_region.Omega_K
-    stopping_times = disk_region.stopping_time(mc)
+    stopping_times = disk_region.stopping_time(mc, rho_s)
     scale_heights = 1  # TODO
     settling_velocities = v_sett(stopping_times, Omega_K, scale_heights)
 

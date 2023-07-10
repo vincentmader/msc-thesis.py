@@ -5,6 +5,8 @@
   dust_to_gas_ratio             = 0.01              # given as ratio M_dust/M_gas
   distance_to_star              = 10                # given in AUs
   flaring_angle                 = 0.05              # given in rad
+  viscosity_alpha               = 1e-3              # dimensionless
+  dust_particle_density         = 1600              # given in kg/m^3  [2010 Birnstiel -> 1.6 g/cm^3]
   enable_physical_gas_density   = true
 
 [radial_discretization]

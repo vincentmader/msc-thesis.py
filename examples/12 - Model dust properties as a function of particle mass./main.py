@@ -67,9 +67,10 @@ def plot_3(m, t_stop):
 
 if __name__ == "__main__":
     mc = mg.grid_cell_centers
-    radii = particle_radius_from_mass(mc)
-    stopping_times = disk_region.stopping_time(radii)
-    stokes_nrs = disk_region.stokes_nr(mc, stopping_times)
+    rho_s = cfg.dust_particle_density
+    radii = particle_radius_from_mass(mc, rho_s)
+    stopping_times = disk_region.stopping_time(radii, rho_s)
+    stokes_nrs = disk_region.stokes_nr(mc, stopping_times, rho_s)
     u = disk_region.v_K  # TODO Is this correct?
     reynolds_nrs = disk_region.reynolds_nr(mc, u)
 
