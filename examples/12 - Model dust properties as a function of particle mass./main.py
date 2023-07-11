@@ -11,7 +11,7 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-FIGSIZE = (10, 5)
+FIGSIZE = (8, 4)
 
 cfg = Config()
 mg = DiscreteMassAxis(cfg)
@@ -32,6 +32,7 @@ def plot_1(m, St):
     plt.xlabel("mass $m$ [kg]")
     plt.ylabel(r"$St$")
     plt.legend()
+    plt.grid()
     path = os.path.join(PATH_TO_FIGURES, "12", "stokes_number.pdf")
     plt.savefig(path)
     plt.show()
@@ -45,6 +46,7 @@ def plot_2(m, Re):
     plt.xlabel("mass $m$ [kg]")
     plt.ylabel(r"$Re$")
     plt.legend()
+    plt.grid()
     path = os.path.join(PATH_TO_FIGURES, "12", "reynolds_number.pdf")
     plt.savefig(path)
     plt.show()
@@ -59,6 +61,7 @@ def plot_3(m, t_stop):
     plt.ylabel(r"$\tau_{stop}$ [s]")
     plt.xlabel(r"$m$ [kg]")
     plt.legend()
+    plt.grid()
     path = os.path.join(PATH_TO_FIGURES, "12", "stopping_time.pdf")
     plt.savefig(path)
     plt.show()
