@@ -76,6 +76,7 @@ def plot(i, m, scale, plot_separately=False, show_plot=False):
             filename = f"discrete-mass-axis_{scale}-scale-{idx}.pdf"
             path = os.path.join(PATH_TO_FIGURES, "11", filename)
             plt.savefig(path)
+            plt.gcf().subplots_adjust(left=0.15)
             if show_plot:
                 plt.show()
             plt.close()
