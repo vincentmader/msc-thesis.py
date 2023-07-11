@@ -72,6 +72,7 @@ def plot(i, m, scale, plot_separately=False, show_plot=False):
         for idx, plot in enumerate(plots):
             plt.figure(figsize=FIGSIZE)
             plot(i, m, scale)
+            plt.tight_layout()
             filename = f"discrete-mass-axis_{scale}-scale-{idx}.pdf"
             path = os.path.join(PATH_TO_FIGURES, "11", filename)
             plt.savefig(path)
