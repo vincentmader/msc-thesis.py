@@ -59,7 +59,7 @@ class Solver:
 
         # Translate back to physical units
         f = N_dust_store / dmgrain
-        m2f = f * mgrain**2
+        m2f = f * mgrain**2  # TODO Why multiply with `mgrain`, instead of `dmgrain`?
         return N_dust_store, f, m2f
 
 
