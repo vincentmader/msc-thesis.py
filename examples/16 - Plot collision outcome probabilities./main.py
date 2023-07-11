@@ -44,7 +44,7 @@ def plot(title, P):
     # Create a grid of subplots (for pcolor plot & colorbar). 
     plt.figure()
     plt.set_cmap("Blues")
-    gs = GridSpec(1, 2, width_ratios=[20, 1])
+    gs = GridSpec(1, 2, width_ratios=[15, 1], wspace=0.)
     
     # Create the pcolor plot.
     ax1 = plt.subplot(gs[0])
@@ -73,13 +73,10 @@ def plot(title, P):
     ax2 = plt.subplot(gs[1])
     plt.colorbar(im, cax=ax2)
     
-    # Adjust spacing between subplots.
-    plt.subplots_adjust(wspace=0.05)
-
 
 if __name__ == "__main__":
     outcome_probabilities = {
-        "cutoff velocity": collision_outcome_probabilities_from_cutoff_velocity,
+        "cutoff_velocity": collision_outcome_probabilities_from_cutoff_velocity,
         "Maxwell-Boltzmann": collision_outcome_probabilities_from_maxwell_boltzmann,
     }
 
@@ -97,6 +94,6 @@ if __name__ == "__main__":
             filename = f"{subtitle} from {title}.pdf"
             os.makedirs("../../figures/16", exist_ok=True)
             path = os.path.join(PATH_TO_FIGURES, "16", filename)
-            plt.savefig(path)
+            plt.savefig(path, bbox_inches='tight')
             plt.show()
             plt.close()
