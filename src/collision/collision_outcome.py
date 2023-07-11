@@ -15,7 +15,7 @@ def collision_outcome_probabilities_from_maxwell_boltzmann(
     for i in range(N_m):
         for j in range(N_m):
             # Calculate fragmentation probability.
-            P_f = (3/2 + (v_frag/dv[i, j])**2 + 1) * np.exp(-3/2 * (v_frag/dv[i, j])**2)
+            P_f = (3/2 * (v_frag/dv[i, j])**2 + 1) * np.exp(-3/2 * (v_frag/dv[i, j])**2)
             # ^ See "2022 Stammler & Birnstiel"
             P_frag[i, j] = P_f
             P_coag[i, j] = 1 - P_f  # NOTE: Bouncing is neglected here.
