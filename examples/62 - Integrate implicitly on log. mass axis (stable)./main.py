@@ -60,8 +60,8 @@ def plot_1(m, m2f, dm2f):
         xlabel_2="mass $m_i$ [kg]",
         xlims_1=(m[0], m[-1]),
         xlims_2=(m[0], m[-1]),
-        ylims_1=[1e-15, 1e2],
-        ylims_2=[1e-40, 1e2],
+        ylims_1=[1e-15, 1e-8],
+        ylims_2=[1e-40, 1e-15],
     )
     plot.draw()
     plt.show()
