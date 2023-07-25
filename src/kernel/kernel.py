@@ -5,6 +5,7 @@ from collision import collision_outcome_probabilities_from_cutoff_velocity
 from collision import collision_outcome_probabilities_from_maxwell_boltzmann
 from collision import collision_rate
 from disk import Disk, DiskRegion
+from dust.dust_particle import particle_radius_from_mass
 from dust.relative_velocity import relative_velocity
 from utils.functions import heaviside_theta
 
@@ -14,6 +15,7 @@ class Kernel():
     def __init__(self, cfg):
 
         self.cfg = cfg
+        rho_s = cfg.dust_particle_density
 
         # Define discrete axes for...
         # ...radial distance of disk region of interest from central star.
@@ -22,6 +24,8 @@ class Kernel():
         mg = DiscreteMassAxis(cfg)
         mc = mg.grid_cell_centers
         self.mg = mg
+        # ...particle radius.
+        self.ac = particle_radius_from_mass(mc, rho_s)
 
         # Define protoplanetary disk, & the position of interest in it.
         disk = Disk(cfg, rg, mg)
