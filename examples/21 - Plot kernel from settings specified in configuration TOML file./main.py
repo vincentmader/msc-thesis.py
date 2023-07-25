@@ -1,9 +1,10 @@
 from pprint import pprint
 import os
 import sys
+import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from config import Config
+    from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from kernel import Kernel
     from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
     from visualization.kernel.v2.gain_vs_loss import KernelGainVsLossPlot
@@ -31,6 +32,8 @@ cfg = Config(
     # fragmentation_variant="mrn",
 )
 pprint(cfg.__dict__)
+if cfg.mpl_dark_mode:
+    plt.style.use(PATH_TO_DARKMODE)
 
 # Define kernel.
 kernel = Kernel(cfg)
