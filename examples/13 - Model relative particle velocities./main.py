@@ -21,6 +21,7 @@ except ModuleNotFoundError as e:
 # Define configuration.
 cfg = Config(
     mass_max_value=1e6,
+    mass_resolution=200,
     # relative_velocity_components=[
     #     "brownian_motion",
     #     "differential_settling",
