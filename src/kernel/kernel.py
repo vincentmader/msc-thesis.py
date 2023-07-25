@@ -79,20 +79,20 @@ class Kernel():
         # ...stick-and-hit coagulation processes.
         K_coag = self._K_coag(R_coll)
         if cfg.enable_coagulation:
-            self.K_coag_gain += K_coag["gain"]
-            self.K_coag_loss += K_coag["loss"]
+            self.K_coag_gain += P_coag * K_coag["gain"]
+            self.K_coag_loss += P_coag * K_coag["loss"]
             self.K_gain += P_coag * K_coag["gain"]
             self.K_loss += P_coag * K_coag["loss"]
         # ...fragmentation processes.
         K_frag = self._K_frag(R_coll)
         if cfg.enable_fragmentation:
-            self.K_frag_gain += K_frag["gain"]
-            self.K_frag_loss += K_frag["loss"]
+            self.K_frag_gain += P_frag * K_frag["gain"]
+            self.K_frag_loss += P_frag * K_frag["loss"]
             self.K_gain += P_frag * K_frag["gain"]
             self.K_loss += P_frag * K_frag["loss"]
         # Define total coagulation & fragmentation sub-kernels.
-        self.K_coag = self.K_coag_gain + self.K_coag_loss
-        self.K_frag = self.K_frag_gain + self.K_frag_loss
+        self.K_coag = P_coag * self.K_coag_gain + P_coag * self.K_coag_loss
+        self.K_frag = P_frag * self.K_frag_gain + P_frag * self.K_frag_loss
         # Define total kernel
         self.K += P_coag * self.K_coag
         self.K += P_frag * self.K_frag
