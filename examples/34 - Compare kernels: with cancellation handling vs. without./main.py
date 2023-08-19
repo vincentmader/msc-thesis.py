@@ -7,8 +7,8 @@ try:
     from config import Config
     from dust import particle_radius_from_mass
     from kernel import Kernel
-    from visualization.vX_2023_08_14_kernel.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.vX_2023_08_14_kernel.gridspec_plot import GridspecPlot
+    from visualization.kernel_v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
+    from visualization.kernel_v3_2023_08_14.gridspec_plot import GridspecPlot
 except ModuleNotFoundError as e:
     raise e
 
