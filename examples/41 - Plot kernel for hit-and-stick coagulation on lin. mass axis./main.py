@@ -5,8 +5,8 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
     from kernel import Kernel
-    from visualization.kernel_v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel_v3_2023_08_14.gridspec_plot import GridspecPlot
+    from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
+    from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
 except ModuleNotFoundError as e:
     raise e
 
