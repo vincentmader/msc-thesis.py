@@ -11,8 +11,8 @@ try:
     from disk.disk import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver
-    from visualization.vX_2023_07_03_evolution.mass_error import DiskMassErrorPlot
-    from visualization.vX_2023_07_03_evolution.slider_plot_2 import InteractiveSliderLinePlot
+    from visualization.evolution.vX_2023_07_03.mass_error import DiskMassErrorPlot
+    from visualization.evolution.vX_2023_07_03.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
     raise e
 
