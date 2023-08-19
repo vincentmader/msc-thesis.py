@@ -16,8 +16,8 @@ try:
     # from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from solver import Solver
-    from visualization.mass_error import DiskMassErrorPlot
-    from visualization.slider_plot_2 import InteractiveSliderLinePlot
+    from visualization.vX_2023_07_03_evolution.mass_error import DiskMassErrorPlot
+    from visualization.vX_2023_07_03_evolution.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
     raise e
 
