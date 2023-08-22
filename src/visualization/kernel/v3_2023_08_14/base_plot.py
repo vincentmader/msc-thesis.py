@@ -19,11 +19,11 @@ class BasePlot:
         path_to_outfile=None,
     ):
         self.draw()
-        if show_plot:
-            plt.show()
         if save_plot:
             assert path_to_outfile is not None, "No savefile path specified."
             plt.savefig(path_to_outfile)
+        if show_plot:
+            plt.show()
         plt.close()
 
     def draw(self):
