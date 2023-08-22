@@ -153,8 +153,8 @@ def plot_separately():
             constrained_layout=True,
         )
         plot(dv, title)
-        path = os.path.join(PATH_TO_FIGURES, "13", f"dv_{title}.pdf")
-        plt.savefig(path)
+        # path = os.path.join(PATH_TO_FIGURES, "13", f"dv_{title}.pdf")
+        # plt.savefig(path)
         plt.close()
 
 
@@ -163,13 +163,13 @@ def plot_together():
     for idx, (dv, title) in tqdm(enumerate(plot_setups)):
         plt.subplot(2, 3, idx + 1)
         plot(dv, title)
-    path = os.path.join(PATH_TO_FIGURES, "13", "relative_velocities.pdf")
-    plt.savefig(path)
+    # path = os.path.join(PATH_TO_FIGURES, "13", "relative_velocities.pdf")
+    # plt.savefig(path)
     plt.show()
     plt.close()
 
 
 def main():
-    os.makedirs("../../figures/13", exist_ok=True)
+    # os.makedirs("../../figures/13", exist_ok=True)
     plot_separately()
     plot_together()
