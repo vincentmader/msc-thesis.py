@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, DiscreteRadialAxis
@@ -57,6 +58,11 @@ plot_setups = [
 
 def main():
     for dv, dv_id in plot_setups:
+        path_to_outfiles = Path("..", "..", "figures", "21")
+        os.makedirs(path_to_outfiles, exist_ok=True)
+        filename = f"dv_{dv_id}.pdf"
+        path_to_outfile = Path(path_to_outfiles, filename)
+
         title = "relative velocity $\Delta v_{" + dv_id + "}$ [m/s]"
         s1 = PcolorMatrixSubplot(
             ac, ac, dv,
@@ -68,4 +74,7 @@ def main():
         subplots = [s1]
     
         p = GridspecPlot(subplots)
-        p.render()
+        p.render(
+            save_plot=True,
+            path_to_outfile=path_to_outfile,
+        )
