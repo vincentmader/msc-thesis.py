@@ -1,10 +1,11 @@
 import os
 import sys
+from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis
     from collision import collision_cross_section
-    from config import Config
+    from config import Config, PATH_TO_FIGURES
     from dust import particle_radius_from_mass
     from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
     from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
@@ -27,9 +28,17 @@ s1 = PcolorMatrixSubplot(
     xlabel="particle radius $a_j$",
     ylabel="particle radius $a_i$",
     # scales=("log", "log", "lin"),
+    cmap="Blues",
 )
 
 subplots = [s1]
 
+path_to_figures = Path(PATH_TO_FIGURES, "22")
+os.makedirs(path_to_figures, exist_ok=True)
+path_to_outfile = Path(path_to_figures, "collision_cross_section.pdf")
+
 p = GridspecPlot(subplots)
-p.render()
+p.render(
+    save_plot=True,
+    path_to_outfile=path_to_outfile
+)
