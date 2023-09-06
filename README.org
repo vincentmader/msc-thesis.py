@@ -16,3 +16,7 @@ To get started, you need to make sure that you have the Python interpreter insta
 After having done that, you should run the `setup.sh` script from inside the `bin` directory (e.g. by running `make setup`, if you have the Make toolchain installed). This will create a virtual Python environment, and ensure that you have all the needed dependencies installed locally.
 
 To get a sense of how this Python library can be used, you may then take a look at the `./examples` directory. After having navigated into that directory from within your shell, just execute `./run` to get a list of all the included examples.
+
+Dependencies:
+- `python3`
+- `make`
