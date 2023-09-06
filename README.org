@@ -1,0 +1,22 @@
+#+startup: show2levels latexpreview
+
+* Computational Cost Optimization via Stochastic Kernel Sampling for the Numerical Integration of the Smoluchovski Coagulation Equation
+
+This repository contains the Python code I wrote while working on my Master's thesis. The thesis' main git repository can be found [[https://github.com/vincentmader/msc-thesis][here]].
+
+** How can I get the code?
+If you'd like to download the code onto your machine, you can either follow the instruction in the main repository (see the link above) or just clone /this/ repository by running the following command from your shell:
+#+begin_src shell
+git clone https://github.com/vincentmader/msc-thesis.py
+#+end_src
+
+** How can I run the code?
+To get started, you need to make sure that you have the Python interpreter installed on your machine. It's probably pre-installed, but if not, you can simply follow the instruction on the [[https://www.python.org/downloads/][official download page]].
+
+After having done that, you should run the `setup.sh` script from inside the `bin` directory (e.g. by running `make setup`, if you have the Make toolchain installed). This will create a virtual Python environment, and ensure that you have all the needed dependencies installed locally.
+
+To get a sense of how this Python library can be used, you may then take a look at the `./examples` directory. After having navigated into that directory from within your shell, just execute `./run` to get a list of all the included examples.
+
+Dependencies:
+- `python3`
+- `make`
