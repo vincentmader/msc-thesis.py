@@ -70,6 +70,7 @@ def main():
             xlabel="particle radius $a_j$",
             ylabel="particle radius $a_i$",
             scales=("log", "log", "lin"),
+            cmap="Reds",
         )
         subplots = [s1]
     
