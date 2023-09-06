@@ -20,3 +20,8 @@ To get a sense of how this Python library can be used, you may then take a look 
 Dependencies:
 - `python3`
 - `make`
+
+You may use the command below to both clone & setup the repository:
+#+begin_src
+curl "https://raw.githubusercontent.com/vincentmader/msc-thesis.py/master/bin/clone_repo.sh" | sh
+#+end_src
