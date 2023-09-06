@@ -7,10 +7,9 @@ from constants import M_sun, L_sun, AU
 dirname = os.path.dirname(__file__)
 path_to_config_toml = os.path.join(dirname, "..", "config.toml")
 
-PATH_TO_DARKMODE = os.path.join(
-    dirname, "visualization", "mpl-styles", "dark.mplstyle"
-)
-PATH_TO_FIGURES = os.path.join(dirname, "..", "figures")
+PATH_TO_LIB = os.path.join(dirname, "..", "lib")
+PATH_TO_FIGURES = os.path.join(dirname, "..", "out", "figures")
+PATH_TO_DARKMODE = os.path.join(PATH_TO_LIB, "mpl-styles", "dark.mplstyle")
 
 
 class Config():

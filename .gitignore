@@ -1,8 +1,7 @@
 .DS_Store
-/.venv
-/figures
-/src/solver/kees_solvers
-/src/visualization/mpl-styles
-__pycache__
-.ipynb_checkpoints
 ._*
+.ipynb_checkpoints
+/.venv
+/lib/
+/out/
+__pycache__
