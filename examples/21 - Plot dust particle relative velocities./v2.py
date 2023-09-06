@@ -5,6 +5,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config
+    from config import PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from dust import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal
@@ -58,7 +59,7 @@ plot_setups = [
 
 def main():
     for dv, dv_id in plot_setups:
-        path_to_outfiles = Path("..", "..", "figures", "21")
+        path_to_outfiles = Path(PATH_TO_FIGURES, "21")
         os.makedirs(path_to_outfiles, exist_ok=True)
         filename = f"dv_{dv_id}.pdf"
         path_to_outfile = Path(path_to_outfiles, filename)

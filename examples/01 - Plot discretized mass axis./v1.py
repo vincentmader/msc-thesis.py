@@ -2,6 +2,7 @@ import os
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
@@ -66,7 +67,7 @@ def plot_4(_, m, mg, scale):
 
 
 def plot(i, m, mg, scale, plot_separately=False, show_plot=False):
-    os.makedirs("../../figures/11", exist_ok=True)
+    os.makedirs(Path(PATH_TO_FIGURES, "11"), exist_ok=True)
     plots = [plot_1, plot_2, plot_3, plot_4]
     if plot_separately:
         for idx, plot in enumerate(plots):

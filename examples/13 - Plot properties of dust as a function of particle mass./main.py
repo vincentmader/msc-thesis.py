@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 try:
@@ -77,7 +78,7 @@ if __name__ == "__main__":
     u = disk_region.v_K  # TODO Is this correct?
     reynolds_nrs = disk_region.reynolds_nr(mc, u)
 
-    os.makedirs("../../figures/12", exist_ok=True)
+    os.makedirs(Path(PATH_TO_FIGURES, "12"), exist_ok=True)
     plot_1(mc, stokes_nrs)
     plot_2(mc, reynolds_nrs)
     plot_3(mc, stopping_times)
