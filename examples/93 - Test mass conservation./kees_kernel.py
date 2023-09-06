@@ -1,1 +1,0 @@
-../15 - Plot kernel comparison: Kees' kernel vs. mine./kees_kernel.py

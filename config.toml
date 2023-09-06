@@ -1,51 +1,55 @@
 [disk]
-  stellar_mass = 1          # given in units of M_sun
-  stellar_luminosity = 1    # given in units of L_sun
-  disk_mass_ratio = 0.01    # given as ratio M_disk/M_star
-  dust_to_gas_ratio = 0.01  # given as ratio M_dust/M_gas
-  distance_to_star = 10     # given in AUs
-  flaring_angle = 0.05      # given in rad
-  enable_physical_gas_density=true
+  stellar_mass                  = 1                 # given in units of M_sun
+  stellar_luminosity            = 1                 # given in units of L_sun
+  disk_mass_ratio               = 0.01              # given as ratio M_disk/M_star
+  dust_to_gas_ratio             = 0.01              # given as ratio M_dust/M_gas
+  distance_to_star              = 10                # given in AUs
+  flaring_angle                 = 0.05              # given in rad
+  viscosity_alpha               = 1e-3              # dimensionless
+  dust_particle_density         = 1600              # given in kg/m^3  [2010 Birnstiel -> 1.6 g/cm^3]
+  enable_physical_gas_density   = true
 
 [radial_discretization]
-  radial_min_value = 1e-2   # given in AUs
-  radial_max_value = 1e+2   # given in AUs
-  radial_resolution = 100   # given as nr. of bins in radial grid
-  radial_axis_scale = "log"
+  radial_min_value              = 1e-2              # given in AUs
+  radial_max_value              = 1e+2              # given in AUs
+  radial_resolution             = 100               # given as nr. of bins in radial grid
+  radial_axis_scale             = "log"             # eiher "lin" or "log"
 
 [mass_discretization]
-  mass_min_value = 1e-15    # given in kg  (a=1e-4 cm -> m=10e-15 kg)
-  mass_max_value = 1e+6     # given in kg  (a=1e+3 cm -> m=10e+6  kg)
-  mass_resolution = 50      # given as nr. of bins in mass grid
-  mass_axis_scale = "log"
-  mass_open_boundary = false  # TODO Assure correct usage (or remove?)
+  mass_min_value                = 1e-15             # given in kg  (a=1e-4 cm -> m=10e-15 kg)
+  mass_max_value                = 1e-3              # given in kg  (a=1e+3 cm -> m=10e+6  kg)  TODO Increase
+  mass_resolution               = 50                # given as nr. of bins in mass grid
+  mass_axis_scale               = "log"             # either "lin" or "log"
+
+# mass_min_value                = 0.5               # given in kg  (a=1e-4 cm -> m=10e-15 kg)
+# mass_max_value                = 50.5              # given in kg  (a=1e+3 cm -> m=10e+6  kg)
+# mass_resolution               = 50                # given as nr. of bins in mass grid
+# mass_axis_scale               = "lin"             # either "lin" or "log"
 
 [time_discretization]
-  time_min_value = 1        # given in s
-  time_max_value = 3e+18    # given in s   (t=100 My -> t=3e+15 s)
-  time_resolution = 100     # given as nr. of bins in time grid
-  time_axis_scale = "log"
+  time_min_value                = 1                 # given in s
+  time_max_value                = 3e+15             # given in s   (t=100 My -> t=3e+15 s)
+  time_resolution               = 100               # given as nr. of bins in time grid
+  time_axis_scale               = "log"             # either "lin" or "log"
 
 [kernel]
-  enable_coagulation = true
-  enable_fragmentation = true
-  enable_cancellation_handling = true 
-  enable_physical_cross_sections = true
-  enable_physical_relative_velocities = [
+  enable_coagulation            = true
+  enable_fragmentation          = true
+  enable_cancellation_handling  = true
+  enable_physical_collisions    = true
+  relative_velocity_components  = [
     "brownian_motion",
     "radial_drift",
     "turbulence",
     "azimuthal",
   # "differential_settling",  # NOTE keep turned off for now
   ]
-  enable_fragmentation_variant = [
-    "naive/pulverization",
-    # "mrn",
-  ]
+  fragmentation_variant         = "mrn"             # either "mrn" or "naive/pulverization"
+  collision_outcome_variant     = "mb_dist"         # either "mb_dist" or "cutoff_velocity"
+  fragmentation_velocity        = 1                 # given in m/s
 
 [solver]
-  solver_variant = "implicit_radau"
-  # ^ Options: "explicit_euler", "implicit_euler", "implicit_radau"
+  solver_variant                = "implicit_radau"  # either "explicit_euler", "implicit_euler", or "implicit_radau"
 
 [plotting]
-  mpl_dark_mode = false
+  mpl_dark_mode                 = false

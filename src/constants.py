@@ -21,12 +21,3 @@ m_p = 1.673e-27      # kg
 
 # Collision Cross Section of Molecular Hydrogen
 sigma_H2 = 2e-19     # m^2
-
-# Mass Density of Solid Particles (Dust)
-rho_s = 1600        # kg/m^3 solid density of particles
-#                    (2010 Birnstiel -> 1.6 g/cm^3)
-# TODO Move to config.
-
-# Alpha Parameter
-alpha = 1e-3
-# TODO Move to config.

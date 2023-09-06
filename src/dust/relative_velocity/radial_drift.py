@@ -1,6 +1,6 @@
 import numpy as np
 
-from disk.dust_particle import particle_radius_from_mass
+from dust import particle_radius_from_mass
 
 
 def dv_radial_drift(cfg, disk, disk_region):
@@ -9,18 +9,19 @@ def dv_radial_drift(cfg, disk, disk_region):
     del_ln_P_g_del_ln_r = disk_region.gas_pressure_gradient
     delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
 
-    masses = mg.grid_cell_centers  # TODO Use bounds or centers?
-    radii = particle_radius_from_mass(masses)
-    stopping_times = disk_region.stopping_time(radii)
-    stokes_nrs = disk_region.stokes_nr(radii, stopping_times)
+    mc = mg.grid_cell_centers  # TODO Use bounds or centers?
+    rho_s = cfg.dust_particle_density
+    radii = particle_radius_from_mass(mc, rho_s)
+    stopping_times = disk_region.stopping_time(radii, rho_s)
+    stokes_nrs = disk_region.stokes_nr(radii, stopping_times, rho_s)
 
     v_r = u_r(cfg, disk_region, stokes_nrs,
               delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r)
 
     dv = np.zeros(shape=[mg.N] * 2)
-    for i, _ in enumerate(masses):
+    for i, _ in enumerate(mc):
         v_i = v_r[i]
-        for j, _ in enumerate(masses):
+        for j, _ in enumerate(mc):
             v_j = v_r[j]
 
             dv[i, j] = np.abs(v_j - v_i)

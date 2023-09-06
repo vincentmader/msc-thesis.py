@@ -1,8 +1,7 @@
 import numpy as np
 from numpy import pi as PI
 
-from constants import rho_s
-from disk.dust_particle import particle_radius_from_mass
+from dust import particle_radius_from_mass
 from utils.physics import mean_free_path, eddy_turnover_time, finite_difference, kepler_frequency
 
 
@@ -10,37 +9,36 @@ class DiskRegion:
     def __init__(self, cfg, disk):
 
         mg = disk.mass_axis
-        masses = mg.grid_cell_centers  # TODO
+        mc = mg.grid_cell_centers  # TODO
 
         rg = disk.radial_axis
-        rb = rg.grid_cell_boundaries
         rc = rg.grid_cell_centers
         r = cfg.distance_to_star
         i_r = rg.index_from_value(r)  # TODO
         r = rc[i_r]
 
-        Sigma_g = disk.gas_surface_density(rb)
-        radii = particle_radius_from_mass(masses)
+        rho_s = cfg.dust_particle_density
+        Sigma_g = disk.gas_surface_density
+        radii = particle_radius_from_mass(mc, rho_s)
 
+        rho_s = cfg.dust_particle_density
         M_star = disk.stellar_mass
-        T_mid = disk.midplane_temperature(rc)
-        c_s = disk.sound_speed(rc)
-        rho_g = disk.midplane_gas_volume_density(rc, Sigma_g)
+        T_mid = disk.midplane_temperature
+        c_s = disk.sound_speed
+        rho_g = disk.midplane_gas_volume_density
         Omega_K = kepler_frequency(rc, M_star)
         v_K = Omega_K * rc
-        n = disk.midplane_gas_volume_number_density(rho_g)  # TODO rename?
+        n = disk.midplane_gas_volume_number_density
         lambda_mfp = mean_free_path(n)
-        u_th = disk.thermal_velocity(rc)
-        H_p = disk.scale_height(rc)
-        P = disk.midplane_gas_pressure(rho_g, c_s)
-        nu_mol = disk.viscosity(u_th, lambda_mfp)
+        u_th = disk.thermal_velocity
+        H_p = disk.scale_height
+        nu_mol = disk.viscosity
 
-        P = disk.midplane_gas_pressure(rc, Sigma_g)  # TODO Do differently?
+        P = disk.midplane_gas_pressure
         logP, logr = np.log(P), np.log(rc)
         gas_pressure_gradient = finite_difference(logP, logr)
 
-        delr_Sigma_g_nu_g_sqrt_r = disk.delr_Sigma_g_nu_g_sqrt_r(rc, Sigma_g)[
-            i_r]
+        delr_Sigma_g_nu_g_sqrt_r = disk.delr_Sigma_g_nu_g_sqrt_r[i_r]
 
         self.r = r
         self.T_mid = T_mid[i_r]
@@ -61,7 +59,7 @@ class DiskRegion:
         self.delr_Sigma_g_nu_g_sqrt_r = delr_Sigma_g_nu_g_sqrt_r
         # TODO Rename?
 
-    def stopping_time(self, radii):
+    def stopping_time(self, radii, rho_s):
         u_th = self.u_th
         rho_g = self.rho_g
 
@@ -82,7 +80,7 @@ class DiskRegion:
         #     # todo: when epstein? see 2010 Birnstiel
         return t_s
 
-    def stokes_nr(self, a, t_stop):
+    def stokes_nr(self, a, t_stop, rho_s):
         Sigma_g = self.Sigma_g
         Omega_K = self.Omega_K
         tau_ed = eddy_turnover_time(Omega_K)

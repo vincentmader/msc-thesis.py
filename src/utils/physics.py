@@ -18,10 +18,10 @@ def mean_free_path(n):
     return lambda_mfp
 
 
-def schmidt_nr(self, m):
-    St = self.stokes_nr(m)
-    Sc = 1 + St**2
-    return Sc
+# def schmidt_nr(self, m):
+#     St = self.stokes_nr(m)
+#     Sc = 1 + St**2
+#     return Sc
 
 
 def finite_difference(y, x):
