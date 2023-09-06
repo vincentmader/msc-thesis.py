@@ -1,8 +1,6 @@
 #+startup: show2levels latexpreview
 
-* Using Stochastic Particle Pair Sampling for Computational Cost Optimization of
-Numerical Integration of the Smoluchovski Equation for Circumstellar Dust 
-Coagulation
+* Using Stochastic Particle Pair Sampling for Computational Cost Optimization of Numerical Integration of the Smoluchovski Equation for Circumstellar Dust Coagulation
 
 This repository contains the Python code I wrote while working on my Master thesis under the supervision of Prof. Dr. Kees Dullemond at the Heidelberg Institute for Theoretical Astrophysics. The thesis' main git repository can be found [[https://github.com/vincentmader/msc-thesis][here]].
 
