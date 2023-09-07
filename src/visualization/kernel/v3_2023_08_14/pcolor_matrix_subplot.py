@@ -76,10 +76,11 @@ class PcolorMatrixSubplot(GridspecSubplot):
         ax = axes[1]
         plt.sca(ax)
         plt.cla()
-        self.im = plt.pcolor(
+        self.im = plt.pcolormesh(
             x, y, z,
             cmap=self.cmap,
-            norm=norm
+            norm=norm,
+            rasterized=True
         )
         plt.axis("scaled")
         plt.xlabel(self.xlabel)
