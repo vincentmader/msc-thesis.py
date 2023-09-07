@@ -28,10 +28,8 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
         if len(z.shape) < 3:
             assert k is None, "2D matrix has no third index k."
-            # Assert cubic shape of kernel matrix.
             assert z.shape[0] == z.shape[1], "Non-cubic kernel shape."
         else:
-            # Assert cubic shape of kernel matrix.
             assert z.shape[0] == z.shape[1] == z.shape[2], "Non-cubic kernel shape."
 
         super().__init__(
