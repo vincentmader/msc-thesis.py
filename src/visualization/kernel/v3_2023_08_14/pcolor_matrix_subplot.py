@@ -55,9 +55,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.cmap = cmap
 
     def draw(self, axes):
-        k = self.k
-        x = self.x
-        y = self.y
+        k, x, y = self.k, self.x, self.y
         z = self.z if k is None else self.z[k]
 
         if self.scales[2] == "lin":
