@@ -28,10 +28,8 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
         if len(z.shape) < 3:
             assert k is None, "2D matrix has no third index k."
-            # Assert cubic shape of kernel matrix.
             assert z.shape[0] == z.shape[1], "Non-cubic kernel shape."
         else:
-            # Assert cubic shape of kernel matrix.
             assert z.shape[0] == z.shape[1] == z.shape[2], "Non-cubic kernel shape."
 
         super().__init__(
@@ -57,9 +55,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.cmap = cmap
 
     def draw(self, axes):
-        k = self.k
-        x = self.x
-        y = self.y
+        k, x, y = self.k, self.x, self.y
         z = self.z if k is None else self.z[k]
 
         if self.scales[2] == "lin":
@@ -80,10 +76,11 @@ class PcolorMatrixSubplot(GridspecSubplot):
         ax = axes[1]
         plt.sca(ax)
         plt.cla()
-        self.im = plt.pcolor(
+        self.im = plt.pcolormesh(
             x, y, z,
             cmap=self.cmap,
-            norm=norm
+            norm=norm,
+            rasterized=True
         )
         plt.axis("scaled")
         plt.xlabel(self.xlabel)
