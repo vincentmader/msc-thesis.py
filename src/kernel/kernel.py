@@ -11,6 +11,11 @@ from utils.functions import heaviside_theta
 
 
 class Kernel():
+    __slots__ = [
+        "cfg", "mg", "ac", "K", "K_gain", "K_loss",
+        "K_coag", "K_coag_gain", "K_coag_loss",
+        "K_frag", "K_frag_gain", "K_frag_loss",
+    ]
 
     def __init__(self, cfg):
 
