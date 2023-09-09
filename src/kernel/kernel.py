@@ -6,6 +6,7 @@ from axis import DiscreteMassAxis, DiscreteRadialAxis
 from collision import collision_outcome_probabilities_from_cutoff_velocity
 from collision import collision_outcome_probabilities_from_maxwell_boltzmann
 from collision import collision_rate
+from config import Config
 from disk import Disk, DiskRegion
 from dust.dust_particle import particle_radius_from_mass
 from dust.relative_velocity import relative_velocity
@@ -21,7 +22,7 @@ class Kernel():
 
     def __init__(
         self, 
-        cfg, 
+        cfg : Config, 
         ijs: Optional[list[tuple[int, int]]] = None,
     ):
 
@@ -118,7 +119,7 @@ class Kernel():
 
     def _K_coag(
         self, 
-        R_coll, 
+        R_coll: np.ndarray, 
         ijs: list[tuple[int, int]],
     ):
 
@@ -200,7 +201,7 @@ class Kernel():
 
     def _K_frag(
         self, 
-        R_coll,
+        R_coll: np.ndarray,
         ijs: list[tuple[int, int]],
     ):
 
