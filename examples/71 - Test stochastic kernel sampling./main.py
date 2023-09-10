@@ -19,33 +19,37 @@ except ModuleNotFoundError as e:
 
 # First, define the weights matrix: `W_ij = \sum_k m_k abs(K_kij)`.
 def _weights(kernel: Kernel) -> np.ndarray:
+    r"""Return matrix $W_{ij} = \sum_k m_k |K_{kij}|$."""
     K = kernel.K
     mg = kernel.mg
     mc = mg.grid_cell_centers
     N_m = mg.N
 
-    out = np.zeros(shape=(N_m, N_m))
+    W_ij = np.zeros(shape=(N_m, N_m))
     for k in range(N_m):
-        out += mc[k] * np.abs(K[k])
-    return out
+        W_ij += mc[k] * np.abs(K[k])
+    return W_ij
 
 
 # Now, define the probability via normalization: `\sum_{ij} W_ij = 1`
 def _probability(weights: np.ndarray) -> np.ndarray:
-    S = weights.sum()
-    weights = weights / S
-    return weights
+    r"""Return probability matrix $P_{ij} = W_{ij} / \sum W_{ij}$."""
+    return weights / weights.sum()
 
 
 def _index_matrix(
     shape_2d: tuple[int, int],
 ) -> np.ndarray:
+    """Return 'index matrix', i.e.
+        | 0,0 | 1,0 |  ->   | 0 | 1 |
+        | 0,1 | 1,1 |  ->   | 2 | 3 |
+    """
     N_i, N_j = shape_2d
     I = []
     for i in range(N_i):
         I_i = []
         for j in range(N_j):
-            I_ij = i*N_i + j
+            I_ij = i * N_i + j
             I_i.append(I_ij)
         I.append(I_i)
     return np.array(I)
@@ -55,6 +59,7 @@ def _sample_indices(
     P: np.ndarray,
     shape_2d: tuple[int, int],
 ) -> list[int]:
+    """Return list of indices corresponding to sampled particle pairs."""
     I = _index_matrix(shape_2d)
 
     shape_1d = (shape_2d[0] * shape_2d[1])
@@ -69,7 +74,9 @@ def _ijs_from_indices(
     indices: list[int],
     shape_2d: tuple[int, int],
 ) -> list[tuple[int, int]]:
-    
+    """Return inversely transformed matrix from `self._index_matrix()`.
+        [0, 1, 2, 3] -> [(0,0), (1,0), (0,1), (1,1)}]
+    """
     out = []
     for idx in indices:
         i = idx // shape_2d[0]
@@ -154,14 +161,14 @@ if __name__ == "__main__":
     p = GridspecPlot(subplots, add_slider=True)
     p.render()
 
-    # N, f, m2f = _run_integrator(kernel, K)
+    N, f, m2f = _run_integrator(kernel, K)
 
-    # tg = DiscreteTimeAxis(cfg)
-    # # Calculate temporal derivative of mass distribution.
-    # dm2f = m2f[1:] - m2f[:-1]
-    # dm2f = list(dm2f)
-    # dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
-    # dm2f = np.array(dm2f)
-    # dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
+    tg = DiscreteTimeAxis(cfg)
+    # Calculate temporal derivative of mass distribution.
+    dm2f = m2f[1:] - m2f[:-1]
+    dm2f = list(dm2f)
+    dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
+    dm2f = np.array(dm2f)
+    dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
 
-    # plot_1(mc, m2f, dm2f)
+    plot_1(mc, m2f, dm2f)
