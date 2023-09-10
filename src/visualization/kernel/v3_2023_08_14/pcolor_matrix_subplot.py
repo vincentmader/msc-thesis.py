@@ -8,7 +8,7 @@ from .gridspec_subplot import GridspecSubplot
 
 
 class PcolorMatrixSubplot(GridspecSubplot):
-    __slots__ = ["x", "y", "z", "k", "im", "scales", "cmap"]
+    __slots__ = ["x", "y", "z", "k", "im", "scales", "cmap", "z_limits"]
 
     def __init__(
         self, 
@@ -22,6 +22,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         symmetrize: bool = False,
         scales: tuple[str, str, str] = ("log", "log", "log"), # TODO rename?
         cmap: str = "Reds",
+        z_limits: Optional[tuple[float, float]] = None,
     ):
         for scale in scales:
             assert scale in ["lin", "log"], "Invalid scale."
@@ -53,13 +54,18 @@ class PcolorMatrixSubplot(GridspecSubplot):
             self.k = k if k is not None else z.shape[2] // 2
         self.scales = scales
         self.cmap = cmap
+        self.z_limits = z_limits
 
     def draw(self, axes):
         k, x, y = self.k, self.x, self.y
         z = self.z if k is None else self.z[k]
 
         if self.scales[2] == "lin":
-            vmin, vmax = z.min(), z.max()
+            if self.z_limits is None:
+                vmin, vmax = z.min(), z.max()
+            else:
+                vmin = self.z_limits[0]
+                vmax = self.z_limits[0]
             smin, smax = np.sign(vmin), np.sign(vmax)
             if smin == smax or 0 in [smin, smax]:
                 norm = colors.Normalize(vmin=vmin, vmax=vmax)
@@ -67,8 +73,17 @@ class PcolorMatrixSubplot(GridspecSubplot):
                 norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
                 self.cmap = "bwr"
         elif self.scales[2] == "log":
-            vmin = z.min() if z.min() != 0 else z[z != 0].min()
-            vmax = z.max() if z.max() != 0 else z[z != 0].max()
+            if self.z_limits is None:
+                if z.min() == z.max() == 0:
+                    vmin = 1e-20
+                    vmax = 1e-7
+                    print(f"Reverting to [{vmin}, {vmax}]")
+                else:
+                    vmin = z.min() if z.min() != 0 else z[z != 0].min()
+                    vmax = z.max() if z.max() != 0 else z[z != 0].max()
+            else:
+                vmin = self.z_limits[0]
+                vmax = self.z_limits[1]
             norm = colors.LogNorm(vmin=vmin, vmax=vmax)
         else:
             raise Exception("")

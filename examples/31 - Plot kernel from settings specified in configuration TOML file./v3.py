@@ -26,12 +26,14 @@ s1 = PcolorMatrixSubplot(
     xlabel="particle radius $a_j$",
     ylabel="particle radius $a_i$",
     symmetrize=True,
+    z_limits=(1e-20, 1e-7),
 )
 s2 = PcolorMatrixSubplot(
     ac, ac, -kernel_1.K_loss,
     title="kernel loss contribution $L_{kij}$",
     xlabel="particle radius $a_j$",
     symmetrize=True,
+    z_limits=(1e-20, 1e-7),
 )
 subplots = [s1, s2]
 
