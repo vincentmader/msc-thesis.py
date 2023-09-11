@@ -47,16 +47,16 @@ for title, outcome_probability in outcome_probabilities.items():
     s1 = PcolorMatrixSubplot(
         ac, ac, P_coag,
         title="dust particle coagulation probability $P_{coag}$",
-        xlabel="particle radius $a_j$",
-        ylabel="particle radius $a_i$",
+        xlabel="particle radius $a_j$ [m]",
+        ylabel="particle radius $a_i$ [m]",
         scales=("log", "log", "lin"),
         cmap="Blues",
     )
     s2 = PcolorMatrixSubplot(
         ac, ac, P_frag,
         title="dust particle fragmentation probability $P_{frag}$",
-        xlabel="particle radius $a_j$",
-        ylabel="particle radius $a_i$",
+        xlabel="particle radius $a_j$ [m]",
+        ylabel="particle radius $a_i$ [m]",
         scales=("log", "log", "lin"),
         cmap="Blues",
     )

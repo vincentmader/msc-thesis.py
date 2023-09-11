@@ -31,8 +31,8 @@ R_coll = collision_rate(cfg, disk, disk_region)
 s1 = PcolorMatrixSubplot(
     ac, ac, R_coll,
     title="collision rate $R_{coll}$",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     # scales=("log", "log", "lin"),
     cmap="Blues",
 )

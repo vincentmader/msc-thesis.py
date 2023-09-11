@@ -25,8 +25,8 @@ R_coll = collision_cross_section(cfg, mg)
 s1 = PcolorMatrixSubplot(
     ac, ac, R_coll,
     title="collision cross section $\sigma_{ij}$",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     # scales=("log", "log", "lin"),
     cmap="Blues",
 )

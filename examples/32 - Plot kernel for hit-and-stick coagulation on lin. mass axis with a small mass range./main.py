@@ -21,8 +21,8 @@ cfg = Config(
     # we have to chose `mass_resolution = mass_max_value - mass_min_value`.
     mass_axis_scale="lin",
     mass_min_value=1,
-    mass_max_value=7,
-    mass_resolution=6,
+    mass_max_value=13,
+    mass_resolution=12,
     # Define processes to include in the simulation.
     enable_coagulation=True,
     enable_fragmentation=False,
@@ -52,8 +52,8 @@ i = np.arange(0, N_m, 1)
 s1 = PcolorMatrixSubplot(
     i, i, kernel.K, 
     title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     scales=("lin", "lin", "lin"),
     symmetrize=True,
 )
