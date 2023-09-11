@@ -27,15 +27,15 @@ ac = np.linspace(0, 49, 50)
 s1 = PcolorMatrixSubplot(
     ac, ac, kernel_1.K_gain, 
     title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     scales=("lin", "lin", "lin"),
     symmetrize=True,
 )
 s2 = PcolorMatrixSubplot(
     ac, ac, -kernel_1.K_loss,
     title="kernel loss contribution $L_{kij}$",
-    xlabel="particle radius $a_j$",
+    xlabel="particle radius $a_j$ [m]",
     scales=("lin", "lin", "lin"),
     symmetrize=True,
 )

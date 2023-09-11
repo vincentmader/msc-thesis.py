@@ -35,22 +35,22 @@ K_equal = K_diff < 1e-14
 s1 = PcolorMatrixSubplot(
     ac, ac, K_1,
     title="cancellation handling deactivated",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     scales=("log", "log", "lin"),
     symmetrize=True,
 )
 s2 = PcolorMatrixSubplot(
     ac, ac, K_2,
     title="cancellation handling activated",
-    xlabel="particle radius $a_j$",
+    xlabel="particle radius $a_j$ [m]",
     scales=("log", "log", "lin"),
     symmetrize=True,
 )
 s3 = PcolorMatrixSubplot(
     ac, ac, np.abs(K_diff),
     title="abs($K_{canc}-K_{nocanc}$)",
-    xlabel="particle radius $a_j$",
+    xlabel="particle radius $a_j$ [m]",
     scales=("log", "log", "log"),
     symmetrize=True,
 )

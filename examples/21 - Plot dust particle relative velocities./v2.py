@@ -68,8 +68,8 @@ def main():
         s1 = PcolorMatrixSubplot(
             ac, ac, dv,
             title=title,
-            xlabel="particle radius $a_j$",
-            ylabel="particle radius $a_i$",
+            xlabel="particle radius $a_j$ [m]",
+            ylabel="particle radius $a_i$ [m]",
             scales=("log", "log", "lin"),
             cmap="Reds",
         )

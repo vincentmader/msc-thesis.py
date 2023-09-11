@@ -52,8 +52,8 @@ i = np.arange(0, N_m, 1)
 s1 = PcolorMatrixSubplot(
     i, i, kernel.K, 
     title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     scales=("lin", "lin", "lin"),
     symmetrize=True,
 )

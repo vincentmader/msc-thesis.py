@@ -23,15 +23,15 @@ ac = particle_radius_from_mass(mc, rho_s)
 s1 = PcolorMatrixSubplot(
     ac, ac, kernel_1.K_gain, 
     title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$",
-    ylabel="particle radius $a_i$",
+    xlabel="particle radius $a_j$ [m]",
+    ylabel="particle radius $a_i$ [m]",
     symmetrize=True,
     z_limits=(1e-20, 1e-7),
 )
 s2 = PcolorMatrixSubplot(
     ac, ac, -kernel_1.K_loss,
     title="kernel loss contribution $L_{kij}$",
-    xlabel="particle radius $a_j$",
+    xlabel="particle radius $a_j$ [m]",
     symmetrize=True,
     z_limits=(1e-20, 1e-7),
 )
