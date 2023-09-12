@@ -142,8 +142,6 @@ class Kernel():
 
             # Calculate combined mass after hit-and-stick collision.
             m_k = m_i + m_j
-            if m_k >= m_max:
-                continue
 
             # If a non-linear grid is used, the corresponding index will
             # not necessarily be an integer. Therefore, the resulting mass
