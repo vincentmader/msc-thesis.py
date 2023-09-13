@@ -14,11 +14,11 @@ class Disk:
     def __init__(
         self,
         cfg: Config,
-        radial_axis: Optional[DiscreteRadialAxis] = None,
+        rg: Optional[DiscreteRadialAxis] = None,
         mass_axis: Optional[DiscreteMassAxis] = None,
     ):
-        self.mass_axis = DiscreteMassAxis(cfg) if mass_axis is None else mass_axis
-        self.radial_axis = DiscreteRadialAxis(cfg) if radial_axis is None else radial_axis
+        self.mg = DiscreteMassAxis(cfg) if mass_axis is None else mass_axis
+        self.rg = DiscreteRadialAxis(cfg) if rg is None else rg
 
         self.stellar_luminosity = cfg.stellar_luminosity
         self.stellar_mass = cfg.stellar_mass
@@ -45,7 +45,7 @@ class Disk:
         r: Optional[np.ndarray] = None,
         M_disk: Optional[np.float64] = None,
     ):
-        r = self.radial_axis.grid_cell_boundaries if r is None else r # NOTE: bounds!
+        r = self.rg.grid_cell_boundaries if r is None else r # NOTE: bounds!
         M_disk = self.disk_mass if M_disk is None else M_disk
 
         plsig = -1
@@ -62,7 +62,7 @@ class Disk:
         L_star: Optional[np.float64] = None,
         flang: Optional[np.float64] = None,
     ):
-        r = self.radial_axis.grid_cell_centers if r is None else r
+        r = self.rg.grid_cell_centers if r is None else r
         L_star = self.stellar_luminosity if L_star is None else L_star
         flang = self.flaring_angle if flang is None else flang
         # ^ (incidence angle of the light)
@@ -75,7 +75,7 @@ class Disk:
         r: Optional[np.ndarray] = None,
         T_mid: Optional[np.ndarray] = None,
     ):
-        r = self.radial_axis.grid_cell_centers if r is None else r
+        r = self.rg.grid_cell_centers if r is None else r
         T_mid = self.midplane_temperature if T_mid is None else T_mid
 
         c_s = np.sqrt(k_B * T_mid / (2.3 * m_p))
@@ -87,7 +87,7 @@ class Disk:
         M_star: Optional[np.float64] = None,
         c_s: Optional[np.ndarray] = None
     ):
-        r = self.radial_axis.grid_cell_centers if r is None else r
+        r = self.rg.grid_cell_centers if r is None else r
         M_star = self.stellar_mass if M_star is None else M_star
         c_s = self.sound_speed if c_s is None else c_s
 
@@ -101,7 +101,7 @@ class Disk:
         Sigma_g: Optional[np.ndarray] = None,
         H_p: Optional[np.ndarray] = None
     ):
-        r = self.radial_axis.grid_cell_centers if r is None else r
+        r = self.rg.grid_cell_centers if r is None else r
         Sigma_g = self.gas_surface_density if Sigma_g is None else Sigma_g
         H_p = self.scale_height if H_p is None else H_p
 
@@ -155,7 +155,7 @@ class Disk:
         Sigma_g: Optional[np.ndarray] = None,
         nu_g: Optional[np.ndarray] = None,
     ):
-        r = self.radial_axis.grid_cell_centers if r is None else r
+        r = self.rg.grid_cell_centers if r is None else r
         Sigma_g = self.gas_surface_density if Sigma_g is None else Sigma_g
         nu_g = self.viscosity if nu_g is None else nu_g
 
@@ -172,7 +172,7 @@ class Disk:
         r: Optional[np.ndarray] = None,
         P_g: Optional[np.ndarray] = None,
     ):
-        r = self.radial_axis.grid_cell_centers if r is None else r
+        r = self.rg.grid_cell_centers if r is None else r
         P_g = self.midplane_gas_pressure if P_g is None else P_g
 
         ln_P_g = np.log(P_g)
