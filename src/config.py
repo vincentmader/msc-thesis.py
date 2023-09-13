@@ -13,6 +13,18 @@ PATH_TO_DARKMODE = os.path.join(PATH_TO_LIB, "mpl-styles", "dark.mplstyle")
 
 
 class Config():
+    __slots__ = [
+        "stellar_mass", "stellar_luminosity", "disk_mass_ratio", "dust_to_gas_ratio",
+        "distance_to_star", "flaring_angle", 
+        "radial_min_value", "radial_max_value", "radial_resolution", "radial_axis_scale",
+        "mass_min_value", "mass_max_value", "mass_resolution", "mass_axis_scale",
+        "time_min_value", "time_max_value", "time_resolution", "time_axis_scale",
+        "enable_coagulation", "enable_fragmentation", "enable_physical_gas_density",
+        "enable_physical_collisions", "enable_cancellation_handling", "enable_collision_sampling",
+        "relative_velocity_components", "fragmentation_variant", "fragmentation_velocity",
+        "collision_outcome_variant", "solver_variant", "mpl_dark_mode", 
+        "dust_particle_density", "viscosity_alpha", "nr_of_samples", "disk_mass",
+    ]
 
     def __init__(
         self,

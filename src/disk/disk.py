@@ -20,14 +20,14 @@ class Disk:
         self.mg = DiscreteMassAxis(cfg) if mass_axis is None else mass_axis
         self.rg = DiscreteRadialAxis(cfg) if rg is None else rg
 
+        # Star:
         self.stellar_luminosity = cfg.stellar_luminosity
         self.stellar_mass = cfg.stellar_mass
+        # Disk:
         self.disk_mass = cfg.disk_mass_ratio * cfg.stellar_mass
         self.dust_to_gas = cfg.dust_to_gas_ratio
-
         self.flaring_angle = cfg.flaring_angle
         self.mass_distribution = []  # TODO
-
         self.gas_surface_density= self._gas_surface_density()
         self.midplane_temperature = self._midplane_temperature()
         self.sound_speed = self._sound_speed()

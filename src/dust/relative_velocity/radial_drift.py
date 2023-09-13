@@ -4,7 +4,7 @@ from dust import particle_radius_from_mass
 
 
 def dv_radial_drift(cfg, disk, disk_region):
-    mg = disk.mass_axis
+    mg = disk.mg
 
     del_ln_P_g_del_ln_r = disk_region.gas_pressure_gradient
     delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r

@@ -8,10 +8,10 @@ from utils.physics import mean_free_path, eddy_turnover_time, finite_difference,
 class DiskRegion:
     def __init__(self, cfg, disk):
 
-        mg = disk.mass_axis
+        mg = disk.mg
         mc = mg.grid_cell_centers  # TODO
 
-        rg = disk.radial_axis
+        rg = disk.rg
         rc = rg.grid_cell_centers
         r = cfg.distance_to_star
         i_r = rg.index_from_value(r)  # TODO

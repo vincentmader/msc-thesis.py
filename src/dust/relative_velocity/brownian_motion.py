@@ -6,7 +6,7 @@ from utils.physics import reduced_mass
 
 
 def dv_brownian_motion(cfg, disk, disk_region):
-    mg = disk.mass_axis
+    mg = disk.mg
     mc = mg.grid_cell_centers
 
     T_mid = disk_region.T_mid
