@@ -26,8 +26,8 @@ class DiskMassErrorPlot():
         x = self.x / (365 * 24 * 60 * 60)
         y = self.y
 
-        y = y[:-1] / (x[1:] - x[:-1])
-        x = x[:-1]
+        # y = y[:-1] / (x[1:] - x[:-1])
+        # x = x[:-1]
 
         self.ax_1.loglog(x, y, 'r', label="pos.")
         self.ax_1.loglog(x, -y, 'b', label="neg.")
