@@ -2,7 +2,7 @@ import numpy as np
 
 
 def dv_differential_settling(cfg, disk, disk_region):
-    mg = disk.mass_axis
+    mg = disk.mg
     mc = mg.grid_cell_centers
 
     rho_s = cfg.dust_particle_density
