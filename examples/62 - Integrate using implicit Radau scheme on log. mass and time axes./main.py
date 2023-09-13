@@ -75,7 +75,7 @@ def plot_2(x, y):
 
 
 def plot_3(kernel, N, f, m2f, dm2f):
-    from visualization.v4_2023_09_13.evolution import EvolutionPlot
+    from visualization.evolution.evolution import EvolutionPlot
     p = EvolutionPlot(kernel, N, f, m2f, dm2f)
     p.render()
 

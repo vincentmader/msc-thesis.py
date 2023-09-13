@@ -6,9 +6,9 @@ try:
     from dust import particle_radius_from_mass, particle_mass_from_radius
     from kernel import Kernel
     from kernel.mass_conservation import test_mass_conservation
-    from visualization.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.v3_2023_08_14.gridspec_plot import GridspecPlot
-    from visualization.v4_2023_09_13.mass_conservation import KernelMassConservationSubplot
+    from visualization.kernel.pcolor_matrix_subplot import PcolorMatrixSubplot
+    from visualization.kernel.gridspec_plot import GridspecPlot
+    from visualization.kernel.mass_conservation import KernelMassConservationSubplot
 except ModuleNotFoundError as e:
     raise e
 

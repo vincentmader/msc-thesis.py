@@ -8,8 +8,8 @@ try:
     from dust import particle_radius_from_mass
     from kees_kernel import create_coag_kernel
     from kernel import Kernel
-    from visualization.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.v3_2023_08_14.gridspec_plot import GridspecPlot
+    from visualization.kernel.pcolor_matrix_subplot import PcolorMatrixSubplot
+    from visualization.kernel.gridspec_plot import GridspecPlot
 except ModuleNotFoundError as e:
     raise e
 

@@ -3,7 +3,7 @@ import numpy as np
 
 from axis import DiscreteTimeAxis
 from kernel import Kernel
-from visualization.v3_2023_08_14.base_plot import BasePlot
+from visualization.kernel.base_plot import BasePlot
 
 
 class EvolutionPlot(BasePlot):
