@@ -10,10 +10,39 @@ path = Path(PATH_TO_LIB, "coag_py")
 path = str(path)
 sys.path.append(path)
 from coag.react_0d import solve_react_0d_equation
+from dust import particle_radius_from_mass
+from sampling.kernel import SampledKernel
+from visualization.kernel.v2.mass_conservation import KernelMassConservationPlot
+from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
+from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
+
+def plot(kernel): # TODO Move elsewhere.
+    cfg, mg, K = kernel.cfg, kernel.mg, kernel.K
+    ac = particle_radius_from_mass(mg.grid_cell_centers, cfg.dust_particle_density)
+    GridspecPlot([
+        PcolorMatrixSubplot(
+            ac, ac, K,
+            title="kernel gain contribution $G_{kij}$",
+            xlabel="particle radius $a_j$ [m]",
+            ylabel="particle radius $a_i$ [m]",
+            symmetrize=True,
+            z_limits=(1e-20, 1e-7),
+        ),
+        PcolorMatrixSubplot(
+            ac, ac, K,
+            title="kernel gain contribution $G_{kij}$",
+            xlabel="particle radius $a_j$ [m]",
+            symmetrize=True,
+            z_limits=(1e-20, 1e-7),
+        )
+    ], add_slider=True).render()
+
+    p = KernelMassConservationPlot(cfg, mg, K)
+    p.show()
 
 
 class Solver:
@@ -43,13 +72,19 @@ class Solver:
         rmat = np.zeros((N_m, N_m))
         for itime in tqdm(range(1, N_t)):
             dt = (time[itime] - time[itime - 1]) / N_subst
+
+            if self.cfg.enable_collision_sampling:
+                kernel = SampledKernel(self.cfg, N_dust)
+                K = kernel.K
+                if itime % 10 == -1:
+                    plot(kernel) 
+
             for j in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
                 if solver == "explicit_euler":
-                    dNdt = (
-                        K[:, :, :] * N_dust[None, :, None] *
-                        N_dust[None, None, :]
-                    ).sum(axis=2).sum(axis=1)
+                    N_1 = N_dust[None, :, None] # TODO better names than `N_1` and `N_2` ?
+                    N_2 = N_dust[None, None, :]
+                    dNdt = (K[:, :, :] * N_1 * N_2).sum(axis=2).sum(axis=1)
                     N_dust += dNdt * dt
                 if solver == "implicit_euler":
                     N_dust = solve_react_0d_equation(
@@ -67,15 +102,3 @@ class Solver:
         f = N_dust_store / dmgrain
         m2f = f * mgrain**2  # TODO Why multiply with `mgrain`, instead of `dmgrain`?
         return N_dust_store, f, m2f
-
-
-# def dndt(mg, n, K):
-#     N_m = mg.N
-#     dndt = np.zeros((N_m))
-#     for k in range(N_m):
-#         dndt_k = 0
-#         for i in range(N_m):
-#             for j in range(N_m):
-#                 dndt_k += K[k][i][j] * n[i] * n[j]
-#         dndt[k] = dndt_k
-#     return dndt

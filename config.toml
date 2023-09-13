@@ -48,6 +48,7 @@
   collision_outcome_variant     = "mb_dist"         # either "mb_dist" or "cutoff_velocity"
   fragmentation_velocity        = 1                 # given in m/s
   enable_collision_sampling     = true
+  nr_of_samples                 = 500
 
 [solver]
   solver_variant                = "implicit_radau"  # either "explicit_euler", "implicit_euler", or "implicit_radau"

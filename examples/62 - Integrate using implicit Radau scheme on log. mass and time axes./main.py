@@ -10,10 +10,6 @@ try:
     from config import Config
     from disk import mass_distribution
     from disk.disk import disk_mass_from_distribution
-    # from disk.disk import Disk
-    # from disk.disk_region import DiskRegion
-    # from collision import collision_rate
-    # from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from solver import Solver
     from visualization.evolution.v1.mass_error import DiskMassErrorPlot
@@ -23,7 +19,7 @@ except ModuleNotFoundError as e:
 
 
 # Load configuration from `../../config.toml`.
-cfg = Config()
+cfg = Config(enable_collision_sampling=False)
 pprint(cfg.__dict__)
 
 # Define discrete axis for radial distance from star, as well as for mass.
@@ -41,6 +37,10 @@ tg = DiscreteTimeAxis(cfg)
 solver = Solver(cfg)
 
 # ─────────────────────────────────────────────────────────────────────────────
+# from disk.disk import Disk
+# from disk.disk_region import DiskRegion
+# from collision import collision_rate
+# from kees_kernel import create_coag_kernel
 # disk = Disk(cfg, rg, mg)
 # disk_region = DiskRegion(cfg, disk)
 # Cij = collision_rate(cfg, disk, disk_region)

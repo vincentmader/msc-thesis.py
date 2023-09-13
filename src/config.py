@@ -48,6 +48,7 @@ class Config():
         dust_particle_density: Optional[float]=None,
         viscosity_alpha: Optional[float]=None,
         enable_collision_sampling: Optional[bool]=None,
+        nr_of_samples: Optional[int]=None,
     ):
         cfg = toml.load(path_to_config_toml)
 
@@ -121,6 +122,8 @@ class Config():
             collision_outcome_variant = cfg_i["collision_outcome_variant"]
         if enable_collision_sampling is None:
             enable_collision_sampling = cfg_i["enable_collision_sampling"]
+        if nr_of_samples is None:
+            nr_of_samples = cfg_i["nr_of_samples"]
 
         cfg_i = cfg["solver"]
         if solver_variant is None:
@@ -137,7 +140,6 @@ class Config():
         self.dust_particle_density = dust_particle_density
         self.dust_to_gas_ratio = dust_to_gas_ratio
         self.enable_cancellation_handling = enable_cancellation_handling
-        self.enable_collision_sampling = enable_collision_sampling
         self.enable_coagulation = enable_coagulation
         self.enable_fragmentation = enable_fragmentation
         self.enable_physical_collisions = enable_physical_collisions
@@ -163,3 +165,5 @@ class Config():
         self.time_min_value = time_min_value
         self.time_resolution = time_resolution
         self.viscosity_alpha = viscosity_alpha
+        self.enable_collision_sampling = enable_collision_sampling
+        self.nr_of_samples = nr_of_samples
