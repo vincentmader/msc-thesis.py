@@ -56,14 +56,12 @@ def plot_together(title, P_coag, P_frag):
         cmap="Blues",
     )
     
-    subplots = [s1, s2]
-    
     path_to_figures = Path(PATH_TO_FIGURES, "24")
     os.makedirs(path_to_figures, exist_ok=True)
     filename = f"collision_outcome_probabilities_from_{title}.pdf"
     path_to_outfile = Path(path_to_figures, filename)
     
-    p = GridspecPlot(subplots)
+    p = GridspecPlot([s1, s2])
     p.render(
         save_plot=True,
         path_to_outfile=path_to_outfile

@@ -29,16 +29,15 @@ s1 = PcolorMatrixSubplot(
     xlabel="particle radius $a_j$ [m]",
     ylabel="particle radius $a_i$ [m]",
     scales=("lin", "lin", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
 s2 = PcolorMatrixSubplot(
     ac, ac, -kernel_1.K_loss,
     title="kernel loss contribution $L_{kij}$",
     xlabel="particle radius $a_j$ [m]",
     scales=("lin", "lin", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
-subplots = [s1, s2]
 
-p = GridspecPlot(subplots, add_slider=True)
+p = GridspecPlot([s1, s2], add_slider=True)
 p.render()

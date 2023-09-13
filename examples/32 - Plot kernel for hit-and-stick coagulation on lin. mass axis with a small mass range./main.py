@@ -55,9 +55,8 @@ s1 = PcolorMatrixSubplot(
     xlabel="particle radius $a_j$ [m]",
     ylabel="particle radius $a_i$ [m]",
     scales=("lin", "lin", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
-subplots = [s1]
 
-p = GridspecPlot(subplots, add_slider=True)
+p = GridspecPlot([s1], add_slider=True)
 p.render()

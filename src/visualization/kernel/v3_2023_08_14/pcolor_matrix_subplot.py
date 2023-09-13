@@ -19,7 +19,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         title: Optional[str] = None,
         xlabel: Optional[str] = None,
         ylabel: Optional[str] = None,
-        symmetrize: bool = False,
+        symmetrized: bool = False,
         scales: tuple[str, str, str] = ("log", "log", "log"), # TODO rename?
         cmap: str = "Reds",
         z_limits: Optional[tuple[float, float]] = None,
@@ -40,7 +40,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         )
         self.x, self.y, self.z = x, y, z
 
-        if symmetrize:
+        if symmetrized:
             if len(z.shape) == 2:
                 self.z = 0.5 * (z + z.T) 
             elif len(z.shape) == 3:

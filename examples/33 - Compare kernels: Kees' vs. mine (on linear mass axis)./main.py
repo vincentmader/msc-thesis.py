@@ -59,7 +59,7 @@ s1 = PcolorMatrixSubplot(
     xlabel="bin index $j$",
     ylabel="bin index $i$",
     scales=("lin", "lin", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
 s2 = PcolorMatrixSubplot(
     # ac, ac, K_kees,
@@ -67,7 +67,7 @@ s2 = PcolorMatrixSubplot(
     title="$K_{kij}^{kees}$",
     xlabel="bin index $j$",
     scales=("lin", "lin", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
 s3 = PcolorMatrixSubplot(
     # ac, ac, K_kees,
@@ -75,11 +75,9 @@ s3 = PcolorMatrixSubplot(
     title="$K_{kij}^{vinc}=K_{kij}^{kees}$",
     xlabel="bin index $j$",
     scales=("lin", "lin", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
-subplots = [s1, s2, s3]
-
-p = GridspecPlot(subplots, add_slider=True)
+p = GridspecPlot([s1, s2, s3], add_slider=True)
 p.render()
 
 # ═════════════════════════════════════════════════════════════════════════════

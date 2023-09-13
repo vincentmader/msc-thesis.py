@@ -29,14 +29,14 @@ def plot(kernel): # TODO Move elsewhere.
             title="kernel gain contribution $G_{kij}$",
             xlabel="particle radius $a_j$ [m]",
             ylabel="particle radius $a_i$ [m]",
-            symmetrize=True,
+            symmetrized=True,
             z_limits=(1e-20, 1e-7),
         ),
         PcolorMatrixSubplot(
             ac, ac, K,
             title="kernel gain contribution $G_{kij}$",
             xlabel="particle radius $a_j$ [m]",
-            symmetrize=True,
+            symmetrized=True,
             z_limits=(1e-20, 1e-7),
         )
     ], add_slider=True).render()

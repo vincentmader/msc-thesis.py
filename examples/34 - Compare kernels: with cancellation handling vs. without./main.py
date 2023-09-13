@@ -38,25 +38,24 @@ s1 = PcolorMatrixSubplot(
     xlabel="particle radius $a_j$ [m]",
     ylabel="particle radius $a_i$ [m]",
     scales=("log", "log", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
 s2 = PcolorMatrixSubplot(
     ac, ac, K_2,
     title="cancellation handling activated",
     xlabel="particle radius $a_j$ [m]",
     scales=("log", "log", "lin"),
-    symmetrize=True,
+    symmetrized=True,
 )
 s3 = PcolorMatrixSubplot(
     ac, ac, np.abs(K_diff),
     title="abs($K_{canc}-K_{nocanc}$)",
     xlabel="particle radius $a_j$ [m]",
     scales=("log", "log", "log"),
-    symmetrize=True,
+    symmetrized=True,
 )
-subplots = [s1, s2, s3]
 
-p = GridspecPlot(subplots, add_slider=True)
+p = GridspecPlot([s1, s2, s3], add_slider=True)
 p.render()
 
 # ═════════════════════════════════════════════════════════════════════════════

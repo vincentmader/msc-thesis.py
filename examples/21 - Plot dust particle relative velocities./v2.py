@@ -73,9 +73,8 @@ def main():
             scales=("log", "log", "lin"),
             cmap="Reds",
         )
-        subplots = [s1]
     
-        p = GridspecPlot(subplots)
+        p = GridspecPlot([s1])
         p.render(
             save_plot=True,
             path_to_outfile=path_to_outfile,

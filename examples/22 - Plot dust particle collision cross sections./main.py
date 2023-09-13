@@ -31,13 +31,11 @@ s1 = PcolorMatrixSubplot(
     cmap="Blues",
 )
 
-subplots = [s1]
-
 path_to_figures = Path(PATH_TO_FIGURES, "22")
 os.makedirs(path_to_figures, exist_ok=True)
 path_to_outfile = Path(path_to_figures, "collision_cross_section.pdf")
 
-p = GridspecPlot(subplots)
+p = GridspecPlot([s1])
 p.render(
     save_plot=True,
     path_to_outfile=path_to_outfile
