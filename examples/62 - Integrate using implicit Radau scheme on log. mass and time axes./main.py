@@ -75,6 +75,12 @@ def plot_2(x, y):
     plt.close()
 
 
+def plot_3(kernel, N, f, m2f, dm2f):
+    from visualization.v4_2023_09_13.evolution import EvolutionPlot
+    p = EvolutionPlot(kernel, N, f, m2f, dm2f)
+    p.render()
+
+
 if __name__ == "__main__":
 
     # Initialize mass distribution.
@@ -96,5 +102,6 @@ if __name__ == "__main__":
     Ms = [disk_mass_from_distribution(n, mc, dm) for n in f]
 
     # Create plots.
+    plot_3(kernel, N, f, m2f, dm2f)
     plot_1(mc, m2f, dm2f)
     plot_2(t, Ms)
