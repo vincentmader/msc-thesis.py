@@ -4,7 +4,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
     from kernel import Kernel
-    from visualization.kernel.v2.gain_vs_loss import KernelGainVsLossPlot
+    from visualization.v1.gain_vs_loss import KernelGainVsLossPlot
 except ModuleNotFoundError as e:
     raise e
 

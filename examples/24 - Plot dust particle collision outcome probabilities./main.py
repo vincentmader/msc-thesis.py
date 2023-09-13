@@ -11,8 +11,8 @@ try:
     from disk import Disk, DiskRegion
     from dust import particle_radius_from_mass
     from dust.relative_velocity import relative_velocity
-    from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
+    from visualization.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
+    from visualization.v3_2023_08_14.gridspec_plot import GridspecPlot
 except ModuleNotFoundError as e:
     raise e
 

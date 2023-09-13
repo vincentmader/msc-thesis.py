@@ -1,6 +1,6 @@
 from config import Config
 from kernel import Kernel
-from visualization.kernel.v2.mass_conservation import KernelMassConservationPlot
+from visualization.v1.mass_conservation import KernelMassConservationPlot
 
 cfg = Config()
 kernel_1 = Kernel(cfg)

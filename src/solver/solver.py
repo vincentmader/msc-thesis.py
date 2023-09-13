@@ -12,9 +12,9 @@ sys.path.append(path)
 from coag.react_0d import solve_react_0d_equation
 from dust import particle_radius_from_mass
 from sampling.kernel import SampledKernel
-from visualization.kernel.v2.mass_conservation import KernelMassConservationPlot
-from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
-from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
+from visualization.v1.mass_conservation import KernelMassConservationPlot
+from visualization.v3_2023_08_14.gridspec_plot import GridspecPlot
+from visualization.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result

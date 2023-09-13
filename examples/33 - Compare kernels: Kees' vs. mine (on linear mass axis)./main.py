@@ -8,8 +8,8 @@ try:
     from dust import particle_radius_from_mass
     from kees_kernel import create_coag_kernel
     from kernel import Kernel
-    from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
+    from visualization.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
+    from visualization.v3_2023_08_14.gridspec_plot import GridspecPlot
 except ModuleNotFoundError as e:
     raise e
 
@@ -110,7 +110,7 @@ p.render()
 # p = KernelMassConservationPlot(cfg, mg, Kkij_kees)
 # p.show()
 
-from visualization.kernel.v2.mass_conservation import KernelMassConservationPlot
+from visualization.v1.mass_conservation import KernelMassConservationPlot
 
 # Plot `\sum_{ij} m_k \Delta m_k K_kij`.
 p = KernelMassConservationPlot(cfg, mg, K_vinc)

@@ -5,7 +5,7 @@ try:
     from axis import DiscreteMassAxis
     from config import Config
     from kernel import Kernel
-    from visualization.kernel.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
+    from visualization.v1.interactive_kernel_layer_plot import InteractiveKernelLayerPlot
 except ModuleNotFoundError as e:
     raise e
 

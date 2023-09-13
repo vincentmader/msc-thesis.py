@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
 
-from visualization.kernel.config import FIGSIZE_1, FIGSIZE_2, FIGSIZE_3
-from visualization.kernel.config import COLORBAR_GEOMETRY
+from visualization.v1.config import FIGSIZE_1, FIGSIZE_2, FIGSIZE_3
+from visualization.v1.config import COLORBAR_GEOMETRY
 
 
 class KernelLayerPlot():
