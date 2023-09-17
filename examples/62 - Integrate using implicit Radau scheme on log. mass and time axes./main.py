@@ -9,8 +9,7 @@ try:
     from disk.disk import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver
-    from visualization.evolution.evolution import EvolutionPlot
-    from visualization.evolution.mass_conservation import MassConservationPlot
+    from visualization.evolution import EvolutionPlot, MassConservationPlot
     from visualization.v1.mass_error import DiskMassErrorPlot
     from visualization.v1.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
