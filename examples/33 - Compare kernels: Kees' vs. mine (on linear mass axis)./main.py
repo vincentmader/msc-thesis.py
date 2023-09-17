@@ -63,16 +63,10 @@ def plot_2(
 
 
     s1 = KernelMassConservationSubplot(
-        mg, K_vinc,
-        title=r"kernel mass error $\sum_k m_k K_{kij}$",
-        scales=(scale, scale, "log"),
-        axis=axis,
+        mg, K_vinc, axis=axis, scales=(scale, scale, "log"), 
     )
     s2 = KernelMassConservationSubplot(
-        mg, K_kees,
-        title=r"kernel mass error $\sum_k m_k K_{kij}$",
-        scales=(scale, scale, "log"),
-        axis=axis,
+        mg, K_kees, axis=axis, scales=(scale, scale, "log"),
     )
     p = GridspecPlot([s1, s2])
     p.render()

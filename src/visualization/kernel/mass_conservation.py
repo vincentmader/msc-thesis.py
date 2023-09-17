@@ -15,4 +15,12 @@ class KernelMassConservationSubplot(KernelSubplot):
         *args, **kwargs
     ):
         self.sum_ij = test_mass_conservation(mg, K)
-        super().__init__(mg, self.sum_ij, *args, **kwargs)
+
+        kwargs["title"]= kwargs["title"]\
+            if "title" in kwargs.keys()\
+            else r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}$"
+
+        super().__init__(
+            mg, self.sum_ij, 
+            *args, **kwargs
+        )

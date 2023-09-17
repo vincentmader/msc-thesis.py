@@ -53,9 +53,7 @@ def plot_2():
 
     p = GridspecPlot([
         KernelMassConservationSubplot(
-            mg, kernel.K,
-            title=r"kernel mass error $\sum_k m_k K_{kij}$",
-            axis=KernelAxis.Radius,
+            mg, kernel.K, axis=KernelAxis.Radius,
         ),
     ])
     p.axes[1].format_coord = custom_format_coord
