@@ -71,7 +71,6 @@ class PcolorMatrixSubplot(GridspecSubplot):
                 norm = colors.Normalize(vmin=vmin, vmax=vmax)
             else:
                 norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
-                self.cmap = "bwr"
         elif self.scales[2] == "log":
             if self.z_limits is None:
                 if z.min() == z.max() == 0:

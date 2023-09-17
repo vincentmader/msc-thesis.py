@@ -2,23 +2,101 @@ import os, sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import DiscreteMassAxis, KernelAxis
     from config import Config
     from dust import particle_radius_from_mass, particle_mass_from_radius
     from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from kernel.mass_conservation import test_mass_conservation
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from visualization.kernel.kernel import KernelSubplot
     from visualization.kernel.mass_conservation import KernelMassConservationSubplot
     from visualization.v1.mass_conservation import KernelMassConservationPlot
 except ModuleNotFoundError as e:
     raise e
 
 
-def plot_1():
-    pass
+def plot_1(
+    scale: str,
+    mg: DiscreteMassAxis,
+    Ks: tuple[np.ndarray, np.ndarray, np.ndarray],
+):
+    K_vinc, K_kees, K_compare = Ks
+    axis = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
 
-def plot_2():
-    pass
+    s1 = KernelSubplot(
+        mg, K_vinc, 
+        title="$K_{kij}^{vinc}$",
+        axis=axis,
+        symmetrized=True,
+        scales=(scale, scale, "lin"),
+        z_limits=(-1, 1),
+        cmap="bwr",
+    )
+    s2 = KernelSubplot(
+        mg, K_kees, 
+        title="$K_{kij}^{kees}$",
+        axis=axis,
+        symmetrized=True,
+        scales=(scale, scale, "lin"),
+        z_limits=(-1, 1),
+        cmap="bwr",
+    )
+    s3 = KernelSubplot(
+        mg, K_compare, 
+        title=r"$\Delta K_{kij}=K_{kij}^{kees}-K_{kij}^{vinc}$",
+        axis=axis,
+        symmetrized=True,
+        scales=(scale, scale, "lin"),
+        z_limits=(-1, 1),
+        cmap="bwr",
+    )
+    p = GridspecPlot([s1, s2, s3], add_slider=True)
+    p.render()
+
+def plot_2(
+    scale: str,
+):
+    # if scale == "lin":
+    #     xlabel = "particle radius $a_j$ [m]",
+    #     ylabel = "particle radius $a_i$ [m]",
+    # else:
+    #     xlabel = "particle radius $a_j$ [m]",
+    #     ylabel = "particle radius $a_i$ [m]",
+
+    # axis = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
+    # s = KernelSubplot(mg, kernel_vinc.K, axis=axis)
+    # p = GridspecPlot([s], add_slider=True)
+    # p.render()
+
+    z = test_mass_conservation(cfg, mg, K_vinc)
+    s1 = PcolorMatrixSubplot(
+        x, y, z,
+        title=r"kernel mass error $\sum_k m_k K_{kij}$",
+        # xlabel="particle radius $a_j$ [m]",
+        # ylabel="particle radius $a_i$ [m]",
+        scales=(scale, scale, "log"),
+    )
+    z = test_mass_conservation(cfg, mg, K_kees)
+    s2 = PcolorMatrixSubplot(
+        x, y, z,
+        title=r"kernel mass error $\sum_k m_k K_{kij}$",
+        # xlabel="particle radius $a_j$ [m]",
+        # ylabel="particle radius $a_i$ [m]",
+        scales=(scale, scale, "log"),
+    )
+    p = GridspecPlot([s1, s2])
+
+    # sum_ij = test_mass_conservation(cfg, mg, kernel_vinc.K)
+    # def custom_format_coord(x, y):
+    #     x, y = particle_mass_from_radius(x, rho_s), particle_mass_from_radius(y, rho_s)
+    #     x, y = mg.index_from_value(x), mg.index_from_value(y)
+    #     i, j = int(x), int(y)  # TODO Index Convention? (irrelevant due to symmetry)
+    #     text = f"sum_k K_kij = {sum_ij[i, j]:.2}, {i = }, {j = }"
+    #     return text
+
+    # p.axes[1].format_coord = custom_format_coord
+    p.render()
 
 def plot_3(cfg, mg, K):
     KernelMassConservationPlot(cfg, mg, K).show()
@@ -40,80 +118,32 @@ if __name__ == "__main__":
         )
     
         kernel_vinc = Kernel(cfg)
-        K_vinc = kernel_vinc.K
-    
-        mg = kernel_vinc.mg
-        mc = mg.grid_cell_centers
-        rho_s = cfg.dust_particle_density
-        ac = particle_radius_from_mass(mc, rho_s)
+        K_vinc, mg = kernel_vinc.K, kernel_vinc.mg
+        mc, ac = mg.grid_cell_centers, mg.particle_radii
     
         R_coll = np.ones(shape=[N_m] * 2) # TODO Redefine `R` (and `K` ?)
         K_kees = create_coag_kernel(mc, R_coll)
         
-        N_m = mg.N
-        i = np.linspace(0, N_m, N_m)
-        
         K_vinc_sym = np.array([0.5 * (z + z.T) for z in K_vinc])
-        K_diff = K_vinc_sym - K_kees
-        K_equal = np.abs(K_diff) < 1e-16
+        K_diff = K_kees - K_vinc_sym
+        # K_equal = np.abs(K_diff) < 1e-16
         # Kkij_v2k = (Kkij_vinc - Kkij_kees) / Kkij_kees * 100
         # Kkij_k2v = (Kkij_kees - Kkij_vinc) / Kkij_vinc * 100
         # Kkij_log_v2k = np.log(Kkij_v2k)
         # Kkij_log_k2v = np.log(Kkij_k2v)
         
-        s1 = PcolorMatrixSubplot(
-            i, i, K_vinc,
-            title="$K_{kij}^{vinc}$",
-            xlabel="bin index $j$",
-            ylabel="bin index $i$",
-            scales=("lin", "lin", "lin"),
-            symmetrized=True,
-            z_limits=(-1, 1),
-        )
-        s2 = PcolorMatrixSubplot(
-            i, i, K_kees,
-            title="$K_{kij}^{kees}$",
-            xlabel="bin index $j$",
-            scales=("lin", "lin", "lin"),
-            z_limits=(-1, 1),
-        )
-        s3 = PcolorMatrixSubplot(
-            i, i, K_equal,
-            title="$K_{kij}^{vinc}=K_{kij}^{kees}$",
-            xlabel="bin index $j$",
-            scales=("lin", "lin", "lin"),
-            symmetrized=True,
-        )
-        p = GridspecPlot([s1, s2, s3], add_slider=True)
-        p.render()
-      
-        sum_ij = test_mass_conservation(cfg, mg, kernel_vinc.K)
-        def custom_format_coord(x, y):
-            x, y = particle_mass_from_radius(x, rho_s), particle_mass_from_radius(y, rho_s)
-            x, y = mg.index_from_value(x), mg.index_from_value(y)
-            i, j = int(x), int(y)  # TODO Index Convention? (irrelevant due to symmetry)
-            text = f"sum_k K_kij = {sum_ij[i, j]:.2}, {i = }, {j = }"
-            return text
-    
-        s1 = KernelMassConservationSubplot(
-            kernel_vinc,
-            title=r"kernel mass error $\sum_k m_k K_{kij}$",
-            xlabel="particle radius $a_j$ [m]",
-            ylabel="particle radius $a_i$ [m]",
-            scales=(scale, scale, "log"),
-        )
-        z = test_mass_conservation(cfg, mg, K_kees)
+        i = np.linspace(0, N_m, N_m)
         x, y = (i, i) if scale == "lin" else (ac, ac)
-        s2 = PcolorMatrixSubplot(
-            x, y, z,
-            title=r"kernel mass error $\sum_k m_k K_{kij}$",
-            xlabel="particle radius $a_j$ [m]",
-            ylabel="particle radius $a_i$ [m]",
-            scales=(scale, scale, "log"),
-        )
-        p = GridspecPlot([s1, s2])
-        p.axes[1].format_coord = custom_format_coord
-        p.render()
+        Ks = (K_vinc, K_kees, K_diff)
 
+        plot_1(scale, mg, Ks)
+        plot_2(scale, )
+      
         # plot_3(cfg, mg, K_vinc)
         # plot_3(cfg, mg, K_kees)
+
+        # from visualization.kernel.kernel import KernelSubplot
+        # axis = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
+        # s = KernelSubplot(mg, kernel_vinc.K, axis=axis)
+        # p = GridspecPlot([s], add_slider=True)
+        # p.render()
