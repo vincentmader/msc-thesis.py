@@ -5,13 +5,13 @@ from visualization.base import BasePlot
 
 class MassConservationPlot(BasePlot):
 
-    def __init__(self, t, Ms):
+    def __init__(self, t, M):
         self.t = t
-        self.Ms = Ms
+        self.M = M
 
     def draw(self):
         t = self.t / (365 * 24 * 60 * 60)
-        M = self.Ms
+        M = self.M
 
         err = (M - M[0]) / M[0]
 
