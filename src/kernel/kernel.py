@@ -166,8 +166,8 @@ class Kernel():
             else:
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
 
-            # Check whether one of the masses is in the upper-most 2 bins.
-            near_upper_bound = i >= N_m - 2 or j >= N_m - 2
+            # Check whether one of the masses is in the upper-most bin.
+            near_upper_bound = i >= N_m - 1 or j >= N_m - 1
 
             # Subtract "loss" term from kernel.
             # ─────────────────────────────────────────────────────────────
@@ -181,7 +181,7 @@ class Kernel():
                     #        If removed, the solver crashes.
                 # Handle "trivial" (non-cancelling) case.
                 else:
-                    K_loss[i, i, j] -= R if i < N_m - 2 else 0
+                    K_loss[i, i, j] -= R if i < N_m - 1 else 0
 
             # Add "gain" term to kernel.
             # ─────────────────────────────────────────────────────────────
