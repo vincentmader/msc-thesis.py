@@ -12,16 +12,35 @@ except ModuleNotFoundError as e:
 cfg = Config(
     mass_axis_scale="lin",
     mass_min_value=1,
-    mass_max_value=50,
+    mass_max_value=51,
+    mass_resolution=50,
+
     enable_coagulation=False,
+    enable_fragmentation=True,
+    enable_cancellation_handling=True,
     enable_physical_collisions=False,
     relative_velocity_components=[],
+    fragmentation_variant="mrn",
 )
 kernel = Kernel(cfg)
-mg = kernel.mg
+K, mg = kernel.K, kernel.mg
 
 
-if __name__ == "__main__":
+def plot_1():
+    GridspecPlot([
+        KernelSubplot(
+            mg, kernel.K,
+            title="kernel $K_{kij}$",
+            scales=("lin", "lin", "lin"),
+            symmetrized=True,
+            axis=KernelAxis.Bin,
+            cmap="bwr",
+            z_limits=(-1, 1)
+        )
+    ], add_slider=True).render()
+
+
+def plot_2():
     GridspecPlot([
         KernelSubplot(
             mg, kernel.K_gain, 
@@ -38,3 +57,8 @@ if __name__ == "__main__":
             axis=KernelAxis.Bin,
         ),
     ], add_slider=True).render()
+
+
+if __name__ == "__main__":
+    plot_1()
+    plot_2()
