@@ -55,7 +55,7 @@ class Solver:
 
         # The commented-out lines from above are replaced by calling the methods
         # of the `DiscreteAxis` class instead, this should lead to the same result.
-        mgrain = mg.grid_cell_centers
+        mc = mg.grid_cell_centers
         dmgrain = mg.grid_cell_widths
 
         # Convert `n -> N` (number of particles per mass bin per volume).
@@ -95,5 +95,5 @@ class Solver:
 
         # Translate back to physical units
         f = N_dust_store / dmgrain
-        m2f = f * mgrain**2  # TODO Why multiply with `mgrain`, instead of `dmgrain`?
+        m2f = f * mc**2  # TODO Why multiply with `mgrain`, instead of `dmgrain`?
         return N_dust_store, f, m2f
