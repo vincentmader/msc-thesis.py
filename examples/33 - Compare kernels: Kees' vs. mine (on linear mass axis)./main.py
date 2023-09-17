@@ -115,5 +115,5 @@ if __name__ == "__main__":
         p.axes[1].format_coord = custom_format_coord
         p.render()
 
-        plot_3(cfg, mg, K_vinc)
-        plot_3(cfg, mg, K_kees)
+        # plot_3(cfg, mg, K_vinc)
+        # plot_3(cfg, mg, K_kees)
