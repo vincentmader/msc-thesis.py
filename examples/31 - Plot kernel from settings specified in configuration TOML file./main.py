@@ -1,11 +1,15 @@
-from v1 import main as v1
-from v2 import main as v2
-from v3 import main as v3
-from v4 import main as v4
-from v5 import main as v5
+import os, sys
+try:
+    sys.path.append(os.path.join("..", "..", "src"))
+    from config import Config
+    from visualization.preset import p1
+except ModuleNotFoundError as e:
+    raise e
 
-# v1()
-# v2()
-# v3()
-# v4()
-v5()
+cfg = Config(
+    enable_collision_sampling=False,
+)
+
+
+if __name__ == "__main__":
+    p1(cfg)
