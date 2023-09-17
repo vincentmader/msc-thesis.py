@@ -4,15 +4,14 @@ from axis import DiscreteMassAxis, DiscreteRadialAxis
 from disk import Disk
 
 
-x_0 = 0
-
-
 def dirac_delta(cfg):
     mg = DiscreteMassAxis(cfg)
     rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
     r = rg.bin_centers  
     rho_g = disk.midplane_gas_volume_density
+
+    x_0 = cfg.initial_mass_bin
 
     m = mg.bin_centers
     dm = mg.bin_widths[x_0]

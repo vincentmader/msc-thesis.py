@@ -58,3 +58,7 @@
 
 [plotting]
   mpl_dark_mode                 = false
+
+[initialization]
+  initialization_variant        = "dirac-delta"
+  initial_mass_bin              = 0

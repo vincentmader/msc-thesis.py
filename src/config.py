@@ -24,6 +24,7 @@ class Config():
         "relative_velocity_components", "fragmentation_variant", "fragmentation_velocity",
         "collision_outcome_variant", "solver_variant", "mpl_dark_mode", 
         "dust_particle_density", "viscosity_alpha", "nr_of_samples", "disk_mass",
+        "initialization_variant", "initial_mass_bin",
     ]
 
     def __init__(
@@ -61,6 +62,8 @@ class Config():
         viscosity_alpha: Optional[float]=None,
         enable_collision_sampling: Optional[bool]=None,
         nr_of_samples: Optional[int]=None,
+        initialization_variant: Optional[str] = None,
+        initial_mass_bin: Optional[int] = None,
     ):
         cfg = toml.load(path_to_config_toml)
 
@@ -145,6 +148,12 @@ class Config():
         if mpl_dark_mode is None:
             mpl_dark_mode = cfg_i["mpl_dark_mode"]
 
+        cfg_i = cfg["initialization"]
+        if initialization_variant is None:
+            initialization_variant = cfg_i["initialization_variant"]
+        if initial_mass_bin is None:
+            initial_mass_bin = cfg_i["initial_mass_bin"]
+
         self.collision_outcome_variant = collision_outcome_variant
         self.disk_mass = disk_mass
         self.disk_mass_ratio = disk_mass_ratio
@@ -179,3 +188,5 @@ class Config():
         self.viscosity_alpha = viscosity_alpha
         self.enable_collision_sampling = enable_collision_sampling
         self.nr_of_samples = nr_of_samples
+        self.initialization_variant = initialization_variant
+        self.initial_mass_bin = initial_mass_bin

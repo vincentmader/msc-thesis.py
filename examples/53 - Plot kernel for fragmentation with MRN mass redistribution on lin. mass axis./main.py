@@ -11,6 +11,7 @@ cfg = Config(
     mass_min_value=1,
     mass_max_value=51,
     mass_resolution=50,
+    initial_mass_bin=10,
 
     enable_coagulation=False,
     enable_fragmentation=True,

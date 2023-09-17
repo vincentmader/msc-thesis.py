@@ -7,6 +7,7 @@ except ModuleNotFoundError as e:
     raise e
 
 cfg = Config(
+    initial_mass_bin=10,
     enable_coagulation=False,
     enable_fragmentation=True,
     enable_cancellation_handling=True,
