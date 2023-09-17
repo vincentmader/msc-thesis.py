@@ -56,7 +56,6 @@ class EvolutionPlot(BasePlot):
         mg = self.kernel.mg
         mb = mg.grid_cell_boundaries
         mc = mg.grid_cell_centers
-        ac = mg.particle_radii
 
         n, N, M, dM = self.f, self.N, self.m2f, self.dm2f
         x, y = mc, M[self.i_t]
@@ -64,7 +63,7 @@ class EvolutionPlot(BasePlot):
         self.ax_1.loglog(x, y, label="")
         self.ax_1.set_xlim(mb[0], mb[-1])
         self.ax_1.set_ylim(1e-12, 1e-8)
-        self.ax_1.grid()
+        self.ax_1.grid(True)
         self.ax_1.set_ylabel(r"dust particle density $\rho_i^s=m_i n_i \Delta m_i$")
         self.ax_1.set_title("temporal evolution of particle mass distribution")
 
@@ -72,7 +71,7 @@ class EvolutionPlot(BasePlot):
         self.ax_2.loglog(x, y, label="")
         self.ax_2.set_xlim(mb[0], mb[-1])
         self.ax_2.set_ylim(1e-21, 1e-16)
-        self.ax_2.grid()
+        self.ax_2.grid(True)
         self.ax_2.set_xlabel("dust particle mass $m^c_i$")
 
     def update(self, i_t):
