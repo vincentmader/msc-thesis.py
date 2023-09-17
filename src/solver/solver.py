@@ -51,7 +51,7 @@ class Solver:
         N_m = mg.N
 
         N_t = self.time_axis.N
-        time = self.time_axis.grid_cell_centers 
+        tc = self.time_axis.grid_cell_centers 
 
         # The commented-out lines from above are replaced by calling the methods
         # of the `DiscreteAxis` class instead, this should lead to the same result.
@@ -66,7 +66,7 @@ class Solver:
         s = np.zeros((N_m))
         rmat = np.zeros((N_m, N_m))
         for itime in tqdm(range(1, N_t)):
-            dt = (time[itime] - time[itime - 1]) / N_subst
+            dt = (tc[itime] - tc[itime - 1]) / N_subst
 
             if self.cfg.enable_collision_sampling:
                 kernel = SampledKernel(self.cfg, N_dust)
