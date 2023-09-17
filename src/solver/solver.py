@@ -12,8 +12,7 @@ sys.path.append(path)
 from coag.react_0d import solve_react_0d_equation
 from sampling.kernel import SampledKernel
 from visualization.base import GridspecPlot
-from visualization.kernel.kernel import KernelSubplot
-from visualization.kernel.mass_conservation import KernelMassConservationSubplot
+from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result

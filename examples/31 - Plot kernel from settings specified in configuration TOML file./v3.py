@@ -7,8 +7,7 @@ try:
     from kernel import Kernel
     from kernel.mass_conservation import test_mass_conservation
     from visualization.base import GridspecPlot
-    from visualization.kernel.kernel import KernelSubplot
-    from visualization.kernel.mass_conservation import KernelMassConservationSubplot
+    from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 except ModuleNotFoundError as e:
     raise e
 

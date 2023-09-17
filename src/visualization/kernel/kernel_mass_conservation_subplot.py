@@ -2,7 +2,7 @@ import numpy as np
 
 from axis import DiscreteMassAxis
 from kernel.mass_conservation import test_mass_conservation
-from visualization.kernel.kernel import KernelSubplot
+from visualization.kernel import KernelSubplot
 
 
 class KernelMassConservationSubplot(KernelSubplot):

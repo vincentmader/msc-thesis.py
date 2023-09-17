@@ -6,7 +6,7 @@ try:
     from config import Config
     from kernel import Kernel
     from visualization.base import GridspecPlot
-    from visualization.kernel.kernel import KernelSubplot
+    from visualization.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
