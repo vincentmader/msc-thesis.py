@@ -4,44 +4,41 @@ import sys
 import numpy as np
 from tqdm import tqdm
 
-from axis import DiscreteTimeAxis
+from axis import DiscreteTimeAxis, KernelAxis
 from config import PATH_TO_LIB
 path = Path(PATH_TO_LIB, "coag_py")
 path = str(path)
 sys.path.append(path)
 from coag.react_0d import solve_react_0d_equation
-from dust import particle_radius_from_mass
 from sampling.kernel import SampledKernel
-from visualization.base import GridspecPlot, PcolorMatrixSubplot
-from visualization.v1.mass_conservation import KernelMassConservationPlot
+from visualization.base import GridspecPlot
+from visualization.kernel.kernel import KernelSubplot
+from visualization.kernel.mass_conservation import KernelMassConservationSubplot
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
 
 def plot(kernel): # TODO Move elsewhere.
-    cfg, mg, K = kernel.cfg, kernel.mg, kernel.K
-    ac = particle_radius_from_mass(mg.grid_cell_centers, cfg.dust_particle_density)
+    mg, K = kernel.mg, kernel.K
     GridspecPlot([
-        PcolorMatrixSubplot(
-            ac, ac, K,
+        KernelSubplot(
+            mg, K, axis=KernelAxis.Radius,
             title="kernel gain contribution $G_{kij}$",
-            xlabel="particle radius $a_j$ [m]",
-            ylabel="particle radius $a_i$ [m]",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
         ),
-        PcolorMatrixSubplot(
-            ac, ac, K,
+        KernelSubplot(
+            mg, K, axis=KernelAxis.Radius,
             title="kernel gain contribution $G_{kij}$",
-            xlabel="particle radius $a_j$ [m]",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
         )
     ], add_slider=True).render()
 
-    p = KernelMassConservationPlot(cfg, mg, K)
-    p.show()
+    GridspecPlot([
+        KernelMassConservationSubplot(mg, K)
+    ]).render()
 
 
 class Solver:
@@ -75,7 +72,7 @@ class Solver:
             if self.cfg.enable_collision_sampling:
                 kernel = SampledKernel(self.cfg, N_dust)
                 K = kernel.K
-                if itime % 10 == -1:
+                if itime % 10 == 0:
                     plot(kernel) 
 
             for j in range(N_subst):

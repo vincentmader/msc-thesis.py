@@ -1,6 +1,7 @@
 import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import KernelAxis
     from config import Config
     from dust import particle_radius_from_mass, particle_mass_from_radius
     from kernel import Kernel
@@ -40,8 +41,8 @@ def plot_1():
 
 
 def plot_2():
-    sum_ij = test_mass_conservation(cfg, mg, kernel.K)
-
+    # TODO Move the below elsewhere? Best: In `KernelMassConservationSubplot` definition.
+    sum_ij = test_mass_conservation(mg, kernel.K)
     def custom_format_coord(x, y):
         x, y = particle_mass_from_radius(x, rho_s), particle_mass_from_radius(y, rho_s)
         x, y = mg.index_from_value(x), mg.index_from_value(y)
@@ -50,10 +51,9 @@ def plot_2():
         return text
 
     s = KernelMassConservationSubplot(
-        kernel,
+        mg, kernel.K,
         title=r"kernel mass error $\sum_k m_k K_{kij}$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+        axis=KernelAxis.Radius,
     )
     p = GridspecPlot([s])
     p.axes[1].format_coord = custom_format_coord
@@ -63,6 +63,3 @@ def plot_2():
 def main():
     plot_1()
     plot_2()
-
-# def format_coord(self, x, y):
-#     return self.custom_format_coord(x, y)

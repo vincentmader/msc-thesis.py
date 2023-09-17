@@ -17,13 +17,13 @@ class KernelSubplot(PcolorMatrixSubplot):
     ):
 
         if axis is KernelAxis.Radius:
-            xlabel = "particle radius $a_j$"
-            ylabel = "particle radius $a_i$"
+            xlabel = "particle radius $a_j$ [m]"
+            ylabel = "particle radius $a_i$ [m]"
             ac = mg.particle_radii
             x, y = ac, ac
         elif axis is KernelAxis.Mass:
-            xlabel = "particle mass $a_j$"
-            ylabel = "particle mass $a_i$"
+            xlabel = "particle mass $a_j$ [kg]"
+            ylabel = "particle mass $a_i$ [kg]"
             mc = mg.grid_cell_centers
             x, y = mc, mc
         else:  # -> `KernelAxis.Bin`
