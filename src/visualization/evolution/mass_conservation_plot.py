@@ -5,9 +5,10 @@ from visualization.base import BasePlot
 
 class MassConservationPlot(BasePlot):
 
-    def __init__(self, t, M):
+    def __init__(self, t, M, *args, **kwargs):
         self.t = t
         self.M = M
+        super().__init__(*args, **kwargs)
 
     def draw(self):
         t = self.t / (365 * 24 * 60 * 60)
