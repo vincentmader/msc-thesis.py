@@ -18,6 +18,12 @@ class MassConservationPlot(BasePlot):
         x = t
         y = err
 
+        # TODO Do with and without:
+        # - Total mass error
+        # - error per time
+        y = y[:-1] / (x[1:] - x[:-1])
+        x = x[:-1]
+
         plt.loglog(x, y, "red", label=r"$\Delta M_t>0$")
         plt.loglog(x, -y, "blue", label=r"$\Delta M_t<0$")
         plt.legend(loc="best")
