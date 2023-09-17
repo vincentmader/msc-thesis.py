@@ -88,13 +88,7 @@ if __name__ == "__main__":
     n0 = mass_distribution.dirac_delta(cfg)
 
     # Run the solver.
-    N, f, m2f = solver.run(n0, K)
-
-    # Calculate temporal derivative of mass distribution.
-    dm2f = m2f[1:] - m2f[:-1]
-    dm2f = list(dm2f)
-    dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
-    dm2f = np.array(dm2f)
+    N, f, m2f, dm2f = solver.run(n0, K)
 
     # Prepare abscissa & ordinate for plot of disk mass error.
     t = tg.bin_centers

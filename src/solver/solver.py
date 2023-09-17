@@ -93,4 +93,11 @@ class Solver:
         # Translate back to physical units
         f = N_dust_store / dm
         m2f = f * mc**2  # TODO Why multiply with `mgrain`, instead of `dmgrain`?
-        return N_dust_store, f, m2f
+
+        dm2f = list(m2f[1:] - m2f[:-1])
+        dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
+        dm2f = np.array(dm2f)
+        dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)]
+        # TODO Do the above more elegantly. (Calculate temp. deriv.)
+
+        return N_dust_store, f, m2f, dm2f
