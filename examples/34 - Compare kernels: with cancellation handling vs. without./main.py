@@ -2,65 +2,66 @@ import os, sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import KernelAxis
     from config import Config
     from kernel import Kernel
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from visualization.base import GridspecPlot
+    from visualization.kernel.kernel import KernelSubplot
+    from visualization.kernel.mass_conservation import KernelMassConservationSubplot
 except ModuleNotFoundError as e:
     raise e
 
-cfg_1 = Config(
-    enable_cancellation_handling=False,
-)
-kernel_1 = Kernel(cfg_1)
-K_1 = kernel_1.K
-
-cfg_2 = Config(
-    enable_cancellation_handling=True,
-)
-kernel_2 = Kernel(cfg_2)
-K_2 = kernel_2.K
+cfg_1 = Config(enable_cancellation_handling=False)
+cfg_2 = Config(enable_cancellation_handling=True)
+kernel_1, kernel_2 = Kernel(cfg_1), Kernel(cfg_2)
+K_1, K_2 = kernel_1.K, kernel_2.K
+K_diff = K_1 - K_2
+K_equal = K_diff < 1e-14
 
 mg = kernel_1.mg
 mc = mg.grid_cell_centers
 ac = mg.particle_radii
 
-K_diff = K_1 - K_2
-K_equal = K_diff < 1e-14
 
-s1 = PcolorMatrixSubplot(
-    ac, ac, K_1,
-    title="cancellation handling deactivated",
-    xlabel="particle radius $a_j$ [m]",
-    ylabel="particle radius $a_i$ [m]",
-    scales=("log", "log", "lin"),
-    symmetrized=True,
-)
-s2 = PcolorMatrixSubplot(
-    ac, ac, K_2,
-    title="cancellation handling activated",
-    xlabel="particle radius $a_j$ [m]",
-    scales=("log", "log", "lin"),
-    symmetrized=True,
-)
-s3 = PcolorMatrixSubplot(
-    ac, ac, np.abs(K_diff),
-    title="abs($K_{canc}-K_{nocanc}$)",
-    xlabel="particle radius $a_j$ [m]",
-    scales=("log", "log", "log"),
-    symmetrized=True,
-)
+def plot_1():
+    p = GridspecPlot([
+        KernelSubplot(
+            mg, K_1,
+            title="kernel $K_{kij}^{canc}$",
+            scales=("log", "log", "lin"),
+            symmetrized=True,
+            cmap="bwr",
+        ),
+        KernelSubplot(
+            mg, K_2,
+            title="kernel $K_{kij}^{nocanc}$ with canc. handling",
+            scales=("log", "log", "lin"),
+            symmetrized=True,
+            cmap="bwr",
+        ),
+        KernelSubplot(
+            mg, np.abs(K_diff),
+            title="abs($K_{kij}^{canc}-K_{kij}^{nocanc}$)",
+            scales=("log", "log", "log"),
+            symmetrized=True,
+    )], add_slider=True)
+    p.render()
 
-p = GridspecPlot([s1, s2, s3], add_slider=True)
-p.render()
 
-# ═════════════════════════════════════════════════════════════════════════════
+def plot_2():
+    p = GridspecPlot([
+        KernelMassConservationSubplot(
+            mg, K_1, axis=KernelAxis.Radius,
+            title=r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
+        ),
+        KernelMassConservationSubplot(
+            mg, K_2, axis=KernelAxis.Radius,
+            title=r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
+        ),
+    ])
+    p.render()
 
-from visualization.v1.mass_conservation import KernelMassConservationPlot
 
-# Plot `\sum_{ij} m_k \Delta m_k K_kij`.
-p = KernelMassConservationPlot(cfg_1, mg, K_1)
-p.show()
-
-# Plot `\sum_{ij} m_k \Delta m_k K_kij`.
-p = KernelMassConservationPlot(cfg_2, mg, K_2)
-p.show()
+if __name__ == "__main__":
+    plot_1()
+    plot_2()
