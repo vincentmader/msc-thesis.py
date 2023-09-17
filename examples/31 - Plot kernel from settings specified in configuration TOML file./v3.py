@@ -6,7 +6,8 @@ try:
     from dust import particle_mass_from_radius
     from kernel import Kernel
     from kernel.mass_conservation import test_mass_conservation
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from visualization.base import GridspecPlot
+    from visualization.kernel.kernel import KernelSubplot
     from visualization.kernel.mass_conservation import KernelMassConservationSubplot
 except ModuleNotFoundError as e:
     raise e
@@ -22,18 +23,17 @@ ac = mg.particle_radii
 rho_s = cfg.dust_particle_density
 
 def plot_1():
-    s1 = PcolorMatrixSubplot(
-        ac, ac, kernel.K_gain, 
+    s1 = KernelSubplot(
+        mg, kernel.K_gain, 
         title="kernel gain contribution $G_{kij}$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+        axis=KernelAxis.Radius,
         symmetrized=True,
         z_limits=(1e-20, 1e-7),
     )
-    s2 = PcolorMatrixSubplot(
-        ac, ac, -kernel.K_loss,
+    s2 = KernelSubplot(
+        mg, -kernel.K_loss,
         title="kernel loss contribution $L_{kij}$",
-        xlabel="particle radius $a_j$ [m]",
+        axis=KernelAxis.Radius,
         symmetrized=True,
         z_limits=(1e-20, 1e-7),
     )
