@@ -18,7 +18,6 @@ cfg = Config(
     mass_resolution=50,
     mass_min_value=2,
     mass_max_value=52,
-
     # mass_min_value=1e-4,
     # mass_max_value=1e+4,
 
@@ -44,32 +43,31 @@ K_kees = create_coag_kernel(mc, R_coll)
 
 i = np.linspace(0, N_m, N_m)
 
-K_diff = K_vinc - K_kees
-K_equal = K_diff < 1e-14
+K_vinc_sym = np.array([0.5 * (z + z.T) for z in K_vinc])
+K_diff = K_vinc_sym - K_kees
+K_equal = np.abs(K_diff) < 1e-16
 # Kkij_v2k = (Kkij_vinc - Kkij_kees) / Kkij_kees * 100
 # Kkij_k2v = (Kkij_kees - Kkij_vinc) / Kkij_vinc * 100
 # Kkij_log_v2k = np.log(Kkij_v2k)
 # Kkij_log_k2v = np.log(Kkij_k2v)
 
 s1 = PcolorMatrixSubplot(
-    # ac, ac, K_vinc,
     i, i, K_vinc,
     title="$K_{kij}^{vinc}$",
     xlabel="bin index $j$",
     ylabel="bin index $i$",
     scales=("lin", "lin", "lin"),
     symmetrized=True,
+    z_limits=(-1, 1),
 )
 s2 = PcolorMatrixSubplot(
-    # ac, ac, K_kees,
     i, i, K_kees,
     title="$K_{kij}^{kees}$",
     xlabel="bin index $j$",
     scales=("lin", "lin", "lin"),
-    symmetrized=True,
+    z_limits=(-1, 1),
 )
 s3 = PcolorMatrixSubplot(
-    # ac, ac, K_kees,
     i, i, K_equal,
     title="$K_{kij}^{vinc}=K_{kij}^{kees}$",
     xlabel="bin index $j$",
