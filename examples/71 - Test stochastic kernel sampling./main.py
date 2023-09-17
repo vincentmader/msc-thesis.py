@@ -6,7 +6,9 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-cfg = Config()
+cfg = Config(
+    enable_collision_sampling=True,
+)
 
 
 if __name__ == "__main__":

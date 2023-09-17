@@ -7,8 +7,7 @@ except ModuleNotFoundError as e:
     raise e
 
 cfg = Config(
-    enable_collision_sampling=False,
-    initial_mass_bin=0,
+    initial_mass_bin=40,
 )
 
 

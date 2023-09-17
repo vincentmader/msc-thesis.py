@@ -87,7 +87,6 @@ if __name__ == "__main__":
             mass_min_value=m_min, mass_max_value=m_max,
             enable_coagulation=True, enable_fragmentation=False,
             enable_physical_collisions=False, relative_velocity_components=[],
-            enable_collision_sampling=False, # If true: Supply `ijs`!
             enable_cancellation_handling=True,
         )
     

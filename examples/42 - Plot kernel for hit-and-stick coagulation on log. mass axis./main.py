@@ -10,7 +10,6 @@ cfg = Config(
     enable_fragmentation=False,
     enable_physical_collisions=False,
     relative_velocity_components=[],
-    enable_collision_sampling=False,
 )
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ except ModuleNotFoundError as e:
     raise e
 
 # Load configuration from `../../config.toml`.
-cfg = Config(enable_collision_sampling=False)
+cfg = Config()
 
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = DiscreteRadialAxis(cfg)

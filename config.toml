@@ -50,7 +50,7 @@
   fragmentation_variant         = "mrn"     # either "mrn" or "naive/pulverization"
   collision_outcome_variant     = "mb_dist" # either "mb_dist" or "cutoff_velocity"
   fragmentation_velocity        = 1         # given in m/s
-  enable_collision_sampling     = true
+  enable_collision_sampling     = false
   nr_of_samples                 = 500
 
 [solver]

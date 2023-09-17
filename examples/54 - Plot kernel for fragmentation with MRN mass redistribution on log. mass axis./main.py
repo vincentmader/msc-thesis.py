@@ -14,7 +14,6 @@ cfg = Config(
     enable_physical_collisions=False,
     relative_velocity_components=[],
     fragmentation_variant="mrn",
-    enable_collision_sampling=False,
 )
 
 if __name__ == "__main__":
