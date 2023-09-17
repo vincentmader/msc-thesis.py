@@ -20,7 +20,7 @@ class SampledKernel(Kernel):
 
         P_ij = W_ij * N_i * N_j
         P_ij = P_ij / P_ij.sum()
-        assert np.abs(P_ij.sum() - 1) <= 1e-6
+        assert np.abs(P_ij.sum() - 1) <= 1e-6  # TODO -> 1e-16 ?
         self.P_ij = P_ij
         
         ijs = self._sample_ijs(cfg)
