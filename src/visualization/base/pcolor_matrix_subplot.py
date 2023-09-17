@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
 
-from .gridspec_subplot import GridspecSubplot
+from visualization.base import GridspecSubplot
 
 
 class PcolorMatrixSubplot(GridspecSubplot):
@@ -65,7 +65,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
                 vmin, vmax = z.min(), z.max()
             else:
                 vmin = self.z_limits[0]
-                vmax = self.z_limits[0]
+                vmax = self.z_limits[1]
             smin, smax = np.sign(vmin), np.sign(vmax)
             if smin == smax or 0 in [smin, smax]:
                 norm = colors.Normalize(vmin=vmin, vmax=vmax)

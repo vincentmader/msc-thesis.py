@@ -7,8 +7,7 @@ try:
     from collision import collision_cross_section
     from config import Config, PATH_TO_FIGURES
     from dust import particle_radius_from_mass
-    from visualization.kernel.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel.gridspec_plot import GridspecPlot
+    from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 

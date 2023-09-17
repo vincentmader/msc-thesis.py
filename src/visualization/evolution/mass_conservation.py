@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from visualization.kernel.base_plot import BasePlot
+from visualization.base import BasePlot
 
 
 class MassConservationPlot(BasePlot):

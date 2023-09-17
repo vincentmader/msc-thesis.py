@@ -14,8 +14,7 @@ try:
     from dust.relative_velocity import dv_radial_drift
     from dust.relative_velocity import dv_turbulence
     from dust.relative_velocity import relative_velocity
-    from visualization.kernel.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel.gridspec_plot import GridspecPlot
+    from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 

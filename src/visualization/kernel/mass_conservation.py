@@ -1,7 +1,7 @@
 from dust import particle_radius_from_mass
 from kernel import Kernel
 from kernel.mass_conservation import test_mass_conservation
-from visualization.kernel.pcolor_matrix_subplot import PcolorMatrixSubplot
+from visualization.base import PcolorMatrixSubplot
 
 
 class KernelMassConservationSubplot(PcolorMatrixSubplot):

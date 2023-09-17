@@ -1,7 +1,7 @@
 from matplotlib.widgets import Slider
 
-from .gridspec_subplot import GridspecSubplot
 from .base_plot import BasePlot
+from .gridspec_subplot import GridspecSubplot
 
 
 class GridspecPlot(BasePlot):
