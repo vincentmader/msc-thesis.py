@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from tqdm import tqdm
 
-from axis import DiscreteTimeAxis, KernelAxis
+from axis import DiscreteTimeAxis, DiscreteMassAxis, KernelAxis
 from config import PATH_TO_LIB
 path = Path(PATH_TO_LIB, "coag_py")
 path = str(path)
@@ -18,8 +18,7 @@ SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
 
-def plot(kernel): # TODO Move elsewhere.
-    mg, K = kernel.mg, kernel.K
+def plot(mg, K): # TODO Move elsewhere.
     GridspecPlot([
         KernelSubplot(
             mg, K, axis=KernelAxis.Radius,
@@ -45,17 +44,14 @@ class Solver:
     def __init__(self, cfg):
         self.cfg = cfg
         self.time_axis = DiscreteTimeAxis(cfg)
+        self.mass_axis = DiscreteMassAxis(cfg)
 
-    def run(self, mg, n_dust, K):
+    def run(self, n_dust, K):
         solver = self.cfg.solver_variant
-        N_m = mg.N
 
-        N_t = self.time_axis.N
-        tc = self.time_axis.grid_cell_centers 
-
-        # The commented-out lines from above are replaced by calling the methods
-        # of the `DiscreteAxis` class instead, this should lead to the same result.
-        mc = mg.grid_cell_centers
+        tg, mg = self.time_axis, self.mass_axis
+        tc, mc = tg.grid_cell_centers, mg.grid_cell_centers
+        N_t, N_m = tg.N, mg.N
         dm = mg.grid_cell_widths
 
         # Convert `n -> N` (number of particles per mass bin per volume).
@@ -71,10 +67,11 @@ class Solver:
             if self.cfg.enable_collision_sampling:
                 kernel = SampledKernel(self.cfg, N_dust)
                 K = kernel.K
-                if itime % 10 == 0:
-                    plot(kernel) 
+                # if itime % 10 == 0:
+                if itime in [0, 100, 120, 130, 140]:
+                    plot(mg, K)
 
-            for j in range(N_subst):
+            for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
                 if solver == "explicit_euler":
                     N_1 = N_dust[None, :, None] # TODO better names than `N_1` and `N_2` ?

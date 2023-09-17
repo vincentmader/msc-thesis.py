@@ -19,7 +19,7 @@ def _run_integrator(kernel, K):
     mg = kernel.mg
     solver = Solver(cfg)
     n0 = mass_distribution.dirac_delta(cfg)
-    N, f, m2f = solver.run(mg, n0, K)
+    N, f, m2f = solver.run(n0, K)
     return N, f, m2f
 
 

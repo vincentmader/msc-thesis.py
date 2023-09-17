@@ -88,7 +88,7 @@ if __name__ == "__main__":
     n0 = mass_distribution.dirac_delta(cfg)
 
     # Run the solver.
-    N, f, m2f = solver.run(mg, n0, K)
+    N, f, m2f = solver.run(n0, K)
 
     # Calculate temporal derivative of mass distribution.
     dm2f = m2f[1:] - m2f[:-1]

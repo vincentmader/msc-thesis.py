@@ -30,7 +30,6 @@ K = kernel.K
 
 # Define temporal domain & solver.
 tg = DiscreteTimeAxis(cfg)
-solver = Solver(cfg)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # from disk.disk import Disk
@@ -87,8 +86,10 @@ if __name__ == "__main__":
     n0 = mass_distribution.dirac_delta(cfg)
     # n0 = mass_distribution.mrn_distribution(cfg)
 
+    solver = Solver(cfg)
+
     # Run the solver.
-    N, f, m2f = solver.run(mg, n0, K)
+    N, f, m2f = solver.run(n0, K)
 
     # Calculate temporal derivative of mass distribution.
     dm2f = m2f[1:] - m2f[:-1]
