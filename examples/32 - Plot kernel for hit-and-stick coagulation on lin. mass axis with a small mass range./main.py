@@ -2,11 +2,12 @@ import os, sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis
+    from axis import DiscreteMassAxis, KernelAxis
     from config import Config
     from dust import particle_radius_from_mass
     from kernel import Kernel
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from visualization.base import GridspecPlot
+    from visualization.kernel.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
@@ -18,8 +19,8 @@ cfg = Config(
     # we have to chose `mass_resolution = mass_max_value - mass_min_value`.
     mass_axis_scale="lin",
     mass_min_value=1,
-    mass_max_value=13,
-    mass_resolution=12,
+    mass_max_value=11,
+    mass_resolution=10,
     # Define processes to include in the simulation.
     enable_coagulation=True,
     enable_fragmentation=False,
@@ -46,13 +47,14 @@ kernels = [K]
 
 i = np.arange(0, N_m, 1)
 
-s1 = PcolorMatrixSubplot(
-    i, i, kernel.K, 
-    title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$ [m]",
-    ylabel="particle radius $a_i$ [m]",
+s1 = KernelSubplot(
+    mg, kernel.K,
+    axis=KernelAxis.Bin,
+    title="kernel $K_{kij}$",
     scales=("lin", "lin", "lin"),
-    symmetrized=True,
+    # symmetrized=True,
+    cmap="bwr",
+    z_limits=(-1, 1),
 )
 
 p = GridspecPlot([s1], add_slider=True)
