@@ -97,15 +97,15 @@ class Kernel():
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
-        K_coag = self._K_coag(R_coll, ijs)
         if cfg.enable_coagulation:
+            K_coag = self._K_coag(R_coll, ijs)
             self.K_coag_gain += P_coag * K_coag["gain"]
             self.K_coag_loss += P_coag * K_coag["loss"]
             self.K_gain += P_coag * K_coag["gain"]
             self.K_loss += P_coag * K_coag["loss"]
         # ...fragmentation processes.
-        K_frag = self._K_frag(R_coll, ijs)
         if cfg.enable_fragmentation:
+            K_frag = self._K_frag(R_coll, ijs)
             self.K_frag_gain += P_frag * K_frag["gain"]
             self.K_frag_loss += P_frag * K_frag["loss"]
             self.K_gain += P_frag * K_frag["gain"]
