@@ -51,6 +51,19 @@ def plot_2(x, y):
     plt.close()
 
 
+def plot_3(kernel, N, f, m2f, dm2f):
+    from visualization.evolution.evolution import EvolutionPlot
+    p = EvolutionPlot(kernel, N, f, m2f, dm2f)
+    p.render()
+
+
+def plot_4(t, Ms):
+    from visualization.evolution.mass_conservation import MassConservationPlot
+    p = MassConservationPlot(t, Ms)
+    p.render()
+
+
+
 if __name__ == "__main__":
     cfg = Config()
     kernel = Kernel(cfg)
@@ -71,5 +84,7 @@ if __name__ == "__main__":
     dm2f = np.array(dm2f)
     dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
 
-    plot_1(mc, m2f, dm2f)
-    plot_2(t, Ms)
+    # plot_1(mc, m2f, dm2f)
+    # plot_2(t, Ms)
+    plot_3(kernel, N, f, m2f, dm2f)
+    plot_4(t, Ms)

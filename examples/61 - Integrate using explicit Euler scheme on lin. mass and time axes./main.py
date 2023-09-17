@@ -75,6 +75,17 @@ def plot_2(x, y):
     plt.close()
 
 
+def plot_3(kernel, N, f, m2f, dm2f):
+    from visualization.evolution.evolution import EvolutionPlot
+    p = EvolutionPlot(kernel, N, f, m2f, dm2f)
+    p.render()
+
+
+def plot_4(t, Ms):
+    from visualization.evolution.mass_conservation import MassConservationPlot
+    p = MassConservationPlot(t, Ms)
+
+
 if __name__ == "__main__":
 
     # Initialize mass distribution.
@@ -96,3 +107,5 @@ if __name__ == "__main__":
     # Create plots.
     plot_1(mc, m2f, dm2f)
     plot_2(t, Ms)
+    # plot_3(kernel, N, f, m2f, dm2f)  TODO Use these instead? 
+    # plot_4(t, Ms)
