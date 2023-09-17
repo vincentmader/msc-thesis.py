@@ -31,7 +31,7 @@ class Kernel():
         rg = DiscreteRadialAxis(cfg)
         # ...particle mass.
         mg = DiscreteMassAxis(cfg)
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
         self.mg = mg
         # ...particle radius.
         self.ac = mg.particle_radii
@@ -121,7 +121,7 @@ class Kernel():
     ):
 
         mg = self.mg
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
         m_max = mg.x_max  # Note: This is NOT the same as `mc[-1]`.
         N_m = mg.N
 
@@ -201,7 +201,7 @@ class Kernel():
     ):
 
         mg = self.mg
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
         N_m = mg.N
 
         fragmentation_variant = self.cfg.fragmentation_variant

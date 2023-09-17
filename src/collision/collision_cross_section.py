@@ -9,7 +9,7 @@ def collision_cross_section(cfg, mg):
         return np.ones(shape=[mg.N] * 2)
 
     rho_s = cfg.dust_particle_density
-    mc = mg.grid_cell_centers
+    mc = mg.bin_centers
     radii = particle_radius_from_mass(mc, rho_s)
 
     sigma = np.ones(shape=[mg.N] * 2)

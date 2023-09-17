@@ -18,7 +18,7 @@ K_diff = K_1 - K_2
 K_equal = K_diff < 1e-14
 
 mg = kernel_1.mg
-mc = mg.grid_cell_centers
+mc = mg.bin_centers
 ac = mg.particle_radii
 
 

@@ -7,7 +7,7 @@ from dust import particle_radius_from_mass
 
 def dv_turbulence(cfg, disk, disk_region):
     mg = disk.mg
-    mc = mg.grid_cell_centers
+    mc = mg.bin_centers
     rho_s = cfg.dust_particle_density
     ac = mg.particle_radii
 

@@ -35,7 +35,7 @@ kernel = Kernel(cfg)
 K = kernel.K
 
 mg = kernel.mg
-mc = mg.grid_cell_centers
+mc = mg.bin_centers
 ac = mg.particle_radii
 N_m = mg.N
 

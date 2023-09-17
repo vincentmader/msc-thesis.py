@@ -9,7 +9,7 @@ def dv_radial_drift(cfg, disk, disk_region):
     del_ln_P_g_del_ln_r = disk_region.gas_pressure_gradient
     delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
 
-    mc = mg.grid_cell_centers  # TODO Use bounds or centers?
+    mc = mg.bin_centers  # TODO Use bounds or centers?
     rho_s = cfg.dust_particle_density
     radii = particle_radius_from_mass(mc, rho_s)
     stopping_times = disk_region.stopping_time(radii, rho_s)

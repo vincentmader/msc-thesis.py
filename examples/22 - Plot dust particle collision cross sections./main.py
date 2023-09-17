@@ -15,7 +15,7 @@ cfg = Config(
 )
 
 mg = DiscreteMassAxis(cfg)
-mc = mg.grid_cell_centers
+mc = mg.bin_centers
 ac = mg.particle_radii
 
 R_coll = collision_cross_section(cfg, mg)

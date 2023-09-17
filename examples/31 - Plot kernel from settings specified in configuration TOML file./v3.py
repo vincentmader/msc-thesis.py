@@ -14,7 +14,7 @@ except ModuleNotFoundError as e:
 cfg = Config()
 kernel = Kernel(cfg)
 mg = kernel.mg
-mc = mg.grid_cell_centers
+mc = mg.bin_centers
 ac = mg.particle_radii
 rho_s = cfg.dust_particle_density
 

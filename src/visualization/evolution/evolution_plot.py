@@ -32,7 +32,7 @@ class EvolutionPlot(BasePlot):
         self.i_t = 0
 
         tg = DiscreteTimeAxis(kernel.cfg)
-        tc = tg.grid_cell_centers
+        tc = tg.bin_centers
         self.t = tc
 
         self.gs = self.fig.add_gridspec(
@@ -54,8 +54,8 @@ class EvolutionPlot(BasePlot):
         self.fig.canvas.draw_idle()
 
         mg = self.kernel.mg
-        mb = mg.grid_cell_boundaries
-        mc = mg.grid_cell_centers
+        mb = mg.bin_boundaries
+        mc = mg.bin_centers
 
         n, N, M, dM = self.f, self.N, self.m2f, self.dm2f
         x, y = mc, M[self.i_t]

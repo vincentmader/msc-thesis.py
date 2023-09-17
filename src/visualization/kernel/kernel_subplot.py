@@ -32,7 +32,7 @@ class KernelSubplot(PcolorMatrixSubplot):
             kwargs["ylabel"] = kwargs["ylabel"]\
                 if "ylabel" in kwargs.keys()\
                 else "particle mass $a_i$ [kg]"
-            mc = mg.grid_cell_centers
+            mc = mg.bin_centers
             x, y = mc, mc
         else:  # -> `KernelAxis.Bin`
             kwargs["xlabel"] = kwargs["xlabel"]\

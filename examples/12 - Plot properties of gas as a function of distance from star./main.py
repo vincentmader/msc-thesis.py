@@ -13,8 +13,8 @@ except ModuleNotFoundError as e:
 cfg = Config()
 mg = DiscreteMassAxis(cfg)
 rg = DiscreteRadialAxis(cfg)
-rc = rg.grid_cell_centers
-rb = rg.grid_cell_boundaries
+rc = rg.bin_centers
+rb = rg.bin_boundaries
 disk = Disk(cfg, rg, mg)
 Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass

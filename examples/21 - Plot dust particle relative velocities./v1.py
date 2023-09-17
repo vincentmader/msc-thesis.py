@@ -40,7 +40,7 @@ if cfg.mpl_dark_mode:
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
 N_m = mg.N
-masses = mg.grid_cell_centers  # TODO Use bounds or centers?
+masses = mg.bin_centers  # TODO Use bounds or centers?
 
 rho_s = cfg.dust_particle_density
 
@@ -82,7 +82,7 @@ plot_setups = [
 # def foo():
 #     ticks, locs = [], []
 #     ns = []  # n = order of magnitude
-#     for i, m in enumerate(mg.grid_cell_boundaries):
+#     for i, m in enumerate(mg.bin_boundaries):
 #         n = int(np.log10(m))
 #         if n not in ns:
 #             ns.append((i, n))

@@ -93,7 +93,7 @@ if __name__ == "__main__":
     
         kernel_vinc = Kernel(cfg)
         K_vinc, mg = kernel_vinc.K, kernel_vinc.mg
-        mc, ac = mg.grid_cell_centers, mg.particle_radii
+        mc, ac = mg.bin_centers, mg.particle_radii
     
         R_coll = np.ones(shape=[N_m] * 2) # TODO Redefine `R` (and `K` ?)
         K_kees = create_coag_kernel(mc, R_coll)

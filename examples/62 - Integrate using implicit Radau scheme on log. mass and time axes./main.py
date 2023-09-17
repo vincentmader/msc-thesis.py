@@ -21,8 +21,8 @@ cfg = Config(enable_collision_sampling=False)
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-mc = mg.grid_cell_centers
-dm = mg.grid_cell_widths
+mc = mg.bin_centers
+dm = mg.bin_widths
 
 # Define kernel.
 kernel = Kernel(cfg)
@@ -39,7 +39,7 @@ tg = DiscreteTimeAxis(cfg)
 # disk = Disk(cfg, rg, mg)
 # disk_region = DiskRegion(cfg, disk)
 # Cij = collision_rate(cfg, disk, disk_region)
-# mgrain = mg.grid_cell_centers
+# mgrain = mg.bin_centers
 # K = create_coag_kernel(mgrain, Cij)  # Kees
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -96,10 +96,10 @@ if __name__ == "__main__":
     dm2f = list(dm2f)
     dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
     dm2f = np.array(dm2f)
-    dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
+    dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)]
 
     # Prepare abscissa & ordinate for plot of disk mass error.
-    t = tg.grid_cell_centers
+    t = tg.bin_centers
     Ms = [disk_mass_from_distribution(n, mc, dm) for n in f]
 
     # Create plots.

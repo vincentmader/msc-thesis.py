@@ -37,8 +37,8 @@ cfg = Config(
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-mc = mg.grid_cell_centers
-dm = mg.grid_cell_widths
+mc = mg.bin_centers
+dm = mg.bin_widths
 
 # Define kernel.
 kernel = Kernel(cfg)
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     dm2f = np.array(dm2f)
 
     # Prepare abscissa & ordinate for plot of disk mass error.
-    t = tg.grid_cell_centers
+    t = tg.bin_centers
     Ms = [disk_mass_from_distribution(n, mc, dm) for n in f]
 
     # Create plots.

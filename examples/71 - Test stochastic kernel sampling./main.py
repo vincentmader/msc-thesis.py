@@ -62,14 +62,14 @@ def plot_4(t, Ms):
 if __name__ == "__main__":
     cfg = Config()
     kernel = Kernel(cfg)
-    K, mc = kernel.K, kernel.mg.grid_cell_centers
+    K, mc = kernel.K, kernel.mg.bin_centers
 
     N, f, m2f = _run_integrator(kernel, K)
 
     mg = DiscreteMassAxis(cfg)
-    dm = mg.grid_cell_widths
+    dm = mg.bin_widths
     tg = DiscreteTimeAxis(cfg)
-    t = tg.grid_cell_centers
+    t = tg.bin_centers
     Ms = [disk_mass_from_distribution(n, mc, dm) for n in f]
 
     # Calculate temporal derivative of mass distribution.
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     dm2f = list(dm2f)
     dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
     dm2f = np.array(dm2f)
-    dm2f = [dm2f[i] / tg.grid_cell_widths[i] for i, _ in enumerate(dm2f)]
+    dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)]
 
     # plot_1(mc, m2f, dm2f)
     # plot_2(t, Ms)

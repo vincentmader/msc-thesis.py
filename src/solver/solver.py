@@ -50,9 +50,9 @@ class Solver:
         solver = self.cfg.solver_variant
 
         tg, mg = self.time_axis, self.mass_axis
-        tc, mc = tg.grid_cell_centers, mg.grid_cell_centers
+        tc, mc = tg.bin_centers, mg.bin_centers
         N_t, N_m = tg.N, mg.N
-        dm = mg.grid_cell_widths
+        dm = mg.bin_widths
 
         # Convert `n -> N` (number of particles per mass bin per volume).
         N_dust = dm * n_dust

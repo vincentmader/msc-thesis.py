@@ -9,10 +9,10 @@ class DiskRegion:
     def __init__(self, cfg, disk):
 
         mg = disk.mg
-        mc = mg.grid_cell_centers  # TODO
+        mc = mg.bin_centers  # TODO
 
         rg = disk.rg
-        rc = rg.grid_cell_centers
+        rc = rg.bin_centers
         r = cfg.distance_to_star
         i_r = rg.index_from_value(r)  # TODO
         r = rc[i_r]

@@ -7,7 +7,7 @@ from utils.physics import reduced_mass
 
 def dv_brownian_motion(cfg, disk, disk_region):
     mg = disk.mg
-    mc = mg.grid_cell_centers
+    mc = mg.bin_centers
 
     T_mid = disk_region.T_mid
     dv = np.zeros(shape=[mg.N] * 2)

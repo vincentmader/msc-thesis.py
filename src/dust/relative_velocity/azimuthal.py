@@ -8,7 +8,7 @@ E_d = 1    # Kees 2023-03-21
 
 def dv_azimuthal(cfg, disk, disk_region):
     mg = disk.mg
-    mc = mg.grid_cell_centers
+    mc = mg.bin_centers
     rho_s = cfg.dust_particle_density
     ac = mg.particle_radii
 

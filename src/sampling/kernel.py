@@ -11,7 +11,7 @@ class SampledKernel(Kernel):
 
         kernel = Kernel(cfg)
         K, mg = kernel.K, kernel.mg
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
 
         W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
 

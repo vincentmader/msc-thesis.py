@@ -15,6 +15,6 @@ class DiscreteMassAxis(DiscreteAxis):
         )
 
         # Define field `particle_radii`.
-        mc = self.grid_cell_centers
+        mc = self.bin_centers
         rho_s = cfg.dust_particle_density
         self.particle_radii = particle_radius_from_mass(mc, rho_s)

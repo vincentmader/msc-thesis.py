@@ -22,7 +22,7 @@ cfg = Config(
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-mc = mg.grid_cell_centers
+mc = mg.bin_centers
 ac = mg.particle_radii
 
 # Define disk, the position of interest in it, & the disk properties there.
