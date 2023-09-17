@@ -5,7 +5,6 @@ try:
     from axis import DiscreteMassAxis
     from collision import collision_cross_section
     from config import Config, PATH_TO_FIGURES
-    from dust import particle_radius_from_mass
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
@@ -15,8 +14,7 @@ cfg = Config()
 
 mg = DiscreteMassAxis(cfg)
 mc = mg.grid_cell_centers
-rho_s = cfg.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 
 R_coll = collision_cross_section(cfg, mg)
 

@@ -3,7 +3,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import KernelAxis
     from config import Config
-    from dust import particle_radius_from_mass, particle_mass_from_radius
+    from dust import particle_mass_from_radius
     from kernel import Kernel
     from kernel.mass_conservation import test_mass_conservation
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
@@ -17,8 +17,9 @@ kernel = Kernel(cfg)
 
 mg = kernel.mg
 mc = mg.grid_cell_centers
+ac = mg.particle_radii
+
 rho_s = cfg.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
 
 def plot_1():
     s1 = PcolorMatrixSubplot(

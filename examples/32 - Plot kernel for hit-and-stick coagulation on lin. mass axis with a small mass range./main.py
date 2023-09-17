@@ -4,7 +4,6 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, KernelAxis
     from config import Config
-    from dust import particle_radius_from_mass
     from kernel import Kernel
     from visualization.base import GridspecPlot
     from visualization.kernel.kernel import KernelSubplot
@@ -38,8 +37,7 @@ K = kernel.K
 
 mg = kernel.mg
 mc = mg.grid_cell_centers
-rho_s = cfg.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 N_m = mg.N
 
 # Define list of kernels to plot.

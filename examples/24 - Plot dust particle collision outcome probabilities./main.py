@@ -8,7 +8,6 @@ try:
     from collision import collision_outcome_probabilities_from_cutoff_velocity
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from dust import particle_radius_from_mass
     from dust.relative_velocity import relative_velocity
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
@@ -17,13 +16,12 @@ except ModuleNotFoundError as e:
 
 # Define kernel configuration.
 cfg = Config()
-rho_s = cfg.dust_particle_density
 
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
 mc = mg.grid_cell_centers
-ac = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)

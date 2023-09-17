@@ -6,7 +6,6 @@ try:
     from config import Config
     from config import PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from dust import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal
     from dust.relative_velocity import dv_brownian_motion
     from dust.relative_velocity import dv_differential_settling
@@ -25,14 +24,8 @@ cfg = Config(
 
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-N_m = mg.N
-
-rho_s = cfg.dust_particle_density
 mc = mg.grid_cell_centers
-ac = particle_radius_from_mass(mc, rho_s)
-
-# Calculate particle radii from masses.
-radii = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)

@@ -2,7 +2,6 @@ import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from dust import particle_radius_from_mass
     from kernel import Kernel
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
@@ -18,8 +17,7 @@ kernel_1 = Kernel(cfg)
 
 mg = kernel_1.mg
 mc = mg.grid_cell_centers
-rho_s = cfg.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 
 s1 = PcolorMatrixSubplot(
     ac, ac, kernel_1.K_gain, 

@@ -6,7 +6,6 @@ try:
     from collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from dust import particle_radius_from_mass
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
@@ -16,10 +15,8 @@ cfg = Config()
 
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-
 mc = mg.grid_cell_centers
-rho_s = cfg.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 
 disk = Disk(cfg, rg, mg)
 disk_region = DiskRegion(cfg, disk)

@@ -3,7 +3,6 @@ import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from dust import particle_radius_from_mass
     from kernel import Kernel
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
@@ -23,8 +22,7 @@ K_2 = kernel_2.K
 
 mg = kernel_1.mg
 mc = mg.grid_cell_centers
-rho_s = cfg_1.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
+ac = mg.particle_radii
 
 K_diff = K_1 - K_2
 K_equal = K_diff < 1e-14
