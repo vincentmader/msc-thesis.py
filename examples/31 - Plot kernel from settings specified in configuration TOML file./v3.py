@@ -8,10 +8,13 @@ try:
     from kernel.mass_conservation import test_mass_conservation
     from visualization.base import GridspecPlot
     from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
+    from visualization.preset import p1
 except ModuleNotFoundError as e:
     raise e
 
-cfg = Config()
+cfg = Config(
+    enable_collision_sampling=False,
+)
 kernel = Kernel(cfg)
 mg = kernel.mg
 mc = mg.bin_centers
@@ -57,7 +60,7 @@ def plot_3():
     def custom_format_coord(x, y):
         x, y = particle_mass_from_radius(x, rho_s), particle_mass_from_radius(y, rho_s)
         x, y = mg.index_from_value(x), mg.index_from_value(y)
-        i, j = int(x), int(y)  # TODO Index Convention? (irrelevant due to symmetry)
+        i, j = int(mg.index_from_value(x)), int(mg.index_from_value(y))
         text = f"sum_k K_kij = {sum_ij[i, j]:.2}, {i = }, {j = }"
         return text
 
@@ -72,5 +75,6 @@ def plot_3():
 
 def main():
     # plot_1()
+
     plot_2()
     plot_3()

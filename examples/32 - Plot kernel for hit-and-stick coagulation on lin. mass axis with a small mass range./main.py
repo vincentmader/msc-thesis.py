@@ -1,16 +1,11 @@
 import os, sys
-import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, KernelAxis
     from config import Config
-    from kernel import Kernel
-    from visualization.base import GridspecPlot
-    from visualization.kernel import KernelSubplot
+    from visualization.preset import p1
 except ModuleNotFoundError as e:
     raise e
 
-# Define kernel configuration.
 cfg = Config(
     # Define mass axis.
     # On a linear grid, if we want to reach a mass grid spacing of exactly one,
@@ -25,34 +20,8 @@ cfg = Config(
     enable_cancellation_handling=False,
     enable_physical_collisions=False,
     relative_velocity_components=[],
+    enable_collision_sampling=False,
 )
 
-# Define discrete mass axis.
-mg = DiscreteMassAxis(cfg)
-
-# Define kernel.
-kernel = Kernel(cfg)
-K = kernel.K
-
-mg = kernel.mg
-mc = mg.bin_centers
-ac = mg.particle_radii
-N_m = mg.N
-
-# Define list of kernels to plot.
-kernels = [K]
-
-i = np.arange(0, N_m, 1)
-
-s1 = KernelSubplot(
-    mg, kernel.K,
-    axis=KernelAxis.Bin,
-    title="kernel $K_{kij}$",
-    scales=("lin", "lin", "lin"),
-    # symmetrized=True,
-    cmap="bwr",
-    z_limits=(-1, 1),
-)
-
-p = GridspecPlot([s1], add_slider=True)
-p.render()
+if __name__ == "__main__":
+    p1(cfg)
