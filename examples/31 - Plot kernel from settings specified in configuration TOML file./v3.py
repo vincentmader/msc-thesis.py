@@ -15,29 +15,29 @@ except ModuleNotFoundError as e:
 
 cfg = Config()
 kernel = Kernel(cfg)
-
 mg = kernel.mg
 mc = mg.grid_cell_centers
 ac = mg.particle_radii
-
 rho_s = cfg.dust_particle_density
 
+
 def plot_1():
-    s1 = KernelSubplot(
-        mg, kernel.K_gain, 
-        title="kernel gain contribution $G_{kij}$",
-        axis=KernelAxis.Radius,
-        symmetrized=True,
-        z_limits=(1e-20, 1e-7),
-    )
-    s2 = KernelSubplot(
-        mg, -kernel.K_loss,
-        title="kernel loss contribution $L_{kij}$",
-        axis=KernelAxis.Radius,
-        symmetrized=True,
-        z_limits=(1e-20, 1e-7),
-    )
-    p = GridspecPlot([s1, s2], add_slider=True)
+    p = GridspecPlot([
+        KernelSubplot(
+            mg, kernel.K_gain, 
+            title="kernel gain contribution $G_{kij}$",
+            axis=KernelAxis.Radius,
+            symmetrized=True,
+            z_limits=(1e-20, 1e-7),
+        ),
+        KernelSubplot(
+            mg, -kernel.K_loss,
+            title="kernel loss contribution $L_{kij}$",
+            axis=KernelAxis.Radius,
+            symmetrized=True,
+            z_limits=(1e-20, 1e-7),
+        ),
+    ], add_slider=True)
     p.render()
 
 
@@ -51,12 +51,13 @@ def plot_2():
         text = f"sum_k K_kij = {sum_ij[i, j]:.2}, {i = }, {j = }"
         return text
 
-    s = KernelMassConservationSubplot(
-        mg, kernel.K,
-        title=r"kernel mass error $\sum_k m_k K_{kij}$",
-        axis=KernelAxis.Radius,
-    )
-    p = GridspecPlot([s])
+    p = GridspecPlot([
+        KernelMassConservationSubplot(
+            mg, kernel.K,
+            title=r"kernel mass error $\sum_k m_k K_{kij}$",
+            axis=KernelAxis.Radius,
+        ),
+    ])
     p.axes[1].format_coord = custom_format_coord
     p.render()
 
