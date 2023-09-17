@@ -22,7 +22,7 @@ class Kernel():
 
     def __init__(
         self, 
-        cfg : Config, 
+        cfg: Config, 
         ijs: Optional[list[tuple[int, int]]] = None,
     ):
 
