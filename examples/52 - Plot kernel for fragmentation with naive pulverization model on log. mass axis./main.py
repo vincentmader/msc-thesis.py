@@ -10,16 +10,15 @@ except ModuleNotFoundError as e:
     raise e
 
 cfg = Config(
-    mass_axis_scale="lin",
-    mass_min_value=1,
-    mass_max_value=51,
-    mass_resolution=50,
-    enable_fragmentation=False,
+    enable_coagulation=False,
+    enable_fragmentation=True,
+    enable_cancellation_handling=True,
     enable_physical_collisions=False,
     relative_velocity_components=[],
+    fragmentation_variant="naive/pulverization",
 )
 kernel = Kernel(cfg)
-mg = kernel.mg
+K, mg = kernel.K, kernel.mg
 
 
 def plot_1():
@@ -27,12 +26,12 @@ def plot_1():
         KernelSubplot(
             mg, kernel.K,
             title="kernel $K_{kij}$",
-            scales=("lin", "lin", "lin"),
+            scales=("log", "log", "lin"),
             symmetrized=True,
+            axis=KernelAxis.Radius,
             cmap="bwr",
-            z_limits=(-1, 1),
-            axis=KernelAxis.Bin,
-        ),
+            z_limits=(-1, 1)
+        )
     ], add_slider=True).render()
 
 
@@ -41,16 +40,16 @@ def plot_2():
         KernelSubplot(
             mg, kernel.K_gain, 
             title="kernel gain contribution $G_{kij}$",
-            scales=("lin", "lin", "lin"),
+            scales=("log", "log", "log"),
             symmetrized=True,
-            axis=KernelAxis.Bin,
+            axis=KernelAxis.Radius,
         ),
         KernelSubplot(
             mg, -kernel.K_loss,
             title="kernel loss contribution $L_{kij}$",
-            scales=("lin", "lin", "lin"),
+            scales=("log", "log", "log"),
             symmetrized=True,
-            axis=KernelAxis.Bin,
+            axis=KernelAxis.Radius,
         ),
     ], add_slider=True).render()
 

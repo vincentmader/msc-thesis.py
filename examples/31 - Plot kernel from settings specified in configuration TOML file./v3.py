@@ -21,6 +21,18 @@ rho_s = cfg.dust_particle_density
 
 
 def plot_1():
+    GridspecPlot([
+        KernelSubplot(
+            mg, kernel.K,
+            title="kernel $K_{kij}$",
+            scales=("log", "log", "lin"),
+            symmetrized=True,
+            axis=KernelAxis.Radius,
+        )
+    ], add_slider=True).render()
+
+
+def plot_2():
     p = GridspecPlot([
         KernelSubplot(
             mg, kernel.K_gain, 
@@ -40,7 +52,7 @@ def plot_1():
     p.render()
 
 
-def plot_2():
+def plot_3():
     # TODO Move the below elsewhere? Best: In `KernelMassConservationSubplot` definition.
     sum_ij = test_mass_conservation(mg, kernel.K)
     def custom_format_coord(x, y):
@@ -60,5 +72,6 @@ def plot_2():
 
 
 def main():
-    plot_1()
+    # plot_1()
     plot_2()
+    plot_3()
