@@ -7,7 +7,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 cfg = Config(
     enable_fragmentation=False,
     enable_physical_collisions=False,
@@ -19,20 +18,20 @@ mg = kernel_1.mg
 mc = mg.grid_cell_centers
 ac = mg.particle_radii
 
-s1 = PcolorMatrixSubplot(
-    ac, ac, kernel_1.K_gain, 
-    title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$ [m]",
-    ylabel="particle radius $a_i$ [m]",
-    symmetrized=True,
-)
-s2 = PcolorMatrixSubplot(
-    ac, ac, -kernel_1.K_loss,
-    title="kernel loss contribution $L_{kij}$",
-    xlabel="particle radius $a_j$ [m]",
-    symmetrized=True,
-)
 
 def main():
-    p = GridspecPlot([s1, s2], add_slider=True)
-    p.render()
+    GridspecPlot([
+        PcolorMatrixSubplot(
+            ac, ac, kernel_1.K_gain, 
+            title="kernel gain contribution $G_{kij}$",
+            xlabel="particle radius $a_j$ [m]",
+            ylabel="particle radius $a_i$ [m]",
+            symmetrized=True,
+        ),
+        PcolorMatrixSubplot(
+            ac, ac, -kernel_1.K_loss,
+            title="kernel loss contribution $L_{kij}$",
+            xlabel="particle radius $a_j$ [m]",
+            symmetrized=True,
+        )
+    ], add_slider=True).render()

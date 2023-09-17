@@ -8,6 +8,7 @@ K = kernel_1.K
 
 mg = kernel_1.mg
 
+
 def main():
     # Plot `\sum_{ij} m_k \Delta m_k K_kij`.
     p = KernelMassConservationPlot(cfg, mg, K)

@@ -13,7 +13,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 # Define kernel configuration.
 cfg = Config()
 
@@ -33,6 +32,7 @@ outcome_probabilities = {
     "cutoff_velocity": collision_outcome_probabilities_from_cutoff_velocity,
     "Maxwell-Boltzmann": collision_outcome_probabilities_from_maxwell_boltzmann,
 }
+
 
 def plot_together(title, P_coag, P_frag):
     s1 = PcolorMatrixSubplot(

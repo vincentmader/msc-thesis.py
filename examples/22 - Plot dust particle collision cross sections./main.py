@@ -9,7 +9,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 cfg = Config()
 
 mg = DiscreteMassAxis(cfg)

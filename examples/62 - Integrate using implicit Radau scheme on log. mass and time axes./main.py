@@ -16,7 +16,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 # Load configuration from `../../config.toml`.
 cfg = Config(enable_collision_sampling=False)
 

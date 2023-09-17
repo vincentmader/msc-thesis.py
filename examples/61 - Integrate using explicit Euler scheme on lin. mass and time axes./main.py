@@ -16,7 +16,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 # Define kernel configuration.
 cfg = Config(
     mass_min_value=1,

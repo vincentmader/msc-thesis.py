@@ -12,7 +12,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 cfg = Config()
 kernel = Kernel(cfg)
 mg = kernel.mg

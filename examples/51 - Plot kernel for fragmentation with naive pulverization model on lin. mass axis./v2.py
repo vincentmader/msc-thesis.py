@@ -1,13 +1,13 @@
 import os, sys
-import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from axis import KernelAxis
     from config import Config
     from kernel import Kernel
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from visualization.base import GridspecPlot
+    from visualization.kernel.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
-
 
 cfg = Config(
     mass_axis_scale="lin",
@@ -18,26 +18,24 @@ cfg = Config(
     relative_velocity_components=[],
     fragmentation_variant="naive/pulverization",
 )
-kernel_1 = Kernel(cfg)
+kernel = Kernel(cfg)
+mg = kernel.mg
 
-ac = np.linspace(0, 49, 50)
-
-s1 = PcolorMatrixSubplot(
-    ac, ac, kernel_1.K_gain, 
-    title="kernel gain contribution $G_{kij}$",
-    xlabel="particle radius $a_j$ [m]",
-    ylabel="particle radius $a_i$ [m]",
-    scales=("lin", "lin", "lin"),
-    symmetrized=True,
-)
-s2 = PcolorMatrixSubplot(
-    ac, ac, -kernel_1.K_loss,
-    title="kernel loss contribution $L_{kij}$",
-    xlabel="particle radius $a_j$ [m]",
-    scales=("lin", "lin", "lin"),
-    symmetrized=True,
-)
 
 def main():
-    p = GridspecPlot([s1, s2], add_slider=True)
-    p.render()
+    GridspecPlot([
+        KernelSubplot(
+            mg, kernel.K_gain, 
+            title="kernel gain contribution $G_{kij}$",
+            scales=("lin", "lin", "lin"),
+            symmetrized=True,
+            axis=KernelAxis.Bin,
+        ),
+        KernelSubplot(
+            mg, -kernel.K_loss,
+            title="kernel loss contribution $L_{kij}$",
+            scales=("lin", "lin", "lin"),
+            symmetrized=True,
+            axis=KernelAxis.Bin,
+        ),
+    ], add_slider=True).render()

@@ -16,7 +16,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 def _run_integrator(kernel, K):
     mg = kernel.mg
     solver = Solver(cfg)
@@ -59,7 +58,6 @@ def plot_3(kernel, N, f, m2f, dm2f):
 def plot_4(t, Ms):
     p = MassConservationPlot(t, Ms)
     p.render()
-
 
 
 if __name__ == "__main__":

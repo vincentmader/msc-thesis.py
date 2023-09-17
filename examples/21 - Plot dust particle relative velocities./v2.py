@@ -16,7 +16,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 cfg = Config(
     mass_resolution=50,
     mass_max_value=1e8,
@@ -47,6 +46,7 @@ plot_setups = [
     # (dv_ds, "DS"),
     (dv, "tot"),
 ]
+
 
 def main():
     for dv, dv_id in plot_setups:

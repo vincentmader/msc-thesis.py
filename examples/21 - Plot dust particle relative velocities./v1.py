@@ -16,7 +16,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 # Define configuration.
 cfg = Config(
     mass_max_value=1e6,

@@ -8,7 +8,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 # Define kernel configuration.
 cfg = Config(
     # Define mass axis.

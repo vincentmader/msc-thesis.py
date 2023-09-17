@@ -8,7 +8,6 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-
 # Define kernel configuration.
 cfg = Config(
     # Define mass axis.
@@ -35,15 +34,9 @@ K = kernel.K
 
 
 def main():
-
-    # Define list of kernels to plot.
-    kernels = [K]
-
-    # Create plot & show it.
-    p = InteractiveKernelLayerPlot(
-        kernels,
+    InteractiveKernelLayerPlot(
+        [K],
         symmetrize_kernels=True,
         kernel_subplot_titles=["$K_{kij}$"],
         cmap_limits=(-1, 1),
-    )
-    p.show()
+    ).show()
