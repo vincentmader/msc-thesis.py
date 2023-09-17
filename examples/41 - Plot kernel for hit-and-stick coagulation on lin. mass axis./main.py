@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))

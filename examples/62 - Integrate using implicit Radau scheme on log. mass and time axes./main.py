@@ -1,6 +1,4 @@
-import os
-import sys
-
+import os, sys
 import matplotlib.pyplot as plt
 import numpy as np
 try:
@@ -11,6 +9,8 @@ try:
     from disk.disk import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver
+    from visualization.evolution.evolution import EvolutionPlot
+    from visualization.evolution.mass_conservation import MassConservationPlot
     from visualization.v1.mass_error import DiskMassErrorPlot
     from visualization.v1.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
@@ -74,13 +74,11 @@ def plot_2(x, y):
 
 
 def plot_3(kernel, N, f, m2f, dm2f):
-    from visualization.evolution.evolution import EvolutionPlot
     p = EvolutionPlot(kernel, N, f, m2f, dm2f)
     p.render()
 
 
 def plot_4(t, Ms):
-    from visualization.evolution.mass_conservation import MassConservationPlot
     p = MassConservationPlot(t, Ms)
     p.render()
 

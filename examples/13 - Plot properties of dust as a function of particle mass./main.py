@@ -1,7 +1,5 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))

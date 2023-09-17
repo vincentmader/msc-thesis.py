@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
 import matplotlib.pyplot as plt
 try:
@@ -8,7 +7,6 @@ try:
     from constants import AU
     from disk import Disk
     from axis import DiscreteMassAxis, DiscreteRadialAxis
-    from utils.physics import kepler_frequency
 except ModuleNotFoundError as e:
     raise e
 

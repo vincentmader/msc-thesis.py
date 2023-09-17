@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config

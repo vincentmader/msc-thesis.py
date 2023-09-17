@@ -1,12 +1,10 @@
-import os
-import sys
-
+import os, sys
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, DiscreteRadialAxis
-    from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
+    from config import Config, PATH_TO_DARKMODE
     from disk import Disk, DiskRegion
     from dust import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal

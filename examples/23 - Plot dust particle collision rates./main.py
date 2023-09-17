@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
