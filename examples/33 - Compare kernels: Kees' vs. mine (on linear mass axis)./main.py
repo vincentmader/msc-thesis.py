@@ -88,7 +88,7 @@ if __name__ == "__main__":
             enable_coagulation=True, enable_fragmentation=False,
             enable_physical_collisions=False, relative_velocity_components=[],
             enable_collision_sampling=False, # If true: Supply `ijs`!
-            enable_cancellation_handling=False,
+            enable_cancellation_handling=True,
         )
     
         kernel_vinc = Kernel(cfg)
