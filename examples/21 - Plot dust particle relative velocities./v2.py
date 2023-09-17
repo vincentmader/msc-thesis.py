@@ -17,8 +17,8 @@ except ModuleNotFoundError as e:
     raise e
 
 cfg = Config(
-    mass_resolution=50,
-    mass_max_value=1e8,
+    mass_resolution=200,
+    mass_max_value=1e12,
 )
 
 rg = DiscreteRadialAxis(cfg)

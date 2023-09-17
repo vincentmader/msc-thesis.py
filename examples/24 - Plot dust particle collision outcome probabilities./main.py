@@ -14,7 +14,10 @@ except ModuleNotFoundError as e:
     raise e
 
 # Define kernel configuration.
-cfg = Config()
+cfg = Config(
+    mass_resolution=200,
+    mass_max_value=1e12,
+)
 
 # Define discrete axis for radial distance from star, as well as for mass.
 rg = DiscreteRadialAxis(cfg)

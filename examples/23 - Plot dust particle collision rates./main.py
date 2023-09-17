@@ -11,7 +11,10 @@ except ModuleNotFoundError as e:
     raise e
 
 
-cfg = Config()
+cfg = Config(    
+    mass_resolution=200,
+    mass_max_value=1e12,
+)
 
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
