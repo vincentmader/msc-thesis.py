@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 import numpy as np
 
@@ -10,6 +11,7 @@ class EvolutionPlot(BasePlot):
     __slots__ = [
         "gs", "ax_1", "ax_2", "ax_3",
         "slider", "i_t", "t",
+        "lines_1", "lines_2",
         "kernel", "N", "f", "m2f", "dm2f"
     ]
 
@@ -60,7 +62,7 @@ class EvolutionPlot(BasePlot):
         n, N, M, dM = self.f, self.N, self.m2f, self.dm2f
         x, y = mc, M[self.i_t]
 
-        self.ax_1.loglog(x, y, label="")
+        self.lines_1, = self.ax_1.loglog(x, y, label="")
         self.ax_1.set_xlim(mb[0], mb[-1])
         self.ax_1.set_ylim(1e-12, 1e-8)
         self.ax_1.grid(True)
@@ -68,7 +70,7 @@ class EvolutionPlot(BasePlot):
         self.ax_1.set_title("temporal evolution of particle mass distribution")
 
         x, y = mc, dM[self.i_t]
-        self.ax_2.loglog(x, y, label="")
+        self.lines_2, = self.ax_2.loglog(x, y, label="")
         self.ax_2.set_xlim(mb[0], mb[-1])
         self.ax_2.set_ylim(1e-21, 1e-16)
         self.ax_2.grid(True)
@@ -76,11 +78,10 @@ class EvolutionPlot(BasePlot):
 
     def update(self, i_t):
         self.i_t = i_t
-        self.ax_1.clear()
-        self.ax_2.clear()
         text = format_time(self.t[i_t])
         self.slider.label.set_text(f"t = {text}")
-        self.draw()
+        self.lines_1.set_ydata(self.m2f[i_t])
+        self.lines_2.set_ydata(self.dm2f[i_t])
 
 
 def format_time(t) -> str:
