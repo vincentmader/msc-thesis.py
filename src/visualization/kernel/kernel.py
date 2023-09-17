@@ -17,24 +17,32 @@ class KernelSubplot(PcolorMatrixSubplot):
     ):
 
         if axis is KernelAxis.Radius:
-            xlabel = "particle radius $a_j$ [m]"
-            ylabel = "particle radius $a_i$ [m]"
+            kwargs["xlabel"] = kwargs["xlabel"]\
+                if "xlabel" in kwargs.keys()\
+                else "particle radius $a_j$ [m]"
+            kwargs["ylabel"] = kwargs["ylabel"]\
+                if "ylabel" in kwargs.keys()\
+                else "particle radius $a_j$ [m]"
             ac = mg.particle_radii
             x, y = ac, ac
         elif axis is KernelAxis.Mass:
-            xlabel = "particle mass $a_j$ [kg]"
-            ylabel = "particle mass $a_i$ [kg]"
+            kwargs["xlabel"] = kwargs["xlabel"]\
+                if "xlabel" in kwargs.keys()\
+                else "particle mass $a_j$ [kg]"
+            kwargs["ylabel"] = kwargs["ylabel"]\
+                if "ylabel" in kwargs.keys()\
+                else "particle mass $a_i$ [kg]"
             mc = mg.grid_cell_centers
             x, y = mc, mc
         else:  # -> `KernelAxis.Bin`
-            xlabel = "bin index $j$"
-            ylabel = "bin index $i$"
+            kwargs["xlabel"] = kwargs["xlabel"]\
+                if "xlabel" in kwargs.keys()\
+                else "bin index $j$"
+            kwargs["ylabel"] = kwargs["ylabel"]\
+                if "ylabel" in kwargs.keys()\
+                else "bin index $i$"
             i = np.linspace(0, mg.N, mg.N)
             x, y = i, i
         z = K
 
-        super().__init__(
-            x, y, z, 
-            xlabel=xlabel, ylabel=ylabel,
-            *args, **kwargs
-        )
+        super().__init__(x, y, z, *args, **kwargs)
