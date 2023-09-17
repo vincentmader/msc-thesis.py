@@ -1,10 +1,11 @@
 import os, sys
 import numpy as np
 try:
+    sys.path.append(os.path.join("..", "..", "lib"))
+    from coag_py.coag.coag import create_coag_kernel
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, KernelAxis
     from config import Config
-    from kees_kernel import create_coag_kernel
     from kernel import Kernel
     from visualization.base import GridspecPlot
     from visualization.kernel.kernel import KernelSubplot
