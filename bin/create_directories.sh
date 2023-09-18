@@ -8,11 +8,12 @@ directories=(
     "../out"
 )
 
+msg="Creating directories..."
+echo "\n${BLUE}${msg}${NC}"
 for dir in "${directories[@]}"; do
-    msg="Creating directory \`${dir}\`..."
-    echo "\n${BLUE}${msg}${NC}"
+    echo "\`${dir}\`"
     if [ -d "${dir}" ]; then
-        echo "Already exists."
+        printf " -> Already exists."
     else
         mkdir "${dir}"
     fi
