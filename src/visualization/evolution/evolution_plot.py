@@ -39,7 +39,7 @@ class EvolutionPlot(BasePlot):
 
         self.gs = self.fig.add_gridspec(
             nrows=2, height_ratios=[2, 1], hspace=0.2,
-            ncols=2, width_ratios=[20, 1], wspace=0.1,
+            ncols=2, width_ratios=[30, 1], wspace=0.1,
         )
         self.ax_1 = self.fig.add_subplot(self.gs[0:1, 0:1])
         self.ax_2 = self.fig.add_subplot(self.gs[1:2, 0:1])
