@@ -83,11 +83,12 @@ class EvolutionPlot(BasePlot):
         self.ax_1c.set_xlim(ac[0], ac[-1])
 
         self.lines_4, = self.ax_2.loglog(mc, dM[self.i_t], label="> 0")
-        # self.lines_5, = self.ax_2.loglog(mc, -dM[self.i_t], label="< 0")
+        self.lines_5, = self.ax_2.loglog(mc, -dM[self.i_t], label="< 0")
         self.ax_2.set_xlim(mb[0], mb[-1])
         self.ax_2.set_ylim(1e-21, 1e-16)
         self.ax_2.grid(True)
         self.ax_2.set_xlabel("dust particle mass $m^c_i$ [kg]")
+        self.ax_2.legend()
 
     def update(self, i_t):
         self.i_t = i_t
@@ -98,6 +99,7 @@ class EvolutionPlot(BasePlot):
         # self.lines_2.set_ydata(self.N[i_t])
         # self.lines_3.set_ydata(self.f[i_t])
         self.lines_4.set_ydata(self.dm2f[i_t])
+        self.lines_5.set_ydata(-self.dm2f[i_t])
 
 
 def format_time(t) -> str:
