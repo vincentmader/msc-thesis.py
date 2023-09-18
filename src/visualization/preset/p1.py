@@ -61,6 +61,7 @@ def plot_kernel_gain_loss(
             title="kernel loss contribution $L_{kij}$",
             scales=(scale, scale, scale),
             z_limits=z_limits,
+            ylabel="",
             symmetrized=True,
             axis=axis,
             cmap=cmap,
@@ -121,6 +122,7 @@ def plot_evolution(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
+    t: np.ndarray,
     N: np.ndarray,
     f: np.ndarray,
     m2f: np.ndarray,
@@ -128,6 +130,27 @@ def plot_evolution(
 ):
     # TODO Fix y-limits
     EvolutionPlot(kernel, N, f, m2f, dm2f).render()
+
+
+def plot_surface(
+    cfg: Config,
+    mg: DiscreteMassAxis,
+    kernel: Kernel,
+    scale: str,
+    t: np.ndarray,
+    N: np.ndarray,
+    f: np.ndarray,
+    m2f: np.ndarray,
+    dm2f: np.ndarray,
+):
+    X, Y = mg.bin_centers, t
+    X, Y = np.meshgrid(X, Y)
+    Z = m2f
+    fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+    surf = ax.plot_surface(np.log10(X), np.log10(Y), np.log10(Z))
+    ax.set_zlim(-40, -8)
+    plt.show()
+    plt.close()
 
 
 def plot_error(
@@ -159,7 +182,8 @@ def main(cfg):
     t, f, N, m2f, dm2f, M = integrate(cfg, kernel)
 
     # Plot evolution of mass distribution over time.
-    plot_evolution(cfg, mg, kernel, scale, f, N, m2f, dm2f)
+    plot_evolution(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
+    # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
 
     # Plot mass error over time.
     plot_error(cfg, mg, kernel, t, M)
