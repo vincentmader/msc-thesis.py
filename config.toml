@@ -54,7 +54,7 @@
   nr_of_samples                 = 500
 
 [solver]
-  solver_variant                = "implicit_radau"  # either "explicit_euler", "implicit_euler", or "implicit_radau"
+  solver_variant                = "implicit_radau"  # "explicit_euler", "implicit_euler", or "implicit_radau"
 
 [plotting]
   mpl_dark_mode                 = false
