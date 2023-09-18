@@ -37,10 +37,11 @@ class MassConservationPlot(BasePlot):
         plt.title(r"mass error $\Delta M_t=(M_t-M_0)/M_0$")
 
         rel_error = (M[-1]-M[0])/M[0]
+        rel_error_sign = f"+" if rel_error > 0 else ""
         msgs = [
             ((0.5, 0.45), r"$M_i$ = " + f"{M[0]}"),
             ((0.5, 0.4), r"$M_f$ = " + f"{M[-1]}"),
-            ((0.5, 0.35), r"$\frac{M_f-M_i}{M_i}$ = " + f"{rel_error*100} %"),
+            ((0.5, 0.35), r"$\frac{M_f-M_i}{M_i}$ = " + rel_error_sign + f"{rel_error*100} %"),
         ]
         for (x, y), msg in msgs:
             print(msg)
