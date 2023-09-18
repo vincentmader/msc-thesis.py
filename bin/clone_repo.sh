@@ -9,7 +9,7 @@ echo "\n${BLUE}${msg}${NC}"
 
 url_1="git@github.com:vincentmader/msc-thesis.py.git"
 url_2="https://github.com/vincentmader/msc-thesis.py"
-path="~/Desktop/./msc-thesis.py"
+path="./msc-thesis.py"
 
 clone() {
     git clone --recurse-submodules "$1" "$2"
