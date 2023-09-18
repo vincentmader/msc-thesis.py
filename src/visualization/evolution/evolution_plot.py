@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 from matplotlib.widgets import Slider
 import numpy as np
 
@@ -9,9 +9,12 @@ from visualization.base import BasePlot
 
 class EvolutionPlot(BasePlot):
     __slots__ = [
-        "gs", "ax_1", "ax_2", "ax_3",
+        "gs",
+        "ax_1", "ax_2", "ax_3", "ax_1c",  # TODO Rename?
+        #  ^ y    ^ dy/t  ^ slider  ^ twiny
+        "lines_1", "lines_2", "lines_3", "lines_4", "lines_5",
+        #  ^ y=M      ^ y=N      ^ y=n      ^ dy/dt    ^ -dy/dt
         "slider", "i_t", "t",
-        "lines_1", "lines_2", "lines_3", "lines_4",
         "kernel", "N", "f", "m2f", "dm2f"
     ]
 
@@ -58,33 +61,40 @@ class EvolutionPlot(BasePlot):
         mg = self.kernel.mg
         mb = mg.bin_boundaries
         mc = mg.bin_centers
+        ac = mg.particle_radii
 
         n, N, M, dM = self.f, self.N, self.m2f, self.dm2f
-        x, y = mc, M[self.i_t]
 
-        self.lines_1, = self.ax_1.loglog(x, M[self.i_t], label=r"$n_i\Delta m_im_i=M_i$")
+        self.lines_1, = self.ax_1.loglog(mc, M[self.i_t], label=r"$n_i\Delta m_im_i=M_i$")
         # self.lines_2, = self.ax_1.loglog(x, N[self.i_t], label=r"$n_i\Delta m_i=N_i$")
-        # self.lines_3, = self.ax_1.loglog(x, n[self.i_t], label=r"$n_i$")
+        # self.lines_3, = self.ax_1.loglog(x, n[self.i_t], label=r"$n_i$") # TODO Plot these too?
         self.ax_1.set_xlim(mb[0], mb[-1])
-        # self.ax_1.set_ylim(1e-12, 1e+30)
+        # self.ax_1.set_ylim(1e-12, 1e+30)  # TODO Generalize definition.
         self.ax_1.set_ylim(1e-12, 1e-8)
         self.ax_1.grid(True)
-        self.ax_1.set_ylabel(r"dust particle density $\rho_i^s=m_i n_i \Delta m_i$")
-        self.ax_1.set_title("temporal evolution of particle mass distribution")
+        self.ax_1.set_ylabel(r"dust particle density $\rho_i^s=m_i n_i \Delta m_i$ [kg s$^{-1}$]")
         self.ax_1.legend(loc="best")
 
-        x, y = mc, dM[self.i_t]
-        self.lines_4, = self.ax_2.loglog(x, y, label="")
+        self.ax_1c = self.ax_1.twiny()
+        self.ax_1c.set_xscale("log")
+        self.ax_1c.set_xlabel("dust particle radius $a_i$ [m]")
+        self.ax_1c.set_ylabel(r"$m_i \Delta n_i \Delta m_i$ [kg s$^{-2}$]") # TODO Why is this not shown?
+        self.ax_1c.xaxis.set_major_locator(ticker.LogLocator(base=10, numticks=15))
+        self.ax_1c.set_xlim(ac[0], ac[-1])
+
+        self.lines_4, = self.ax_2.loglog(mc, dM[self.i_t], label="> 0")
+        # self.lines_5, = self.ax_2.loglog(mc, -dM[self.i_t], label="< 0")
         self.ax_2.set_xlim(mb[0], mb[-1])
         self.ax_2.set_ylim(1e-21, 1e-16)
         self.ax_2.grid(True)
-        self.ax_2.set_xlabel("dust particle mass $m^c_i$")
+        self.ax_2.set_xlabel("dust particle mass $m^c_i$ [kg]")
 
     def update(self, i_t):
         self.i_t = i_t
         text = format_time(self.t[i_t])
         self.slider.label.set_text(f"t = {text}")
         self.lines_1.set_ydata(self.m2f[i_t])
+        # self.lines_5.set_ydata(self.m2f[i_t])
         # self.lines_2.set_ydata(self.N[i_t])
         # self.lines_3.set_ydata(self.f[i_t])
         self.lines_4.set_ydata(self.dm2f[i_t])
