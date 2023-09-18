@@ -9,14 +9,14 @@ def assert_cubic_kernel_shape(K):
     return shape[0]
 
 
-def test_mass_conservation(cfg, mg, K):
+def test_mass_conservation(mg, K):
     K = np.array([0.5 * (K_k + K_k.T) for K_k in K])
 
     N_m = assert_cubic_kernel_shape(K)
     assert N_m == mg.N
 
-    mc = mg.grid_cell_centers
-    dm = mg.grid_cell_widths
+    mc = mg.bin_centers
+    dm = mg.bin_widths
 
     out = np.zeros(shape=[N_m] * 2)
 
@@ -28,7 +28,7 @@ def test_mass_conservation(cfg, mg, K):
                 m_k = mc[k]
                 dm_k = dm[k]
 
-                if cfg.mass_axis_scale == "lin":
+                if mg.scale == "lin":
                     msg = f"dm_k != 1 on linear grid, is this on purpose? ({k=}, {dm_k=})"
                     assert np.abs(dm_k - 1) <= 1e-14, msg
 

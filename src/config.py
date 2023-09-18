@@ -13,6 +13,19 @@ PATH_TO_DARKMODE = os.path.join(PATH_TO_LIB, "mpl-styles", "dark.mplstyle")
 
 
 class Config():
+    __slots__ = [
+        "stellar_mass", "stellar_luminosity", "disk_mass_ratio", "dust_to_gas_ratio",
+        "distance_to_star", "flaring_angle", 
+        "radial_min_value", "radial_max_value", "radial_resolution", "radial_axis_scale",
+        "mass_min_value", "mass_max_value", "mass_resolution", "mass_axis_scale",
+        "time_min_value", "time_max_value", "time_resolution", "time_axis_scale",
+        "enable_coagulation", "enable_fragmentation", "enable_physical_gas_density",
+        "enable_physical_collisions", "enable_cancellation_handling", "enable_collision_sampling",
+        "relative_velocity_components", "fragmentation_variant", "fragmentation_velocity",
+        "collision_outcome_variant", "solver_variant", "mpl_dark_mode", 
+        "dust_particle_density", "viscosity_alpha", "nr_of_samples", "disk_mass",
+        "initialization_variant", "initial_mass_bin",
+    ]
 
     def __init__(
         self,
@@ -47,6 +60,10 @@ class Config():
         mpl_dark_mode: Optional[bool]=None,
         dust_particle_density: Optional[float]=None,
         viscosity_alpha: Optional[float]=None,
+        enable_collision_sampling: Optional[bool]=None,
+        nr_of_samples: Optional[int]=None,
+        initialization_variant: Optional[str] = None,
+        initial_mass_bin: Optional[int] = None,
     ):
         cfg = toml.load(path_to_config_toml)
 
@@ -118,6 +135,10 @@ class Config():
             fragmentation_velocity = cfg_i["fragmentation_velocity"]
         if collision_outcome_variant is None:
             collision_outcome_variant = cfg_i["collision_outcome_variant"]
+        if enable_collision_sampling is None:
+            enable_collision_sampling = cfg_i["enable_collision_sampling"]
+        if nr_of_samples is None:
+            nr_of_samples = cfg_i["nr_of_samples"]
 
         cfg_i = cfg["solver"]
         if solver_variant is None:
@@ -126,6 +147,12 @@ class Config():
         cfg_i = cfg["plotting"]
         if mpl_dark_mode is None:
             mpl_dark_mode = cfg_i["mpl_dark_mode"]
+
+        cfg_i = cfg["initialization"]
+        if initialization_variant is None:
+            initialization_variant = cfg_i["initialization_variant"]
+        if initial_mass_bin is None:
+            initial_mass_bin = cfg_i["initial_mass_bin"]
 
         self.collision_outcome_variant = collision_outcome_variant
         self.disk_mass = disk_mass
@@ -159,3 +186,7 @@ class Config():
         self.time_min_value = time_min_value
         self.time_resolution = time_resolution
         self.viscosity_alpha = viscosity_alpha
+        self.enable_collision_sampling = enable_collision_sampling
+        self.nr_of_samples = nr_of_samples
+        self.initialization_variant = initialization_variant
+        self.initial_mass_bin = initial_mass_bin

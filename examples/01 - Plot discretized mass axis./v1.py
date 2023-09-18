@@ -1,8 +1,7 @@
-import os
-import sys
+import os, sys
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
-from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
@@ -104,7 +103,7 @@ def main():
 
         mg = DiscreteMassAxis(cfg)
         i = np.arange(0, mg.N, 1)
-        m = mg.grid_cell_centers
+        m = mg.bin_centers
         # ^ NOTE: Used bounds (not centers) here,
         #   since centers are indexed by x.5 values.
         plot(i, m, mg, scale, plot_separately=False, show_plot=True)

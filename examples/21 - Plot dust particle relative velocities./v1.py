@@ -1,12 +1,10 @@
-import os
-import sys
-
+import os, sys
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, DiscreteRadialAxis
-    from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
+    from config import Config, PATH_TO_DARKMODE
     from disk import Disk, DiskRegion
     from dust import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal
@@ -17,7 +15,6 @@ try:
     from dust.relative_velocity import relative_velocity
 except ModuleNotFoundError as e:
     raise e
-
 
 # Define configuration.
 cfg = Config(
@@ -43,7 +40,7 @@ if cfg.mpl_dark_mode:
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
 N_m = mg.N
-masses = mg.grid_cell_centers  # TODO Use bounds or centers?
+masses = mg.bin_centers  # TODO Use bounds or centers?
 
 rho_s = cfg.dust_particle_density
 
@@ -85,7 +82,7 @@ plot_setups = [
 # def foo():
 #     ticks, locs = [], []
 #     ns = []  # n = order of magnitude
-#     for i, m in enumerate(mg.grid_cell_boundaries):
+#     for i, m in enumerate(mg.bin_boundaries):
 #         n = int(np.log10(m))
 #         if n not in ns:
 #             ns.append((i, n))

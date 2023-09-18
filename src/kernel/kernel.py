@@ -8,7 +8,6 @@ from collision import collision_outcome_probabilities_from_maxwell_boltzmann
 from collision import collision_rate
 from config import Config
 from disk import Disk, DiskRegion
-from dust.dust_particle import particle_radius_from_mass
 from dust.relative_velocity import relative_velocity
 from utils.functions import heaviside_theta
 
@@ -22,22 +21,20 @@ class Kernel():
 
     def __init__(
         self, 
-        cfg : Config, 
+        cfg: Config, 
         ijs: Optional[list[tuple[int, int]]] = None,
     ):
-
         self.cfg = cfg
-        rho_s = cfg.dust_particle_density
 
         # Define discrete axes for...
         # ...radial distance of disk region of interest from central star.
         rg = DiscreteRadialAxis(cfg)
         # ...particle mass.
         mg = DiscreteMassAxis(cfg)
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
         self.mg = mg
         # ...particle radius.
-        self.ac = particle_radius_from_mass(mc, rho_s)
+        self.ac = mg.particle_radii
 
         # If relevant particle pairs are not specified explicitly,
         # assume all of them have to be taken into account.
@@ -97,15 +94,15 @@ class Kernel():
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
-        K_coag = self._K_coag(R_coll, ijs)
         if cfg.enable_coagulation:
+            K_coag = self._K_coag(R_coll, ijs)
             self.K_coag_gain += P_coag * K_coag["gain"]
             self.K_coag_loss += P_coag * K_coag["loss"]
             self.K_gain += P_coag * K_coag["gain"]
             self.K_loss += P_coag * K_coag["loss"]
         # ...fragmentation processes.
-        K_frag = self._K_frag(R_coll, ijs)
         if cfg.enable_fragmentation:
+            K_frag = self._K_frag(R_coll, ijs)
             self.K_frag_gain += P_frag * K_frag["gain"]
             self.K_frag_loss += P_frag * K_frag["loss"]
             self.K_gain += P_frag * K_frag["gain"]
@@ -124,7 +121,7 @@ class Kernel():
     ):
 
         mg = self.mg
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
         m_max = mg.x_max  # Note: This is NOT the same as `mc[-1]`.
         N_m = mg.N
 
@@ -142,8 +139,6 @@ class Kernel():
 
             # Calculate combined mass after hit-and-stick collision.
             m_k = m_i + m_j
-            if m_k >= m_max:
-                continue
 
             # If a non-linear grid is used, the corresponding index will
             # not necessarily be an integer. Therefore, the resulting mass
@@ -168,8 +163,8 @@ class Kernel():
             else:
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
 
-            # Check whether one of the masses is in the upper-most 2 bins.
-            near_upper_bound = i >= N_m - 2 or j >= N_m - 2
+            # Check whether one of the masses is in the upper-most bin.
+            near_upper_bound = i >= N_m - 1 or j >= N_m - 1
 
             # Subtract "loss" term from kernel.
             # ─────────────────────────────────────────────────────────────
@@ -183,7 +178,7 @@ class Kernel():
                     #        If removed, the solver crashes.
                 # Handle "trivial" (non-cancelling) case.
                 else:
-                    K_loss[i, i, j] -= R if i < N_m - 2 else 0
+                    K_loss[i, i, j] -= R if i < N_m - 1 else 0
 
             # Add "gain" term to kernel.
             # ─────────────────────────────────────────────────────────────
@@ -206,7 +201,7 @@ class Kernel():
     ):
 
         mg = self.mg
-        mc = mg.grid_cell_centers
+        mc = mg.bin_centers
         N_m = mg.N
 
         fragmentation_variant = self.cfg.fragmentation_variant

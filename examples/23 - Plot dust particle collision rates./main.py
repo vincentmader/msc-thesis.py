@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
@@ -7,21 +6,20 @@ try:
     from collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from dust import particle_radius_from_mass
-    from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
+    from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 
 
-cfg = Config()
+cfg = Config(    
+    mass_resolution=200,
+    mass_max_value=1e12,
+)
 
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-
-mc = mg.grid_cell_centers
-rho_s = cfg.dust_particle_density
-ac = particle_radius_from_mass(mc, rho_s)
+mc = mg.bin_centers
+ac = mg.particle_radii
 
 disk = Disk(cfg, rg, mg)
 disk_region = DiskRegion(cfg, disk)
@@ -37,13 +35,11 @@ s1 = PcolorMatrixSubplot(
     cmap="Blues",
 )
 
-subplots = [s1]
-
 path_to_figures = Path(PATH_TO_FIGURES, "23")
 os.makedirs(path_to_figures, exist_ok=True)
 path_to_outfile = Path(path_to_figures, "collision_rate.pdf")
 
-p = GridspecPlot(subplots)
+p = GridspecPlot([s1])
 p.render(
     save_plot=True,
     path_to_outfile=path_to_outfile

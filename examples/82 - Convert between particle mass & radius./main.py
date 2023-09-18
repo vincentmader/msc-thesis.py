@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
@@ -8,6 +7,7 @@ except ModuleNotFoundError as e:
     raise e
 
 centimeter = 0.01
+
 
 if __name__ == "__main__":
     cfg = Config()

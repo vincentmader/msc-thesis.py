@@ -11,9 +11,14 @@ cfg = Config(
     mass_min_value=1,
     mass_max_value=51,
     mass_resolution=50,
-    enable_fragmentation=False,
+    initial_mass_bin=10,
+
+    enable_coagulation=False,
+    enable_fragmentation=True,
+    enable_cancellation_handling=True,
     enable_physical_collisions=False,
     relative_velocity_components=[],
+    fragmentation_variant="mrn",
 )
 
 if __name__ == "__main__":

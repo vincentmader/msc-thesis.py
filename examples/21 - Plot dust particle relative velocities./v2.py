@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
@@ -7,34 +6,25 @@ try:
     from config import Config
     from config import PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from dust import particle_radius_from_mass
     from dust.relative_velocity import dv_azimuthal
     from dust.relative_velocity import dv_brownian_motion
     from dust.relative_velocity import dv_differential_settling
     from dust.relative_velocity import dv_radial_drift
     from dust.relative_velocity import dv_turbulence
     from dust.relative_velocity import relative_velocity
-    from visualization.kernel.v3_2023_08_14.pcolor_matrix_subplot import PcolorMatrixSubplot
-    from visualization.kernel.v3_2023_08_14.gridspec_plot import GridspecPlot
+    from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 
-
 cfg = Config(
-    mass_resolution=50,
-    mass_max_value=1e8,
+    mass_resolution=200,
+    mass_max_value=1e12,
 )
 
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
-N_m = mg.N
-
-rho_s = cfg.dust_particle_density
-mc = mg.grid_cell_centers
-ac = particle_radius_from_mass(mc, rho_s)
-
-# Calculate particle radii from masses.
-radii = particle_radius_from_mass(mc, rho_s)
+mc = mg.bin_centers
+ac = mg.particle_radii
 
 # Define disk, the position of interest in it, & the disk properties there.
 disk = Disk(cfg, rg, mg)
@@ -57,6 +47,7 @@ plot_setups = [
     (dv, "tot"),
 ]
 
+
 def main():
     for dv, dv_id in plot_setups:
         path_to_outfiles = Path(PATH_TO_FIGURES, "21")
@@ -73,9 +64,8 @@ def main():
             scales=("log", "log", "lin"),
             cmap="Reds",
         )
-        subplots = [s1]
     
-        p = GridspecPlot(subplots)
+        p = GridspecPlot([s1])
         p.render(
             save_plot=True,
             path_to_outfile=path_to_outfile,

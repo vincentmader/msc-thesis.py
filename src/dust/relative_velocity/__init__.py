@@ -17,7 +17,7 @@ def relative_velocity(
 ):
     if cfg.relative_velocity_components == []:
         # return 35 * np.ones(shape=[disk.mass_axis.N] * 2)
-        return np.ones(shape=[disk.mass_axis.N] * 2)
+        return np.ones(shape=[disk.mg.N] * 2)
 
     dvs = []
     for dv_name in cfg.relative_velocity_components:

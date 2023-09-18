@@ -1,8 +1,5 @@
 #!../.venv/bin/python3
-import os
-import re
-import sys
-
+import os, re, sys
 from termcolor import colored
 
 

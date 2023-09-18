@@ -1,7 +1,10 @@
+from dust.dust_particle import particle_radius_from_mass
+
 from .discrete_axis import DiscreteAxis
 
 
 class DiscreteMassAxis(DiscreteAxis):
+    __slots__ = ["particle_radii"]
 
     def __init__(self, cfg):
         super().__init__(
@@ -10,3 +13,8 @@ class DiscreteMassAxis(DiscreteAxis):
             cfg.mass_resolution,
             cfg.mass_axis_scale,
         )
+
+        # Define field `particle_radii`.
+        mc = self.bin_centers
+        rho_s = cfg.dust_particle_density
+        self.particle_radii = particle_radius_from_mass(mc, rho_s)

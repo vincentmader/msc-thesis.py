@@ -7,13 +7,13 @@ except ModuleNotFoundError as e:
     raise e
 
 cfg = Config(
-    mass_axis_scale="lin",
-    mass_min_value=1,
-    mass_max_value=51,
-    mass_resolution=50,
-    enable_fragmentation=False,
+    initial_mass_bin=30,
+    enable_coagulation=False,
+    enable_fragmentation=True,
+    enable_cancellation_handling=True,
     enable_physical_collisions=False,
     relative_velocity_components=[],
+    fragmentation_variant="naive/pulverization",
 )
 
 if __name__ == "__main__":

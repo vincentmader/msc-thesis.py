@@ -1,9 +1,15 @@
-from v1 import main as v1
-from v2 import main as v2
-from v3 import main as v3
-from v4_kernel_mass_conservation import main as v4
+import os, sys
+try:
+    sys.path.append(os.path.join("..", "..", "src"))
+    from config import Config
+    from visualization.preset import p1
+except ModuleNotFoundError as e:
+    raise e
 
-# v1()
-# v2()
-v3()
-v4()
+cfg = Config(
+    initial_mass_bin=40,
+)
+
+
+if __name__ == "__main__":
+    p1(cfg)

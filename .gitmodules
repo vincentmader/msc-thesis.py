@@ -1,0 +1,6 @@
+[submodule "lib/coag_py"]
+	path = lib/coag_py
+	url = https://github.com/vincentmader/coag_py
+[submodule "lib/mpl-styles"]
+	path = lib/mpl-styles
+	url = https://github.com/vincentmader/mpl-styles

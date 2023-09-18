@@ -1,7 +1,5 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
@@ -70,7 +68,7 @@ def plot_3(m, t_stop):
 
 
 if __name__ == "__main__":
-    mc = mg.grid_cell_centers
+    mc = mg.bin_centers
     rho_s = cfg.dust_particle_density
     radii = particle_radius_from_mass(mc, rho_s)
     stopping_times = disk_region.stopping_time(radii, rho_s)

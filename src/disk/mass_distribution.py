@@ -4,18 +4,17 @@ from axis import DiscreteMassAxis, DiscreteRadialAxis
 from disk import Disk
 
 
-x_0 = 0
-
-
 def dirac_delta(cfg):
     mg = DiscreteMassAxis(cfg)
     rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
-    r = rg.grid_cell_centers  
+    r = rg.bin_centers  
     rho_g = disk.midplane_gas_volume_density
 
-    m = mg.grid_cell_centers
-    dm = mg.grid_cell_widths[x_0]
+    x_0 = cfg.initial_mass_bin
+
+    m = mg.bin_centers
+    dm = mg.bin_widths[x_0]
 
     R = cfg.distance_to_star
     if cfg.enable_physical_gas_density:
@@ -41,11 +40,11 @@ def mrn_distribution(cfg):
     mg = DiscreteMassAxis(cfg)
     rg = DiscreteRadialAxis(cfg)
     disk = Disk(cfg, rg, mg)
-    r = rg.grid_cell_centers 
+    r = rg.bin_centers 
     rho_g = disk.midplane_gas_volume_density
 
-    m = mg.grid_cell_centers
-    dm = mg.grid_cell_widths[x_0]
+    m = mg.bin_centers
+    dm = mg.bin_widths[x_0]
 
     m_min = m[0]
     m_max = m[-1]

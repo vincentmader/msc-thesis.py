@@ -1,14 +1,18 @@
-from typing import Optional
+from typing import Optional, Any
 
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
 
-from .gridspec_subplot import GridspecSubplot
+from visualization.base import GridspecSubplot
 
 
 class PcolorMatrixSubplot(GridspecSubplot):
-    __slots__ = ["x", "y", "z", "k", "im", "scales", "cmap", "z_limits"]
+    __slots__ = [
+        "x", "y", "z", "k", "im", 
+        "scales", "cmap", "z_limits", "grid",
+        "xticks", "yticks",
+    ]
 
     def __init__(
         self, 
@@ -19,10 +23,13 @@ class PcolorMatrixSubplot(GridspecSubplot):
         title: Optional[str] = None,
         xlabel: Optional[str] = None,
         ylabel: Optional[str] = None,
-        symmetrize: bool = False,
+        symmetrized: bool = False,
         scales: tuple[str, str, str] = ("log", "log", "log"), # TODO rename?
         cmap: str = "Reds",
         z_limits: Optional[tuple[float, float]] = None,
+        grid: Optional[bool] = False,
+        xticks: Optional[Any] = None,
+        yticks: Optional[Any] = None,
     ):
         for scale in scales:
             assert scale in ["lin", "log"], "Invalid scale."
@@ -40,7 +47,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         )
         self.x, self.y, self.z = x, y, z
 
-        if symmetrize:
+        if symmetrized:
             if len(z.shape) == 2:
                 self.z = 0.5 * (z + z.T) 
             elif len(z.shape) == 3:
@@ -55,6 +62,9 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.scales = scales
         self.cmap = cmap
         self.z_limits = z_limits
+        self.grid = grid
+        self.xticks = xticks
+        self.yticks = yticks
 
     def draw(self, axes):
         k, x, y = self.k, self.x, self.y
@@ -65,13 +75,12 @@ class PcolorMatrixSubplot(GridspecSubplot):
                 vmin, vmax = z.min(), z.max()
             else:
                 vmin = self.z_limits[0]
-                vmax = self.z_limits[0]
+                vmax = self.z_limits[1]
             smin, smax = np.sign(vmin), np.sign(vmax)
             if smin == smax or 0 in [smin, smax]:
                 norm = colors.Normalize(vmin=vmin, vmax=vmax)
             else:
                 norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
-                self.cmap = "bwr"
         elif self.scales[2] == "log":
             if self.z_limits is None:
                 if z.min() == z.max() == 0:
@@ -100,6 +109,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         plt.axis("scaled")
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
+        plt.grid(self.grid)
         scale_x = self.scales[0]
         scale_y = self.scales[1]
         scale_x = "linear" if scale_x == "lin" else scale_x

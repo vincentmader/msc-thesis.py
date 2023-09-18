@@ -6,15 +6,15 @@ from dust import particle_radius_from_mass
 
 
 def dv_turbulence(cfg, disk, disk_region):
-    mg = disk.mass_axis
-    mc = mg.grid_cell_centers
+    mg = disk.mg
+    mc = mg.bin_centers
     rho_s = cfg.dust_particle_density
-    radii = particle_radius_from_mass(mc, rho_s)
+    ac = mg.particle_radii
 
     alpha = cfg.viscosity_alpha
     T_mid = disk_region.T_mid
     rho_g = disk_region.rho_g
-    t_stop = disk_region.stopping_time(radii, rho_s)
+    t_stop = disk_region.stopping_time(ac, rho_s)
     c_s = disk_region.c_s
     H_p = disk_region.H_p
     Omega_K = disk_region.Omega_K

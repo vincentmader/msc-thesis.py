@@ -11,6 +11,6 @@ echo "\n${BLUE}${msg}${NC}"
 url="https://github.com/vincentmader/msc-thesis.py"
 path="./msc-thesis.py"
 
-git clone "$url" "$path"
+git clone --recurse-submodules "$url" "$path"
 
 cd "$path" && make setup

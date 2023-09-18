@@ -18,11 +18,11 @@ class DiscreteAxis:
         self.N = N
         self.scale = scale
 
-        self.grid_cell_boundaries = self._grid_cell_boundaries()
-        self.grid_cell_centers = self._grid_cell_centers()
-        self.grid_cell_widths = self._grid_cell_widths()
+        self.bin_boundaries = self._bin_boundaries()
+        self.bin_centers = self._bin_centers()
+        self.bin_widths = self._bin_widths()
 
-    def _grid_cell_boundaries(self) -> np.ndarray:
+    def _bin_boundaries(self) -> np.ndarray:
         x_min, x_max, N = self.x_min, self.x_max, self.N
         indices = np.arange(0, N + 1, 1)
         if self.scale == "lin":
@@ -35,25 +35,25 @@ class DiscreteAxis:
             return x
         raise Exception(f"Axis scale '{self.scale}' unknown.")
 
-    def _grid_cell_centers(self) -> np.ndarray:
-        xs = self.grid_cell_boundaries
+    def _bin_centers(self) -> np.ndarray:
+        xs = self.bin_boundaries
         if self.scale == "lin":
             return (xs[:-1] + xs[1:]) / 2
         if self.scale == "log":
             return np.sqrt(xs[:-1] * xs[1:])
         raise Exception(f"Axis scale '{self.scale}' unknown.")
 
-    def _grid_cell_widths(self) -> np.ndarray:
-        grid_cell_boundaries = self.grid_cell_boundaries
-        return grid_cell_boundaries[1:] - grid_cell_boundaries[:-1]
+    def _bin_widths(self) -> np.ndarray:
+        bin_boundaries = self.bin_boundaries
+        return bin_boundaries[1:] - bin_boundaries[:-1]
 
     def index_from_value(self, x) -> int:
-        xs = self.grid_cell_centers
+        xs = self.bin_centers
         i = np.where((xs - x) <= 0)[0][-1]
         # NOTE: I believe this automatically prevents an `i >= N`.
         return i
 
     def value_from_index(self, i) -> np.float64:
-        xs = self.grid_cell_centers
+        xs = self.bin_centers
         x = xs[i]
         return np.float64(x)

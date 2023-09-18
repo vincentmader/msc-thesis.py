@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 from pathlib import Path
 import matplotlib.pyplot as plt
 try:
@@ -8,16 +7,14 @@ try:
     from constants import AU
     from disk import Disk
     from axis import DiscreteMassAxis, DiscreteRadialAxis
-    from utils.physics import kepler_frequency
 except ModuleNotFoundError as e:
     raise e
-
 
 cfg = Config()
 mg = DiscreteMassAxis(cfg)
 rg = DiscreteRadialAxis(cfg)
-rc = rg.grid_cell_centers
-rb = rg.grid_cell_boundaries
+rc = rg.bin_centers
+rb = rg.bin_boundaries
 disk = Disk(cfg, rg, mg)
 Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass
