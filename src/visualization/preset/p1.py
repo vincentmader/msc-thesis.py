@@ -61,6 +61,7 @@ def plot_kernel_gain_loss(
             title="kernel loss contribution $L_{kij}$",
             scales=(scale, scale, scale),
             z_limits=z_limits,
+            ylabel="",
             symmetrized=True,
             axis=axis,
             cmap=cmap,
