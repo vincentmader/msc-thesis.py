@@ -10,7 +10,7 @@ directories=(
 msg="Creating directories..."
 echo "\n${BLUE}${msg}${NC}"
 for dir in "${directories[@]}"; do
-    printf "\`${dir}\`"
+    printf " - \`${dir}\`"
     if [ -d "${dir}" ]; then
         echo " -> Already exists."
     else
