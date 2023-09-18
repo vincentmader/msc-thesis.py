@@ -18,7 +18,7 @@ SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
 
-def plot(mg, K): # TODO Move elsewhere.
+def plot(mg, K, P): # TODO Move elsewhere.
     GridspecPlot([
         KernelSubplot(
             mg, K, axis=KernelAxis.Radius,
@@ -31,8 +31,14 @@ def plot(mg, K): # TODO Move elsewhere.
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
-        )
+        ),
     ], add_slider=True).render()
+
+    GridspecPlot([
+        KernelSubplot(
+            mg, P, title="sampling probability $P_{ij}$",
+        )
+    ]).render()
 
     GridspecPlot([
         KernelMassConservationSubplot(mg, K)
@@ -66,10 +72,10 @@ class Solver:
 
             if self.cfg.enable_collision_sampling:
                 kernel = SampledKernel(self.cfg, N_dust)
-                K = kernel.K
+                K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # if itime % 10 == 0:
-                if itime in [0, 100, 120, 130, 140]:
-                    plot(mg, K)
+                if itime in [1, 50, 100, 120, 130, 140]:
+                    plot(mg, K, P)
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
@@ -97,7 +103,7 @@ class Solver:
         dm2f = list(m2f[1:] - m2f[:-1])
         dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
         dm2f = np.array(dm2f)
-        dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)]
+        dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)] # TODO Rename dm2f -> dm2fdt
         # TODO Do the above more elegantly. (Calculate temp. deriv.)
 
         return N_dust_store, f, m2f, dm2f
