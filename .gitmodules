@@ -1,0 +1,3 @@
+[submodule "lib/coag_py"]
+	path = lib/coag_py
+	url = https://github.com/vincentmader/coag_py
