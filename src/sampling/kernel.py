@@ -18,7 +18,7 @@ class SampledKernel(Kernel):
         N_i = np.abs(N[:, None])
         N_j = np.abs(N[None, :])
 
-        P_ij = W_ij * N_i * N_j
+        P_ij = W_ij * N_i * N_j  # TODO Is this multiplication correct?
         P_ij = P_ij / P_ij.sum()
         assert np.abs(P_ij.sum() - 1) <= 1e-6  # TODO -> 1e-16 ?
         self.P_ij = P_ij
