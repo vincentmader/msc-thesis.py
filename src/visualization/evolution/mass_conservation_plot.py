@@ -48,10 +48,7 @@ class MassConservationPlot(BasePlot):
         ]
         for (x, y), msg in msgs:
             print(msg)
-            plt_text(
-                x, y, msg, 
-                color=color,
-            )
+            plt_text(x, y, msg, color=color)
 
 
 def plt_text(x, y, text, color="black"):
