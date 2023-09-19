@@ -14,7 +14,7 @@ from utils.functions import heaviside_theta
 
 class Kernel():
     __slots__ = [
-        "cfg", "mg", "ac", "K", "K_gain", "K_loss",
+        "cfg", "mg", "K", "K_gain", "K_loss",
         "K_coag", "K_coag_gain", "K_coag_loss",
         "K_frag", "K_frag_gain", "K_frag_loss",
     ]
@@ -33,8 +33,6 @@ class Kernel():
         mg = DiscreteMassAxis(cfg)
         mc = mg.bin_centers
         self.mg = mg
-        # ...particle radius.
-        self.ac = mg.particle_radii
 
         # If relevant particle pairs are not specified explicitly,
         # assume all of them have to be taken into account.
