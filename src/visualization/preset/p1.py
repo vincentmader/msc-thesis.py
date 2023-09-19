@@ -161,7 +161,7 @@ def plot_error(
     M: np.ndarray,
 ):
     # TODO Fix y-limits
-    MassConservationPlot(t, M).render()
+    MassConservationPlot(cfg, t, M).render()
 
 
 def main(cfg):

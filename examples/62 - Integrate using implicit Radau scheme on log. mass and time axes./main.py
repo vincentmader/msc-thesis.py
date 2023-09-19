@@ -76,7 +76,7 @@ def plot_3(kernel, N, f, m2f, dm2f):
 
 
 def plot_4(t, Ms):
-    p = MassConservationPlot(t, Ms)
+    p = MassConservationPlot(cfg, t, Ms)
     p.render()
 
 
