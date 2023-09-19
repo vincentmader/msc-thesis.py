@@ -1,27 +1,29 @@
 import matplotlib.pyplot as plt
 
+from config import PATH_TO_DARKMODE
 from visualization.base import BasePlot
 
 
 class MassConservationPlot(BasePlot):
     __slots__ = [
         "gs", "ax_1", "ax_2", 
-        "t", "M",
+        "cfg", "t", "M",
     ]
 
-    def __init__(self, t, M, *args, **kwargs):
+    def __init__(self, cfg, t, M, *args, **kwargs):
+        self.cfg = cfg
         self.t = t
         self.M = M
         super().__init__(*args, **kwargs)
 
+        # if cfg.mpl_dark_mode:
+        #     plt.style.use(PATH_TO_DARKMODE)
+
     def draw(self):
         t = self.t / (365 * 24 * 60 * 60)
         M = self.M
-
         err = (M - M[0]) / M[0]
-
-        x = t
-        y = err
+        x, y = t, err
 
         # TODO Do with and without:
         # - Total mass error
@@ -36,6 +38,7 @@ class MassConservationPlot(BasePlot):
         plt.ylabel("mass error $\Delta M_t$ [kg]")
         plt.title(r"mass error $\Delta M_t=(M_t-M_0)/M_0$")
 
+        color = "white" if self.cfg.mpl_dark_mode else "black" # TODO Make sure this works also when not calling from preset `p1`.
         rel_error = (M[-1]-M[0])/M[0]
         rel_error_sign = f"+" if rel_error > 0 else ""
         msgs = [
@@ -45,13 +48,17 @@ class MassConservationPlot(BasePlot):
         ]
         for (x, y), msg in msgs:
             print(msg)
-            plt_text(x, y, msg)
+            plt_text(
+                x, y, msg, 
+                color=color,
+            )
 
 
-def plt_text(x, y, text):
+def plt_text(x, y, text, color="black"):
     plt.text(
         x, y, text,
-        horizontalalignment='center',
-        verticalalignment='center',
+        horizontalalignment="center",
+        verticalalignment="center",
         transform=plt.gca().transAxes,
+        color=color,
     )
