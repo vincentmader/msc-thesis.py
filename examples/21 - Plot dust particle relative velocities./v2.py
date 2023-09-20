@@ -55,7 +55,7 @@ def main():
         filename = f"dv_{dv_id}.pdf"
         path_to_outfile = Path(path_to_outfiles, filename)
 
-        title = "relative velocity $\Delta v_{" + dv_id + "}$ [m/s]"
+        title = r"relative velocity $\Delta v_{ij}^{" + dv_id + "}$ [m/s]"
         s1 = PcolorMatrixSubplot(
             ac, ac, dv,
             title=title,
