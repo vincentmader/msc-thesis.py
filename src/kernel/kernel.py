@@ -81,6 +81,10 @@ class Kernel():
             else:
                 P_coag, P_frag = 0.5, 0.5
 
+        # Define rate of coag./frag. events.
+        R_coag = R_coll * P_coag
+        R_frag = R_coll * P_frag
+
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
         self.K_coag_loss = np.zeros(shape=[mg.N] * 3)
@@ -92,19 +96,23 @@ class Kernel():
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
-        if cfg.enable_coagulation:                  # TODO Multiply with R_kij here!
-            K_coag_gain, K_coag_loss = self._K_coag(R_coll, ijs)
-            self.K_coag_gain += P_coag * K_coag_gain
-            self.K_coag_loss += P_coag * K_coag_loss
-            self.K_gain += P_coag * K_coag_gain
-            self.K_loss += P_coag * K_coag_loss
+        if cfg.enable_coagulation:
+            K_coag_gain, K_coag_loss = self._K_coag(ijs)  # TODO Rename: K -> X?
+            K_coag_gain *= R_coag
+            K_coag_loss *= R_coag
+            self.K_coag_gain += K_coag_gain
+            self.K_coag_loss += K_coag_loss
+            self.K_gain += K_coag_gain
+            self.K_loss += K_coag_loss
         # ...fragmentation processes.
         if cfg.enable_fragmentation:
-            K_frag_gain, K_frag_loss = self._K_frag(R_coll, ijs)
-            self.K_frag_gain += P_frag * K_frag_gain
-            self.K_frag_loss += P_frag * K_frag_loss
-            self.K_gain += P_frag * K_frag_gain
-            self.K_loss += P_frag * K_frag_loss
+            K_frag_gain, K_frag_loss = self._K_frag(ijs)
+            K_frag_gain *= R_frag
+            K_frag_loss *= R_frag
+            self.K_frag_gain += K_frag_gain
+            self.K_frag_loss += K_frag_loss
+            self.K_gain += K_frag_gain
+            self.K_loss += K_frag_loss
         # Define total coagulation & fragmentation sub-kernels.
         self.K_coag = P_coag * self.K_coag_gain + P_coag * self.K_coag_loss
         self.K_frag = P_frag * self.K_frag_gain + P_frag * self.K_frag_loss
@@ -114,13 +122,10 @@ class Kernel():
 
     def _K_coag(
         self, 
-        R_coll: np.ndarray, 
         ijs: list[tuple[int, int]],
     ):
-
         mg = self.mg
-        mc = mg.bin_centers
-        m_max = mg.x_max  # Note: This is NOT the same as `mc[-1]`.
+        mc, N_m = mg.bin_centers, mg.N
         N_m = mg.N
 
         K_gain = np.zeros(shape=[N_m] * 3)
@@ -131,9 +136,6 @@ class Kernel():
             m_i, m_j = mc[i], mc[j]
 
             th = heaviside_theta(i - j)
-
-            # Get collision rate for mass pair.
-            R = R_coll[i, j]
 
             # Calculate combined mass after hit-and-stick collision.
             m_k = m_i + m_j
@@ -170,13 +172,13 @@ class Kernel():
             if not near_upper_bound:
                 # Handle cancellation.
                 if handle_cancellation:
-                    K_loss[k_l, i, j] -= R * th * eps
-                    K_loss[k_l, i, j] -= R * th if i == j else 0
+                    K_loss[k_l, i, j] -= th * eps
+                    K_loss[k_l, i, j] -= th if i == j else 0
                     # ^ TODO Why is this term here?
                     #        If removed, the solver crashes.
                 # Handle "trivial" (non-cancelling) case.
                 else:
-                    K_loss[i, i, j] -= R if i < N_m - 1 else 0
+                    K_loss[i, i, j] -= 1 if i < N_m - 1 else 0
 
             # Add "gain" term to kernel.
             # ─────────────────────────────────────────────────────────────
@@ -184,23 +186,20 @@ class Kernel():
             if not near_upper_bound:
                 # Handle cancellation.
                 if handle_cancellation:
-                    K_gain[k_h, i, j] += R * th * eps
+                    K_gain[k_h, i, j] += th * eps
                 # Handle "trivial" (non-cancelling) case.
                 else:
-                    K_gain[k_l, i, j] += R * th * (1 - eps)
-                    K_gain[k_h, i, j] += R * th * eps
+                    K_gain[k_l, i, j] += th * (1 - eps)
+                    K_gain[k_h, i, j] += th * eps
 
         return K_gain, K_loss
 
     def _K_frag(
         self, 
-        R_coll: np.ndarray,
         ijs: list[tuple[int, int]],
     ):
-
         mg = self.mg
-        mc = mg.bin_centers
-        N_m = mg.N
+        mc, N_m = mg.bin_centers, mg.N
 
         fragmentation_variant = self.cfg.fragmentation_variant
 
@@ -209,10 +208,7 @@ class Kernel():
 
         for i, j in ijs:
             m_i, m_j = mc[i], mc[j]
-
             th = heaviside_theta(i - j)
-            
-            R = R_coll[i, j]
 
             # 1. Most basic/naive fragmentation implementation: "Pulverization"
             # ═════════════════════════════════════════════════════════════════
@@ -224,8 +220,8 @@ class Kernel():
                 m_k = mc[k]
                 if min(i, j) > X:
                     eps = (m_i + m_j) / m_k
-                    K_loss[i, i, j] -= R
-                    K_gain[k, i, j] += R * th * eps
+                    K_loss[i, i, j] -= 1
+                    K_gain[k, i, j] += th * eps
 
             # 2. Mass redistribution following the MRN model
             # ═════════════════════════════════════════════════════════════════
@@ -260,10 +256,10 @@ class Kernel():
                 for k in range(k_min, k_max):
                     m_k = mc[k]
                     A = m_k**q / S
-                    K_gain[k, i, j] += R * m_tot / m_k * A * th
+                    K_gain[k, i, j] += m_tot / m_k * A * th
 
                 # Remove mass from bins corresponding to initial masses.
-                K_loss[i, i, j] -= R 
+                K_loss[i, i, j] -= 1 
 
             else: 
                 pass
