@@ -92,19 +92,19 @@ class Kernel():
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
-        if cfg.enable_coagulation:
-            K_coag = self._K_coag(R_coll, ijs)
-            self.K_coag_gain += P_coag * K_coag["gain"]
-            self.K_coag_loss += P_coag * K_coag["loss"]
-            self.K_gain += P_coag * K_coag["gain"]
-            self.K_loss += P_coag * K_coag["loss"]
+        if cfg.enable_coagulation:                  # TODO Multiply with R_kij here!
+            K_coag_gain, K_coag_loss = self._K_coag(R_coll, ijs)
+            self.K_coag_gain += P_coag * K_coag_gain
+            self.K_coag_loss += P_coag * K_coag_loss
+            self.K_gain += P_coag * K_coag_gain
+            self.K_loss += P_coag * K_coag_loss
         # ...fragmentation processes.
         if cfg.enable_fragmentation:
-            K_frag = self._K_frag(R_coll, ijs)
-            self.K_frag_gain += P_frag * K_frag["gain"]
-            self.K_frag_loss += P_frag * K_frag["loss"]
-            self.K_gain += P_frag * K_frag["gain"]
-            self.K_loss += P_frag * K_frag["loss"]
+            K_frag_gain, K_frag_loss = self._K_frag(R_coll, ijs)
+            self.K_frag_gain += P_frag * K_frag_gain
+            self.K_frag_loss += P_frag * K_frag_loss
+            self.K_gain += P_frag * K_frag_gain
+            self.K_loss += P_frag * K_frag_loss
         # Define total coagulation & fragmentation sub-kernels.
         self.K_coag = P_coag * self.K_coag_gain + P_coag * self.K_coag_loss
         self.K_frag = P_frag * self.K_frag_gain + P_frag * self.K_frag_loss
@@ -190,7 +190,7 @@ class Kernel():
                     K_gain[k_l, i, j] += R * th * (1 - eps)
                     K_gain[k_h, i, j] += R * th * eps
 
-        return {"gain": K_gain, "loss": K_loss}
+        return K_gain, K_loss
 
     def _K_frag(
         self, 
@@ -268,4 +268,4 @@ class Kernel():
             else: 
                 pass
 
-        return {"gain": K_gain, "loss": K_loss}
+        return K_gain, K_loss
