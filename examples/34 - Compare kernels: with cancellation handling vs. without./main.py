@@ -51,11 +51,11 @@ def plot_2():
     p = GridspecPlot([
         KernelMassConservationSubplot(
             mg, K_1, axis=KernelAxis.Radius,
-            title=r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
+            title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
         ),
         KernelMassConservationSubplot(
             mg, K_2, axis=KernelAxis.Radius,
-            title=r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
+            title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
         ),
     ])
     p.render()
