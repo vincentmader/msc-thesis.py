@@ -74,8 +74,8 @@ class Solver:
                 kernel = SampledKernel(self.cfg, N_dust)
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # if itime % 10 == 0:
-                if itime in [1, 50, 100, 120, 130, 140]:
-                    plot(mg, K, P)
+                # if itime in [1, 50, 100, 120, 130, 140]:
+                #     plot(mg, K, P)
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
