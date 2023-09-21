@@ -24,7 +24,8 @@ ac = mg.particle_radii
 
 
 def plot_1():
-    p = GridspecPlot([
+
+    GridspecPlot([
         KernelSubplot(
             mg, K_1,
             title="kernel $K_{kij}^{canc}$",
@@ -44,8 +45,7 @@ def plot_1():
             title="abs($K_{kij}^{canc}-K_{kij}^{nocanc}$)",
             scales=("log", "log", "log"),
             symmetrized=True,
-    )], add_slider=True)
-    p.render()
+    )], add_slider=True).render()
 
 
 def plot_2():
