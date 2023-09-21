@@ -1,9 +1,10 @@
 import os, sys
 import numpy as np
+from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import KernelAxis
-    from config import Config
+    from config import Config, PATH_TO_FIGURES
     from kernel import Kernel
     from visualization.base import GridspecPlot
     from visualization.kernel import KernelMassConservationSubplot, KernelSubplot
@@ -48,17 +49,24 @@ def plot_1():
 
 
 def plot_2():
-    p = GridspecPlot([
-        KernelMassConservationSubplot(
-            mg, K_1, axis=KernelAxis.Radius,
-            title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
-        ),
-        KernelMassConservationSubplot(
-            mg, K_2, axis=KernelAxis.Radius,
-            title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
-        ),
-    ])
-    p.render()
+
+    s1 = KernelMassConservationSubplot(
+        mg, K_1, axis=KernelAxis.Radius,
+        title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
+    )
+    s2 = KernelMassConservationSubplot(
+        mg, K_2, axis=KernelAxis.Radius,
+        title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
+    )
+    GridspecPlot([s1, s2]).render()
+
+    for label, subplot in {"canc": s1, "nocanc": s2}.items():
+        path = Path(PATH_TO_FIGURES, "34")
+        os.makedirs(path, exist_ok=True)
+        path = Path(path, f"{label}.pdf")
+        GridspecPlot([subplot]).render(
+            show_plot=False, save_plot=True, path_to_outfile=path
+        )
 
 
 if __name__ == "__main__":
