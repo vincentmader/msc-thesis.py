@@ -9,7 +9,7 @@ def assert_cubic_kernel_shape(K):
     return shape[0]
 
 
-def test_mass_conservation(mg, K):
+def test_mass_conservation(mg, K):  # TODO Move to `Kernel` definition?
     K = np.array([0.5 * (K_k + K_k.T) for K_k in K])  
     # ^ TODO Why such different results when this line is commented out?
 
