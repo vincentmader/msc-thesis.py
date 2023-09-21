@@ -243,8 +243,7 @@ class Kernel():
                 #      in "naive/pulverization" (with X set to ~= 1 there).
 
                 # Calculate corresponding mass values from bin indices.
-                m_min = mc[k_min]
-                m_max = mc[k_max]
+                m_min, m_max = mc[k_min], mc[k_max]
                 assert m_min > mg.x_min
                 assert m_max < mg.x_max
 
