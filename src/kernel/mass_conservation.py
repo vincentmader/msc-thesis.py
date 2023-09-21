@@ -10,32 +10,27 @@ def assert_cubic_kernel_shape(K):
 
 
 def test_mass_conservation(mg, K):
-    K = np.array([0.5 * (K_k + K_k.T) for K_k in K])
+    K = np.array([0.5 * (K_k + K_k.T) for K_k in K])  
+    # ^ TODO Why such different results when this line is commented out?
 
     N_m = assert_cubic_kernel_shape(K)
     assert N_m == mg.N
 
-    mc = mg.bin_centers
-    dm = mg.bin_widths
-
-    out = np.zeros(shape=[N_m] * 2)
+    mc, dm = mg.bin_centers, mg.bin_widths
+    err_matrix = np.zeros(shape=[N_m] * 2)
 
     for i in range(N_m):
         for j in range(N_m):
-
-            sum_ij = 0
+            err_ij = 0
             for k in range(N_m):
-                m_k = mc[k]
-                dm_k = dm[k]
-
                 if mg.scale == "lin":
-                    msg = f"dm_k != 1 on linear grid, is this on purpose? ({k=}, {dm_k=})"
-                    assert np.abs(dm_k - 1) <= 1e-14, msg
+                    msg = f"dm_k != 1 on linear grid, is this on purpose? ({k=}, {dm[k]=})"
+                    assert np.abs(dm[k] - 1) <= 1e-14, msg
 
-                sum_ij += m_k * K[k, i, j]
+                err_ij += mc[k] * K[k, i, j]
+            err_matrix[i, j] = abs(err_ij)  # < 1e-12
 
-            machine_precision_is_assured = abs(sum_ij)  # < 1e-12
+    err_total = np.sum(err_matrix)
+    print(err_total)
 
-            out[i, j] = machine_precision_is_assured
-
-    return out
+    return err_matrix, err_total

@@ -13,7 +13,7 @@ class KernelMassConservationPlot():
         self.fig = plt.figure(figsize=FIGSIZE)
         self.ax = plt.gca()
         self.K = K
-        self.sum_ij = test_mass_conservation(cfg, mg, K)
+        self.sum_ij, self.sum = test_mass_conservation(mg, K)
 
         self.ax.format_coord = self.custom_format_coord
 

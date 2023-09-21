@@ -6,7 +6,7 @@ from visualization.kernel import KernelSubplot
 
 
 class KernelMassConservationSubplot(KernelSubplot):
-    __slots__ = ["sum_ij"]
+    __slots__ = ["err_matrix", "err_total"]
 
     def __init__(
         self,
@@ -14,13 +14,13 @@ class KernelMassConservationSubplot(KernelSubplot):
         K: np.ndarray,
         *args, **kwargs
     ):
-        self.sum_ij = test_mass_conservation(mg, K)
+        self.err_matrix, self.err_total = test_mass_conservation(mg, K)
 
-        kwargs["title"]= kwargs["title"]\
+        kwargs["title"] = kwargs["title"]\
             if "title" in kwargs.keys()\
-            else r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}$"
+            else r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}$, $\sum_{ij}|\Delta_ij|$ = " + f"{self.err_total}"
 
         super().__init__(
-            mg, self.sum_ij, 
+            mg, self.err_matrix, 
             *args, **kwargs
         )

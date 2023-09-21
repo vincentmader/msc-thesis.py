@@ -80,11 +80,11 @@ def plot_kernel_error(
     rho_s = cfg.dust_particle_density
 
     # TODO Move the below elsewhere? Best: In `KernelMassConservationSubplot` definition.
-    sum_ij = test_mass_conservation(mg, kernel.K)
+    err_ij, err_total = test_mass_conservation(mg, kernel.K)
     def custom_format_coord(x, y):
         x, y = particle_mass_from_radius(x, rho_s), particle_mass_from_radius(y, rho_s)
         i, j = int(mg.index_from_value(x)), int(mg.index_from_value(y))
-        text = f"sum_k K_kij = {sum_ij[i, j]:.2}, {i = }, {j = }"
+        text = f"sum_k K_kij = {err_ij[i, j]:.2}, {i = }, {j = }"
         return text
 
     p = GridspecPlot([
@@ -92,6 +92,7 @@ def plot_kernel_error(
             mg, kernel.K, 
             scales=(scale, scale, scale),
             axis=axis,
+            symmetrized=True,
             # z_limits=z_limits, # TODO
         ),
     ])
