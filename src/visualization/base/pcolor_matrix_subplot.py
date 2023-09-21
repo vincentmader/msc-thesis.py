@@ -119,7 +119,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
         ax = axes[0]
         plt.sca(ax)
-        plt.colorbar(self.im, cax=ax, orientation="horizontal")
+        plt.colorbar(self.im, cax=ax, orientation="horizontal", extend="both")
         plt.title(self.title)
 
     def update(self, k):
