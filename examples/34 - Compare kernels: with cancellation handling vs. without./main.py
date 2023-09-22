@@ -32,21 +32,21 @@ def plot_1():
     # Plot kernels `K_canc` `K_nocanc` side by side, & plot difference.
     GridspecPlot([
         KernelSubplot(
-            mg, K_1,
+            cfg_1, mg, K_1,
             title="kernel $K_{kij}^{canc}$",
             scales=("log", "log", "lin"),
             symmetrized=True,
             cmap="bwr",
         ),
         KernelSubplot(
-            mg, K_2,
+            cfg_2, mg, K_2,
             title="kernel $K_{kij}^{nocanc}$ with canc. handling",
             scales=("log", "log", "lin"),
             symmetrized=True,
             cmap="bwr",
         ),
         KernelSubplot(
-            mg, np.abs(K_diff),
+            cfg_1, mg, np.abs(K_diff), # TODO This is the wrong `cfg`.
             title="abs($K_{kij}^{canc}-K_{kij}^{nocanc}$)",
             scales=("log", "log", "log"),
             symmetrized=True,
@@ -57,11 +57,11 @@ def plot_2():
 
     # Plot kernel errors of `K_canc` & `K_nocanc` side by side.
     s1 = KernelMassConservationSubplot(
-        kernel_1, axis_label_variant=KernelAxis.Radius,
+        cfg_1, mg, K_1, axis_label_variant=KernelAxis.Radius,
         title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
     )
     s2 = KernelMassConservationSubplot(
-        kernel_2, axis_label_variant=KernelAxis.Radius,
+        cfg_2, mg, K_2, axis_label_variant=KernelAxis.Radius,
         title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
     )
     GridspecPlot([s1, s2]).render()

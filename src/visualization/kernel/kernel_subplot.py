@@ -1,3 +1,4 @@
+from config import Config
 from typing import Optional
 
 import numpy as np
@@ -7,10 +8,11 @@ from visualization.base import PcolorMatrixSubplot
 
 
 class KernelSubplot(PcolorMatrixSubplot):
-    __slots__ = ["mg", "K", "axis_variant"]
+    __slots__ = ["cfg", "mg", "K", "axis_variant"]
 
     def __init__(
         self,
+        cfg: Config,
         mg: DiscreteMassAxis,
         K: np.ndarray,
         axis_label_variant: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`

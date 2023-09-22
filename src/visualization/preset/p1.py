@@ -24,7 +24,7 @@ def plot_kernel(
         z_limits = (-z_limits[1], z_limits[1])
     GridspecPlot([
         KernelSubplot(
-            mg, kernel.K,
+            cfg, mg, kernel.K,
             title="kernel $K_{kij}$",
             scales=(scale, scale, "lin"),
             z_limits=z_limits,
@@ -46,7 +46,7 @@ def plot_kernel_gain_loss(
     cmap = "Reds" if scale == "log" else "bwr"
     GridspecPlot([
         KernelSubplot(
-            mg, kernel.K_gain, 
+            cfg, mg, kernel.K_gain, 
             title="kernel gain contribution $G_{kij}$",
             scales=(scale, scale, scale),
             z_limits=z_limits,
@@ -55,7 +55,7 @@ def plot_kernel_gain_loss(
             cmap=cmap,
         ),
         KernelSubplot(
-            mg, -kernel.K_loss,
+            cfg, mg, -kernel.K_loss,
             title="kernel loss contribution $L_{kij}$",
             scales=(scale, scale, scale),
             z_limits=z_limits,
@@ -77,7 +77,7 @@ def plot_kernel_error(
 ):
     p = GridspecPlot([
         KernelMassConservationSubplot(
-            kernel,
+            cfg, mg, kernel.K,
             scales=(scale, scale, scale),
             axis_label_variant=axis_label_variant,
             symmetrized=True,

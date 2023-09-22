@@ -15,6 +15,7 @@ except ModuleNotFoundError as e:
 
 
 def plot_1(
+    cfg: Config,
     scale: str,
     mg: DiscreteMassAxis,
     Ks: tuple[np.ndarray, np.ndarray, np.ndarray],
@@ -22,50 +23,51 @@ def plot_1(
     K_vinc, K_kees, K_compare = Ks
     axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
 
-    s1 = KernelSubplot(
-        mg, K_vinc, 
-        title="$K_{kij}^{vinc}$",
-        axis_label_variant=axis_label_variant,
-        symmetrized=True,
-        scales=(scale, scale, "lin"),
-        z_limits=(-1, 1),
-        cmap="bwr",
-    )
-    s2 = KernelSubplot(
-        mg, K_kees, 
-        title="$K_{kij}^{kees}$",
-        axis_label_variant=axis_label_variant,
-        symmetrized=True,
-        scales=(scale, scale, "lin"),
-        z_limits=(-1, 1),
-        cmap="bwr",
-    )
-    s3 = KernelSubplot(
-        mg, K_compare, 
-        title=r"$\Delta K_{kij}=K_{kij}^{kees}-K_{kij}^{vinc}$",
-        axis_label_variant=axis_label_variant,
-        symmetrized=True,
-        scales=(scale, scale, "lin"),
-        z_limits=(-1, 1),
-        cmap="bwr",
-    )
-    p = GridspecPlot([s1, s2, s3], add_slider=True)
-    p.render()
+    GridspecPlot([
+        KernelSubplot(
+            cfg, mg, K_vinc,
+            title="$K_{kij}^{vinc}$",
+            axis_label_variant=axis_label_variant,
+            symmetrized=True,
+            scales=(scale, scale, "lin"),
+            z_limits=(-1, 1),
+            cmap="bwr",
+        ),
+        KernelSubplot(
+            cfg, mg, K_kees,
+            title="$K_{kij}^{kees}$",
+            axis_label_variant=axis_label_variant,
+            symmetrized=True,
+            scales=(scale, scale, "lin"),
+            z_limits=(-1, 1),
+            cmap="bwr",
+        ),
+        KernelSubplot(
+            cfg, mg, K_compare,
+            title=r"$\Delta K_{kij}=K_{kij}^{kees}-K_{kij}^{vinc}$",
+            axis_label_variant=axis_label_variant,
+            symmetrized=True,
+            scales=(scale, scale, "lin"),
+            z_limits=(-1, 1),
+            cmap="bwr",
+        ),
+    ], add_slider=True).render()
 
 
 def plot_2(
+    cfg: Config,
     scale: str,
     mg: DiscreteMassAxis,
-    kernels: tuple[Kernel, Kernel],
+    Ks: tuple[np.ndarray, np.ndarray],
 ):
-    kernel_vinc, kernel_kees = kernels
+    K_vinc, K_kees = Ks
     axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
 
     s1 = KernelMassConservationSubplot(
-        kernel_vinc, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"), 
+        cfg, mg, K_vinc, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"), 
     )
     s2 = KernelMassConservationSubplot(
-        kernel_kees, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"),
+        cfg, mg, K_kees, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"),
     )
     p = GridspecPlot([s1, s2])
     p.render()
@@ -102,7 +104,7 @@ if __name__ == "__main__":
         i = np.linspace(0, N_m, N_m)
         x, y = (i, i) if scale == "lin" else (ac, ac)
 
-        plot_1(scale, mg, (kernel_vinc, kernel_kees, K_diff))  # TODO Fix this!!!
-        plot_2(scale, mg, (kernel_vinc, kernel_kees))
+        plot_1(cfg, scale, mg, (K_vinc, K_kees, K_diff))  # TODO Fix this!!!
+        plot_2(cfg, scale, mg, (K_vinc, K_kees))
         # plot_3(cfg, mg, K_vinc)
         # plot_3(cfg, mg, K_kees)
