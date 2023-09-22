@@ -13,11 +13,11 @@ class KernelSubplot(PcolorMatrixSubplot):
         self,
         mg: DiscreteMassAxis,
         K: np.ndarray,
-        axis: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`
+        axis_label_variant: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`
         *args, **kwargs
     ):
 
-        if axis is KernelAxis.Radius:
+        if axis_label_variant is KernelAxis.Radius:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
                 else "particle radius $a_j$ [m]"
@@ -26,7 +26,7 @@ class KernelSubplot(PcolorMatrixSubplot):
                 else "particle radius $a_i$ [m]"
             ac = mg.particle_radii
             x, y = ac, ac
-        elif axis is KernelAxis.Mass:
+        elif axis_label_variant is KernelAxis.Mass:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
                 else "particle mass $a_j$ [kg]"
@@ -45,5 +45,5 @@ class KernelSubplot(PcolorMatrixSubplot):
             i = np.linspace(0, mg.N, mg.N)
             x, y = i, i
 
-        self.mg, self.K, self.axis_variant = mg, K, axis
+        self.mg, self.K, self.axis_variant = mg, K, axis_label_variant
         super().__init__(x, y, K, *args, **kwargs)

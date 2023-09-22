@@ -13,7 +13,7 @@ class KernelMassConservationSubplot(KernelSubplot):
     def __init__(
         self,
         kernel: Kernel,
-        axis: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`
+        axis_label_variant: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`
         *args, **kwargs
     ):
         self.kernel = kernel
@@ -23,7 +23,7 @@ class KernelMassConservationSubplot(KernelSubplot):
             if "title" in kwargs.keys()\
             else r"kernel mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}$, $\sum_{ij}|\Delta_ij|$ = " + f"{self.err_total}"
 
-        super().__init__(self.kernel.mg, self.err_matrix, axis=axis, *args, **kwargs)
+        super().__init__(self.kernel.mg, self.err_matrix, axis_label_variant=axis_label_variant, *args, **kwargs)
 
     def format_coord(self, x, y):
         if self.axis_variant is KernelAxis.Radius:

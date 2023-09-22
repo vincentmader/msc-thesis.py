@@ -21,13 +21,13 @@ N_iter = 4  # Nr of iterations for implicit time step
 def plot(mg, K, P): # TODO Move elsewhere.
     GridspecPlot([
         KernelSubplot(
-            mg, K, axis=KernelAxis.Radius,
+            mg, K, axis_label_variant=KernelAxis.Radius,
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
         ),
         KernelSubplot(
-            mg, K, axis=KernelAxis.Radius,
+            mg, K, axis_label_variant=KernelAxis.Radius,
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),

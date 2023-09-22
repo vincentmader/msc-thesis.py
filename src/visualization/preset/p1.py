@@ -29,7 +29,7 @@ def plot_kernel(
             scales=(scale, scale, "lin"),
             z_limits=z_limits,
             symmetrized=True,
-            axis=axis,
+            axis_label_variant=axis,
             cmap="bwr",
         )
     ], add_slider=True).render()
@@ -51,7 +51,7 @@ def plot_kernel_gain_loss(
             scales=(scale, scale, scale),
             z_limits=z_limits,
             symmetrized=True,
-            axis=axis,
+            axis_label_variant=axis,
             cmap=cmap,
         ),
         KernelSubplot(
@@ -61,7 +61,7 @@ def plot_kernel_gain_loss(
             z_limits=z_limits,
             ylabel="",
             symmetrized=True,
-            axis=axis,
+            axis_label_variant=axis,
             cmap=cmap,
         ),
     ], add_slider=True).render()
@@ -72,14 +72,14 @@ def plot_kernel_error(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis: KernelAxis,
+    axis_label_variant: KernelAxis,
     z_limits: tuple[float, float],
 ):
     p = GridspecPlot([
         KernelMassConservationSubplot(
             kernel,
             scales=(scale, scale, scale),
-            axis=axis,
+            axis_label_variant=axis_label_variant,
             symmetrized=True,
             # z_limits=z_limits, # TODO
         ),
@@ -157,14 +157,14 @@ def main(cfg):
         plt.style.use(PATH_TO_DARKMODE)
     mg, kernel = DiscreteMassAxis(cfg), Kernel(cfg)
     scale = mg.scale
-    axis = KernelAxis.Radius if scale == "log" else KernelAxis.Bin
+    axis_label_variant = KernelAxis.Radius if scale == "log" else KernelAxis.Bin
     z_limits = (1e-20, 1e-7) if scale == "log" else (-1, 1)
     # Plot total kernel     with lin. colorscale.
-    plot_kernel(cfg, mg, kernel, scale, axis, z_limits)
+    plot_kernel(cfg, mg, kernel, scale, axis_label_variant, z_limits)
     # Plot K_gain & K_loss  with log. colorscale.
-    plot_kernel_gain_loss(cfg, mg, kernel, scale, axis, z_limits)
+    plot_kernel_gain_loss(cfg, mg, kernel, scale, axis_label_variant, z_limits)
     # Plot kernel mass error.
-    plot_kernel_error(cfg, mg, kernel, scale, axis, z_limits)
+    plot_kernel_error(cfg, mg, kernel, scale, axis_label_variant, z_limits)
 
     # Integrate.
     t, f, N, m2f, dm2f, M = integrate(cfg, kernel)

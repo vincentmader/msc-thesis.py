@@ -20,12 +20,12 @@ def plot_1(
     Ks: tuple[np.ndarray, np.ndarray, np.ndarray],
 ):
     K_vinc, K_kees, K_compare = Ks
-    axis = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
+    axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
 
     s1 = KernelSubplot(
         mg, K_vinc, 
         title="$K_{kij}^{vinc}$",
-        axis=axis,
+        axis_label_variant=axis_label_variant,
         symmetrized=True,
         scales=(scale, scale, "lin"),
         z_limits=(-1, 1),
@@ -34,7 +34,7 @@ def plot_1(
     s2 = KernelSubplot(
         mg, K_kees, 
         title="$K_{kij}^{kees}$",
-        axis=axis,
+        axis_label_variant=axis_label_variant,
         symmetrized=True,
         scales=(scale, scale, "lin"),
         z_limits=(-1, 1),
@@ -43,7 +43,7 @@ def plot_1(
     s3 = KernelSubplot(
         mg, K_compare, 
         title=r"$\Delta K_{kij}=K_{kij}^{kees}-K_{kij}^{vinc}$",
-        axis=axis,
+        axis_label_variant=axis_label_variant,
         symmetrized=True,
         scales=(scale, scale, "lin"),
         z_limits=(-1, 1),
@@ -56,17 +56,16 @@ def plot_1(
 def plot_2(
     scale: str,
     mg: DiscreteMassAxis,
-    Ks: tuple[np.ndarray, np.ndarray],
+    kernels: tuple[Kernel, Kernel],
 ):
-    K_vinc, K_kees = Ks
-    axis = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
-
+    kernel_vinc, kernel_kees = kernels
+    axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
 
     s1 = KernelMassConservationSubplot(
-        mg, K_vinc, axis=axis, scales=(scale, scale, "log"), 
+        kernel_vinc, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"), 
     )
     s2 = KernelMassConservationSubplot(
-        mg, K_kees, axis=axis, scales=(scale, scale, "log"),
+        kernel_kees, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"),
     )
     p = GridspecPlot([s1, s2])
     p.render()
@@ -103,7 +102,7 @@ if __name__ == "__main__":
         i = np.linspace(0, N_m, N_m)
         x, y = (i, i) if scale == "lin" else (ac, ac)
 
-        plot_1(scale, mg, (K_vinc, K_kees, K_diff))
-        plot_2(scale, mg, (K_vinc, K_kees))
+        plot_1(scale, mg, (kernel_vinc, kernel_kees, K_diff))  # TODO Fix this!!!
+        plot_2(scale, mg, (kernel_vinc, kernel_kees))
         # plot_3(cfg, mg, K_vinc)
         # plot_3(cfg, mg, K_kees)
