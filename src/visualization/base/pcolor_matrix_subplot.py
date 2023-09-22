@@ -129,4 +129,5 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.im.set_array(z.ravel())
 
     def format_coord(self, x, y):
-        raise Exception("Not implemented.")
+        # TODO: Redefine.
+        return f"{x}, {y}"

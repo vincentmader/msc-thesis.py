@@ -57,11 +57,11 @@ def plot_2():
 
     # Plot kernel errors of `K_canc` & `K_nocanc` side by side.
     s1 = KernelMassConservationSubplot(
-        mg, K_1, axis=KernelAxis.Radius,
+        kernel_1, axis=KernelAxis.Radius,
         title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
     )
     s2 = KernelMassConservationSubplot(
-        mg, K_2, axis=KernelAxis.Radius,
+        kernel_2, axis=KernelAxis.Radius,
         title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
     )
     GridspecPlot([s1, s2]).render()

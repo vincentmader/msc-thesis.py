@@ -5,9 +5,7 @@ from axis import DiscreteMassAxis, DiscreteTimeAxis, KernelAxis
 from config import Config, PATH_TO_DARKMODE
 from disk import mass_distribution
 from disk.disk import disk_mass_from_distribution  # TODO Remove
-from dust import particle_mass_from_radius
 from kernel import Kernel
-from kernel.mass_conservation import test_mass_conservation
 from solver import Solver
 from visualization.base import GridspecPlot
 from visualization.evolution import EvolutionPlot, MassConservationPlot
@@ -77,26 +75,15 @@ def plot_kernel_error(
     axis: KernelAxis,
     z_limits: tuple[float, float],
 ):
-    rho_s = cfg.dust_particle_density
-
-    # TODO Move the below elsewhere? Best: In `KernelMassConservationSubplot` definition.
-    err_ij, err_total = test_mass_conservation(mg, kernel.K)
-    def custom_format_coord(x, y):
-        x, y = particle_mass_from_radius(x, rho_s), particle_mass_from_radius(y, rho_s)
-        i, j = int(mg.index_from_value(x)), int(mg.index_from_value(y))
-        text = f"sum_k K_kij = {err_ij[i, j]:.2}, {i = }, {j = }"
-        return text
-
     p = GridspecPlot([
         KernelMassConservationSubplot(
-            mg, kernel.K, 
+            kernel,
             scales=(scale, scale, scale),
             axis=axis,
             symmetrized=True,
             # z_limits=z_limits, # TODO
         ),
     ])
-    p.axes[1].format_coord = custom_format_coord
     p.render()
 
 

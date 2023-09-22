@@ -7,12 +7,13 @@ from visualization.base import PcolorMatrixSubplot
 
 
 class KernelSubplot(PcolorMatrixSubplot):
+    __slots__ = ["mg", "K", "axis_variant"]
 
     def __init__(
         self,
         mg: DiscreteMassAxis,
         K: np.ndarray,
-        axis: Optional[KernelAxis] = KernelAxis.Radius,
+        axis: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`
         *args, **kwargs
     ):
 
@@ -22,7 +23,7 @@ class KernelSubplot(PcolorMatrixSubplot):
                 else "particle radius $a_j$ [m]"
             kwargs["ylabel"] = kwargs["ylabel"]\
                 if "ylabel" in kwargs.keys()\
-                else "particle radius $a_j$ [m]"
+                else "particle radius $a_i$ [m]"
             ac = mg.particle_radii
             x, y = ac, ac
         elif axis is KernelAxis.Mass:
@@ -43,6 +44,6 @@ class KernelSubplot(PcolorMatrixSubplot):
                 else "bin index $i$"
             i = np.linspace(0, mg.N, mg.N)
             x, y = i, i
-        z = K
 
-        super().__init__(x, y, z, *args, **kwargs)
+        self.mg, self.K, self.axis_variant = mg, K, axis
+        super().__init__(x, y, K, *args, **kwargs)
