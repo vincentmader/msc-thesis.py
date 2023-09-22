@@ -47,5 +47,5 @@ class KernelSubplot(PcolorMatrixSubplot):
             i = np.linspace(0, mg.N, mg.N)
             x, y = i, i
 
-        self.mg, self.K, self.axis_variant = mg, K, axis_label_variant
+        self.cfg, self.mg, self.K, self.axis_variant = cfg, mg, K, axis_label_variant
         super().__init__(x, y, K, *args, **kwargs)
