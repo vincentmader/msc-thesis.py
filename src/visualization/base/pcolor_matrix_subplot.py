@@ -116,6 +116,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         scale_y = "linear" if scale_y == "lin" else scale_y
         ax.set_xscale(scale_x)
         ax.set_yscale(scale_y)
+        ax.format_coord = self.format_coord
 
         ax = axes[0]
         plt.sca(ax)
@@ -126,3 +127,6 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.k = k
         z = self.z[k]
         self.im.set_array(z.ravel())
+
+    def format_coord(self, x, y):
+        raise Exception("Not implemented.")

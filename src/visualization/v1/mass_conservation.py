@@ -45,7 +45,7 @@ class KernelMassConservationPlot():
         plt.close()
 
     def custom_format_coord(self, x, y):
-        i, j = int(x), int(y)  # TODO Convention?
+        i, j = int(y), int(x)
         sum_ij = self.sum_ij[i, j]
         text = ""
         text += f"sum_k K_kij = {sum_ij:.2}, "
