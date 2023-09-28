@@ -256,6 +256,8 @@ class Kernel():
                 for k in range(k_min, k_max):
                     A = mc[k]**q / S
                     K_gain[k, i, j] += m_tot / mc[k] * A * th
+                    # K_gain[k, i, j] += m_tot * mc[k]**(q-1) / S * th
+                    # ^ TODO: Why does this lead to changes in the kernel mass conservation plot?
 
                 # Remove mass from bins corresponding to initial masses.
                 K_loss[i, i, j] -= 1 
