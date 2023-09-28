@@ -235,6 +235,7 @@ class Kernel():
                 # Define mass range resulting from fragmentation event.
                 k_min = 0
                 k_max = mg.index_from_value(m_tot)
+                # k_max = mg.index_from_value(max(m_i, m_j))
                 # ^ NOTE: This is a somewhat arbitrary choice:
                 #   - One could also choose e.g. `m_max = max(m_i, m_j)`,
                 #   - or something completely different, as long as mass is conserved.
@@ -249,7 +250,7 @@ class Kernel():
 
                 # Calculate normalization constant for MRN distribution.
                 S = sum([mc[k]**q for k in range(k_min, k_max)])
-                assert S != 0
+                assert S != 0  # TODO really needed?
 
                 # Add mass to bins "receiving" mass in fragmentation event.
                 for k in range(k_min, k_max):
