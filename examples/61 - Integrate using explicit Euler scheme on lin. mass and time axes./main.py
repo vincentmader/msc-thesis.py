@@ -1,6 +1,5 @@
 import os, sys
 import matplotlib.pyplot as plt
-import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
@@ -97,5 +96,5 @@ if __name__ == "__main__":
     # Create plots.
     plot_1(mc, m2f, dm2f)
     plot_2(t, Ms)
-    # plot_3(kernel, N, f, m2f, dm2f)  TODO Use these instead? 
+    # plot_3(kernel, N, f, m2f, dm2f)  # TODO Use these instead? 
     # plot_4(t, Ms)
