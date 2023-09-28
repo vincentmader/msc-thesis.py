@@ -18,16 +18,16 @@ SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
 
-def plot(mg, K, P): # TODO Move elsewhere.
+def plot(cfg, mg, K, P): # TODO Move elsewhere.
     GridspecPlot([
         KernelSubplot(
-            mg, K, axis_label_variant=KernelAxis.Radius,
+            cfg, mg, K, axis_label_variant=KernelAxis.Radius,
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
         ),
         KernelSubplot(
-            mg, K, axis_label_variant=KernelAxis.Radius,
+            cfg, mg, K, axis_label_variant=KernelAxis.Radius,
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
@@ -36,12 +36,12 @@ def plot(mg, K, P): # TODO Move elsewhere.
 
     GridspecPlot([
         KernelSubplot(
-            mg, P, title="sampling probability $P_{ij}$",
+            cfg, mg, P, title="sampling probability $P_{ij}$",
         )
     ]).render()
 
     GridspecPlot([
-        KernelMassConservationSubplot(mg, K)
+        KernelMassConservationSubplot(cfg, mg, K)
     ]).render()
 
 
@@ -75,7 +75,7 @@ class Solver:
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # if itime % 10 == 0:
                 # if itime in [1, 50, 100, 120, 130, 140]:
-                #     plot(mg, K, P)
+                #     plot(self.cfg, mg, K, P)
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
