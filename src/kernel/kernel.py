@@ -126,7 +126,6 @@ class Kernel():
     ):
         mg = self.mg
         mc, N_m = mg.bin_centers, mg.N
-        N_m = mg.N
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
