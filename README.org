@@ -6,9 +6,7 @@ This repository contains the Python code I wrote while working on my Master thes
 
 *** Prerequisites
 
-Before running the code, make sure you have the following dependencies installed on your machine:
-- `python3`
-- `make`
+Before running the code, make sure you have Python 3 installed on your machine.
 
 *** Installation
 

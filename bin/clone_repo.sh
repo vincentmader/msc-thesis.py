@@ -16,4 +16,4 @@ clone() {
 }
 clone "$url_1" "$path" || clone "$url_2" "$path"
 
-cd "$path" && make setup
+cd "$path/bin" && ./setup.sh
