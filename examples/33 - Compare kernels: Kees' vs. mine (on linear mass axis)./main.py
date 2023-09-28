@@ -9,7 +9,6 @@ try:
     from kernel import Kernel
     from visualization.base import GridspecPlot
     from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
-    from visualization.v1.mass_conservation import KernelMassConservationPlot
 except ModuleNotFoundError as e:
     raise e
 
@@ -73,10 +72,6 @@ def plot_2(
     p.render()
 
 
-def plot_3(cfg, mg, K):
-    KernelMassConservationPlot(cfg, mg, K).show()
-
-
 setups = [
     ("lin", (2   , 52  , 50)),
     ("log", (1e-4, 1e+4, 50)),
@@ -106,5 +101,3 @@ if __name__ == "__main__":
 
         plot_1(cfg, scale, mg, (K_vinc, K_kees, K_diff))  # TODO Fix this!!!
         plot_2(cfg, scale, mg, (K_vinc, K_kees))
-        # plot_3(cfg, mg, K_vinc)
-        # plot_3(cfg, mg, K_kees)
