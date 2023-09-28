@@ -249,7 +249,7 @@ class Kernel():
                 assert m_max < mg.x_max
 
                 # Calculate normalization constant for MRN distribution.
-                S = sum([mc[k]**q for k in range(k_min, k_max)])
+                S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
                 assert S != 0  # TODO really needed?
 
                 # Add mass to bins "receiving" mass in fragmentation event.
