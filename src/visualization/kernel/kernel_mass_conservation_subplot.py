@@ -25,7 +25,7 @@ class KernelMassConservationSubplot(KernelSubplot):
 
         kwargs["title"] = kwargs["title"]\
             if "title" in kwargs.keys()\
-            else r"mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}$, $\Delta=\sum_{ij}|\Delta_{ij}|$ = " + f"{self.err_total:.2e}" + "kg/m$^3$"
+            else r"mass error $\Delta_{ij}=\sum_k m_k\cdot K_{kij}$, $\Delta=\sum_{ij}|\Delta_{ij}|$ = " + f"{self.err_total:.2e}" + " m$^3$s$^{-1}$kg"
 
         super().__init__(cfg, mg, self.K, axis_label_variant=axis_label_variant, *args, **kwargs)
 
