@@ -49,6 +49,7 @@ for label_f, f in zip(["cutoff", "MB"], fs):
             ylabel="particle radius $a_i$ [m]",
             z_limits=(1e-30, 1e5), # TODO Determine dynamically?
             cmap="Blues",
+            # scales=("log", "log", "log"), # TODO Define dynamically.
         )
         
         path_to_figures = Path(PATH_TO_FIGURES, "25")
