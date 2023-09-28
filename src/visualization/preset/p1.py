@@ -159,19 +159,20 @@ def main(cfg):
     scale = mg.scale
     axis_label_variant = KernelAxis.Radius if scale == "log" else KernelAxis.Bin
     z_limits = (1e-20, 1e-7) if scale == "log" else (-1, 1)
+
     # Plot total kernel     with lin. colorscale.
-    plot_kernel(cfg, mg, kernel, scale, axis_label_variant, z_limits)
+#    plot_kernel(cfg, mg, kernel, scale, axis_label_variant, z_limits)
     # Plot K_gain & K_loss  with log. colorscale.
     plot_kernel_gain_loss(cfg, mg, kernel, scale, axis_label_variant, z_limits)
     # Plot kernel mass error.
     plot_kernel_error(cfg, mg, kernel, scale, axis_label_variant, z_limits)
 
-    # Integrate.
-    t, f, N, m2f, dm2f, M = integrate(cfg, kernel)
-
-    # Plot evolution of mass distribution over time.
-    plot_evolution(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
-    # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
-
-    # Plot mass error over time.
-    plot_error(cfg, mg, kernel, t, M)
+#    # Integrate.
+#    t, f, N, m2f, dm2f, M = integrate(cfg, kernel)
+#
+#    # Plot evolution of mass distribution over time.
+#    plot_evolution(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
+#    # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
+#
+#    # Plot mass error over time.
+#    plot_error(cfg, mg, kernel, t, M)
