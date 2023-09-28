@@ -254,9 +254,8 @@ class Kernel():
 
                 # Add mass to bins "receiving" mass in fragmentation event.
                 for k in range(k_min, k_max):
-                    m_k = mc[k]
-                    A = m_k**q / S
-                    K_gain[k, i, j] += m_tot / m_k * A * th
+                    A = mc[k]**q / S
+                    K_gain[k, i, j] += m_tot / mc[k] * A * th
 
                 # Remove mass from bins corresponding to initial masses.
                 K_loss[i, i, j] -= 1 
