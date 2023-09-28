@@ -75,7 +75,12 @@ class Solver:
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # if itime % 10 == 0:
                 # if itime in [1, 50, 100, 120, 130, 140]:
+                # if itime > 150 and itime % 5 == 0:
                 #     plot(self.cfg, mg, K, P)
+                #     a = input()
+                #     if a == "p":
+                #         path = Path(f"/Users/vinc/Desktop/K_kij_{itime}.txt")
+                #         kernel.save_to_file(path=path)
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."

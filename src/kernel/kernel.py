@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
@@ -265,3 +266,13 @@ class Kernel():
                 pass
 
         return K_gain, K_loss
+
+    def save_to_file(
+        self, 
+        path: Optional[Path]=None
+    ):
+        K = self.K
+        N = self.mg.N
+        K = K.reshape((N, N*N))
+        assert self.K.all() == K.reshape((N, N, N)).all()
+        np.savetxt(str(path), K)
