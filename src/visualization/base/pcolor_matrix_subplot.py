@@ -7,6 +7,10 @@ import numpy as np
 from visualization.base import GridspecSubplot
 
 
+VMIN = 1e-20
+VMAX = 1e-7
+
+
 class PcolorMatrixSubplot(GridspecSubplot):
     __slots__ = [
         "x", "y", "z", "k", "im", 
@@ -66,14 +70,14 @@ class PcolorMatrixSubplot(GridspecSubplot):
         norm = self._pcolormesh_norm(z)
         self.im = plt.pcolormesh(x, y, z, cmap=self.cmap, norm=norm, rasterized=True)
         plt.axis("scaled")
-        plt.xlabel(self.xlabel)
-        plt.ylabel(self.ylabel)
-        plt.grid(self.grid)
         scale_x = self.scales[0]
         scale_y = self.scales[1]
         ax.set_xscale("linear" if scale_x == "lin" else scale_x)
         ax.set_yscale("linear" if scale_y == "lin" else scale_y)
+        ax.set_xlabel(self.xlabel)
+        ax.set_ylabel(self.ylabel)
         ax.format_coord = self.format_coord
+        ax.grid(self.grid)
 
         ax = axes[0]
         plt.sca(ax)
@@ -81,38 +85,28 @@ class PcolorMatrixSubplot(GridspecSubplot):
         plt.title(self.title)
 
     def update(self, k):
-        self.k = k
-        z = self.z[k]
+        self.k, z = k, self.z[k]
         self.im.set_array(z.ravel())
 
     def format_coord(self, x, y):
-        # TODO: Redefine.
-        return f"{x}, {y}"
+        return f"{x}, {y}"  # TODO: Redefine.
 
     def _pcolormesh_norm(self, z):
         if self.scales[2] == "lin":
-            if self.z_limits is None:
-                vmin, vmax = z.min(), z.max()
-            else:
-                vmin, vmax = self.z_limits
+            vmin, vmax = (z.min(), z.max()) if self.z_limits is None else self.z_limits
             smin, smax = np.sign(vmin), np.sign(vmax)
             if smin == smax or 0 in [smin, smax]:
-                norm = colors.Normalize(vmin=vmin, vmax=vmax)
+                return colors.Normalize(vmin=vmin, vmax=vmax)
             else:
-                norm = colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
-        elif self.scales[2] == "log":
+                return colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
+        if self.scales[2] == "log":
             if self.z_limits is None:
                 if z.min() == z.max() == 0:
-                    vmin = 1e-20
-                    vmax = 1e-7
+                    vmin, vmax = VMIN, VMAX
                     print(f"Reverting to [{vmin}, {vmax}]")
                 else:
                     vmin = z.min() if z.min() != 0 else z[z != 0].min()
                     vmax = z.max() if z.max() != 0 else z[z != 0].max()
             else:
-                vmin = self.z_limits[0]
-                vmax = self.z_limits[1]
-            norm = colors.LogNorm(vmin=vmin, vmax=vmax)
-        else:
-            raise Exception("")
-        return norm
+                vmin, vmax = self.z_limits[0], self.z_limits[1]
+            return colors.LogNorm(vmin=vmin, vmax=vmax)
