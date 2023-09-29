@@ -10,7 +10,7 @@ from visualization.kernel import KernelSubplot
 
 
 class KernelMassConservationSubplot(KernelSubplot):
-    __slots__ = ["K", "err_matrix", "err_total"]
+    __slots__ = ["err_matrix", "err_total"]
 
     def __init__(
         self,
@@ -20,15 +20,14 @@ class KernelMassConservationSubplot(KernelSubplot):
         axis_label_variant: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `KernelAxisLabelVariant`
         *args, **kwargs
     ):
-        self.err_matrix, self.err_total = test_mass_conservation(mg, K)
-        self.K = self.err_matrix
+        err_matrix, err_total = test_mass_conservation(mg, K)
 
         title = r"error $\Delta K_{ij}=\sum_k \frac{m_k}{m_i+m_j}\cdot K_{kij}$, "
         title += r"$\Delta K=\sum_{ij}|\Delta K_{ij}|$ = " 
-        title += f"{self.err_total:.2e}" + " m$^3$s$^{-1}$"
+        title += f"{err_total:.2e}" + " m$^3$s$^{-1}$"
 
         kwargs["title"] = kwargs["title"] if "title" in kwargs.keys() else title
-        super().__init__(cfg, mg, self.K, axis_label_variant=axis_label_variant, *args, **kwargs)
+        super().__init__(cfg, mg, err_matrix, axis_label_variant=axis_label_variant, *args, **kwargs)
 
     def format_coord(self, x, y):
         if self.axis_variant is KernelAxis.Radius:
@@ -43,4 +42,4 @@ class KernelMassConservationSubplot(KernelSubplot):
         else:  # -> `KernelAxis.Bin`
             i, j = int(y), int(x)
 
-        return f"{i = }, {j = }, sum_k K_kij = {self.err_matrix[i, j]:.2}"
+        return f"{i = }, {j = }, sum_k K_kij = {self.z[i, j]:.2}"

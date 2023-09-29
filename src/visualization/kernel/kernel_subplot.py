@@ -8,7 +8,7 @@ from visualization.base import PcolorMatrixSubplot
 
 
 class KernelSubplot(PcolorMatrixSubplot):
-    __slots__ = ["cfg", "mg", "K", "axis_variant"]
+    __slots__ = ["cfg", "mg", "axis_variant"]
 
     def __init__(
         self,
@@ -47,5 +47,5 @@ class KernelSubplot(PcolorMatrixSubplot):
             i = np.linspace(0, mg.N, mg.N)
             x, y = i, i
 
-        self.cfg, self.mg, self.K, self.axis_variant = cfg, mg, K, axis_label_variant
+        self.cfg, self.mg, self.axis_variant = cfg, mg, axis_label_variant
         super().__init__(x, y, K, *args, **kwargs)
