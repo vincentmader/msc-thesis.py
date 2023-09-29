@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
 
-SLIDER_COORDS = [0.925, 0.3, 0.04, 0.4]  # todo: move elsewhere ?
+SLIDER_COORDS = [0.925, 0.3, 0.04, 0.4]
 FIGSIZE = (10, 10)
 
 
