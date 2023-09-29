@@ -61,11 +61,9 @@ class PcolorMatrixSubplot(GridspecSubplot):
         k, x, y = self.k, self.x, self.y
         z = self.z if k is None else self.z[k]
 
-        # Define norm.
-        norm = self._pcolormesh_norm(z)
-
         ax = axes[1]
         plt.sca(ax)
+        norm = self._pcolormesh_norm(z)
         self.im = plt.pcolormesh(x, y, z, cmap=self.cmap, norm=norm, rasterized=True)
         plt.axis("scaled")
         plt.xlabel(self.xlabel)
@@ -73,10 +71,8 @@ class PcolorMatrixSubplot(GridspecSubplot):
         plt.grid(self.grid)
         scale_x = self.scales[0]
         scale_y = self.scales[1]
-        scale_x = "linear" if scale_x == "lin" else scale_x
-        scale_y = "linear" if scale_y == "lin" else scale_y
-        ax.set_xscale(scale_x)
-        ax.set_yscale(scale_y)
+        ax.set_xscale("linear" if scale_x == "lin" else scale_x)
+        ax.set_yscale("linear" if scale_y == "lin" else scale_y)
         ax.format_coord = self.format_coord
 
         ax = axes[0]
