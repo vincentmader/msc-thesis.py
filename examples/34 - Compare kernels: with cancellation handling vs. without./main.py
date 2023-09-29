@@ -3,7 +3,7 @@ import numpy as np
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import KernelAxis
+    from axis import KernelAxisLabelVariant
     from config import Config, PATH_TO_FIGURES
     from kernel import Kernel
     from visualization.base import GridspecPlot
@@ -57,11 +57,11 @@ def plot_2():
 
     # Plot kernel errors of `K_canc` & `K_nocanc` side by side.
     s1 = KernelMassConservationSubplot(
-        cfg_1, mg, K_1, axis_label_variant=KernelAxis.Radius,
+        cfg_1, mg, K_1, axis_label_variant=KernelAxisLabelVariant.Radius,
         title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
     )
     s2 = KernelMassConservationSubplot(
-        cfg_2, mg, K_2, axis_label_variant=KernelAxis.Radius,
+        cfg_2, mg, K_2, axis_label_variant=KernelAxisLabelVariant.Radius,
         title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
     )
     GridspecPlot([s1, s2]).render()

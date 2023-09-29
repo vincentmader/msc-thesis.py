@@ -4,7 +4,7 @@ try:
     sys.path.append(os.path.join("..", "..", "lib"))
     from coag_py.coag.coag import create_coag_kernel
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, KernelAxis
+    from axis import DiscreteMassAxis, KernelAxisLabelVariant
     from config import Config
     from kernel import Kernel
     from visualization.base import GridspecPlot
@@ -20,7 +20,7 @@ def plot_1(
     Ks: tuple[np.ndarray, np.ndarray, np.ndarray],
 ):
     K_vinc, K_kees, K_compare = Ks
-    axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
+    axis_label_variant = KernelAxisLabelVariant.Bin if scale == "lin" else KernelAxisLabelVariant.Radius
 
     GridspecPlot([
         KernelSubplot(
@@ -60,7 +60,7 @@ def plot_2(
     Ks: tuple[np.ndarray, np.ndarray],
 ):
     K_vinc, K_kees = Ks
-    axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
+    axis_label_variant = KernelAxisLabelVariant.Bin if scale == "lin" else KernelAxisLabelVariant.Radius
 
     s1 = KernelMassConservationSubplot(
         cfg, mg, K_vinc, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"), 

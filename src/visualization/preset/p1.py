@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from axis import DiscreteMassAxis, DiscreteTimeAxis, KernelAxis
+from axis import DiscreteMassAxis, DiscreteTimeAxis, KernelAxisLabelVariant
 from config import Config, PATH_TO_DARKMODE
 from disk import mass_distribution
 from disk.disk import disk_mass_from_distribution  # TODO Remove
@@ -17,7 +17,7 @@ def plot_kernel(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis: KernelAxis,
+    axis: KernelAxisLabelVariant,
     z_limits: tuple[float, float],
 ):
     if kernel.K.all() >= 0: 
@@ -40,7 +40,7 @@ def plot_kernel_gain_loss(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis: KernelAxis,
+    axis: KernelAxisLabelVariant,
     z_limits: tuple[float, float],
 ):
     cmap = "Reds" if scale == "log" else "bwr"
@@ -72,7 +72,7 @@ def plot_kernel_error(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis_label_variant: KernelAxis,
+    axis_label_variant: KernelAxisLabelVariant,
     z_limits: tuple[float, float],
 ):
     p = GridspecPlot([
@@ -157,7 +157,7 @@ def main(cfg):
         plt.style.use(PATH_TO_DARKMODE)
     mg, kernel = DiscreteMassAxis(cfg), Kernel(cfg)
     scale = mg.scale
-    axis_label_variant = KernelAxis.Radius if scale == "log" else KernelAxis.Bin
+    axis_label_variant = KernelAxisLabelVariant.Radius if scale == "log" else KernelAxisLabelVariant.Bin
     z_limits = (1e-20, 1e-7) if scale == "log" else (-1, 1)
 
     # Plot total kernel     with lin. colorscale.

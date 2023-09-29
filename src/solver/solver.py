@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from tqdm import tqdm
 
-from axis import DiscreteTimeAxis, DiscreteMassAxis, KernelAxis
+from axis import DiscreteTimeAxis, DiscreteMassAxis, KernelAxisLabelVariant
 from config import PATH_TO_LIB
 path = Path(PATH_TO_LIB, "coag_py")
 path = str(path)
@@ -21,13 +21,13 @@ N_iter = 4  # Nr of iterations for implicit time step
 def plot(cfg, mg, K, P): # TODO Move elsewhere.
     GridspecPlot([
         KernelSubplot(
-            cfg, mg, K, axis_label_variant=KernelAxis.Radius,
+            cfg, mg, K, axis_label_variant=KernelAxisLabelVariant.Radius,
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),
         ),
         KernelSubplot(
-            cfg, mg, K, axis_label_variant=KernelAxis.Radius,
+            cfg, mg, K, axis_label_variant=KernelAxisLabelVariant.Radius,
             title="kernel gain contribution $G_{kij}$",
             symmetrized=True,
             z_limits=(1e-20, 1e-7),

@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-from axis import DiscreteMassAxis, KernelAxis
+from axis import DiscreteMassAxis, KernelAxisLabelVariant
 from visualization.base import PcolorMatrixSubplot
 
 
@@ -15,11 +15,11 @@ class KernelSubplot(PcolorMatrixSubplot):
         cfg: Config,
         mg: DiscreteMassAxis,
         K: np.ndarray,
-        axis_label_variant: Optional[KernelAxis] = KernelAxis.Radius, # TODO Rename? -> `axis_variant`
+        axis_label_variant: Optional[KernelAxisLabelVariant] = KernelAxisLabelVariant.Radius, # TODO Rename? -> `axis_variant`
         *args, **kwargs
     ):
 
-        if axis_label_variant is KernelAxis.Radius:
+        if axis_label_variant is KernelAxisLabelVariant.Radius:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
                 else "particle radius $a_j$ [m]"
@@ -28,7 +28,7 @@ class KernelSubplot(PcolorMatrixSubplot):
                 else "particle radius $a_i$ [m]"
             ac = mg.particle_radii
             x, y = ac, ac
-        elif axis_label_variant is KernelAxis.Mass:
+        elif axis_label_variant is KernelAxisLabelVariant.Mass:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
                 else "particle mass $a_j$ [kg]"
