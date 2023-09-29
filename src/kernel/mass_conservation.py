@@ -20,7 +20,7 @@ def test_mass_conservation(mg, K):  # TODO Move to `Kernel` definition?
     err_matrix = np.zeros(shape=[N_m] * 2)
 
     for i in range(N_m):
-        for j in range(i + 1):
+        for j in range(N_m):
             m_tot = mc[i] + mc[j]
 
             err_ij = 0
@@ -28,7 +28,7 @@ def test_mass_conservation(mg, K):  # TODO Move to `Kernel` definition?
                 if mg.scale == "lin":
                     msg = f"dm_k != 1 on linear grid, is this on purpose? ({k=}, {dm[k]=})"
                     assert np.abs(dm[k] - 1) <= 1e-14, msg
-                err_ij += mc[k] * K[k, i, j] / m_tot
+                err_ij += mc[k] * K[k, i, j] / m_tot # TODO Multiply one line lower.
             err_matrix[i, j] = abs(err_ij)  # < 1e-12
 
     err_total = np.sum(err_matrix)  # TODO Calc. with squares?
