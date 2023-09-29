@@ -15,7 +15,7 @@ class KernelSubplot(PcolorMatrixSubplot):
         cfg: Config,
         mg: DiscreteMassAxis,
         K: np.ndarray,
-        axis_label_variant: Optional[KernelAxisLabelVariant] = KernelAxisLabelVariant.Radius, # TODO Rename? -> `axis_variant`
+        axis_label_variant: Optional[KernelAxisLabelVariant] = KernelAxisLabelVariant.Radius,
         *args, **kwargs
     ):
 
