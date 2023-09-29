@@ -2,11 +2,12 @@ import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, DiscreteRadialAxis
+    from axis import DiscreteMassAxis, DiscreteRadialAxis, KernelAxisLabelVariant
     from collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from visualization.base import GridspecPlot
+    from visualization.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
@@ -26,12 +27,11 @@ disk_region = DiskRegion(cfg, disk)
 
 R_coll = collision_rate(cfg, disk, disk_region)
 
-s1 = PcolorMatrixSubplot(
-    ac, ac, R_coll,
+s1 = KernelSubplot(
+    cfg, mg, R_coll,
     title="collision rate $R_{coll}$",
     # ^ TODO Add units.
-    xlabel="particle radius $a_j$ [m]",
-    ylabel="particle radius $a_i$ [m]",
+    axis_label_variant=KernelAxisLabelVariant.Radius,
     # axis_scales=("log", "log", "lin"),
     cmap="Blues",
 )
