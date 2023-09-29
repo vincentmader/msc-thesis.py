@@ -48,7 +48,7 @@ plot_setups = [
 ]
 
 
-def main():
+if __name__ == "__main__":
     for dv, dv_id in plot_setups:
         path_to_outfiles = Path(PATH_TO_FIGURES, "21")
         os.makedirs(path_to_outfiles, exist_ok=True)
