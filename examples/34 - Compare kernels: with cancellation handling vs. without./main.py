@@ -34,21 +34,21 @@ def plot_1():
         KernelSubplot(
             cfg_1, mg, K_1,
             title="kernel $K_{kij}^{canc}$",
-            scales=("log", "log", "lin"),
+            axis_scales=("log", "log", "lin"),
             symmetrized=True,
             cmap="bwr",
         ),
         KernelSubplot(
             cfg_2, mg, K_2,
             title="kernel $K_{kij}^{nocanc}$ with canc. handling",
-            scales=("log", "log", "lin"),
+            axis_scales=("log", "log", "lin"),
             symmetrized=True,
             cmap="bwr",
         ),
         KernelSubplot(
             cfg_1, mg, np.abs(K_diff), # TODO This is the wrong `cfg`.
             title="abs($K_{kij}^{canc}-K_{kij}^{nocanc}$)",
-            scales=("log", "log", "log"),
+            axis_scales=("log", "log", "log"),
             symmetrized=True,
     )], add_slider=True).render()
 

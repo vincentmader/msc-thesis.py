@@ -14,7 +14,7 @@ VMAX = 1e-7
 class PcolorMatrixSubplot(GridspecSubplot):
     __slots__ = [
         "x", "y", "z", "k", "im", 
-        "scales", "cmap", "z_limits", "grid",
+        "axis_scales", "cmap", "z_limits", "grid",
         "xticks", "yticks",
     ]
 
@@ -25,7 +25,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         z: np.ndarray,
         k: Optional[int] = None,
         symmetrized: bool = False,
-        axis_scales: tuple[str, str, str] = ("log", "log", "log"), # TODO rename?
+        axis_scales: tuple[str, str, str] = ("log", "log", "log"),
         z_limits: Optional[tuple[float, float]] = None,
         xticks: Optional[Any] = None,
         yticks: Optional[Any] = None,
@@ -44,7 +44,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
         # Initialize class instance.
         super().__init__(*args, **kwargs)
-        self.scales, self.z_limits = axis_scales, z_limits
+        self.axis_scales, self.z_limits = axis_scales, z_limits
         self.cmap, self.grid = cmap, grid
         self.xticks, self.yticks = xticks, yticks
         self.x, self.y, self.z = x, y, z
@@ -70,8 +70,8 @@ class PcolorMatrixSubplot(GridspecSubplot):
         norm = self._pcolormesh_norm(z)
         self.im = plt.pcolormesh(x, y, z, cmap=self.cmap, norm=norm, rasterized=True)
         plt.axis("scaled")
-        scale_x = self.scales[0]
-        scale_y = self.scales[1]
+        scale_x = self.axis_scales[0]
+        scale_y = self.axis_scales[1]
         ax.set_xscale("linear" if scale_x == "lin" else scale_x)
         ax.set_yscale("linear" if scale_y == "lin" else scale_y)
         ax.set_xlabel(self.xlabel)
@@ -92,14 +92,14 @@ class PcolorMatrixSubplot(GridspecSubplot):
         return f"{x}, {y}"  # TODO: Redefine.
 
     def _pcolormesh_norm(self, z):
-        if self.scales[2] == "lin":
+        if self.axis_scales[2] == "lin":
             vmin, vmax = (z.min(), z.max()) if self.z_limits is None else self.z_limits
             smin, smax = np.sign(vmin), np.sign(vmax)
             if smin == smax or 0 in [smin, smax]:
                 return colors.Normalize(vmin=vmin, vmax=vmax)
             else:
                 return colors.TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)
-        if self.scales[2] == "log":
+        if self.axis_scales[2] == "log":
             if self.z_limits is None:
                 if z.min() == z.max() == 0:
                     vmin, vmax = VMIN, VMAX
