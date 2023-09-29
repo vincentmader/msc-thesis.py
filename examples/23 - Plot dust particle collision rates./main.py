@@ -16,32 +16,28 @@ cfg = Config(
     mass_resolution=200,
     mass_max_value=1e12,
 )
-
 rg = DiscreteRadialAxis(cfg)
 mg = DiscreteMassAxis(cfg)
 mc = mg.bin_centers
 ac = mg.particle_radii
-
 disk = Disk(cfg, rg, mg)
 disk_region = DiskRegion(cfg, disk)
-
 R_coll = collision_rate(cfg, disk, disk_region)
-
-s1 = KernelSubplot(
-    cfg, mg, R_coll,
-    title="collision rate $R_{coll}$",
-    # ^ TODO Add units.
-    axis_label_variant=KernelAxisLabelVariant.Radius,
-    # axis_scales=("log", "log", "lin"),
-    cmap="Blues",
-)
 
 path_to_figures = Path(PATH_TO_FIGURES, "23")
 os.makedirs(path_to_figures, exist_ok=True)
 path_to_outfile = Path(path_to_figures, "collision_rate.pdf")
 
-p = GridspecPlot([s1])
-p.render(
+p = GridspecPlot([
+    KernelSubplot(
+        cfg, mg, R_coll,
+        title="collision rate $R_{coll}$",
+        # ^ TODO Add units.
+        axis_label_variant=KernelAxisLabelVariant.Radius,
+        # axis_scales=("log", "log", "lin"),
+        cmap="Blues",
+    )
+]).render(
     save_plot=True,
     path_to_outfile=path_to_outfile
 )
