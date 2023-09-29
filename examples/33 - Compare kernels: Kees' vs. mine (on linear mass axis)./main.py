@@ -28,7 +28,7 @@ def plot_1(
             title="$K_{kij}^{vinc}$",
             axis_label_variant=axis_label_variant,
             symmetrized=True,
-            scales=(scale, scale, "lin"),
+            axis_scales=(scale, scale, "lin"),
             z_limits=(-1, 1),
             cmap="bwr",
         ),
@@ -37,7 +37,7 @@ def plot_1(
             title="$K_{kij}^{kees}$",
             axis_label_variant=axis_label_variant,
             symmetrized=True,
-            scales=(scale, scale, "lin"),
+            axis_scales=(scale, scale, "lin"),
             z_limits=(-1, 1),
             cmap="bwr",
         ),
@@ -46,7 +46,7 @@ def plot_1(
             title=r"$\Delta K_{kij}=K_{kij}^{kees}-K_{kij}^{vinc}$",
             axis_label_variant=axis_label_variant,
             symmetrized=True,
-            scales=(scale, scale, "lin"),
+            axis_scales=(scale, scale, "lin"),
             z_limits=(-1, 1),
             cmap="bwr",
         ),
@@ -63,10 +63,10 @@ def plot_2(
     axis_label_variant = KernelAxis.Bin if scale == "lin" else KernelAxis.Radius
 
     s1 = KernelMassConservationSubplot(
-        cfg, mg, K_vinc, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"), 
+        cfg, mg, K_vinc, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"), 
     )
     s2 = KernelMassConservationSubplot(
-        cfg, mg, K_kees, axis_label_variant=axis_label_variant, scales=(scale, scale, "log"),
+        cfg, mg, K_kees, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"),
     )
     p = GridspecPlot([s1, s2])
     p.render()
