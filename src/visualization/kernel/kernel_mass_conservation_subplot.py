@@ -23,10 +23,11 @@ class KernelMassConservationSubplot(KernelSubplot):
         self.err_matrix, self.err_total = test_mass_conservation(mg, K)
         self.K = self.err_matrix
 
-        kwargs["title"] = kwargs["title"]\
-            if "title" in kwargs.keys()\
-            else r"error $\Delta K_{ij}=\sum_k m_k\cdot K_{kij}$, $\Delta K=\sum_{ij}|\Delta K_{ij}|$ = " + f"{self.err_total:.2e}" + " m$^3$s$^{-1}$kg"
+        title = r"error $\Delta K_{ij}=\sum_k \frac{m_k}{m_i+m_j}\cdot K_{kij}$, "
+        title += r"$\Delta K=\sum_{ij}|\Delta K_{ij}|$ = " 
+        title += f"{self.err_total:.2e}" + " m$^3$s$^{-1}$"
 
+        kwargs["title"] = kwargs["title"] if "title" in kwargs.keys() else title
         super().__init__(cfg, mg, self.K, axis_label_variant=axis_label_variant, *args, **kwargs)
 
     def format_coord(self, x, y):
