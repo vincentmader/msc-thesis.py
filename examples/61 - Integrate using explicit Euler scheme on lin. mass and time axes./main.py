@@ -9,7 +9,6 @@ try:
     from kernel import Kernel
     from solver import Solver
     from visualization.evolution import EvolutionPlot, MassConservationPlot
-    from visualization.v1.mass_error import DiskMassErrorPlot
     from visualization.v1.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
     raise e
@@ -65,20 +64,12 @@ def plot_1(m, m2f, dm2f):
     plt.close()
 
 
-def plot_2(x, y):
-    plot = DiskMassErrorPlot(x, y)
-    plot.draw()
-    plt.show()
-    plt.close()
-
-
 def plot_3(kernel, N, f, m2f, dm2f):
-    p = EvolutionPlot(kernel, N, f, m2f, dm2f)
-    p.render()
+    EvolutionPlot(kernel, N, f, m2f, dm2f).render()
 
 
 def plot_4(t, Ms):
-    p = MassConservationPlot(cfg, t, Ms)
+    MassConservationPlot(cfg, t, Ms).render()
 
 
 if __name__ == "__main__":
@@ -95,6 +86,5 @@ if __name__ == "__main__":
 
     # Create plots.
     plot_1(mc, m2f, dm2f)
-    plot_2(t, Ms)
     # plot_3(kernel, N, f, m2f, dm2f)  # TODO Use these instead? 
-    # plot_4(t, Ms)
+    plot_4(t, Ms)
