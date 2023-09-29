@@ -25,16 +25,16 @@ class PcolorMatrixSubplot(GridspecSubplot):
         z: np.ndarray,
         k: Optional[int] = None,
         symmetrized: bool = False,
-        scales: tuple[str, str, str] = ("log", "log", "log"), # TODO rename?
-        cmap: str = "Reds",
+        axis_scales: tuple[str, str, str] = ("log", "log", "log"), # TODO rename?
         z_limits: Optional[tuple[float, float]] = None,
-        grid: Optional[bool] = False,
         xticks: Optional[Any] = None,
         yticks: Optional[Any] = None,
+        grid: Optional[bool] = False,
+        cmap: str = "Reds",
         *args, **kwargs,
     ):
         # Assert valid scale specifications, & valid (cubic) matrix shape.
-        for scale in scales:
+        for scale in axis_scales:
             assert scale in ["lin", "log"], "Invalid scale."
         if len(z.shape) < 3:
             assert k is None, "2D matrix has no third index k, no need to specify it."
@@ -44,7 +44,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
         # Initialize class instance.
         super().__init__(*args, **kwargs)
-        self.scales, self.z_limits = scales, z_limits
+        self.scales, self.z_limits = axis_scales, z_limits
         self.cmap, self.grid = cmap, grid
         self.xticks, self.yticks = xticks, yticks
         self.x, self.y, self.z = x, y, z

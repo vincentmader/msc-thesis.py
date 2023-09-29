@@ -43,7 +43,7 @@ def plot_together(title, P_coag, P_frag):
         title="dust particle coagulation probability $P_{coag}$",
         xlabel="particle radius $a_j$ [m]",
         ylabel="particle radius $a_i$ [m]",
-        scales=("log", "log", "lin"),
+        axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )
     s2 = PcolorMatrixSubplot(
@@ -51,7 +51,7 @@ def plot_together(title, P_coag, P_frag):
         title="dust particle fragmentation probability $P_{frag}$",
         xlabel="particle radius $a_j$ [m]",
         ylabel="particle radius $a_i$ [m]",
-        scales=("log", "log", "lin"),
+        axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )
     
@@ -72,7 +72,7 @@ def plot_separately(title, P_coag, P_frag):
         title="dust particle coagulation probability $P_{coag}$",
         xlabel="particle radius $a_j$ [m]",
         ylabel="particle radius $a_i$ [m]",
-        scales=("log", "log", "lin"),
+        axis_scales=("log", "log", "lin"),
         cmap="Blues",
     ) 
     
@@ -92,7 +92,7 @@ def plot_separately(title, P_coag, P_frag):
         title="dust particle fragmentation probability $P_{frag}$",
         xlabel="particle radius $a_j$ [m]",
         ylabel="particle radius $a_i$ [m]",
-        scales=("log", "log", "lin"),
+        axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )
 
