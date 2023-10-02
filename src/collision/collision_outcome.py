@@ -3,6 +3,30 @@ import numpy as np
 from config import Config
 
 
+def collision_outcome_probabilities(cfg: Config, dv: np.ndarray):
+    # Case 1: Include only hit-and-stick coagulation.
+    if (cfg.enable_coagulation) and (not cfg.enable_fragmentation):
+        P_coag, P_frag = 1, 0
+    # Case 2: Include only fragmentation.
+    elif (not cfg.enable_coagulation) and (cfg.enable_fragmentation):
+        P_coag, P_frag = 0, 1
+    # Case 3: Include neither (useless, but included for completeness).
+    elif (not cfg.enable_coagulation) and (not cfg.enable_fragmentation):
+        P_coag, P_frag = 0, 0
+    # Case 4: Include both.
+    else:
+        # Case 4.1: Assume fragmentation if `v > v_cutoff`, else coagulation.
+        if cfg.collision_outcome_variant == "cutoff_velocity":
+            P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity(cfg, dv)
+        # Case 4.2: Calculate outcome probabilities from cutoff velocity & M.B. distribution.
+        elif cfg.collision_outcome_variant == "mb_dist":
+            P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann(cfg, dv)
+        # Case 4.3: Assume equal probabilities.
+        else:
+            P_coag, P_frag = 0.5, 0.5
+    return P_coag, P_frag
+
+
 def collision_outcome_probabilities_from_maxwell_boltzmann(
     cfg: Config,
     dv,

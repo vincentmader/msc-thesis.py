@@ -4,8 +4,7 @@ from typing import Optional
 import numpy as np
 
 from axis import DiscreteMassAxis, DiscreteRadialAxis
-from collision import collision_outcome_probabilities_from_cutoff_velocity
-from collision import collision_outcome_probabilities_from_maxwell_boltzmann
+from collision import collision_outcome_probabilities
 from collision import collision_rate
 from config import Config
 from disk import Disk, DiskRegion
@@ -58,26 +57,7 @@ class Kernel():
             assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
         # Define probabilities for coagulation & fragmentation events.
-        # Case 1: Include only hit-and-stick coagulation.
-        if (cfg.enable_coagulation) and (not cfg.enable_fragmentation):
-            P_coag, P_frag = 1, 0
-        # Case 2: Include only fragmentation.
-        elif (not cfg.enable_coagulation) and (cfg.enable_fragmentation):
-            P_coag, P_frag = 0, 1
-        # Case 3: Include neither (useless, but included for completeness).
-        elif (not cfg.enable_coagulation) and (not cfg.enable_fragmentation):
-            P_coag, P_frag = 0, 0
-        # Case 4: Include both.
-        else:
-            # Case 4.1: Assume fragmentation if `v > v_cutoff`, else coagulation.
-            if cfg.collision_outcome_variant == "cutoff_velocity":
-                P_coag, P_frag = collision_outcome_probabilities_from_cutoff_velocity(cfg, dv)
-            # Case 4.2: Calculate outcome probabilities from cutoff velocity & M.B. distribution.
-            elif cfg.collision_outcome_variant == "mb_dist":
-                P_coag, P_frag = collision_outcome_probabilities_from_maxwell_boltzmann(cfg, dv)
-            # Case 4.3: Assume equal probabilities.
-            else:
-                P_coag, P_frag = 0.5, 0.5
+        P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
 
         # Define rate of coag./frag. events.
         R_coag = R_coll * P_coag
