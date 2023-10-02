@@ -10,6 +10,7 @@ path = Path(PATH_TO_LIB, "coag_py")
 path = str(path)
 sys.path.append(path)
 from coag.react_0d import solve_react_0d_equation
+from kernel import Kernel
 from sampling.kernel import SampledKernel
 from visualization.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
@@ -64,6 +65,8 @@ class Solver:
         N_dust = dm * n_dust
         
         R_coag, R_frag = None, None
+        kernel = Kernel(self.cfg)
+        W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) # NOTE Keep in sync with W_ij in `SampledKernel`
 
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
@@ -74,10 +77,10 @@ class Solver:
 
             if self.cfg.enable_collision_sampling:
                 if itime == 0:
-                    kernel = SampledKernel(self.cfg, N_dust)
+                    kernel = SampledKernel(self.cfg, N_dust, W_ij=W_ij)
                     R_coag, R_frag = kernel.R_coag, kernel.R_frag
                 else:
-                    kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag)
+                    kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag, W_ij=W_ij)
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # if itime % 10 == 0:
                 # if itime in [1, 50, 100, 120, 130, 140]:

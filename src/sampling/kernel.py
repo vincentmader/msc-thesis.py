@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 
 from config import Config
@@ -7,13 +9,19 @@ from kernel import Kernel
 class SampledKernel(Kernel):
     __slots__ = ["P_ij"]
 
-    def __init__(self, cfg: Config, N: np.ndarray, *args, **kwargs):
+    def __init__(
+        self, 
+        cfg: Config, 
+        N: np.ndarray, 
+        W_ij: Optional[np.ndarray]=None,
+        *args, **kwargs
+    ):
 
-        kernel = Kernel(cfg)
-        K, mg = kernel.K, kernel.mg
-        mc = mg.bin_centers
-
-        W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
+        if W_ij is None:
+            kernel = Kernel(cfg)
+            K, mg = kernel.K, kernel.mg
+            mc = mg.bin_centers
+            W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
 
         N_i = np.abs(N[:, None])
         N_j = np.abs(N[None, :])
