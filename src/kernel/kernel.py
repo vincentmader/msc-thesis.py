@@ -26,13 +26,15 @@ class Kernel():
     ):
         self.cfg = cfg
 
-        # Define discrete axes for...
-        # ...radial distance of disk region of interest from central star,
-        rg = DiscreteRadialAxis(cfg)
-        # ...particle mass,
-        mg = DiscreteMassAxis(cfg)
+        # Define discrete axes...
+        rg = DiscreteRadialAxis(cfg) # ...for distance from central star,
+        mg = DiscreteMassAxis(cfg)   # ...for particle mass,
         mc = mg.bin_centers
         self.mg = mg
+
+        # TODO Correct? (only needed for log?)
+        if cfg.enable_cancellation_handling and cfg.mass_axis_scale == "log":
+            assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
         # If relevant particle pairs are not specified explicitly,
         # assume all of them have to be taken into account.
@@ -42,23 +44,14 @@ class Kernel():
                 for j in range(mg.N):
                     ijs.append((i, j))
 
-        # Define...
-        # ...the protoplanetary disk, 
-        disk = Disk(cfg, rg, mg)
-        # ...the position of interest in the disk,
+        # Define PPD, & radial position of interest in it.
+        disk = Disk(cfg, rg, mg) 
         disk_region = DiskRegion(cfg, disk)
-        # ...relative dust particle velocities,
+        # Define relative dust particle velocities, & collision rates.
         dv = relative_velocity(cfg, disk, disk_region)
-        # ...collision rates.
         R_coll = collision_rate(cfg, disk, disk_region)
-
-        if cfg.enable_cancellation_handling and cfg.mass_axis_scale == "log":
-            # TODO Correct? (only needed for log?)
-            assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
-
         # Define probabilities for coagulation & fragmentation events.
         P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
-
         # Define rate of coag./frag. events.
         R_coag = R_coll * P_coag
         R_frag = R_coll * P_frag
