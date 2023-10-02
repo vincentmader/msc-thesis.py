@@ -1,3 +1,5 @@
+import numpy as np
+
 from .collision_cross_section import collision_cross_section
 from dust.relative_velocity import relative_velocity
 
@@ -5,12 +7,11 @@ from dust.relative_velocity import relative_velocity
 def collision_rate(cfg, disk, disk_region):  # TODO Think re: inputs of this function
     mg = disk.mg
 
-    # Calculate collision cross section & relative particle velocities.
-    sigma = collision_cross_section(cfg, mg)
-    dv = relative_velocity(cfg, disk, disk_region)
+    if cfg.enable_physical_collisions:
+        sigma = collision_cross_section(cfg, mg)
+        dv = relative_velocity(cfg, disk, disk_region)
+        return sigma * dv     # NOTE Simplification was made here.
 
-    # Calculate reaction rate.
-    # TODO Include reaction probability?
-    R = sigma * dv  # NOTE Simplification was made here.
-    # TODO Include number density?
-    return R
+    # In the most simple case, the rates are just set to 1.
+    else:  
+        return np.ones(shape=[mg.N] * 2)

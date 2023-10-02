@@ -51,10 +51,7 @@ class Kernel():
         dv = relative_velocity(cfg, disk, disk_region)
 
         # Define particle collision rates.
-        if cfg.enable_physical_collisions:
-            R_coll = collision_rate(cfg, disk, disk_region)
-        else:  # In the most simple case, the rates are just set to 1.
-            R_coll = np.ones(shape=[mg.N] * 2)
+        R_coll = collision_rate(cfg, disk, disk_region)
 
         if cfg.enable_cancellation_handling and cfg.mass_axis_scale == "log":
             # TODO Correct? (only needed for log?)
