@@ -62,6 +62,8 @@ class Solver:
 
         # Convert `n -> N` (number of particles per mass bin per volume).
         N_dust = dm * n_dust
+        
+        R_coag, R_frag = None, None
 
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
@@ -71,7 +73,11 @@ class Solver:
             dt = (tc[itime] - tc[itime - 1]) / N_subst
 
             if self.cfg.enable_collision_sampling:
-                kernel = SampledKernel(self.cfg, N_dust)
+                if itime == 0:
+                    kernel = SampledKernel(self.cfg, N_dust)
+                    R_coag, R_frag = kernel.R_coag, kernel.R_frag
+                else:
+                    kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag)
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # if itime % 10 == 0:
                 # if itime in [1, 50, 100, 120, 130, 140]:

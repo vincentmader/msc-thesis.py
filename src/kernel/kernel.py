@@ -14,15 +14,19 @@ from utils.functions import heaviside_theta
 
 class Kernel():
     __slots__ = [
-        "cfg", "mg", "K", "K_gain", "K_loss",
-        "K_coag", "K_coag_gain", "K_coag_loss",
-        "K_frag", "K_frag_gain", "K_frag_loss",
+        "cfg", "mg", 
+                  "R_coag",      "R_frag",
+        "K",      "K_coag",      "K_frag", 
+        "K_gain", "K_coag_gain", "K_frag_gain", 
+        "K_loss", "K_coag_loss", "K_frag_loss",
     ]
 
     def __init__(
         self, 
         cfg: Config, 
         ijs: Optional[list[tuple[int, int]]] = None,
+        R_coag: Optional[np.ndarray] = None,
+        R_frag: Optional[np.ndarray] = None,
     ):
         self.cfg = cfg
 
@@ -44,17 +48,18 @@ class Kernel():
                 for j in range(mg.N):
                     ijs.append((i, j))
 
-        # Define PPD, & radial position of interest in it.
-        disk = Disk(cfg, rg, mg) 
-        disk_region = DiskRegion(cfg, disk)
-        # Define relative dust particle velocities, & collision rates.
-        dv = relative_velocity(cfg, disk, disk_region)
-        R_coll = collision_rate(cfg, disk, disk_region)
-        # Define probabilities for coagulation & fragmentation events.
-        P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
-        # Define rate of coag./frag. events.
-        R_coag = R_coll * P_coag
-        R_frag = R_coll * P_frag
+        if R_coag is R_frag is None:
+            # Define PPD, & radial position of interest in it.
+            disk = Disk(cfg, rg, mg) 
+            disk_region = DiskRegion(cfg, disk)
+            # Define relative dust particle velocities, & collision rates.
+            dv = relative_velocity(cfg, disk, disk_region)
+            R_coll = collision_rate(cfg, disk, disk_region)
+            # Define probabilities for coagulation & fragmentation events.
+            P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
+            # Define rate of coag./frag. events.
+            R_coag, R_frag = R_coll * P_coag, R_coll * P_frag
+        self.R_coag, self.R_frag = R_coag, R_frag
 
         # Initialize kernel matrices with zeros.
         self.K_coag_gain = np.zeros(shape=[mg.N] * 3)

@@ -7,7 +7,7 @@ from kernel import Kernel
 class SampledKernel(Kernel):
     __slots__ = ["P_ij"]
 
-    def __init__(self, cfg: Config, N: np.ndarray):
+    def __init__(self, cfg: Config, N: np.ndarray, *args, **kwargs):
 
         kernel = Kernel(cfg)
         K, mg = kernel.K, kernel.mg
@@ -25,7 +25,7 @@ class SampledKernel(Kernel):
         
         ijs = self._sample_ijs(cfg)
 
-        super().__init__(cfg, ijs=ijs)
+        super().__init__(cfg, ijs=ijs, *args, **kwargs)
 
     def _sample_ijs(self, cfg: Config) -> list[tuple[int, int]]:
         P_ij = self.P_ij
