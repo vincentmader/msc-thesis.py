@@ -38,9 +38,10 @@ class PcolorMatrixSubplot(GridspecSubplot):
             assert scale in ["lin", "log"], "Invalid scale."
         if len(z.shape) < 3:
             assert k is None, "2D matrix has no third index k, no need to specify it."
-            assert z.shape[0] == z.shape[1], "Matrix shape should be cubic."
+            # assert z.shape[0] == z.shape[1], "Matrix shape should be cubic."
+            assert z.shape[0] == z.shape[1], "Matrix shape should be square."
         else:
-            assert z.shape[0] == z.shape[1] == z.shape[2], "Matrix shape should be cubic."
+            assert z.shape[1] == z.shape[2], "Matrix layer shape should be square."
 
         # Initialize class instance.
         super().__init__(*args, **kwargs)
