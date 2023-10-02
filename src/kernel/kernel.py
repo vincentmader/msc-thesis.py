@@ -28,9 +28,9 @@ class Kernel():
         self.cfg = cfg
 
         # Define discrete axes for...
-        # ...radial distance of disk region of interest from central star.
+        # ...radial distance of disk region of interest from central star,
         rg = DiscreteRadialAxis(cfg)
-        # ...particle mass.
+        # ...particle mass,
         mg = DiscreteMassAxis(cfg)
         mc = mg.bin_centers
         self.mg = mg
@@ -43,14 +43,14 @@ class Kernel():
                 for j in range(mg.N):
                     ijs.append((i, j))
 
-        # Define protoplanetary disk, & the position of interest in it.
+        # Define...
+        # ...the protoplanetary disk, 
         disk = Disk(cfg, rg, mg)
+        # ...the position of interest in the disk,
         disk_region = DiskRegion(cfg, disk)
-
-        # Define total relative dust particle velocities.
+        # ...relative dust particle velocities,
         dv = relative_velocity(cfg, disk, disk_region)
-
-        # Define particle collision rates.
+        # ...collision rates.
         R_coll = collision_rate(cfg, disk, disk_region)
 
         if cfg.enable_cancellation_handling and cfg.mass_axis_scale == "log":
