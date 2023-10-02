@@ -74,7 +74,7 @@ class GridspecPlot(BasePlot):
             self._setup_slider()
 
     def _setup_slider(self):
-        k_max = max([s.z.shape[2] - 1 for s in self.subplots]) # TODO
+        k_max = max([s.z.shape[0] - 1 for s in self.subplots]) # TODO
         k_init = k_max // 2 + 1
 
         ax = self.fig.add_subplot(self.gs[-1])
