@@ -28,10 +28,10 @@ def test_mass_conservation(mg, K):  # TODO Turn this function into `Kernel` clas
 
             err_ij = 0
             for k in range(N_m):
-                # err_ij += mc[k] * K[k, i, j]
-            # err_matrix[i, j] = err_ij / m_tot
-               err_ij += mc[k] * K[k, i, j]
-            err_matrix[i, j] = (err_ij / m_tot)**2
+                err_ij += mc[k] * K[k, i, j]
+            err_matrix[i, j] = np.abs(err_ij / m_tot)  
+            #                TODO ^ Remove `abs()` here, plot +/- side by side.
 
-    err_total = np.sum(err_matrix)**.5  # TODO
+    err_total = np.sum(err_matrix**2)**.5
+    # err_total = np.sum(err_matrix)
     return err_matrix, err_total
