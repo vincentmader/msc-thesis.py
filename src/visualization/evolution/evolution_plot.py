@@ -3,6 +3,7 @@ from matplotlib.widgets import Slider
 import numpy as np
 
 from axis import DiscreteTimeAxis
+from constants import DAYS_PER_YEAR
 from kernel import Kernel
 from visualization.base import BasePlot
 
@@ -107,7 +108,7 @@ def format_time(t) -> str:
     M = 60
     H = 60*M
     D = 24*H
-    Y = 365.25*D
+    Y = DAYS_PER_YEAR * D
     KY = 1000 * Y
     MY = 1000 * KY
 

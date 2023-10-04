@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+from constants import SECONDS_PER_YEAR
 from visualization.base import BasePlot
 
 
@@ -16,7 +17,7 @@ class MassConservationPlot(BasePlot):
         super().__init__(*args, **kwargs)
 
     def draw(self):
-        t = self.t / (365 * 24 * 60 * 60)
+        t = self.t / SECONDS_PER_YEAR
         M = self.M
         err = (M - M[0]) / M[0]
         x, y = t, err

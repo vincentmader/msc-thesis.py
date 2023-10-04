@@ -21,3 +21,7 @@ m_p = 1.673e-27      # kg
 
 # Collision Cross Section of Molecular Hydrogen
 sigma_H2 = 2e-19     # m^2
+
+# Nr. of Earth days per Earth year.
+DAYS_PER_YEAR = 365.2425
+SECONDS_PER_YEAR = DAYS_PER_YEAR * 24 * 60 * 60

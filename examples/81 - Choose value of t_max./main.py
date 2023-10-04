@@ -1,16 +1,10 @@
 import numpy as np
+from constants import SECONDS_PER_YEAR
+
 # ═════════════════════════════════════════════════════════════════════════════
 
-SECOND = 1
-MINUTE = 60 * SECOND
-HOUR = 60 * MINUTE
-DAY = 24 * HOUR
-YEAR = 365.25 * DAY
-
-MILLION = 1e6
-
+MILLION, YEAR = 1e6, SECONDS_PER_YEAR
 t_max = 100 * MILLION * YEAR
-
 print(f"t_max = {t_max / YEAR:.2e} y")
 print(f"      = {t_max:.2e} s")
 
@@ -29,11 +23,9 @@ print(t)
 print()
 
 
-year_in_s = 60 * 60 * 24 * 365.25
-
 years = [60, 70]
 for year in years:
-    duration_in_years = t[year] / year_in_s
+    duration_in_years = t[year] / SECONDS_PER_YEAR
     duration_in_myears = duration_in_years / 1e6
 
     print(f"\nt[{year}]")
