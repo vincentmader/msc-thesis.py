@@ -10,8 +10,6 @@ def assert_cubic_kernel_shape(K):
 
 
 def test_mass_conservation(mg, K):  # TODO Turn this function into `Kernel` class method.
-    K = np.array([0.5 * (K_k + K_k.T) for K_k in K])  
-    # ^ TODO Why such different results when this line is commented out?
 
     N_m = assert_cubic_kernel_shape(K)
     assert N_m == mg.N

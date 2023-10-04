@@ -46,6 +46,7 @@ class Kernel():
             ijs = []
             for i in range(mg.N):
                 for j in range(mg.N):
+                    # (i, j) = (i, j) if j <= i  else (j, i)
                     ijs.append((i, j))
 
         if R_coag is R_frag is None:
@@ -75,6 +76,7 @@ class Kernel():
         # ...stick-and-hit coagulation processes.
         if cfg.enable_coagulation:
             K_coag_gain, K_coag_loss = self._K_coag(ijs)  # TODO Rename: K -> X?
+            # K_coag_loss = np.array([(K_k + K_k.T) for K_k in K_coag_loss])[?]
             K_coag_gain *= R_coag
             K_coag_loss *= R_coag
             self.K_coag_gain += K_coag_gain
@@ -109,10 +111,20 @@ class Kernel():
 
         # Loop over all mass pairs.
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
-            # if i < j:
-            #     i, j = j, i
-
+            ii, jj = (i, j) if i >= j else (j, i)
+            # NOTE: The variables `ii` or `jj` are used for the case  where
+            #       you have to flip indices, i.e. do `(i,j) -> (j,i)`.
+            #       This "flip" is needed to assure that the kernel lives 
+            #       entirely in the top-left half of the matrix (due to 
+            #       symmetry of problem, collision "ij = ji").
+            #       When doing the flip, we cannot do a simple tuple 
+            #       deconstruction like `(i,j) = (j, i)`, since the indices
+            #       are needed elsewhere in their "unflipped" initial state.
             m_i, m_j = mc[i], mc[j]
+            # NOTE: Ignoring a possible index flip (like mentioned above) when defining
+            #       the masses `m_i` and `m_i` is possible when they're only used for
+            #       defining their sum `m_tot` (commutative/symmetric).
+            #       In general, this is not necessarily the case, but here it's alright.
 
             th = heaviside_theta(i - j)
 
@@ -151,13 +163,13 @@ class Kernel():
             if not near_upper_bound:
                 # Handle cancellation.
                 if handle_cancellation:
-                    K_loss[k_l, i, j] -= th * eps
-                    K_loss[k_l, i, j] -= th if i == j else 0
+                    K_loss[k_l, ii, jj] -= th * eps
+                    K_loss[k_l, ii, jj] -= th if i == j else 0
                     # ^ TODO Why is this term here?
                     #        If removed, the solver crashes.
                 # Handle "trivial" (non-cancelling) case.
                 else:
-                    K_loss[i, i, j] -= 1 if i < N_m - 1 else 0
+                    K_loss[i, ii, jj] -= 1 if i < N_m - 1 else 0
 
             # Add "gain" term to kernel.
             # ─────────────────────────────────────────────────────────────
@@ -165,11 +177,11 @@ class Kernel():
             if not near_upper_bound:
                 # Handle cancellation.
                 if handle_cancellation:
-                    K_gain[k_h, i, j] += th * eps
+                    K_gain[k_h, ii, jj] += th * eps
                 # Handle "trivial" (non-cancelling) case.
                 else:
-                    K_gain[k_l, i, j] += th * (1 - eps)
-                    K_gain[k_h, i, j] += th * eps
+                    K_gain[k_l, ii, jj] += th * (1 - eps)
+                    K_gain[k_h, ii, jj] += th * eps
 
         return K_gain, K_loss
 
@@ -187,8 +199,7 @@ class Kernel():
         K_loss = np.zeros(shape=[N_m] * 3)
 
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
-            # if i < j:  
-            #     i, j = j, i
+            ii, jj = (i, j) if i >= j else (j, i)
             m_i, m_j = mc[i], mc[j]
             th = heaviside_theta(i - j)
 
@@ -202,8 +213,8 @@ class Kernel():
                 m_k = mc[k]
                 if min(i, j) > X:
                     eps = (m_i + m_j) / m_k
-                    K_loss[i, i, j] -= 1
-                    K_gain[k, i, j] += th * eps
+                    K_loss[i, ii, jj] -= 1
+                    K_gain[k, ii, jj] += th * eps
 
             # 2. Mass redistribution following the MRN model
             # ═════════════════════════════════════════════════════════════════
@@ -242,12 +253,12 @@ class Kernel():
                     # A = mc[k]**q / S
                     # NOTE: The "equations" (statements) 1 & 6 are not numerically equivalent!
                     #       The following steps serve to find out where the difference occurs (5->6).
-                    # K_gain[k, i, j] += m_tot / mc[k] * A * th                      # eq. 1
-                    # K_gain[k, i, j] += m_tot / mc[k] * (mc[k]**q / S) * th         # eq. 2
-                    # K_gain[k, i, j] += m_tot * (mc[k]**q / mc[k] / S) * th         # eq. 3
-                    # K_gain[k, i, j] += m_tot * ((mc[k]**q / mc[k]) / S) * th       # eq. 4
-                    K_gain[k, i, j] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
-                    # K_gain[k, i, j] += m_tot * (mc[k]**(q-1.0) / S) * th           # eq. 6
+                    # K_gain[k, i, j] += m_tot / mc[k] * A * th                        # eq. 1
+                    # K_gain[k, i, j] += m_tot / mc[k] * (mc[k]**q / S) * th           # eq. 2
+                    # K_gain[k, i, j] += m_tot * (mc[k]**q / mc[k] / S) * th           # eq. 3
+                    # K_gain[k, i, j] += m_tot * ((mc[k]**q / mc[k]) / S) * th         # eq. 4
+                    # K_gain[k, i, j] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
+                    # K_gain[k, i, j] += m_tot * (mc[k]**(q-1.0) / S) * th             # eq. 6
                     # ^ TODO: Why does this lead to changes in the kernel mass conservation plot?
                     a = ((mc[k]**q * mc[k]**(-1)) / S)
                     b = (mc[k]**(q-1.0) / S)
@@ -255,9 +266,11 @@ class Kernel():
                     c = abs(a / b - 1)
                     assert c < 1e-14
                     # TODO: Decide which one to use.
+                    #       For now: Use equation 5:
+                    K_gain[k, ii, jj] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
 
                 # Remove mass from bins corresponding to initial masses.
-                K_loss[i, i, j] -= 1
+                K_loss[i, ii, jj] -= 1
 
             else: 
                 pass
