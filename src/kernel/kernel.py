@@ -162,9 +162,8 @@ class Kernel():
             if not near_upper_bound:
                 if handle_cancellation:
                     K_loss[k_l, ii, jj] -= th * eps
-                    K_loss[k_l, ii, jj] -= th if i == j else 0
-                    # ^ TODO Why is this term here?
-                    #        If removed, the solver crashes.
+                    # K_loss[k_l, ii, jj] -= th if i == j else 0
+                    # ^ TODO Why is this term here? (If removed, the solver crashes/crashed)
                 else:  # Handle "trivial" (non-cancelling) case.
                     K_loss[i, ii, jj] -= 1 if i < N_m - 1 else 0
 
