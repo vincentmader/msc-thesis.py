@@ -20,6 +20,7 @@ class KernelSubplot(PcolorMatrixSubplot):
         *args, **kwargs
     ):
 
+        # TODO Fix x/y axes. Plot mass/bin/radius boundaries, not centers (?)
         if axis_label_variant is AxisLabelVariant.Radius:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
@@ -52,16 +53,18 @@ class KernelSubplot(PcolorMatrixSubplot):
         super().__init__(x, y, K, *args, **kwargs)
 
     def format_coord(self, x, y):
-        if self.axis_variant is AxisLabelVariant.Radius:
-            rho_s = self.cfg.dust_particle_density
-            m_i = particle_mass_from_radius(y, rho_s)
-            m_j = particle_mass_from_radius(x, rho_s)
-            i = self.mg.index_from_value(m_i)
-            j = self.mg.index_from_value(m_j)
-        elif self.axis_variant is AxisLabelVariant.Radius:
-            i = self.mg.index_from_value(y)
-            j = self.mg.index_from_value(x)
-        else:  # -> `AxisLabelVariant.Bin`
-            i, j = int(y), int(x)
-
+        try:
+            if self.axis_variant is AxisLabelVariant.Radius:
+                rho_s = self.cfg.dust_particle_density
+                m_i = particle_mass_from_radius(y, rho_s)
+                m_j = particle_mass_from_radius(x, rho_s)
+                i = self.mg.index_from_value(m_i)
+                j = self.mg.index_from_value(m_j)
+            elif self.axis_variant is AxisLabelVariant.Radius:
+                i = self.mg.index_from_value(y)
+                j = self.mg.index_from_value(x)
+            else:  # -> `AxisLabelVariant.Bin`
+                i, j = int(y), int(x)
+        except IndexError:
+            return ""
         return f"k = {self.k}   {i = }   {j = }   K_kij = {self.z[self.k, i, j]:.2}"

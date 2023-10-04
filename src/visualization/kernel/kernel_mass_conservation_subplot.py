@@ -30,16 +30,18 @@ class KernelMassConservationSubplot(KernelSubplot):
         super().__init__(cfg, mg, err_matrix, axis_label_variant=axis_label_variant, *args, **kwargs)
 
     def format_coord(self, x, y):
-        if self.axis_variant is AxisLabelVariant.Radius:
-            rho_s = self.cfg.dust_particle_density
-            m_i = particle_mass_from_radius(y, rho_s)
-            m_j = particle_mass_from_radius(x, rho_s)
-            i = self.mg.index_from_value(m_i)
-            j = self.mg.index_from_value(m_j)
-        elif self.axis_variant is AxisLabelVariant.Radius:
-            i = self.mg.index_from_value(y)
-            j = self.mg.index_from_value(x)
-        else:  # -> `AxisLabelVariant.Bin`
-            i, j = int(y), int(x)
-
+        try:
+            if self.axis_variant is AxisLabelVariant.Radius:
+                rho_s = self.cfg.dust_particle_density
+                m_i = particle_mass_from_radius(y, rho_s)
+                m_j = particle_mass_from_radius(x, rho_s)
+                i = self.mg.index_from_value(m_i)
+                j = self.mg.index_from_value(m_j)
+            elif self.axis_variant is AxisLabelVariant.Radius:
+                i = self.mg.index_from_value(y)
+                j = self.mg.index_from_value(x)
+            else:  # -> `AxisLabelVariant.Bin`
+                i, j = int(y), int(x)
+        except IndexError:
+            return ""
         return f"{i = }, {j = }, sum_k K_kij = {self.z[i, j]:.2}"
