@@ -6,9 +6,7 @@ import numpy as np
 
 from visualization.base import GridspecSubplot
 
-
-VMIN = 1e-20
-VMAX = 1e-7
+VMIN, VMAX = 1e-20, 1e-7
 
 
 class PcolorMatrixSubplot(GridspecSubplot):
@@ -20,17 +18,17 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
     def __init__(
         self, 
-        x: np.ndarray,
-        y: np.ndarray,
-        z: np.ndarray,
-        k: Optional[int] = None,
-        symmetrized: bool = False,
-        axis_scales: tuple[str, str, str] = ("log", "log", "log"),
-        z_limits: Optional[tuple[float, float]] = None,
-        xticks: Optional[Any] = None,
-        yticks: Optional[Any] = None,
-        grid: Optional[bool] = False,
-        cmap: str = "Reds",
+        x:              np.ndarray,
+        y:              np.ndarray,
+        z:              np.ndarray,
+        xticks:         Optional[Any]                   = None,
+        yticks:         Optional[Any]                   = None,
+        z_limits:       Optional[tuple[float, float]]   = None,
+        k:              Optional[int]                   = None,
+        grid:           Optional[bool]                  = False,
+        symmetrized:    bool                            = False,
+        cmap:           str                             = "Reds",
+        axis_scales:    tuple[str, str, str]            = ("log", "log", "log"),
         *args, **kwargs,
     ):
         # Assert valid scale specifications, & valid (cubic) matrix shape.
@@ -45,15 +43,15 @@ class PcolorMatrixSubplot(GridspecSubplot):
 
         # Initialize class instance.
         super().__init__(*args, **kwargs)
-        self.axis_scales, self.z_limits = axis_scales, z_limits
+        self.x, self.y, self.z = x, y, z
         self.cmap, self.grid = cmap, grid
         self.xticks, self.yticks = xticks, yticks
-        self.x, self.y, self.z = x, y, z
+        self.axis_scales, self.z_limits = axis_scales, z_limits
 
         # Symmetrize 3D matrix "layers".
-        if symmetrized and len(z.shape) == 2:
+        if symmetrized and (len(z.shape) == 2):
             self.z = (z + z.T) / 2
-        if symmetrized and len(z.shape) == 3:
+        if symmetrized and (len(z.shape) == 3):
             self.z = np.array([(z + z.T)/2 for z in z])
 
         # Define initial matrix "layer index".
