@@ -23,13 +23,15 @@ def test_mass_conservation(mg, K):  # TODO Move to `Kernel` definition?
 
     err_matrix = np.zeros(shape=[N_m] * 2)
     for i in range(N_m):
-        for j in range(N_m):
+        for j in range(N_m):  # TODO Use `i+1` as max.?
             m_tot = mc[i] + mc[j]
 
             err_ij = 0
             for k in range(N_m):
+                # err_ij += mc[k] * K[k, i, j]
+            # err_matrix[i, j] = err_ij / m_tot
                 err_ij += mc[k] * K[k, i, j]
-            err_matrix[i, j] = abs(err_ij) / m_tot # < 1e-12
+            err_matrix[i, j] = (err_ij / m_tot)**2
 
-    err_total = np.sum(err_matrix)  # TODO Calc. with squares?
+    err_total = np.sum(err_matrix)**.5  # TODO
     return err_matrix, err_total
