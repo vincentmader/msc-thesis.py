@@ -4,6 +4,7 @@ from typing import Optional
 import numpy as np
 
 from axis import DiscreteMassAxis, AxisLabelVariant
+from dust import particle_mass_from_radius
 from visualization.base import PcolorMatrixSubplot
 
 
@@ -49,3 +50,18 @@ class KernelSubplot(PcolorMatrixSubplot):
 
         self.cfg, self.mg, self.axis_variant = cfg, mg, axis_label_variant
         super().__init__(x, y, K, *args, **kwargs)
+
+    def format_coord(self, x, y):
+        if self.axis_variant is AxisLabelVariant.Radius:
+            rho_s = self.cfg.dust_particle_density
+            m_i = particle_mass_from_radius(y, rho_s)
+            m_j = particle_mass_from_radius(x, rho_s)
+            i = self.mg.index_from_value(m_i)
+            j = self.mg.index_from_value(m_j)
+        elif self.axis_variant is AxisLabelVariant.Radius:
+            i = self.mg.index_from_value(y)
+            j = self.mg.index_from_value(x)
+        else:  # -> `AxisLabelVariant.Bin`
+            i, j = int(y), int(x)
+
+        return f"k = {self.k}   {i = }   {j = }   K_kij = {self.z[self.k, i, j]:.2}"
