@@ -2,7 +2,7 @@ import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, DiscreteRadialAxis, KernelAxisLabelVariant
+    from axis import DiscreteMassAxis, DiscreteRadialAxis, AxisLabelVariant
     from collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
@@ -33,7 +33,7 @@ p = GridspecPlot([
         cfg, mg, R_coll,
         title="collision rate $R_{coll}$",
         # ^ TODO Add units.
-        axis_label_variant=KernelAxisLabelVariant.Radius,
+        axis_label_variant=AxisLabelVariant.Radius,
         # axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )
