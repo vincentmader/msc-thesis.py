@@ -25,7 +25,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         yticks:         Optional[Any]                   = None,
         z_limits:       Optional[tuple[float, float]]   = None,
         k:              Optional[int]                   = None,
-        grid:           Optional[bool]                  = False,
+        grid:           bool                            = False,
         symmetrized:    bool                            = False,
         cmap:           str                             = "Reds",
         axis_scales:    tuple[str, str, str]            = ("log", "log", "log"),
