@@ -140,3 +140,31 @@ def stokes_nr(rho_s, a, Sigma_g):
 def reynolds_nr(a, u, nu):  # NOTE Don't use Kepler here!
     Re = 2 * a * u / nu
     return Re
+
+
+def u_r(cfg, disk_region, St, delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r):
+    """Radial Dust Velocity"""
+    r       = cfg.distance_to_star
+    c_s     = disk_region.sound_speed
+    v_K     = disk_region.kepler_velocity
+    Sigma_g = disk_region.gas_surface_density
+
+    v_g = u_g(r, Sigma_g, delr_Sigma_g_nu_g_sqrt_r)
+    v_n = u_n(c_s, v_K, del_ln_P_g_del_ln_r)
+    v_r = (v_g - 2 * St * v_n) / (1 + St**2)
+    return v_r
+
+
+def u_g(r, Sigma_g, delr_Sigma_g_nu_g_sqrt_r):
+    """Radial Gas Velocity"""
+    u_g = -3 / (Sigma_g * np.sqrt(r)) * delr_Sigma_g_nu_g_sqrt_r
+    return u_g
+
+
+def u_n(c_s, v_K, del_ln_P_g_del_ln_r):
+    """Maximum drift velocity of a particle"""
+    E_d = 1
+    u_n = -E_d / 2 * c_s**2 / v_K * del_ln_P_g_del_ln_r
+    return u_n
+#   u_n = -E_d * del_P_g_del_r / (2 * rho_g * Omega_K)
+#       ^ from 2010 Birnstiel, eq. 20

@@ -1,7 +1,6 @@
 import numpy as np
 
-from dust import particle_radius_from_mass
-from utils import physics
+from utils import physics 
 
 
 def dv_radial_drift(cfg, disk, disk_region):
@@ -14,7 +13,7 @@ def dv_radial_drift(cfg, disk, disk_region):
 
     del_ln_P_g_del_ln_r      = disk_region.gas_pressure_gradient
     delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
-    v_r = u_r(
+    v_r = physics.u_r(
         cfg, disk_region, St, delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r
     )
 
@@ -27,33 +26,6 @@ def dv_radial_drift(cfg, disk, disk_region):
             dv[i, j] = np.abs(v_j - v_i)
 
     return dv
-
-
-def u_r(cfg, disk_region, St, delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r):
-    """Radial Dust Velocity"""
-    r       = cfg.distance_to_star
-    c_s     = disk_region.sound_speed
-    v_K     = disk_region.kepler_velocity
-    Sigma_g = disk_region.gas_surface_density
-
-    v_g = u_g(r, Sigma_g, delr_Sigma_g_nu_g_sqrt_r)
-    v_n = u_n(c_s, v_K, del_ln_P_g_del_ln_r)
-    v_r = (v_g - 2 * St * v_n) / (1 + St**2)
-    return v_r
-
-
-def u_g(r, Sigma_g, delr_Sigma_g_nu_g_sqrt_r):
-    """Radial Gas Velocity"""
-    u_g = -3 / (Sigma_g * np.sqrt(r)) * delr_Sigma_g_nu_g_sqrt_r
-    return u_g
-
-
-def u_n(c_s, v_K, del_ln_P_g_del_ln_r):
-    """Maximum drift velocity of a particle"""
-    E_d = 1
-    u_n = - E_d / 2 * c_s**2 / v_K * del_ln_P_g_del_ln_r
-    # u_n = -del_P_g_del_r * E_d / (2 * rho_g * Omega_K)
-    return u_n
 
 
 # def v_r(disk_region, masses, del_P_g_del_r):
