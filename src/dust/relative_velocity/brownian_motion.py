@@ -9,7 +9,7 @@ def dv_brownian_motion(cfg, disk, disk_region):
     mg = disk.mg
     mc = mg.bin_centers
 
-    T_mid = disk_region.T_mid
+    T_mid = disk_region.midplane_temperature
     dv = np.zeros(shape=[mg.N] * 2)
     for i, m_i in enumerate(mc):
         for j, m_j in enumerate(mc):

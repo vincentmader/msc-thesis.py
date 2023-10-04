@@ -7,6 +7,7 @@ try:
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from dust import particle_radius_from_mass
+    from utils import physics
 except ModuleNotFoundError as e:
     raise e
 
@@ -68,15 +69,22 @@ def plot_3(m, t_stop):
 
 
 if __name__ == "__main__":
-    mc = mg.bin_centers
-    rho_s = cfg.dust_particle_density
-    radii = particle_radius_from_mass(mc, rho_s)
-    stopping_times = disk_region.stopping_time(radii, rho_s)
-    stokes_nrs = disk_region.stokes_nr(mc, stopping_times, rho_s)
-    u = disk_region.v_K  # TODO Is this correct?
-    reynolds_nrs = disk_region.reynolds_nr(mc, u)
+    rho_g_mid   = disk_region.midplane_gas_volume_density
+    u_th        = disk_region.thermal_velocity
+    mc          = disk_region.mg.bin_centers
+    u           = disk_region.kepler_velocity  # TODO Is this correct?
+    Sigma_g     = disk_region.gas_surface_density
+    nu_mol      = disk_region.viscosity
+    rho_s       = cfg.dust_particle_density
+    a           = particle_radius_from_mass(mc, rho_s)
 
     os.makedirs(Path(PATH_TO_FIGURES, "12"), exist_ok=True)
-    plot_1(mc, stokes_nrs)
+
+    reynolds_nrs = physics.reynolds_nr(a, u, nu_mol)
     plot_2(mc, reynolds_nrs)
+
+    stopping_times = physics.stopping_time(rho_s, a, rho_g_mid, u_th)
     plot_3(mc, stopping_times)
+
+    stokes_nrs = physics.stokes_nr(rho_s, a, Sigma_g)
+    plot_1(mc, stokes_nrs)

@@ -96,11 +96,8 @@ def midplane_gas_volume_density(r: np.ndarray, Sigma_g: np.ndarray, H_p: np.ndar
 
 def delr_Sigma_g_nu_g_sqrt_r(r: np.ndarray, Sigma_g: np.ndarray, nu_g: np.ndarray):
     Sigma_g_nu_g_sqrt_r = Sigma_g * nu_g * np.sqrt(r)
-
     delr_Sigma_g_nu_g_sqrt_r = finite_difference(Sigma_g_nu_g_sqrt_r, r)
-    delr_Sigma_g_nu_g_sqrt_r = np.append(
-        delr_Sigma_g_nu_g_sqrt_r, delr_Sigma_g_nu_g_sqrt_r[-1]
-    )  # TODO
+    # TODO Make sure the output array has correct shape (append one more?).
     return delr_Sigma_g_nu_g_sqrt_r
 
 
@@ -108,8 +105,38 @@ def del_ln_P_g_del_ln_r(r: np.ndarray, P_g: np.ndarray):
     ln_P_g = np.log(P_g)
     ln_r = np.log(r)
     del_ln_P_g_del_ln_r = finite_difference(ln_P_g, ln_r)
-
-    del_ln_P_g_del_ln_r = np.append(
-        del_ln_P_g_del_ln_r, del_ln_P_g_del_ln_r[-1]
-    )  # TODO
+    # TODO Make sure the output array has correct shape (append one more?).
     return del_ln_P_g_del_ln_r
+
+
+def stopping_time(rho_s, a, rho_g, u_th):
+    # TODO Implement Stokes regimes.
+    # Re = self.reynolds_nr(radii, u)
+    # nu_mol = self.nu_mol
+    # res = np.zeros(shape=(len(radii)))
+    # u = 1  # TODO
+    #     if Re < 1:
+    #         t_s_i = (2 * rho_s * a**2) / (9 * nu_mol * rho_g)
+    #     if 1 < Re < 800:
+    #         t_s_i = (2**0.6 * rho_s * a**1.6) /
+    #         (9 * nu_mol**0.6 * rho_g**1.4 * u**0.4)
+    #     if Re > 800:
+    #         return (6 * rho_s * a) / (rho_g * u)
+    #     # todo: when epstein? see 2010 Birnstiel
+    t_s = (rho_s * a) / (rho_g * u_th)
+    return t_s
+
+
+def stokes_nr(rho_s, a, Sigma_g):
+    # TODO Distinguish cases.
+    if True:  # a < 9 / 4 * lambda_mfp:      # 2010 Birnstiel
+        St = rho_s * a / Sigma_g * PI / 2    # 2010 Birnstiel
+        return St
+    else:
+        St = t_stop / tau_ed                 # 2010 Birnstiel
+        return St
+
+
+def reynolds_nr(a, u, nu):  # NOTE Don't use Kepler here!
+    Re = 2 * a * u / nu
+    return Re

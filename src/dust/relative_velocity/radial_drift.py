@@ -1,24 +1,24 @@
 import numpy as np
 
 from dust import particle_radius_from_mass
+from utils import physics
 
 
 def dv_radial_drift(cfg, disk, disk_region):
-    mg = disk.mg
+    mc, ac  = disk.mg.bin_centers, disk.mg.particle_radii
+    rho_s   = cfg.dust_particle_density
+    rho_g   = disk_region.midplane_gas_volume_density
+    u_th    = disk_region.thermal_velocity
+    t_stop  = physics.stopping_time(rho_s, ac, rho_g, u_th)
+    St      = physics.stokes_nr(ac, t_stop, rho_s)
 
-    del_ln_P_g_del_ln_r = disk_region.gas_pressure_gradient
+    del_ln_P_g_del_ln_r      = disk_region.gas_pressure_gradient
     delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
+    v_r = u_r(
+        cfg, disk_region, St, delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r
+    )
 
-    mc = mg.bin_centers  # TODO Use bounds or centers?
-    rho_s = cfg.dust_particle_density
-    radii = particle_radius_from_mass(mc, rho_s)
-    stopping_times = disk_region.stopping_time(radii, rho_s)
-    stokes_nrs = disk_region.stokes_nr(radii, stopping_times, rho_s)
-
-    v_r = u_r(cfg, disk_region, stokes_nrs,
-              delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r)
-
-    dv = np.zeros(shape=[mg.N] * 2)
+    dv = np.zeros(shape=[disk.mg.N] * 2)
     for i, _ in enumerate(mc):
         v_i = v_r[i]
         for j, _ in enumerate(mc):
@@ -29,13 +29,12 @@ def dv_radial_drift(cfg, disk, disk_region):
     return dv
 
 
-def u_r(cfg, disk_region, stokes_nrs, delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r):
+def u_r(cfg, disk_region, St, delr_Sigma_g_nu_g_sqrt_r, del_ln_P_g_del_ln_r):
     """Radial Dust Velocity"""
-    St = stokes_nrs
-    c_s = disk_region.c_s
-    v_K = disk_region.v_K
-    Sigma_g = disk_region.Sigma_g
-    r = cfg.distance_to_star
+    r       = cfg.distance_to_star
+    c_s     = disk_region.sound_speed
+    v_K     = disk_region.kepler_velocity
+    Sigma_g = disk_region.gas_surface_density
 
     v_g = u_g(r, Sigma_g, delr_Sigma_g_nu_g_sqrt_r)
     v_n = u_n(c_s, v_K, del_ln_P_g_del_ln_r)

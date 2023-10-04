@@ -2,35 +2,33 @@ import numpy as np
 from numpy import pi as PI
 
 from constants import m_p, k_B
-from dust import particle_radius_from_mass
+from utils import physics
 
 
 def dv_turbulence(cfg, disk, disk_region):
-    mg = disk.mg
-    mc = mg.bin_centers
-    rho_s = cfg.dust_particle_density
-    ac = mg.particle_radii
-
-    alpha = cfg.viscosity_alpha
-    T_mid = disk_region.T_mid
-    rho_g = disk_region.rho_g
-    t_stop = disk_region.stopping_time(ac, rho_s)
-    c_s = disk_region.c_s
-    H_p = disk_region.H_p
-    Omega_K = disk_region.Omega_K
+    mc, ac  = disk.mg.bin_centers, disk.mg.particle_radii
+    T_mid   = disk_region.midplane_temperature
+    rho_g   = disk_region.midplane_gas_volume_density
+    u_th    = disk_region.thermal_velocity
+    c_s     = disk_region.sound_speed
+    H_p     = disk_region.scale_height
+    Omega_K = disk_region.kepler_frequency
+    rho_s   = cfg.dust_particle_density
+    alpha   = cfg.viscosity_alpha
+    t_stop  = physics.stopping_time(rho_s, ac, rho_g, u_th)
 
     vturb0 = np.sqrt(alpha) * c_s
     lturb0 = np.sqrt(alpha) * H_p
     tturb0 = 1 / Omega_K  # lturb0 / vturb0
 
     def v1():
-        return np.zeros(shape=[mg.N] * 2)
+        return np.zeros(shape=[disk.mg.N] * 2)
 
     def v2():
         return dv_tu_voelk(t_stop, t_stop, rho_g, T_mid, vn, tn)
 
     def v3():
-        dv = np.zeros(shape=[mg.N] * 2)
+        dv = np.zeros(shape=[disk.mg.N] * 2)
         for i, _ in enumerate(mc):
             for j, _ in enumerate(mc):
                 t_i = t_stop[i]
