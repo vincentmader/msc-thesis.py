@@ -18,8 +18,8 @@ class MassConservationPlot(BasePlot):
 
     def draw(self):
         t = self.t / SECONDS_PER_YEAR
-        M = self.M
-        err = (M - M[0]) / M[0]
+        M = self.M  # TODO Rename: M -> rho
+        err = (M - M[0]) / M[0] * 100
         x, y = t, err
 
         # TODO Do with and without:
@@ -28,20 +28,21 @@ class MassConservationPlot(BasePlot):
         # y = y[:-1] / (x[1:] - x[:-1])
         # x = x[:-1]
 
-        plt.loglog(x, y, "red", label=r"$\Delta M_t>0$")
-        plt.loglog(x, -y, "blue", label=r"$\Delta M_t<0$")
+        plt.loglog(x,  y, "red",  label=r"$\Delta \rho_t>0$")
+        plt.loglog(x, -y, "blue", label=r"$\Delta \rho_t<0$")
         plt.legend(loc="best")
         plt.xlabel("time $t$ [years]")
-        plt.ylabel("mass error $\Delta M_t$ [kg]")
-        plt.title(r"mass error $\Delta M_t=(M_t-M_0)/M_0$")
+        plt.ylabel(r"mass error $\Delta\rho_t$ [%]")
+        plt.title( r"mass error $\Delta\rho_t=(\rho_t-\rho_0)/\rho_0$")
+        plt.grid()
 
         color = "white" if self.cfg.mpl_dark_mode else "black" # TODO Make sure this works also when not calling from preset `p1`.
         rel_error = (M[-1]-M[0])/M[0]
         rel_error_sign = f"+" if rel_error > 0 else ""
         msgs = [
-            ((0.5, 0.45), r"$M_i$ = " + f"{M[0]}"),
-            ((0.5, 0.4), r"$M_f$ = " + f"{M[-1]}"),
-            ((0.5, 0.35), r"$\frac{M_f-M_i}{M_i}$ = " + rel_error_sign + f"{rel_error*100} %"),
+            ((0.5, 0.55), r"$M_i$ = " + f"{M[0]}"),
+            ((0.5, 0.5), r"$M_f$ = " + f"{M[-1]}"),
+            ((0.5, 0.45), r"$\frac{M_f-M_i}{M_i}$ = " + rel_error_sign + f"{rel_error*100} %"),
         ]
         for (x, y), msg in msgs:
             print(msg)
