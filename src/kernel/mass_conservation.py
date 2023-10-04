@@ -9,7 +9,7 @@ def assert_cubic_kernel_shape(K):
     return shape[0]
 
 
-def test_mass_conservation(mg, K):  # TODO Move to `Kernel` definition?
+def test_mass_conservation(mg, K):  # TODO Turn this function into `Kernel` class method.
     K = np.array([0.5 * (K_k + K_k.T) for K_k in K])  
     # ^ TODO Why such different results when this line is commented out?
 
@@ -30,7 +30,7 @@ def test_mass_conservation(mg, K):  # TODO Move to `Kernel` definition?
             for k in range(N_m):
                 # err_ij += mc[k] * K[k, i, j]
             # err_matrix[i, j] = err_ij / m_tot
-                err_ij += mc[k] * K[k, i, j]
+               err_ij += mc[k] * K[k, i, j]
             err_matrix[i, j] = (err_ij / m_tot)**2
 
     err_total = np.sum(err_matrix)**.5  # TODO
