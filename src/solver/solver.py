@@ -46,6 +46,17 @@ def plot(cfg, mg, K, P): # TODO Move elsewhere.
     ]).render()
 
 
+def plot_2(cfg, mg, Ps):
+    GridspecPlot(
+        [
+            KernelSubplot(
+                cfg, mg, np.array(Ps), cmap="Blues", z_limits=(1e-5, 1),
+                title="Collision Pair Sampling Probability $P_{ij}$"
+            )
+        ], add_slider=True,
+    ).render()
+
+
 class Solver:
 
     def __init__(self, cfg):
@@ -68,6 +79,8 @@ class Solver:
         kernel = Kernel(self.cfg)
         W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) # NOTE Keep in sync with W_ij in `SampledKernel`
 
+        Ps = []
+
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
         s = np.zeros((N_m))
@@ -82,6 +95,8 @@ class Solver:
                 else:
                     kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag, W_ij=W_ij)
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
+                Ps.append(P)
+                # K = [.5 * (K_k + K_k.T) for K_k in K]
                 # if itime % 10 == 0:
                 # if itime in [1, 50, 100, 120, 130, 140]:
                 # if itime > 150 and itime % 5 == 0:
@@ -119,5 +134,8 @@ class Solver:
         dm2f = np.array(dm2f)
         dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)] # TODO Rename dm2f -> dm2fdt
         # TODO Do the above more elegantly. (Calculate temp. deriv.)
+
+        if self.cfg.enable_collision_sampling:
+            plot_2(self.cfg, mg, Ps)
 
         return N_dust_store, f, m2f, dm2f
