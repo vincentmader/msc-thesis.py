@@ -59,6 +59,7 @@ class Kernel():
             P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
             # Define rate of coag./frag. events.
             R_coag, R_frag = R_coll * P_coag, R_coll * P_frag
+        # TODO Handle cases where `(R_coag is not None) and (R_frag is None)`, & other way round.
         self.R_coag, self.R_frag = R_coag, R_frag
 
         # Initialize kernel matrices with zeros.
