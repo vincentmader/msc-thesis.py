@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-from config import PATH_TO_DARKMODE
 from visualization.base import BasePlot
 
 
@@ -15,9 +14,6 @@ class MassConservationPlot(BasePlot):
         self.t = t
         self.M = M
         super().__init__(*args, **kwargs)
-
-        # if cfg.mpl_dark_mode:
-        #     plt.style.use(PATH_TO_DARKMODE)
 
     def draw(self):
         t = self.t / (365 * 24 * 60 * 60)
