@@ -15,9 +15,9 @@ class Disk:
         self,
         cfg: Config,
         rg: Optional[DiscreteRadialAxis] = None,
-        mass_axis: Optional[DiscreteMassAxis] = None,
+        mg: Optional[DiscreteMassAxis] = None,
     ):
-        self.mg = DiscreteMassAxis(cfg) if mass_axis is None else mass_axis
+        self.mg = DiscreteMassAxis(cfg) if mg is None else mg
         self.rg = DiscreteRadialAxis(cfg) if rg is None else rg
 
         # Star:
