@@ -95,6 +95,7 @@ class Solver:
                 else:
                     kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag, W_ij=W_ij)
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
+                # K = [(K_k + K_k.T)/2 for K_k in K]  # TODO Does this make difference for integration?
                 Ps.append(P)
                 # K = [.5 * (K_k + K_k.T) for K_k in K]
                 # if itime % 10 == 0:

@@ -107,7 +107,10 @@ class Kernel():
         K_loss = np.zeros(shape=[N_m] * 3)
 
         # Loop over all mass pairs.
-        for i, j in ijs:
+        for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
+            # if i < j:
+            #     i, j = j, i
+
             m_i, m_j = mc[i], mc[j]
 
             th = heaviside_theta(i - j)
@@ -175,13 +178,16 @@ class Kernel():
     ):
         mg = self.mg
         mc, N_m = mg.bin_centers, mg.N
+        dm = mg.bin_widths
 
         fragmentation_variant = self.cfg.fragmentation_variant
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        for i, j in ijs:
+        for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
+            # if i < j:  
+            #     i, j = j, i
             m_i, m_j = mc[i], mc[j]
             th = heaviside_theta(i - j)
 
@@ -224,18 +230,33 @@ class Kernel():
                 assert m_max < mg.x_max
 
                 # Calculate normalization constant for MRN distribution.
+                # S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
                 S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
                 assert S != 0  # TODO really needed?
 
+                # TODO Fix definition
+
                 # Add mass to bins "receiving" mass in fragmentation event.
                 for k in range(k_min, k_max):
-                    A = mc[k]**q / S
-                    K_gain[k, i, j] += m_tot / mc[k] * A * th
-                    # K_gain[k, i, j] += m_tot * mc[k]**(q-1) / S * th
+                    # A = mc[k]**q / S
+                    # NOTE: The "equations" (statements) 1 & 6 are not numerically equivalent!
+                    #       The following steps serve to find out where the difference occurs (5->6).
+                    # K_gain[k, i, j] += m_tot / mc[k] * A * th                      # eq. 1
+                    # K_gain[k, i, j] += m_tot / mc[k] * (mc[k]**q / S) * th         # eq. 2
+                    # K_gain[k, i, j] += m_tot * (mc[k]**q / mc[k] / S) * th         # eq. 3
+                    # K_gain[k, i, j] += m_tot * ((mc[k]**q / mc[k]) / S) * th       # eq. 4
+                    K_gain[k, i, j] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
+                    # K_gain[k, i, j] += m_tot * (mc[k]**(q-1.0) / S) * th           # eq. 6
                     # ^ TODO: Why does this lead to changes in the kernel mass conservation plot?
+                    a = ((mc[k]**q * mc[k]**(-1)) / S)
+                    b = (mc[k]**(q-1.0) / S)
+                    assert a != b
+                    c = abs(a / b - 1)
+                    assert c < 1e-14
+                    # TODO: Decide which one to use.
 
                 # Remove mass from bins corresponding to initial masses.
-                K_loss[i, i, j] -= 1 
+                K_loss[i, i, j] -= 1
 
             else: 
                 pass
