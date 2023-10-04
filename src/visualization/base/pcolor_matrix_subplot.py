@@ -90,7 +90,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.im.set_array(z.ravel())
 
     def format_coord(self, x, y):
-        return f"{x}, {y}"  # TODO: Redefine.
+        return f"{x}, {y}"  # NOTE: Redefine this in child classes.
 
     def _pcolormesh_norm(self, z):
         if self.axis_scales[2] == "lin":
