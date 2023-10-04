@@ -4,9 +4,9 @@ import numpy as np
 from axis import DiscreteMassAxis, DiscreteTimeAxis, KernelAxisLabelVariant
 from config import Config, PATH_TO_DARKMODE
 from disk import mass_distribution
-from disk.disk import disk_mass_from_distribution  # TODO Remove
 from kernel import Kernel
 from solver import Solver
+from utils.physics import disk_mass_from_distribution  # TODO Remove
 from visualization.base import GridspecPlot
 from visualization.evolution import EvolutionPlot, MassConservationPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
