@@ -159,27 +159,21 @@ class Kernel():
 
             # Subtract "loss" term from kernel.
             # ─────────────────────────────────────────────────────────────
-            # Handle upper mass grid boundary.
             if not near_upper_bound:
-                # Handle cancellation.
                 if handle_cancellation:
                     K_loss[k_l, ii, jj] -= th * eps
                     K_loss[k_l, ii, jj] -= th if i == j else 0
                     # ^ TODO Why is this term here?
                     #        If removed, the solver crashes.
-                # Handle "trivial" (non-cancelling) case.
-                else:
+                else:  # Handle "trivial" (non-cancelling) case.
                     K_loss[i, ii, jj] -= 1 if i < N_m - 1 else 0
 
             # Add "gain" term to kernel.
             # ─────────────────────────────────────────────────────────────
-            # Handle upper mass grid boundary.
             if not near_upper_bound:
-                # Handle cancellation.
                 if handle_cancellation:
                     K_gain[k_h, ii, jj] += th * eps
-                # Handle "trivial" (non-cancelling) case.
-                else:
+                else:  # Handle "trivial" (non-cancelling) case.
                     K_gain[k_l, ii, jj] += th * (1 - eps)
                     K_gain[k_h, ii, jj] += th * eps
 
