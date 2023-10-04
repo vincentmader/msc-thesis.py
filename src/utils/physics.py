@@ -102,9 +102,8 @@ def delr_Sigma_g_nu_g_sqrt_r(r: np.ndarray, Sigma_g: np.ndarray, nu_g: np.ndarra
 
 
 def del_ln_P_g_del_ln_r(r: np.ndarray, P_g: np.ndarray):
-    ln_P_g = np.log(P_g)
-    ln_r = np.log(r)
-    del_ln_P_g_del_ln_r = finite_difference(ln_P_g, ln_r)
+    log_P_g, log_r = np.log10(P_g), np.log10(r)
+    del_ln_P_g_del_ln_r = finite_difference(log_P_g, log_r)
     # TODO Make sure the output array has correct shape (append one more?).
     return del_ln_P_g_del_ln_r
 

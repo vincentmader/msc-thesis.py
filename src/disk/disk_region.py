@@ -1,7 +1,5 @@
-import numpy as np
-
 from dust import particle_radius_from_mass
-from utils.physics import mean_free_path, finite_difference, kepler_frequency
+from utils.physics import mean_free_path, kepler_frequency
 
 
 class DiskRegion:
@@ -31,6 +29,8 @@ class DiskRegion:
         Omega_K    = kepler_frequency(rc, M_star)
         v_K        = Omega_K * rc
         a          = particle_radius_from_mass(mc, rho_s)
+        del_P_g_del_r            = disk.del_ln_P_g_del_ln_r
+        delr_Sigma_g_nu_g_sqrt_r = disk.delr_Sigma_g_nu_g_sqrt_r
 
         # Determine PPD properties at radial distance `r`.
         self.mg, self.rg                 = mg, rg
@@ -48,12 +48,6 @@ class DiskRegion:
         self.midplane_gas_pressure       = P_g_mid[i_r]
         self.distance_to_star            = r
         self.particle_radii              = a
-
-        logP, logr = np.log(P_g_mid), np.log(rc)
-        gas_pressure_gradient = finite_difference(logP, logr)
-        self.gas_pressure_gradient = gas_pressure_gradient[i_r]
-        # ^ TODO Rename (log/log deriv)
-
-        delr_Sigma_g_nu_g_sqrt_r = disk.delr_Sigma_g_nu_g_sqrt_r[i_r]
-        self.delr_Sigma_g_nu_g_sqrt_r = delr_Sigma_g_nu_g_sqrt_r
-        # TODO Rename?
+        self.gas_pressure_gradient       = del_P_g_del_r[i_r]
+        self.delr_Sigma_g_nu_g_sqrt_r    = delr_Sigma_g_nu_g_sqrt_r[i_r]
+        # TODO ^ Rename?
