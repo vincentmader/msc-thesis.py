@@ -142,11 +142,11 @@ class Kernel():
             # Calculate masses corresponding to the two neighboring bins.
             m_l = mg.value_from_index(k_l)
             m_h = mg.value_from_index(k_h)
-            assert m_k >= m_l and m_k <= m_h
+            assert (m_k >= m_l) and (m_k <= m_h)
 
             # Decide whether near-zero cancellation handling is required.
             might_cancel = (k_l == i)
-            handle_cancellation = self.cfg.enable_cancellation_handling and might_cancel
+            handle_cancellation = (self.cfg.enable_cancellation_handling and might_cancel)
 
             # Calculate fraction of mass "overflowing" into bin `k_h`.
             if handle_cancellation:
@@ -155,7 +155,7 @@ class Kernel():
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
 
             # Check whether one of the masses is in the upper-most bin.
-            near_upper_bound = i >= N_m - 1 or j >= N_m - 1
+            near_upper_bound = (i >= N_m - 1) or (j >= N_m - 1)
 
             # Subtract "loss" term from kernel.
             # ─────────────────────────────────────────────────────────────
