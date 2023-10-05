@@ -242,7 +242,7 @@ class Kernel():
                 # Calculate normalization constant for MRN distribution.
                 # S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
                 S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
-                assert S != 0  # TODO really needed?
+                assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
 
                 # TODO Fix definition
 
@@ -261,6 +261,8 @@ class Kernel():
                     a = ((mc[k]**q * mc[k]**(-1)) / S)
                     b = (mc[k]**(q-1.0) / S)
                     assert a != b
+                    # if a == b:
+                    #     print(k, i, j)
                     c = abs(a / b - 1)
                     assert c < 1e-14
                     # TODO: Decide which one to use.
