@@ -99,11 +99,10 @@ class Kernel():
         self.K += self.K_coag
         self.K += self.K_frag
 
-        # self.K /= (self.R_coag + self.R_frag)
-        # self.K /= R_coll
         # a = self.R_coag + self.R_frag
         # b = R_coll
         # assert abs(a/b - 1).all() < 1e-14
+        # self.K /= R_coll
 
     def _K_coag(
         self, 
