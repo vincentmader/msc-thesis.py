@@ -269,6 +269,11 @@ class Kernel():
                     #       For now: Use equation 5:
                     K_gain[k, ii, jj] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
 
+                    # S = sum([mc[k]**q * mc[k] * dm[k] for k in range(k_min, k_max)])
+                    # A = m_tot / S
+                    # f_kij = A * mc[k]**q
+                    # K_gain[k, ii, jj] += mc[k] * f_kij * th
+
                 # Remove mass from bins corresponding to initial masses.
                 K_loss[i, ii, jj] -= 1
 
