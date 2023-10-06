@@ -94,7 +94,7 @@ def plot(i, m, mg, scale, plot_separately=False, show_plot=False):
         plt.close()
 
 
-def main():
+if __name__ == "__main__":
     cfg = Config()
     if cfg.mpl_dark_mode:
         plt.style.use(PATH_TO_DARKMODE)
