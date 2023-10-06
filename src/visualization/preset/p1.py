@@ -80,7 +80,7 @@ def plot_kernel_error(
             cfg, mg, kernel.K,
             axis_scales=(scale, scale, scale),
             axis_label_variant=axis_label_variant,
-            symmetrized=True,
+            symmetrized=False,
             # z_limits=z_limits, # TODO
         ),
     ])
