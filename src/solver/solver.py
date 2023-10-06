@@ -51,8 +51,21 @@ def plot_2(cfg, mg, Ps):
         [
             KernelSubplot(
                 cfg, mg, np.array(Ps), cmap="Blues", z_limits=(1e-5, 1),
-                title="Collision Pair Sampling Probability $P_{ij}$"
-            )
+                title="Collision Pair Sampling Probability $P_{ij}$",
+            ),
+        ], add_slider=True,
+    ).render()
+
+
+def plot_3(cfg, mg, Ns):
+    GridspecPlot(
+        [
+            KernelSubplot(
+                cfg, mg, np.array(Ns), cmap="Blues", 
+                z_limits=(0, 10),  # <- NOTE: Low upper boundary for better visibility.
+                axis_scales=("log", "log", "lin"),
+                title=r"Collision Pair Sampling Count $N_{ij}$",
+            ),
         ], add_slider=True,
     ).render()
 
@@ -79,7 +92,7 @@ class Solver:
         kernel = Kernel(self.cfg)
         W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) # NOTE Keep in sync with W_ij in `SampledKernel`
 
-        Ps = []
+        Ps, Ns = [], []
 
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
@@ -96,7 +109,25 @@ class Solver:
                     kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag, W_ij=W_ij)
                 K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
                 # K = [(K_k + K_k.T)/2 for K_k in K]  # TODO Does this make difference for integration?
+
                 Ps.append(P)
+                # for k, K_k in enumerate(K):  # NOTE This cannot be correct! Divide by N_ij instead!
+                #     K[k][P!=0] = K[k][P!=0] / P[P!=0]
+
+                N_ij = kernel.N_ij
+                Ns.append(N_ij)
+                # for k, K_k in enumerate(K):  
+                #     K[k][N_ij != 0] = K[k][N_ij != 0] / N_ij[N_ij != 0]
+                for k, K_k in enumerate(K):  
+                    assert np.sum(N_ij) == self.cfg.nr_of_samples
+                    K[k] = K[k] / np.sum(N_ij)
+
+                # for i in range(self.cfg.mass_resolution):
+                #     for j in range(self.cfg.mass_resolution):
+                #         S = sum([K[k,i,j] for k in range(self.cfg.mass_resolution)])
+                #         if S != 0:
+                #             print(i, j, S)
+
                 # K = [.5 * (K_k + K_k.T) for K_k in K]
                 # if itime % 10 == 0:
                 # if itime in [1, 50, 100, 120, 130, 140]:
@@ -138,5 +169,6 @@ class Solver:
 
         if self.cfg.enable_collision_sampling:
             plot_2(self.cfg, mg, Ps)
+            plot_3(self.cfg, mg, Ns)
 
         return N_dust_store, f, m2f, dm2f
