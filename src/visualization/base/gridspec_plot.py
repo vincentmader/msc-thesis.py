@@ -31,6 +31,7 @@ class GridspecPlot(BasePlot):
             1: (5, 6),
             2: (10, 6),
             3: (15, 6),
+            4: (20, 6),
         }
         return figsizes[nr_of_subplots]
 
