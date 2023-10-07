@@ -23,6 +23,7 @@ class SampledKernel(Kernel):
             kernel = Kernel(cfg)
             K, mg, mc = kernel.K, kernel.mg, kernel.mg.bin_centers
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
+            # TODO Use quadratic addition instead? (+ sqrt afterwards)
 
         N_i = np.abs(N[:, None])
         N_j = np.abs(N[None, :])
