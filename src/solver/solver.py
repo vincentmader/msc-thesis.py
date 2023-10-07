@@ -90,7 +90,7 @@ class Solver:
         
         R_coag, R_frag = None, None
         kernel = Kernel(self.cfg)
-        W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) # NOTE Keep in sync with W_ij in `SampledKernel`
+        W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) # NOTE Keep in sync with W_ij in `SampledKernel`
 
         Ps, Ns = [], []
 
@@ -107,20 +107,24 @@ class Solver:
                     R_coag, R_frag = kernel.R_coag, kernel.R_frag
                 else:
                     kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag, W_ij=W_ij)
-                K, P = kernel.K, kernel.P_ij  # TODO More consistent names, P vs. P_ij
+                K, P, N = kernel.K, kernel.P_ij, kernel.N_ij
+                #    ^ TODO More consistent names, P vs. P_ij
+                Ps.append(P)
+                Ns.append(N)
+
+                # assert (K == Kernel(self.cfg).K).all()
+                # TODO Compare kernels: Is sampled with N=2500 same as unsampled?
+
                 # K = [(K_k + K_k.T)/2 for K_k in K]  # TODO Does this make difference for integration?
 
-                Ps.append(P)
                 # for k, K_k in enumerate(K):  # NOTE This cannot be correct! Divide by N_ij instead!
                 #     K[k][P!=0] = K[k][P!=0] / P[P!=0]
 
-                N_ij = kernel.N_ij
-                Ns.append(N_ij)
                 # for k, K_k in enumerate(K):  
                 #     K[k][N_ij != 0] = K[k][N_ij != 0] / N_ij[N_ij != 0]
-                for k, K_k in enumerate(K):  
-                    assert np.sum(N_ij) == self.cfg.nr_of_samples
-                    K[k] = K[k] / np.sum(N_ij)
+                # for k, K_k in enumerate(K):  
+                #     assert np.sum(N_ij) == self.cfg.nr_of_samples
+                #     K[k] = K[k] / np.sum(N_ij)
 
                 # for i in range(self.cfg.mass_resolution):
                 #     for j in range(self.cfg.mass_resolution):

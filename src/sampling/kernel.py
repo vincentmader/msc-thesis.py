@@ -7,32 +7,33 @@ from kernel import Kernel
 
 
 class SampledKernel(Kernel):
-    __slots__ = ["P_ij"]
+    __slots__ = [
+        "P_ij",  #  = Probability of randomly selecting a collision pair $(i,j)$.
+        "N_ij",  #  = Nr. of times that the collision $(i,j)$ was selected.
+    ]
 
     def __init__(
         self, 
         cfg: Config, 
         N: np.ndarray, 
-        W_ij: Optional[np.ndarray]=None,
+        W_ij: Optional[np.ndarray] = None,
         *args, **kwargs
     ):
-
-        if W_ij is None:
+        if W_ij is None:  # Define weights, if not received as argument.
             kernel = Kernel(cfg)
-            K, mg = kernel.K, kernel.mg
-            mc = mg.bin_centers
-            W_ij = sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
+            K, mg, mc = kernel.K, kernel.mg, kernel.mg.bin_centers
+            W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
 
         N_i = np.abs(N[:, None])
         N_j = np.abs(N[None, :])
 
         P_ij = W_ij * N_i * N_j  # TODO Is this multiplication correct?
-        P_ij = P_ij / P_ij.sum()
+        P_ij = P_ij / P_ij.sum()  # Normalize. 
         assert np.abs(P_ij.sum() - 1) <= 1e-6  # TODO -> 1e-16 ?
         self.P_ij = P_ij
-        
-        ijs = self._sample_ijs(cfg)
+        self.N_ij = np.zeros(shape=[N.shape[0]]*2)
 
+        ijs = self._sample_ijs(cfg)
         super().__init__(cfg, ijs=ijs, *args, **kwargs)
 
     def _sample_ijs(self, cfg: Config) -> list[tuple[int, int]]:
@@ -44,16 +45,13 @@ class SampledKernel(Kernel):
         indices = range(N_i * N_j)
         P_ij = P_ij.reshape(N_i * N_j)
     
-        N_sample = cfg.nr_of_samples
-        sampled = np.random.choice(
-            indices, p=P_ij, size=N_sample, # NOTE: Pairs can be selected multiple times
-        )
+        N_sample = min(cfg.nr_of_samples, len(P_ij[P_ij != 0]))
+
+        sampled = np.random.choice(indices, p=P_ij, size=N_sample, replace=False)
     
         ijs = []
         for s in sampled:
-            i = s // N_i
-            j = s % N_i
-            if (i, j) in ijs: # NOTE: This helped a lot! (no duplicates)
-                continue
+            i, j = s // N_i, s % N_i
             ijs.append((i, j))
+            self.N_ij[i, j] += 1
         return ijs
