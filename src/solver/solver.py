@@ -1,18 +1,16 @@
-from pathlib import Path
 import sys
 
 import numpy as np
 from tqdm import tqdm
 
 from axis import DiscreteTimeAxis, DiscreteMassAxis, AxisLabelVariant
-from config import PATH_TO_LIB
-path = Path(PATH_TO_LIB, "coag_py")
-path = str(path)
-sys.path.append(path)
-from coag.react_0d import solve_react_0d_equation
+from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel
 from visualization.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
+
+sys.path.append(PATH_TO_COAG)
+from coag.react_0d import solve_react_0d_equation
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
