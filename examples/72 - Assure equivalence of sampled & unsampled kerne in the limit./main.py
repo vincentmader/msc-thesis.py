@@ -28,6 +28,18 @@ S = kernel_2.K
 
 # Assert equality.
 assert (K == S).all()
+# NOTE: This assertion actually works perfectly fine!
+#    -> The sampled kernel does exactly equal the unsampled one,
+#       if we let `N_samples = N_m^2`.
+# NOTE: This does not mean that everything works though!
+#       The assertion will fail in the solver.
+#    -> Why? Because `N` will have entries equal to zero!
+#    -> Then `P_ij = 0` as well.
+#    -> This means that some collisions will NEVER be sampled,
+#       regardless of how many points I select at random.
+# NOTE: The solution to this should be quite simple:
+#    -> Set `P_ij = 1e-99` instead of 0 (or some other tiny value).
+#    -> This should affect the result ONLY in the limit of `N_samples = N_m^2`.
 
 # Plot the kernels, & their behavior re: mass error.
 plot_kernel_gain_loss(cfg, mg, kernel_1, z_limits=(1e-20, 1), scale="log")
