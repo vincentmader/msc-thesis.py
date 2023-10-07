@@ -7,7 +7,6 @@ from axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
 from config import Config, PATH_TO_DARKMODE
 from disk import mass_distribution
 from kernel import Kernel
-from solver import Solver
 from utils.physics import disk_mass_from_distribution  # TODO Remove
 from visualization.base import GridspecPlot
 from visualization.evolution import EvolutionPlot, MassConservationPlot
@@ -93,6 +92,8 @@ def integrate(
     cfg: Config,
     kernel: Kernel,
 ):
+    from solver import Solver
+
     tg = DiscreteTimeAxis(cfg)
     tc = tg.bin_centers
     mc = kernel.mg.bin_centers
