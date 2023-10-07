@@ -1,16 +1,16 @@
 import os
-import toml
 from typing import Optional
+
+import toml
 
 from constants import M_sun, L_sun, AU
 
 dirname = os.path.dirname(__file__)
-path_to_config_toml = os.path.join(dirname, "..", "config.toml")
-
-PATH_TO_LIB = os.path.join(dirname, "..", "lib")
-PATH_TO_FIGURES = os.path.join(dirname, "..", "out", "figures")
+PATH_TO_CFG_TOML = os.path.join(dirname, "..", "config.toml")
+PATH_TO_LIB      = os.path.join(dirname, "..", "lib")
+PATH_TO_FIGURES  = os.path.join(dirname, "..", "out", "figures")
 PATH_TO_DARKMODE = os.path.join(PATH_TO_LIB, "mpl-styles", "dark.mplstyle")
-PATH_TO_COAG = os.path.join(PATH_TO_LIB, "coag_py")
+PATH_TO_COAG     = os.path.join(PATH_TO_LIB, "coag_py")
 
 
 class Config():
@@ -66,7 +66,7 @@ class Config():
         initialization_variant:         Optional[str]       = None,
         initial_mass_bin:               Optional[int]       = None,
     ):
-        cfg = toml.load(path_to_config_toml)
+        cfg = toml.load(PATH_TO_CFG_TOML)
 
         cfg_i = cfg["disk"]
         if stellar_mass is None:
@@ -155,39 +155,39 @@ class Config():
         if initial_mass_bin is None:
             initial_mass_bin = cfg_i["initial_mass_bin"]
 
-        self.collision_outcome_variant = collision_outcome_variant
-        self.disk_mass = disk_mass
-        self.disk_mass_ratio = disk_mass_ratio
-        self.distance_to_star = distance_to_star
-        self.dust_particle_density = dust_particle_density
-        self.dust_to_gas_ratio = dust_to_gas_ratio
+        self.collision_outcome_variant    = collision_outcome_variant
+        self.disk_mass                    = disk_mass
+        self.disk_mass_ratio              = disk_mass_ratio
+        self.distance_to_star             = distance_to_star
+        self.dust_particle_density        = dust_particle_density
+        self.dust_to_gas_ratio            = dust_to_gas_ratio
         self.enable_cancellation_handling = enable_cancellation_handling
-        self.enable_coagulation = enable_coagulation
-        self.enable_fragmentation = enable_fragmentation
-        self.enable_physical_collisions = enable_physical_collisions
-        self.enable_physical_gas_density = enable_physical_gas_density
-        self.flaring_angle = flaring_angle
-        self.fragmentation_variant = fragmentation_variant
-        self.fragmentation_velocity = fragmentation_velocity
-        self.mass_axis_scale = mass_axis_scale
-        self.mass_max_value = mass_max_value
-        self.mass_min_value = mass_min_value
-        self.mass_resolution = mass_resolution
-        self.mpl_dark_mode = mpl_dark_mode
-        self.radial_axis_scale = radial_axis_scale
-        self.radial_max_value = radial_max_value
-        self.radial_min_value = radial_min_value
-        self.radial_resolution = radial_resolution
+        self.enable_coagulation           = enable_coagulation
+        self.enable_fragmentation         = enable_fragmentation
+        self.enable_physical_collisions   = enable_physical_collisions
+        self.enable_physical_gas_density  = enable_physical_gas_density
+        self.flaring_angle                = flaring_angle
+        self.fragmentation_variant        = fragmentation_variant
+        self.fragmentation_velocity       = fragmentation_velocity
+        self.mass_axis_scale              = mass_axis_scale
+        self.mass_max_value               = mass_max_value
+        self.mass_min_value               = mass_min_value
+        self.mass_resolution              = mass_resolution
+        self.mpl_dark_mode                = mpl_dark_mode
+        self.radial_axis_scale            = radial_axis_scale
+        self.radial_max_value             = radial_max_value
+        self.radial_min_value             = radial_min_value
+        self.radial_resolution            = radial_resolution
         self.relative_velocity_components = relative_velocity_components
-        self.solver_variant = solver_variant
-        self.stellar_luminosity = stellar_luminosity
-        self.stellar_mass = stellar_mass
-        self.time_axis_scale = time_axis_scale
-        self.time_max_value = time_max_value
-        self.time_min_value = time_min_value
-        self.time_resolution = time_resolution
-        self.viscosity_alpha = viscosity_alpha
-        self.enable_collision_sampling = enable_collision_sampling
-        self.nr_of_samples = nr_of_samples
-        self.initialization_variant = initialization_variant
-        self.initial_mass_bin = initial_mass_bin
+        self.solver_variant               = solver_variant
+        self.stellar_luminosity           = stellar_luminosity
+        self.stellar_mass                 = stellar_mass
+        self.time_axis_scale              = time_axis_scale
+        self.time_max_value               = time_max_value
+        self.time_min_value               = time_min_value
+        self.time_resolution              = time_resolution
+        self.viscosity_alpha              = viscosity_alpha
+        self.enable_collision_sampling    = enable_collision_sampling
+        self.nr_of_samples                = nr_of_samples
+        self.initialization_variant       = initialization_variant
+        self.initial_mass_bin             = initial_mass_bin
