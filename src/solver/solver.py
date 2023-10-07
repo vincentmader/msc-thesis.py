@@ -10,8 +10,7 @@ path = Path(PATH_TO_LIB, "coag_py")
 path = str(path)
 sys.path.append(path)
 from coag.react_0d import solve_react_0d_equation
-from kernel import Kernel
-from sampling.kernel import SampledKernel
+from kernel import Kernel, SampledKernel
 from visualization.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 
