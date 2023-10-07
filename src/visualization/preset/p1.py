@@ -1,3 +1,5 @@
+from typing import Optional
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -17,8 +19,8 @@ def plot_kernel(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis: AxisLabelVariant,
     z_limits: tuple[float, float],
+    axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
 ):
     if kernel.K.all() >= 0: 
         z_limits = (-z_limits[1], z_limits[1])
@@ -29,7 +31,7 @@ def plot_kernel(
             axis_scales=(scale, scale, "lin"),
             z_limits=z_limits,
             symmetrized=True,
-            axis_label_variant=axis,
+            axis_label_variant=axis_label_variant,
             cmap="bwr",
         )
     ], add_slider=True).render()
@@ -40,8 +42,8 @@ def plot_kernel_gain_loss(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis: AxisLabelVariant,
     z_limits: tuple[float, float],
+    axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
 ):
     cmap = "Reds" if scale == "log" else "bwr"
     GridspecPlot([
@@ -51,7 +53,7 @@ def plot_kernel_gain_loss(
             axis_scales=(scale, scale, scale),
             z_limits=z_limits,
             symmetrized=False,
-            axis_label_variant=axis,
+            axis_label_variant=axis_label_variant,
             cmap=cmap,
         ),
         KernelSubplot(
@@ -61,7 +63,7 @@ def plot_kernel_gain_loss(
             z_limits=z_limits,
             ylabel="",
             symmetrized=False,
-            axis_label_variant=axis,
+            axis_label_variant=axis_label_variant,
             cmap=cmap,
         ),
     ], add_slider=True).render()
@@ -72,8 +74,8 @@ def plot_kernel_error(
     mg: DiscreteMassAxis,
     kernel: Kernel,
     scale: str,
-    axis_label_variant: AxisLabelVariant,
     z_limits: tuple[float, float],
+    axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
 ):
     p = GridspecPlot([
         KernelMassConservationSubplot(
@@ -163,9 +165,9 @@ def main(cfg):
     # Plot total kernel     with lin. colorscale.
 #    plot_kernel(cfg, mg, kernel, scale, axis_label_variant, z_limits)
     # Plot K_gain & K_loss  with log. colorscale.
-    plot_kernel_gain_loss(cfg, mg, kernel, scale, axis_label_variant, z_limits)
+    plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant)
     # Plot kernel mass error.
-    plot_kernel_error(cfg, mg, kernel, scale, axis_label_variant, z_limits)
+    plot_kernel_error(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant)
 
     # Integrate.
     t, f, N, m2f, dm2f, M = integrate(cfg, kernel)
