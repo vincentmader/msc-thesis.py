@@ -8,6 +8,7 @@ from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel
 from visualization.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
+from visualization.preset.p1 import plot_kernel_gain_loss
 
 sys.path.append(PATH_TO_COAG)
 from coag.react_0d import solve_react_0d_equation
@@ -67,6 +68,54 @@ def plot_3(cfg, mg, Ns):
     ).render()
 
 
+def plot_4(cfg, mg, kernel_unsampled, kernel_sampled):
+    K_g = kernel_unsampled.K_gain
+    K_l = kernel_unsampled.K_loss
+    S_g = kernel_sampled.K_gain
+    S_l = kernel_sampled.K_loss
+
+    cmap = "Reds" 
+    z_limits = (1e-20, 1)
+    scale = "log"
+    GridspecPlot([
+        KernelSubplot(
+            cfg, mg, K_g,
+            title="kernel gain contribution $G_{kij}$",
+            axis_scales=(scale, scale, scale),
+            z_limits=z_limits,
+            symmetrized=False,
+            cmap=cmap,
+        ),
+        KernelSubplot(
+            cfg, mg, -K_l,
+            title="kernel loss contribution $L_{kij}$",
+            axis_scales=(scale, scale, scale),
+            z_limits=z_limits,
+            ylabel="",
+            symmetrized=False,
+            cmap=cmap,
+        ),
+        KernelSubplot(
+            cfg, mg, S_g,
+            title="kernel gain contribution $G_{kij}$",
+            axis_scales=(scale, scale, scale),
+            z_limits=z_limits,
+            symmetrized=False,
+            cmap=cmap,
+        ),
+        KernelSubplot(
+            cfg, mg, -S_l,
+            title="kernel loss contribution $L_{kij}$",
+            axis_scales=(scale, scale, scale),
+            z_limits=z_limits,
+            ylabel="",
+            symmetrized=False,
+            cmap=cmap,
+        ),
+    ], add_slider=True).render()
+
+
+
 class Solver:
 
     def __init__(self, cfg):
@@ -109,7 +158,12 @@ class Solver:
                 Ps.append(P)
                 Ns.append(N)
 
-                # assert (K == Kernel(self.cfg).K).all()
+                kernel_unsampled = Kernel(self.cfg)
+                if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
+                    try:
+                        assert (K == kernel_unsampled.K).all()
+                    except AssertionError:
+                        plot_4(self.cfg, mg, kernel_unsampled, kernel)
                 # TODO Compare kernels: Is sampled with N=2500 same as unsampled?
 
                 # K = [(K_k + K_k.T)/2 for K_k in K]  # TODO Does this make difference for integration?
