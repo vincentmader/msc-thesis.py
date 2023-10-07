@@ -7,7 +7,7 @@ except ModuleNotFoundError as e:
     raise e
 
 cfg = Config(
-    initial_mass_bin=40,
+    # initial_mass_bin=40,
 )
 
 
