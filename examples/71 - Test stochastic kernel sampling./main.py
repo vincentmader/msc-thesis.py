@@ -8,6 +8,7 @@ except ModuleNotFoundError as e:
 
 cfg = Config(
     enable_collision_sampling=True,
+    # initial_mass_bin=40,
 )
 
 
