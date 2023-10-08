@@ -30,7 +30,7 @@ class SampledKernel(Kernel):
 
         P_ij = W_ij * N_i * N_j   # TODO Is this multiplication correct?
         P_ij = P_ij / P_ij.sum()  # Normalize. 
-        P_ij[P_ij == 0] = 1e-10   # TODO Choose this value. 
+        P_ij[P_ij == 0] = 1e-100   # TODO Choose this value. 
         P_ij = P_ij / P_ij.sum()  # Normalize again. 
         assert np.abs(P_ij.sum() - 1) <= 1e-6  # TODO -> 1e-16 ?
         # TODO Exclude collision $(i,j)$ when $P_ij < 1e-10$ AND not sampling over all collisions.
