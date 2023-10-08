@@ -66,14 +66,14 @@ class EvolutionPlot(BasePlot):
 
         n, N, M, dM = self.f, self.N, self.m2f, self.dm2f
 
-        self.lines_1, = self.ax_1.loglog(mc, M[self.i_t], label=r"$n_i\Delta m_im_i=M_i$")
+        self.lines_1, = self.ax_1.loglog(mc, M[self.i_t], label=r"$n_i\Delta m_im_i=\rho_i^s$")
         # self.lines_2, = self.ax_1.loglog(x, N[self.i_t], label=r"$n_i\Delta m_i=N_i$")
         # self.lines_3, = self.ax_1.loglog(x, n[self.i_t], label=r"$n_i$") # TODO Plot these too?
         self.ax_1.set_xlim(mb[0], mb[-1])
         # self.ax_1.set_ylim(1e-12, 1e+30)  # TODO Generalize definition.
         self.ax_1.set_ylim(1e-12, 1e-8)
         self.ax_1.grid(True)
-        self.ax_1.set_ylabel(r"dust particle density $\rho_i^s=m_i n_i \Delta m_i$ [kg s$^{-1}$]")
+        self.ax_1.set_ylabel(r"dust particle density $\rho_i^s=m_i n_i \Delta m_i$ [kg m$^{-3}$]")
         self.ax_1.legend(loc="best")
 
         self.ax_1c = self.ax_1.twiny()
