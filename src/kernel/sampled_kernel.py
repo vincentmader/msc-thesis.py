@@ -32,9 +32,8 @@ class SampledKernel(Kernel):
         N_j = np.abs(N[None, :])
 
         P_ij = W_ij * N_i * N_j   # TODO Is this multiplication correct?
-        P_ij = P_ij / P_ij.sum()  # Normalize. 
         P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
-        P_ij = P_ij / P_ij.sum()  # Normalize again. 
+        P_ij = P_ij / P_ij.sum()  # Normalize. 
         assert np.abs(P_ij.sum() - 1) <= 1e-6
 
         self.P_ij = P_ij
