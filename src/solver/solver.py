@@ -60,7 +60,7 @@ def plot_3(cfg, mg, Ns):
         [
             KernelSubplot(
                 cfg, mg, np.array(Ns), cmap="Blues", 
-                z_limits=(0, 10),  # <- NOTE: Low upper boundary for better visibility.
+                z_limits=(0, np.max(Ns)),  # <- NOTE: Low upper boundary for better visibility.
                 axis_scales=("log", "log", "lin"),
                 title=r"Collision Pair Sampling Count $N_{ij}$",
             ),
