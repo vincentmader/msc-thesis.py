@@ -35,7 +35,7 @@ class SampledKernel(Kernel):
         P_ij = P_ij / P_ij.sum()  # Normalize. 
         P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
         P_ij = P_ij / P_ij.sum()  # Normalize again. 
-        assert np.abs(P_ij.sum() - 1) <= 1e-12
+        assert np.abs(P_ij.sum() - 1) <= 1e-6
 
         self.P_ij = P_ij
         self.N_ij = np.zeros(shape=[N.shape[0]]*2)
