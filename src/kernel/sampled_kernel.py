@@ -6,6 +6,9 @@ from config import Config
 from kernel import Kernel
 
 
+ALMOST_BUT_NOT_QUITE_ZERO = 1e-100  # TODO Choose this value. 
+
+
 class SampledKernel(Kernel):
     __slots__ = [
         "P_ij",  #  = Probability of randomly selecting a collision pair $(i,j)$.
@@ -30,10 +33,9 @@ class SampledKernel(Kernel):
 
         P_ij = W_ij * N_i * N_j   # TODO Is this multiplication correct?
         P_ij = P_ij / P_ij.sum()  # Normalize. 
-        P_ij[P_ij == 0] = 1e-100   # TODO Choose this value. 
+        P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
         P_ij = P_ij / P_ij.sum()  # Normalize again. 
         assert np.abs(P_ij.sum() - 1) <= 1e-6  # TODO -> 1e-16 ?
-        # TODO Exclude collision $(i,j)$ when $P_ij < 1e-10$ AND not sampling over all collisions.
 
         self.P_ij = P_ij
         self.N_ij = np.zeros(shape=[N.shape[0]]*2)
@@ -51,7 +53,11 @@ class SampledKernel(Kernel):
         P_ij = P_ij.reshape(N_i * N_j)
     
         assert (P_ij != 0).all()
-        N_sample = cfg.nr_of_samples
+
+        # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
+        # The "relevant" collisions are those with a probability significantly higher than 1e-100.
+        N_relevant = np.sum(P_ij > ALMOST_BUT_NOT_QUITE_ZERO * 1000)
+        N_sample = min(cfg.nr_of_samples, N_relevant)
 
         sampled = np.random.choice(indices, p=P_ij, size=N_sample, replace=False)
     
