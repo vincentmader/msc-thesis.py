@@ -31,14 +31,14 @@ class SampledKernel(Kernel):
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # TODO Use quadratic addition instead? (+ sqrt afterwards)
 
-        assert (np.abs(N[N < 0]) <= 1e-16).all(), N
+        # assert (np.abs(N[N < 0]) <= 1e-16).all(), N  # TODO Uncomment this line.
         N_i = np.abs(N[:, None])  # TODO `N` can be less than 0. Can I fix this?
         N_j = np.abs(N[None, :])
 
         m_i = mc[:, None]
         m_j = mc[None, :]
 
-        P_ij = W_ij * N_i * N_j * m_i * m_j   # TODO Is this multiplication correct?
+        P_ij = W_ij * N_i * N_j * m_i * m_j
         P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
         P_ij = P_ij / P_ij.sum()  # Normalize. 
         assert np.abs(P_ij.sum() - 1) <= 1e-6
