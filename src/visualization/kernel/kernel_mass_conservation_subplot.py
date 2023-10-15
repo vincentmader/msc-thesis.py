@@ -23,7 +23,7 @@ class KernelMassConservationSubplot(KernelSubplot):
         err_matrix, err_total = test_mass_conservation(mg, K)
 
         if "title" not in kwargs.keys():
-            kwargs["title"]  = r"error $\Delta K_{ij}=\sum_k \frac{m_k}{m_i+m_j}\cdot K_{kij}$, "
+            kwargs["title"]  = r"error $\Delta K_{ij}=\sum_k \frac{m_k}{m_i+m_j}\cdot\frac{K_{kij}}{R_{ij}}$, "
             kwargs["title"] += r"$\Delta K=\sqrt{\sum_{ij}\Delta K_{ij}^2}$ = " 
             kwargs["title"] += f"{err_total:.2e}" + " m$^3$s$^{-1}$"
 
