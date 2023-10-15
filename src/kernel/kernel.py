@@ -45,7 +45,6 @@ class Kernel():
             ijs = []
             for i in range(mg.N):
                 for j in range(mg.N):
-                    # (i, j) = (i, j) if j <= i  else (j, i)
                     ijs.append((i, j))
 
         if R_coag is R_frag is None:
