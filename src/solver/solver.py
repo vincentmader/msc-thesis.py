@@ -17,38 +17,12 @@ SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
 
-def plot(cfg, mg, K, P): # TODO Move elsewhere.
-    GridspecPlot([
-        KernelSubplot(
-            cfg, mg, K, axis_label_variant=AxisLabelVariant.Radius,
-            title="kernel gain contribution $G_{kij}$",
-            symmetrized=True,
-            z_limits=(1e-20, 1e-7),
-        ),
-        KernelSubplot(
-            cfg, mg, K, axis_label_variant=AxisLabelVariant.Radius,
-            title="kernel gain contribution $G_{kij}$",
-            symmetrized=True,
-            z_limits=(1e-20, 1e-7),
-        ),
-    ], add_slider=True).render()
-
-    GridspecPlot([
-        KernelSubplot(
-            cfg, mg, P, title="sampling probability $P_{ij}$",
-        )
-    ]).render()
-
-    GridspecPlot([
-        KernelMassConservationSubplot(cfg, mg, K)
-    ]).render()
-
 
 def plot_2(cfg, mg, Ps):
     GridspecPlot(
         [
-            KernelSubplot(
-                cfg, mg, np.array(Ps), cmap="Blues", z_limits=(1e-5, 1),
+            KernelSubplot(cfg, mg, np.array(Ps), 
+                cmap="Blues", z_limits=(1e-5, 1),
                 title="Collision Pair Sampling Probability $P_{ij}$",
             ),
         ], add_slider=True, slider_label="$i_t$"
@@ -58,10 +32,9 @@ def plot_2(cfg, mg, Ps):
 def plot_3(cfg, mg, Ns):
     GridspecPlot(
         [
-            KernelSubplot(
-                cfg, mg, np.array(Ns), cmap="Blues", 
+            KernelSubplot(cfg, mg, np.array(Ns), 
                 z_limits=(0, np.max(Ns)),  # <- NOTE: Low upper boundary for better visibility.
-                axis_scales=("log", "log", "lin"),
+                axis_scales=("log", "log", "lin"), cmap="Blues", 
                 title=r"Collision Pair Sampling Count $N_{ij}$",
             ),
         ], add_slider=True, slider_label="$i_t$"
@@ -69,48 +42,30 @@ def plot_3(cfg, mg, Ns):
 
 
 def plot_4(cfg, mg, kernel_unsampled, kernel_sampled):
-    K_g = kernel_unsampled.K_gain
-    K_l = kernel_unsampled.K_loss
-    S_g = kernel_sampled.K_gain
-    S_l = kernel_sampled.K_loss
+    K_g, S_g = kernel_unsampled.K_gain, kernel_sampled.K_gain
+    K_l, S_l = kernel_unsampled.K_loss, kernel_sampled.K_loss
 
-    cmap = "Reds" 
-    z_limits = (1e-20, 1)
-    scale = "log"
+    cmap, scale, z_limits = "Reds" , "log", (1e-20, 1)
     GridspecPlot([
-        KernelSubplot(
-            cfg, mg, K_g,
+        KernelSubplot(cfg, mg, K_g,
             title="kernel gain contribution $G_{kij}$",
             axis_scales=(scale, scale, scale),
-            z_limits=z_limits,
-            symmetrized=False,
-            cmap=cmap,
+            z_limits=z_limits, symmetrized=False, cmap=cmap,
         ),
-        KernelSubplot(
-            cfg, mg, -K_l,
+        KernelSubplot(cfg, mg, -K_l,
             title="kernel loss contribution $L_{kij}$",
-            axis_scales=(scale, scale, scale),
-            z_limits=z_limits,
-            ylabel="",
-            symmetrized=False,
-            cmap=cmap,
+            axis_scales=(scale, scale, scale), ylabel="",
+            z_limits=z_limits, symmetrized=False, cmap=cmap,
         ),
-        KernelSubplot(
-            cfg, mg, S_g,
+        KernelSubplot(cfg, mg, S_g,
             title="kernel gain contribution $G_{kij}$",
             axis_scales=(scale, scale, scale),
-            z_limits=z_limits,
-            symmetrized=False,
-            cmap=cmap,
+            z_limits=z_limits, symmetrized=False, cmap=cmap,
         ),
-        KernelSubplot(
-            cfg, mg, -S_l,
+        KernelSubplot(cfg, mg, -S_l,
             title="kernel loss contribution $L_{kij}$",
-            axis_scales=(scale, scale, scale),
-            z_limits=z_limits,
-            ylabel="",
-            symmetrized=False,
-            cmap=cmap,
+            axis_scales=(scale, scale, scale), ylabel="",
+            z_limits=z_limits, symmetrized=False, cmap=cmap,
         ),
     ], add_slider=True).render()
 
@@ -136,7 +91,8 @@ class Solver:
         
         R_coag, R_frag = None, None
         kernel = Kernel(self.cfg)
-        W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) # NOTE Keep in sync with W_ij in `SampledKernel`
+        W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) 
+        #    ^ NOTE Keep definition in sync with W_ij in `SampledKernel`
 
         Ps, Ns = [], []
 
@@ -158,40 +114,13 @@ class Solver:
                 Ps.append(P)
                 Ns.append(N)
 
+                # Compare kernels: Is sampled with N=2500 same as unsampled?
                 kernel_unsampled = Kernel(self.cfg)
                 if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
                     try:
                         assert (K == kernel_unsampled.K).all()
                     except AssertionError:
                         plot_4(self.cfg, mg, kernel_unsampled, kernel)
-                # TODO Compare kernels: Is sampled with N=2500 same as unsampled?
-
-                # K = [(K_k + K_k.T)/2 for K_k in K]  # TODO Does this make difference for integration?
-
-                # for k, K_k in enumerate(K):  # NOTE This cannot be correct! Divide by N_ij instead!
-                #     K[k][P!=0] = K[k][P!=0] / P[P!=0]
-
-                # for k, K_k in enumerate(K):  
-                #     K[k][N_ij != 0] = K[k][N_ij != 0] / N_ij[N_ij != 0]
-                # for k, K_k in enumerate(K):  
-                #     assert np.sum(N_ij) == self.cfg.nr_of_samples
-                #     K[k] = K[k] / np.sum(N_ij)
-
-                # for i in range(self.cfg.mass_resolution):
-                #     for j in range(self.cfg.mass_resolution):
-                #         S = sum([K[k,i,j] for k in range(self.cfg.mass_resolution)])
-                #         if S != 0:
-                #             print(i, j, S)
-
-                # K = [.5 * (K_k + K_k.T) for K_k in K]
-                # if itime % 10 == 0:
-                # if itime in [1, 50, 100, 120, 130, 140]:
-                # if itime > 150 and itime % 5 == 0:
-                #     plot(self.cfg, mg, K, P)
-                #     a = input()
-                #     if a == "p":
-                #         path = Path(f"/Users/vinc/Desktop/K_kij_{itime}.txt")
-                #         kernel.save_to_file(path=path)
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
