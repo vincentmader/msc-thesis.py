@@ -33,20 +33,12 @@ class MassConservationPlot(BasePlot):
         plt.legend(loc="best")
         plt.xlabel("time $t$ [years]")
         plt.ylabel(r"mass error $\Delta\rho_t$ [%]")
-        plt.title( r"mass error $\Delta\rho_t=(\rho_t-\rho_0)/\rho_0$")
         plt.grid()
 
-        color = "white" if self.cfg.mpl_dark_mode else "black" # TODO Make sure this works also when not calling from preset `p1`.
         rel_error = (M[-1]-M[0])/M[0]
         rel_error_sign = f"+" if rel_error > 0 else ""
-        msgs = [
-            ((0.5, 0.55), r"$M_i$ = " + f"{M[0]}"),
-            ((0.5, 0.5), r"$M_f$ = " + f"{M[-1]}"),
-            ((0.5, 0.45), r"$\frac{M_f-M_i}{M_i}$ = " + rel_error_sign + f"{rel_error*100} %"),
-        ]
-        for (x, y), msg in msgs:
-            print(msg)
-            plt_text(x, y, msg, color=color)
+        title = r"mass error $\Delta\rho_t=(\rho_t-\rho_0)/\rho_0$ = " + rel_error_sign + f"{rel_error*100} %"
+        plt.title(title)
 
 
 def plt_text(x, y, text, color="black"):
