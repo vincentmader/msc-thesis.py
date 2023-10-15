@@ -3,12 +3,12 @@ import sys
 import numpy as np
 from tqdm import tqdm
 
-from axis import DiscreteTimeAxis, DiscreteMassAxis, AxisLabelVariant
+from axis import DiscreteTimeAxis, DiscreteMassAxis
 from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel
-from visualization.base import GridspecPlot
-from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
-from visualization.preset.p1 import plot_kernel_gain_loss
+from visualization.preset.p2 import plot_sampling_probability_vs_time
+from visualization.preset.p2 import plot_sampling_count_vs_time
+from visualization.preset.p2 import plot_kernel_sampled_vs_unsampled
 
 sys.path.append(PATH_TO_COAG)
 from coag.react_0d import solve_react_0d_equation
@@ -16,59 +16,6 @@ from coag.react_0d import solve_react_0d_equation
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter = 4  # Nr of iterations for implicit time step
-
-
-def plot_2(cfg, mg, Ps):
-    GridspecPlot(
-        [
-            KernelSubplot(cfg, mg, np.array(Ps), 
-                cmap="Blues", z_limits=(1e-5, 1),
-                title="Collision Pair Sampling Probability $P_{ij}$",
-            ),
-        ], add_slider=True, slider_label="$i_t$"
-    ).render()
-
-
-def plot_3(cfg, mg, Ns):
-    GridspecPlot(
-        [
-            KernelSubplot(cfg, mg, np.array(Ns), 
-                z_limits=(0, np.max(Ns)),  # <- NOTE: Low upper boundary for better visibility.
-                axis_scales=("log", "log", "lin"), cmap="Blues", 
-                title=r"Collision Pair Sampling Count $N_{ij}$",
-            ),
-        ], add_slider=True, slider_label="$i_t$"
-    ).render()
-
-
-def plot_4(cfg, mg, kernel_unsampled, kernel_sampled):
-    K_g, S_g = kernel_unsampled.K_gain, kernel_sampled.K_gain
-    K_l, S_l = kernel_unsampled.K_loss, kernel_sampled.K_loss
-
-    cmap, scale, z_limits = "Reds" , "log", (1e-20, 1)
-    GridspecPlot([
-        KernelSubplot(cfg, mg, K_g,
-            title="kernel gain contribution $G_{kij}$",
-            axis_scales=(scale, scale, scale),
-            z_limits=z_limits, symmetrized=False, cmap=cmap,
-        ),
-        KernelSubplot(cfg, mg, -K_l,
-            title="kernel loss contribution $L_{kij}$",
-            axis_scales=(scale, scale, scale), ylabel="",
-            z_limits=z_limits, symmetrized=False, cmap=cmap,
-        ),
-        KernelSubplot(cfg, mg, S_g,
-            title="kernel gain contribution $G_{kij}$",
-            axis_scales=(scale, scale, scale),
-            z_limits=z_limits, symmetrized=False, cmap=cmap,
-        ),
-        KernelSubplot(cfg, mg, -S_l,
-            title="kernel loss contribution $L_{kij}$",
-            axis_scales=(scale, scale, scale), ylabel="",
-            z_limits=z_limits, symmetrized=False, cmap=cmap,
-        ),
-    ], add_slider=True).render()
-
 
 
 class Solver:
@@ -120,7 +67,7 @@ class Solver:
                     try:
                         assert (K == kernel_unsampled.K).all()
                     except AssertionError:
-                        plot_4(self.cfg, mg, kernel_unsampled, kernel)
+                        plot_kernel_sampled_vs_unsampled(self.cfg, mg, kernel_unsampled, kernel)
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
@@ -152,7 +99,7 @@ class Solver:
         # TODO Do the above more elegantly. (Calculate temp. deriv.)
 
         if self.cfg.enable_collision_sampling:
-            plot_2(self.cfg, mg, Ps)
-            plot_3(self.cfg, mg, Ns)
+            plot_sampling_probability_vs_time(self.cfg, mg, Ps)
+            plot_sampling_count_vs_time(self.cfg, mg, Ns)
 
         return N_dust_store, f, m2f, dm2f
