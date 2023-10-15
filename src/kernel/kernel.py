@@ -21,8 +21,7 @@ class Kernel():
         "K_loss", "K_coag_loss", "K_frag_loss",
     ]
 
-    def __init__(
-        self, 
+    def __init__(self, 
         cfg: Config, 
         ijs: Optional[list[tuple[int, int]]] = None,
         R_coag: Optional[np.ndarray] = None,
@@ -104,8 +103,7 @@ class Kernel():
         # assert abs(a/b - 1).all() < 1e-14
         # self.K /= R_coll
 
-    def _K_coag(
-        self, 
+    def _K_coag(self, 
         ijs: list[tuple[int, int]],
     ):
         mg = self.mg
@@ -182,8 +180,7 @@ class Kernel():
 
         return K_gain, K_loss
 
-    def _K_frag(
-        self, 
+    def _K_frag(self, 
         ijs: list[tuple[int, int]],
     ):
         mg = self.mg
