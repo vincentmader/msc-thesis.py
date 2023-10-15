@@ -117,14 +117,13 @@ class Kernel():
         # Loop over all mass pairs.
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
             ii, jj = (i, j) if i >= j else (j, i)
-            # NOTE: The variables `ii` or `jj` are used for the case  where
-            #       you have to flip indices, i.e. do `(i,j) -> (j,i)`.
-            #       This "flip" is needed to assure that the kernel lives 
-            #       entirely in the top-left half of the matrix (due to 
-            #       symmetry of problem, collision "ij = ji").
-            #       When doing the flip, we cannot do a simple tuple 
-            #       deconstruction like `(i,j) = (j, i)`, since the indices
-            #       are needed elsewhere in their "unflipped" initial state.
+            # NOTE: The variables `ii` or `jj` are used for the case where we
+            #       have to flip indices, i.e. do `(i,j) -> (j,i)`. This "flip" 
+            #       is needed to assure that the kernel lives entirely in the 
+            #       top-left half of the matrix (due to symmetry of problem, 
+            #       collision "ij = ji"). When doing the flip, we cannot do a 
+            #       simple tuple deconstruction like `(i,j) = (j, i)`, since the 
+            #       indices are needed elsewhere in their "unflipped" initial state.
             m_i, m_j = mc[i], mc[j]
             # NOTE: Ignoring a possible index flip (like mentioned above) when defining
             #       the masses `m_i` and `m_i` is possible when they're only used for
