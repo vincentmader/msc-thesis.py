@@ -6,9 +6,10 @@ from tqdm import tqdm
 from axis import DiscreteTimeAxis, DiscreteMassAxis
 from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel
+from visualization.preset.p2 import plot_kernel_mass_error_vs_time
+from visualization.preset.p2 import plot_kernel_sampled_vs_unsampled
 from visualization.preset.p2 import plot_sampling_probability_vs_time
 from visualization.preset.p2 import plot_sampling_count_vs_time
-from visualization.preset.p2 import plot_kernel_sampled_vs_unsampled
 
 sys.path.append(PATH_TO_COAG)
 from coag.react_0d import solve_react_0d_equation
@@ -41,7 +42,7 @@ class Solver:
         W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) 
         #    ^ NOTE Keep definition in sync with W_ij in `SampledKernel`
 
-        Ps, Ns = [], []
+        Ps, Ns, Ks = [], [], []
 
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
@@ -60,6 +61,7 @@ class Solver:
                 #    ^ TODO More consistent names, P vs. P_ij
                 Ps.append(P)
                 Ns.append(N)
+                Ks.append(K)
 
                 # Compare kernels: Is sampled with N=2500 same as unsampled?
                 kernel_unsampled = Kernel(self.cfg)
@@ -101,5 +103,6 @@ class Solver:
         if self.cfg.enable_collision_sampling:
             plot_sampling_probability_vs_time(self.cfg, mg, Ps)
             plot_sampling_count_vs_time(self.cfg, mg, Ns)
+            plot_kernel_mass_error_vs_time(self.cfg, mg, Ks)
 
         return N_dust_store, f, m2f, dm2f

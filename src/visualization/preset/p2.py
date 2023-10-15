@@ -2,6 +2,7 @@ import numpy as np
 
 from visualization.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
+from kernel.mass_conservation import test_mass_conservation
 
 
 def plot_sampling_probability_vs_time(cfg, mg, Ps):
@@ -22,6 +23,17 @@ def plot_sampling_count_vs_time(cfg, mg, Ns):
                 z_limits=(0, np.max(Ns)),  # <- NOTE: Low upper boundary for better visibility.
                 axis_scales=("log", "log", "lin"), cmap="Blues", 
                 title=r"Collision Pair Sampling Count $N_{ij}$",
+            ),
+        ], add_slider=True, slider_label="$i_t$"
+    ).render()
+
+
+def plot_kernel_mass_error_vs_time(cfg, mg, Ks):
+    Es = [test_mass_conservation(mg, K)[0] for K in Ks]
+    GridspecPlot(
+        [
+            KernelSubplot(cfg, mg, np.array(Es), 
+                cmap="Reds", title=r"Kernel mass error $\Delta K_{ij}$",
             ),
         ], add_slider=True, slider_label="$i_t$"
     ).render()
@@ -54,5 +66,3 @@ def plot_kernel_sampled_vs_unsampled(cfg, mg, kernel_unsampled, kernel_sampled):
             z_limits=z_limits, symmetrized=False, cmap=cmap,
         ),
     ], add_slider=True).render()
-
-
