@@ -51,7 +51,7 @@ def plot_2(cfg, mg, Ps):
                 cfg, mg, np.array(Ps), cmap="Blues", z_limits=(1e-5, 1),
                 title="Collision Pair Sampling Probability $P_{ij}$",
             ),
-        ], add_slider=True,
+        ], add_slider=True, slider_label="$i_t$"
     ).render()
 
 
@@ -64,7 +64,7 @@ def plot_3(cfg, mg, Ns):
                 axis_scales=("log", "log", "lin"),
                 title=r"Collision Pair Sampling Count $N_{ij}$",
             ),
-        ], add_slider=True,
+        ], add_slider=True, slider_label="$i_t$"
     ).render()
 
 

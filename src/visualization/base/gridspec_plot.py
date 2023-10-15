@@ -5,16 +5,18 @@ from .gridspec_subplot import GridspecSubplot
 
 
 class GridspecPlot(BasePlot):
-    __slots__ = ["gs", "axes", "subplots", "slider"]
+    __slots__ = ["gs", "axes", "subplots", "slider", "slider_label"]
 
     def __init__(
         self,
         subplots: list[GridspecSubplot],
-        add_slider=False,
+        add_slider: bool = False,
+        slider_label: str = "k",
     ):
         figsize = self._choose_figsize(len(subplots))
         super().__init__(figsize=figsize)
         self.subplots = subplots
+        self.slider_label = slider_label
         self._setup_axes(subplots, add_slider)
 
     def draw(self):
@@ -85,7 +87,7 @@ class GridspecPlot(BasePlot):
             valmax=k_max, 
             valstep=1, 
             valinit=k_init,
-            label="$k$", 
+            label=self.slider_label, 
             orientation="vertical",
         )  # TODO
         self.slider.on_changed(self.update)
