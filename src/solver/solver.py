@@ -16,7 +16,7 @@ from coag.react_0d import solve_react_0d_equation
 
 SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
-N_iter = 4  # Nr of iterations for implicit time step
+N_iter  = 4  # Nr of iterations for implicit time step
 
 
 class Solver:
