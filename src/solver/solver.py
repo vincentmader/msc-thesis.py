@@ -66,9 +66,15 @@ class Solver:
                 # Compare kernels: Is sampled with N=2500 same as unsampled?
                 kernel_unsampled = Kernel(self.cfg)
                 if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
+                    # Ku = kernel_unsampled.K
+                    # err = (K[Ku!=0] - Ku[Ku!=0]) / Ku[Ku!=0]
                     try:
+                        # assert (np.abs(err) < 1e-12).all()
                         assert (K == kernel_unsampled.K).all()
                     except AssertionError:
+                        # m = (Ku[K!=0] / K[K!=0]).max()
+                        # m = ((Ku[K!=0] - K[K!=0]) / K[K!=0]).max()
+                        # print(err.max(), err.min())
                         plot_kernel_sampled_vs_unsampled(self.cfg, mg, kernel_unsampled, kernel)
 
             for _ in range(N_subst):
