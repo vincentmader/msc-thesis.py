@@ -15,10 +15,10 @@ from utils.functions import heaviside_theta
 class Kernel():
     __slots__ = [
         "cfg", "mg", 
-                  "R_coag",      "R_frag",
         "K",      "K_coag",      "K_frag", 
         "K_gain", "K_coag_gain", "K_frag_gain", 
         "K_loss", "K_coag_loss", "K_frag_loss",
+                  "R_coag",      "R_frag",
     ]
 
     def __init__(self, 
@@ -35,12 +35,11 @@ class Kernel():
         mc = mg.bin_centers
         self.mg = mg
 
-        # TODO Correct? (only needed for log?)
         if cfg.enable_cancellation_handling and cfg.mass_axis_scale == "log":
             assert (mc[1:] / mc[:-1]).max() < 2, "Error: mass grid too coarse."
 
-        # If relevant particle pairs are not specified explicitly,
-        # assume all of them have to be taken into account.
+        # If relevant particle pairs are not specified explicitly:
+        # -> Assume all of them have to be taken into account.
         if ijs is None:
             ijs = []
             for i in range(mg.N):
@@ -74,7 +73,6 @@ class Kernel():
         # ...stick-and-hit coagulation processes.
         if cfg.enable_coagulation:
             K_coag_gain, K_coag_loss = self._K_coag(ijs)  # TODO Rename: K -> X?
-            # K_coag_loss = np.array([(K_k + K_k.T) for K_k in K_coag_loss])[?]
             K_coag_gain *= R_coag
             K_coag_loss *= R_coag
             self.K_coag_gain += K_coag_gain
@@ -97,14 +95,7 @@ class Kernel():
         self.K += self.K_coag
         self.K += self.K_frag
 
-        # a = self.R_coag + self.R_frag
-        # b = R_coll
-        # assert abs(a/b - 1).all() < 1e-14
-        # self.K /= R_coll
-
-    def _K_coag(self, 
-        ijs: list[tuple[int, int]],
-    ):
+    def _K_coag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
         mc, N_m = mg.bin_centers, mg.N
 
@@ -179,27 +170,23 @@ class Kernel():
 
         return K_gain, K_loss
 
-    def _K_frag(self, 
-        ijs: list[tuple[int, int]],
-    ):
+    def _K_frag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
         mc, N_m = mg.bin_centers, mg.N
-        dm = mg.bin_widths
-
-        fragmentation_variant = self.cfg.fragmentation_variant
+        dm = mg.bin_widths  # TODO Make sure I can do not need this.
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
-            ii, jj = (i, j) if i >= j else (j, i)
+            ii,  jj  = (i, j) if i >= j else (j, i)
             m_i, m_j = mc[i], mc[j]
             th = heaviside_theta(i - j)
 
             # 1. Most basic/naive fragmentation implementation: "Pulverization"
             # ═════════════════════════════════════════════════════════════════
 
-            if fragmentation_variant == "naive/pulverization":
+            if self.cfg.fragmentation_variant == "naive/pulverization":
 
                 X = 0  # TODO Play around with this value, observe changes!
                 k = 0
@@ -212,19 +199,17 @@ class Kernel():
             # 2. Mass redistribution following the MRN model
             # ═════════════════════════════════════════════════════════════════
 
-            elif fragmentation_variant == "mrn":
+            elif self.cfg.fragmentation_variant == "mrn":
                 q = -11 / 6
 
                 # Define total mass that needs to be "moved".
                 m_tot = m_i + m_j
 
                 # Define mass range resulting from fragmentation event.
-                k_min = 0
-                k_max = mg.index_from_value(m_tot)
-                # k_max = mg.index_from_value(max(m_i, m_j))
-                # ^ NOTE: This is a somewhat arbitrary choice:
-                #   - One could also choose e.g. `m_max = max(m_i, m_j)`,
-                #   - or something completely different, as long as mass is conserved.
+                k_min, k_max = 0, mg.index_from_value(m_tot)
+                # ^ NOTE: This is a somewhat arbitrary choice: One could also choose
+                #   - e.g. `m_max = max(m_i, m_j)`, or
+                #   - something completely different, as long as mass is conserved.
                 # ^ NOTE:
                 #    - If we set `k_max = 1`, we expect the same behavior as 
                 #      in "naive/pulverization" (with X set to ~= 1 there).
@@ -235,45 +220,14 @@ class Kernel():
                 assert m_max < mg.x_max
 
                 # Calculate normalization constant for MRN distribution.
-                # S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
-                S = sum([mc[k]**q for k in range(k_min, k_max)])  # TODO -> `k_max + 1` ? (below as well)
+                S = sum([ mc[kk]**(q+1) for kk in range(k_min, k_max) ])
                 assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
-
-                # TODO Fix definition
-
-                # Add mass to bins "receiving" mass in fragmentation event.
+                
+                # Add mass to bins corresponding to newly created particles.
                 for k in range(k_min, k_max):
-                    # A = mc[k]**q / S
-                    # NOTE: The "equations" (statements) 1 & 6 are not numerically equivalent!
-                    #       The following steps serve to find out where the difference occurs (5->6).
-                    # K_gain[k, i, j] += m_tot / mc[k] * A * th                        # eq. 1
-                    # K_gain[k, i, j] += m_tot / mc[k] * (mc[k]**q / S) * th           # eq. 2
-                    # K_gain[k, i, j] += m_tot * (mc[k]**q / mc[k] / S) * th           # eq. 3
-                    # K_gain[k, i, j] += m_tot * ((mc[k]**q / mc[k]) / S) * th         # eq. 4
-                    # K_gain[k, i, j] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
-                    # K_gain[k, i, j] += m_tot * (mc[k]**(q-1.0) / S) * th             # eq. 6
-                    # ^ TODO: Why does this lead to changes in the kernel mass conservation plot?
-                    a = ((mc[k]**q * mc[k]**(-1)) / S)
-                    b = (mc[k]**(q-1.0) / S)
-                    assert a != b
-                    # if a == b:
-                    #     print(k, i, j)
-                    c = abs(a / b - 1)
-                    assert c < 1e-14
-                    # TODO: Decide which one to use.
-                    #       For now: Use equation 5:
-                    # K_gain[k, ii, jj] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
+                    K_gain[k, ii, jj] += m_tot * mc[k]**q / S * th
 
-                    # TODO Is this better for mass conservation than the previous implementation?
-                    S = sum([mc[kk]**(q+1) for kk in range(k_min, k_max)])
-                    K_gain[k, ii, jj] += m_tot *   mc[k]**q                / S  * th
-
-                    # S = sum([mc[k]**q * mc[k] * dm[k] for k in range(k_min, k_max)])
-                    # A = m_tot / S
-                    # f_kij = A * mc[k]**q
-                    # K_gain[k, ii, jj] += mc[k] * f_kij * th
-
-                # Remove mass from bins corresponding to initial masses.
+                # Remove mass from bins corresponding to initial particles.
                 K_loss[i, ii, jj] -= 1
 
             else: 
