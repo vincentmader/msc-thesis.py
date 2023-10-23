@@ -84,10 +84,20 @@ class Config():
             flaring_angle = cfg_i["flaring_angle"]
         if enable_physical_gas_density is None:
             enable_physical_gas_density = cfg_i["enable_physical_gas_density"]
+        if enable_physical_collisions is None:
+            enable_physical_collisions = cfg_i["enable_physical_collisions"]
         if dust_particle_density is None:
             dust_particle_density = cfg_i["dust_particle_density"]
         if viscosity_alpha is None:
             viscosity_alpha = cfg_i["viscosity_alpha"]
+        if relative_velocity_components is None:
+            relative_velocity_components = cfg_i["relative_velocity_components"]
+        if fragmentation_variant is None:
+            fragmentation_variant = cfg_i["fragmentation_variant"]
+        if fragmentation_velocity is None:
+            fragmentation_velocity = cfg_i["fragmentation_velocity"]
+        if collision_outcome_variant is None:
+            collision_outcome_variant = cfg_i["collision_outcome_variant"]
 
         cfg_i = cfg["radial_discretization"]
         if radial_min_value is None:
@@ -124,18 +134,8 @@ class Config():
             enable_coagulation = cfg_i["enable_coagulation"]
         if enable_fragmentation is None:
             enable_fragmentation = cfg_i["enable_fragmentation"]
-        if enable_physical_collisions is None:
-            enable_physical_collisions = cfg_i["enable_physical_collisions"]
-        if relative_velocity_components is None:
-            relative_velocity_components = cfg_i["relative_velocity_components"]
         if enable_cancellation_handling is None:
             enable_cancellation_handling = cfg_i["enable_cancellation_handling"]
-        if fragmentation_variant is None:
-            fragmentation_variant = cfg_i["fragmentation_variant"]
-        if fragmentation_velocity is None:
-            fragmentation_velocity = cfg_i["fragmentation_velocity"]
-        if collision_outcome_variant is None:
-            collision_outcome_variant = cfg_i["collision_outcome_variant"]
         if enable_collision_sampling is None:
             enable_collision_sampling = cfg_i["enable_collision_sampling"]
         if nr_of_samples is None:
