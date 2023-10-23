@@ -22,7 +22,7 @@
 
 [mass_discretization]
     mass_min_value                  = 1e-15     # given in kg  (a=1e-4 cm -> m=10e-15 kg)
-    mass_max_value                  = 1         # given in kg  (a=1e+3 cm -> m=10e+6  kg)  TODO Increase
+    mass_max_value                  = 1         # given in kg  (a=1e+3 cm -> m=10e+6  kg) TODO Increase `m_max`.
     mass_resolution                 = 50        # given as nr. of bins in mass grid
     mass_axis_scale                 = "log"     # either "lin" or "log"
   # mass_min_value                  = 0.5       # given in kg  (a=1e-4 cm -> m=10e-15 kg)
