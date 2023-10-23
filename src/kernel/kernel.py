@@ -57,7 +57,8 @@ class Kernel():
             P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
             # Define rate of coag./frag. events.
             R_coag, R_frag = R_coll * P_coag, R_coll * P_frag
-        # TODO Handle cases where `(R_coag is not None) and (R_frag is None)`, & other way round.
+        if (R_coag is None and R_frag is not None) or (R_frag is None and R_coag is not None):
+            raise Exception("Unhandled case: Either both `R_coag` & `R_frag` have to be given, or neither.")
         self.R_coag, self.R_frag = R_coag, R_frag
 
         # Initialize kernel matrices with zeros.
@@ -65,29 +66,29 @@ class Kernel():
         self.K_coag_loss = np.zeros(shape=[mg.N] * 3)
         self.K_frag_gain = np.zeros(shape=[mg.N] * 3)
         self.K_frag_loss = np.zeros(shape=[mg.N] * 3)
-        self.K_gain = np.zeros(shape=[mg.N] * 3)
-        self.K_loss = np.zeros(shape=[mg.N] * 3)
-        self.K = np.zeros(shape=[mg.N] * 3)
+        self.K_gain      = np.zeros(shape=[mg.N] * 3)
+        self.K_loss      = np.zeros(shape=[mg.N] * 3)
+        self.K           = np.zeros(shape=[mg.N] * 3)
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
         if cfg.enable_coagulation:
             K_coag_gain, K_coag_loss = self._K_coag(ijs)  # TODO Rename: K -> X?
-            K_coag_gain *= R_coag
-            K_coag_loss *= R_coag
+            K_coag_gain      *= R_coag
+            K_coag_loss      *= R_coag
             self.K_coag_gain += K_coag_gain
             self.K_coag_loss += K_coag_loss
-            self.K_gain += K_coag_gain
-            self.K_loss += K_coag_loss
+            self.K_gain      += K_coag_gain
+            self.K_loss      += K_coag_loss
         # ...fragmentation processes.
         if cfg.enable_fragmentation:
             K_frag_gain, K_frag_loss = self._K_frag(ijs)
-            K_frag_gain *= R_frag
-            K_frag_loss *= R_frag
+            K_frag_gain      *= R_frag
+            K_frag_loss      *= R_frag
             self.K_frag_gain += K_frag_gain
             self.K_frag_loss += K_frag_loss
-            self.K_gain += K_frag_gain
-            self.K_loss += K_frag_loss
+            self.K_gain      += K_frag_gain
+            self.K_loss      += K_frag_loss
         # Define total coagulation & fragmentation sub-kernels.
         self.K_coag = self.K_coag_gain + self.K_coag_loss
         self.K_frag = self.K_frag_gain + self.K_frag_loss
@@ -132,8 +133,7 @@ class Kernel():
                 continue
 
             # Calculate masses corresponding to the two neighboring bins.
-            m_l = mg.value_from_index(k_l)
-            m_h = mg.value_from_index(k_h)
+            m_l, m_h = mg.value_from_index(k_l), mg.value_from_index(k_h)
             assert (m_k >= m_l) and (m_k <= m_h)
 
             # Decide whether near-zero cancellation handling is required.
@@ -141,10 +141,10 @@ class Kernel():
             handle_cancellation = (self.cfg.enable_cancellation_handling and might_cancel)
 
             # Calculate fraction of mass "overflowing" into bin `k_h`.
-            if handle_cancellation:
-                eps = m_j / (m_h - m_l)  # Subtract analytically.
-            else:
+            if not handle_cancellation:
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
+            else:
+                eps = m_j / (m_h - m_l)  # Subtract analytically.
 
             # Check whether one of the masses is in the upper-most bin.
             near_upper_bound = (i >= N_m - 1) or (j >= N_m - 1)
