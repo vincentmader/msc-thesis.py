@@ -76,6 +76,41 @@ def plot_2():
         )
 
 
+def plot_3():
+    for (enable_coagulation, enable_fragmentation) in [(True, False), (False, True)]:
+
+        kernel_superscript = ""
+        kernel_superscript = "coag" if (enable_coagulation and not enable_fragmentation) else kernel_superscript
+        kernel_superscript = "frag" if (not enable_coagulation and enable_fragmentation) else kernel_superscript
+
+        for enable_cancellation_handling in [True, False]:
+
+            kernel_subscript = "nocanc" if enable_cancellation_handling else "canc"
+
+            cfg = Config(
+                enable_coagulation=enable_coagulation,
+                enable_fragmentation=enable_fragmentation,
+                enable_cancellation_handling=enable_cancellation_handling,
+            )
+            kernel = Kernel(cfg)
+            mg, K = kernel.mg, kernel.K
+            # E_ij, E_tot = test_mass_conservation(mg, K)
+
+            title = r"K^{" + kernel_superscript + "}_{" + kernel_subscript + "}"
+            filename = title.replace("{", "").replace("}", "").replace("^", "_")
+            filename = f"{filename}.pdf"
+            path_to_outfile = Path(PATH_TO_FIGURES, "34", filename)
+            title = f"${title}$"
+
+            GridspecPlot([
+                KernelMassConservationSubplot(
+                    cfg, mg, K,
+                    title=title,
+                ),
+            ]) .render(save_plot=True, path_to_outfile=path_to_outfile)
+
+
 if __name__ == "__main__":
     plot_1()
     plot_2()
+    plot_3()
