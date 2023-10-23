@@ -89,6 +89,7 @@ class EvolutionPlot(BasePlot):
         self.ax_2.set_ylim(1e-21, 1e-16)
         self.ax_2.grid(True)
         self.ax_2.set_xlabel("dust particle mass $m^c_i$ [kg]")
+        self.ax_2.set_ylabel(r"$\frac{d\rho_i^s}{dt}$ [kg m$^{-3}$s$^{-1}$]")
         self.ax_2.legend()
 
     def update(self, i_t):
