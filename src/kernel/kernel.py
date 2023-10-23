@@ -262,7 +262,11 @@ class Kernel():
                     assert c < 1e-14
                     # TODO: Decide which one to use.
                     #       For now: Use equation 5:
-                    K_gain[k, ii, jj] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
+                    # K_gain[k, ii, jj] += m_tot * ((mc[k]**q * mc[k]**(-1)) / S) * th   # eq. 5
+
+                    # TODO Is this better for mass conservation than the previous implementation?
+                    S = sum([mc[kk]**(q+1) for kk in range(k_min, k_max)])
+                    K_gain[k, ii, jj] += m_tot *   mc[k]**q                / S  * th
 
                     # S = sum([mc[k]**q * mc[k] * dm[k] for k in range(k_min, k_max)])
                     # A = m_tot / S
