@@ -14,7 +14,7 @@
       "radial_drift",
       "turbulence",
       "azimuthal",
-    # "differential_settling",                  # NOTE keep turned off for now
+    # "differential_settling",                  # ToDo: Fix definition of `dv_DS`.
     ]
     collision_outcome_variant       = "mb_dist" # either "mb_dist" or "cutoff_velocity"
     fragmentation_variant           = "mrn"     # either "mrn" or "naive/pulverization"
@@ -22,7 +22,7 @@
 
 [mass_discretization]
     mass_min_value                  = 1e-15     # given in kg  (a=1e-4 cm -> m=10e-15 kg)
-    mass_max_value                  = 1         # given in kg  (a=1e+3 cm -> m=10e+6  kg) TODO Increase `m_max`.
+    mass_max_value                  = 1         # given in kg  (a=1e+3 cm -> m=10e+6  kg)
     mass_resolution                 = 50        # given as nr. of bins in mass grid
     mass_axis_scale                 = "log"     # either "lin" or "log"
   # mass_min_value                  = 0.5       # given in kg  (a=1e-4 cm -> m=10e-15 kg)
