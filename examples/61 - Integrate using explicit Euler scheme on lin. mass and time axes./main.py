@@ -5,7 +5,7 @@ try:
     from axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
     from disk import mass_distribution
-    from disk.disk import disk_mass_from_distribution
+    from utils.physics import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver
     from visualization.evolution import EvolutionPlot, MassConservationPlot
