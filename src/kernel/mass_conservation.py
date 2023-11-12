@@ -1,17 +1,12 @@
 import numpy as np
 
-
-def assert_cubic_kernel_shape(K):
-    shape = K.shape
-    assert len(shape) == 3
-    assert shape[0] == shape[1]
-    assert shape[1] == shape[2]
-    return shape[0]
+from utils.functions import is_cubic
 
 
 def test_mass_conservation(mg, K, R_coll):  # TODO Turn this function into `Kernel` class method.
 
-    N_m = assert_cubic_kernel_shape(K)
+    assert is_cubic(K)
+    N_m = K.shape[0]
     assert N_m == mg.N
 
     mc, dm = mg.bin_centers, mg.bin_widths
