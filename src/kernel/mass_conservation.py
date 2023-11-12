@@ -9,7 +9,7 @@ def assert_cubic_kernel_shape(K):
     return shape[0]
 
 
-def test_mass_conservation(mg, K):  # TODO Turn this function into `Kernel` class method.
+def test_mass_conservation(mg, K, R_coll):  # TODO Turn this function into `Kernel` class method.
 
     N_m = assert_cubic_kernel_shape(K)
     assert N_m == mg.N
@@ -27,7 +27,7 @@ def test_mass_conservation(mg, K):  # TODO Turn this function into `Kernel` clas
             err_ij = 0
             for k in range(N_m):
                 err_ij += mc[k] * K[k, i, j]
-            err_matrix[i, j] = np.abs(err_ij / m_tot)  
+            err_matrix[i, j] = np.abs(err_ij / m_tot) / R_coll[i, j]
             #                TODO ^ Remove `abs()` here, plot +/- side by side.
 
     err_total = np.sum(err_matrix**2)**.5

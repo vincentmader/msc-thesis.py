@@ -72,13 +72,14 @@ def plot_kernel_error(
     cfg: Config,
     mg: DiscreteMassAxis,
     kernel: Kernel,
+    R: np.ndarray,
     scale: str,
     z_limits: tuple[float, float],
     axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
 ):
     p = GridspecPlot([
         KernelMassConservationSubplot(
-            cfg, mg, kernel.K,
+            cfg, mg, kernel.K, R,
             axis_scales=(scale, scale, scale),
             axis_label_variant=axis_label_variant,
             symmetrized=False,
@@ -161,14 +162,16 @@ def main(cfg):
     mg, kernel = DiscreteMassAxis(cfg), Kernel(cfg)
     scale = mg.scale
     axis_label_variant = AxisLabelVariant.Radius if scale == "log" else AxisLabelVariant.Bin
-    z_limits = (1e-20, 1e-7) if scale == "log" else (-1, 1)
+    z_limits = (1e-20, 1e+10) if scale == "log" else (-1, 1)
 
     # Plot total kernel     with lin. colorscale.
 #    plot_kernel(cfg, mg, kernel, scale, axis_label_variant, z_limits)
     # Plot K_gain & K_loss  with log. colorscale.
     plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant)
+
     # Plot kernel mass error.
-    plot_kernel_error(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant)
+    R = kernel.R_coag + kernel.R_frag
+    plot_kernel_error(cfg, mg, kernel, R, scale, z_limits, axis_label_variant=axis_label_variant)
 
     # Integrate.
     t, f, N, m2f, dm2f, M = integrate(cfg, kernel)

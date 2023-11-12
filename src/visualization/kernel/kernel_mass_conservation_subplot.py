@@ -17,10 +17,11 @@ class KernelMassConservationSubplot(KernelSubplot):
         cfg: Config,
         mg: DiscreteMassAxis,
         K: np.ndarray,
+        R_coll: np.ndarray,
         axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
         *args, **kwargs
     ):
-        err_matrix, err_total = test_mass_conservation(mg, K)
+        err_matrix, err_total = test_mass_conservation(mg, K, R_coll)
 
         if "title" not in kwargs.keys():
             kwargs["title"]  = r"error $\Delta K_{ij}=\sum_k \frac{m_k}{m_i+m_j}\cdot\frac{K_{kij}}{R_{ij}}$, "
