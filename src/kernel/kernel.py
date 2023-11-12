@@ -99,6 +99,7 @@ class Kernel():
     def _K_coag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
         mc, N_m = mg.bin_centers, mg.N
+        dm = mg.bin_widths
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
@@ -173,7 +174,7 @@ class Kernel():
     def _K_frag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
         mc, N_m = mg.bin_centers, mg.N
-        dm = mg.bin_widths  # TODO Make sure I can do not need this.
+        dm = mg.bin_widths
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
@@ -220,12 +221,13 @@ class Kernel():
                 assert m_max < mg.x_max
 
                 # Calculate normalization constant for MRN distribution.
-                S = sum([ mc[kk]**(q+1) for kk in range(k_min, k_max) ])
+                S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
+                # TODO ^ Multiply with `dm[kk]` inside sum?
                 assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
                 
                 # Add mass to bins corresponding to newly created particles.
                 for k in range(k_min, k_max):
-                    K_gain[k, ii, jj] += m_tot * mc[k]**q / S * th
+                    K_gain[k, ii, jj] += m_tot * mc[k]**q / S * th * dm[k]
 
                 # Remove mass from bins corresponding to initial particles.
                 K_loss[i, ii, jj] -= 1
