@@ -6,6 +6,9 @@ from utils.functions import is_cubic
 def test_mass_conservation(mg, K, R_coll):  
     # TODO Turn this function into `Kernel` class method.
 
+    # PERFORM ASSERTIONS.
+    # ─────────────────────────────────────────────────────────────────────────
+
     # Assert correct shape of kernel matrix.
     assert is_cubic(K)
     N_m = K.shape[0]
@@ -20,8 +23,12 @@ def test_mass_conservation(mg, K, R_coll):
     # Assert non-negative collision rates.
     assert R_coll.all() >= 0
 
+    # CALCULATE KERNEL MASS ERROR FOR ALL COLLISIONS `(i, j)`.
+    # ─────────────────────────────────────────────────────────────────────────
+
     # Initialize 2d matrix for error in collision `(i, j)`.
     E = np.zeros(shape=[N_m] * 2)
+
     # Calculate error for all collisions `(i, j)`.
     for i in range(N_m):
         for j in range(N_m):  # <- TODO Use `i+1` as max.?
@@ -33,5 +40,6 @@ def test_mass_conservation(mg, K, R_coll):
             E[i, j] = np.abs(E_ij / m_tot) / R_coll[i, j]
             #  TODO ^ Remove `abs()` here, plot +/- side by side.
 
+    # Calculate total error.
     E_tot = np.sum(E**2)**.5
     return E, E_tot
