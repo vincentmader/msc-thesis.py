@@ -70,7 +70,7 @@ def scale_height(r: np.ndarray, M_star: float, c_s: np.ndarray):
 
 
 def gas_surface_density(r: np.ndarray, M_disk: float):
-    plsig = -1
+    plsig = -0.8  # plsig == power-law sigma
     Sigma_g = (r[:-1] / AU)**plsig
     dsurf = PI * (r[1:]**2 - r[:-1]**2)
     mdummy = (Sigma_g * dsurf).sum()
