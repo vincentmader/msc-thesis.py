@@ -38,11 +38,11 @@ class KernelMassConservationSubplot(KernelSubplot):
             unit = "m$^3$ kg"
         elif kernel_error_variant is KernelErrorVariant.PercentPerCollision:
             dK_ij = r"$\sum_k \frac{m_k}{m_i+m_j}\cdot\frac{K_{kij}}{R_{ij}}$"
-            unit = "m$^3$"
+            unit = "% m$^3$"
         else:
             raise Exception("NOTE: This can never happen.")
 
-        dK = r"$\Delta K=\sqrt{\sum_{ij}\Delta K_{ij}^2}$ = " 
+        dK = r"$\Delta K=\sqrt{\sum_{ij}\Delta K_{ij}^2}$" 
         title = r"$\Delta K_{ij}$ = " + f"{dK_ij}" + ", " + f"{dK} = {err_total:.2e} {unit}"
         return title
 

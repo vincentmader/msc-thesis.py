@@ -43,7 +43,7 @@ def test_mass_conservation(mg, K, R_coll, kernel_error_variant):
             if kernel_error_variant == KernelErrorVariant.KgPerCollision:
                 E[i, j] /= R_coll[i, j]
             if kernel_error_variant == KernelErrorVariant.PercentPerCollision:
-                E[i, j] /= R_coll[i, j] * m_tot * 100
+                E[i, j] /= R_coll[i, j] * m_tot / 100
 
     # Calculate total error.
     E_tot = np.sum(E**2)**.5
