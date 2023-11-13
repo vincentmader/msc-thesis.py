@@ -8,7 +8,8 @@ from constants import M_sun, L_sun, AU
 dirname = os.path.dirname(__file__)
 PATH_TO_CFG_TOML = os.path.join(dirname, "..", "config.toml")
 PATH_TO_LIB      = os.path.join(dirname, "..", "lib")
-PATH_TO_FIGURES  = os.path.join(dirname, "..", "out", "figures")
+PATH_TO_OUTFILES = os.path.join(dirname, "..", "out")
+PATH_TO_FIGURES  = os.path.join(PATH_TO_OUTFILES, "figures")
 PATH_TO_DARKMODE = os.path.join(PATH_TO_LIB, "mpl-styles", "dark.mplstyle")
 PATH_TO_COAG     = os.path.join(PATH_TO_LIB, "coag_py")
 
