@@ -65,8 +65,8 @@ class Solver:
                 Ks.append(K)
 
                 # Compare kernels: Is sampled with N=2500 same as unsampled?
-                kernel_unsampled = Kernel(self.cfg)
                 if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
+                    kernel_unsampled = Kernel(self.cfg)
                     # Ku = kernel_unsampled.K
                     # err = (K[Ku!=0] - Ku[Ku!=0]) / Ku[Ku!=0]
                     try:

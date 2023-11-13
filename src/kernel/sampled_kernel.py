@@ -30,6 +30,7 @@ class SampledKernel(Kernel):
             K = kernel.K
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # TODO Use quadratic addition instead? (+ sqrt afterwards)
+        self.cfg = cfg  # NOTE This field is written to twice.
 
         # assert (np.abs(N[N < 0]) <= 1e-16).all(), N  # TODO Uncomment this line.
         N_i = N[:, None] 
@@ -41,8 +42,11 @@ class SampledKernel(Kernel):
         m_j = mc[None, :]
 
         P_ij = W_ij * N_i * N_j * m_i * m_j
-        # P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
-        P_ij = P_ij / P_ij.sum()  # Normalize. 
+        # If sampling over all collisions, make sure that probability is > 0 everywhere.
+        if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
+            P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
+        # Normalize probability distribution.
+        P_ij = P_ij / P_ij.sum()  
         assert np.abs(P_ij.sum() - 1) <= 1e-6
 
         self.P_ij = P_ij
@@ -59,17 +63,16 @@ class SampledKernel(Kernel):
         assert N_i == N_j
         indices = range(N_i * N_j)
         P_ij = P_ij.reshape(N_i * N_j)
-    
-        # assert (P_ij != 0).all()
 
+        # If sampling over all collisions, make sure that probability is > 0 everywhere.
+        if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
+            assert (P_ij != 0).all()
+            N_sample = self.cfg.nr_of_samples
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
-        N_relevant = np.sum(P_ij > ALMOST_BUT_NOT_QUITE_ZERO)
-        N_relevant = np.sum(P_ij > 1e-20)
-        N_sample = min(cfg.nr_of_samples, N_relevant)
-        # print(N_relevant, N_sample)
-        # N_sample = cfg.nr_of_samples
-        # TODO Correctly do this. Uncommenting the lines above leads to `K_sampled != K_unsampled`.
+        else:
+            N_relevant = np.sum(P_ij > 1e-50)
+            N_sample = min(cfg.nr_of_samples, N_relevant)
 
         sampled = np.random.choice(indices, p=P_ij, size=N_sample, replace=False)
     
