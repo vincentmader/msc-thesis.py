@@ -30,15 +30,15 @@ class KernelMassConservationSubplot(KernelSubplot):
         super().__init__(cfg, mg, err_matrix, axis_label_variant=axis_label_variant, *args, **kwargs)
 
     def format_title(self, err_total, kernel_error_variant):
-        if kernel_error_variant is KernelErrorVariant.KgPerSecond:
+        if kernel_error_variant is KernelErrorVariant.KgPerSecondPerDensity:
             dK_ij = r"$\sum_k m_k\cdot K_{kij}$"
             unit = "m$^3$ kg s$^{-1}$"
         elif kernel_error_variant is KernelErrorVariant.KgPerCollision:
             dK_ij = r"$\sum_k m_k\cdot\frac{K_{kij}}{R_{ij}}$"
-            unit = "m$^3$ kg"
+            unit = "kg"
         elif kernel_error_variant is KernelErrorVariant.PercentPerCollision:
             dK_ij = r"$\sum_k \frac{m_k}{m_i+m_j}\cdot\frac{K_{kij}}{R_{ij}}$"
-            unit = "% m$^3$"
+            unit = "%"
         else:
             raise Exception("NOTE: This can never happen.")
 

@@ -45,10 +45,15 @@ def test_mass_conservation(
                 E_ij += mc[k] * K[k, i, j]
             E[i, j] = np.abs(E_ij)
             #  TODO ^ Remove `abs()` here, plot +/- side by side.
-            if kernel_error_variant == KernelErrorVariant.KgPerCollision:
+            if kernel_error_variant == KernelErrorVariant.KgPerSecondPerDensity:
+                pass
+            elif kernel_error_variant == KernelErrorVariant.KgPerCollision:
                 E[i, j] /= R_coll[i, j]
-            if kernel_error_variant == KernelErrorVariant.PercentPerCollision:
+            elif kernel_error_variant == KernelErrorVariant.PercentPerCollision:
                 E[i, j] /= R_coll[i, j] * m_tot / 100
+            else:
+                raise Exception("This can never happen.")
+
 
     # Calculate total error.
     E_tot = np.sum(E**2)**.5

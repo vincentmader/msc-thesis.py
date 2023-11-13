@@ -8,6 +8,6 @@ class AxisLabelVariant(Enum):
 
 
 class KernelErrorVariant(Enum):
-    KgPerSecond = 0
+    KgPerSecondPerDensity = 0
     KgPerCollision = 1
     PercentPerCollision = 2
