@@ -6,6 +6,7 @@ from tqdm import tqdm
 from axis import DiscreteTimeAxis, DiscreteMassAxis
 from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel
+from visualization.preset.p1 import plot_kernel_gain_loss
 from visualization.preset.p2 import plot_kernel_mass_error_vs_time
 from visualization.preset.p2 import plot_kernel_sampled_vs_unsampled
 from visualization.preset.p2 import plot_sampling_probability_vs_time
@@ -63,6 +64,9 @@ class Solver:
                 Ps.append(P)
                 Ns.append(N)
                 Ks.append(K)
+
+                if False and itime % 20 == 0:
+                    plot_kernel_gain_loss(self.cfg, mg, kernel, "log", (1e-20, 1.))
 
                 # Compare kernels: Is sampled with N=2500 same as unsampled?
                 if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
