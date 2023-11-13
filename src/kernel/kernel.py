@@ -21,10 +21,10 @@ class Kernel():
     ]
 
     def __init__(self, 
-        cfg: Config, 
-        ijs: Optional[list[tuple[int, int]]] = None,
-        R_coag: Optional[np.ndarray] = None,
-        R_frag: Optional[np.ndarray] = None,
+        cfg:    Config, 
+        ijs:    Optional[list[tuple[int, int]]] = None,
+        R_coag: Optional[np.ndarray]            = None,
+        R_frag: Optional[np.ndarray]            = None,
     ):
         self.cfg = cfg
 
