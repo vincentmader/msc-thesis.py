@@ -32,6 +32,8 @@ def plot_kernel_mass_error_vs_time(cfg, mg, Ks, R_coll):
     Es = [test_mass_conservation(mg, K, R_coll)[0] for K in Ks]
     GridspecPlot(
         [
+            # NOTE This should be a `KernelMassConservationSubplot`, but it can't be,
+            #      since that class takes `K` as input, not `Es`...
             KernelSubplot(cfg, mg, np.array(Es), 
                 cmap="Reds", title=r"Kernel mass error $\Delta K_{ij}$",
             ),
