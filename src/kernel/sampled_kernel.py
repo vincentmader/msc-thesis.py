@@ -34,14 +34,12 @@ class SampledKernel(Kernel):
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # TODO Use quadratic addition instead? (+ sqrt afterwards)
 
+        m_i, m_j = mc[:, None], mc[None, :]
+        N_i, N_j =  N[:, None],  N[None, :]
+
         # assert (np.abs(N[N < 0]) <= 1e-16).all(), N  # TODO Uncomment this line.
-        N_i = N[:, None] 
-        N_j = N[None, :]
         N_i[N_i < 0] = 0  # NOTE: Why are there even cases where `N < 0` ?
         N_j[N_j < 0] = 0
-
-        m_i = mc[:, None]
-        m_j = mc[None, :]
 
         P_ij = W_ij * N_i * N_j * m_i * m_j
         # If sampling over all collisions, make sure that probability is > 0 everywhere.
