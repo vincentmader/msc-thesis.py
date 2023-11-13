@@ -1,9 +1,10 @@
 import numpy as np
 
+from axis import KernelErrorVariant
 from utils.functions import is_cubic
 
 
-def test_mass_conservation(mg, K, R_coll):  
+def test_mass_conservation(mg, K, R_coll, kernel_error_variant):  
     # TODO Turn this function into `Kernel` class method.
 
     # PERFORM ASSERTIONS.
@@ -37,8 +38,12 @@ def test_mass_conservation(mg, K, R_coll):
             E_ij = 0
             for k in range(N_m):
                 E_ij += mc[k] * K[k, i, j]
-            E[i, j] = np.abs(E_ij / m_tot) / R_coll[i, j]
+            E[i, j] = np.abs(E_ij)
             #  TODO ^ Remove `abs()` here, plot +/- side by side.
+            if kernel_error_variant == KernelErrorVariant.KgPerCollision:
+                E[i, j] /= R_coll[i, j]
+            if kernel_error_variant == KernelErrorVariant.PercentPerCollision:
+                E[i, j] /= R_coll[i, j] * m_tot * 100
 
     # Calculate total error.
     E_tot = np.sum(E**2)**.5
