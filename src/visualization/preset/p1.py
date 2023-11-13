@@ -76,13 +76,14 @@ def plot_kernel_error(
     scale: str,
     z_limits: tuple[float, float],
     axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
+    symmetrized=False,
 ):
     p = GridspecPlot([
         KernelMassConservationSubplot(
             cfg, mg, kernel.K, R,
             axis_scales=(scale, scale, scale),
             axis_label_variant=axis_label_variant,
-            symmetrized=False,
+            symmetrized=symmetrized,
             # z_limits=z_limits, # TODO
         ),
     ])
