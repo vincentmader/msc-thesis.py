@@ -23,14 +23,16 @@ class SampledKernel(Kernel):
         W_ij:   Optional[np.ndarray] = None,
         *args, **kwargs
     ):
+        self.cfg = cfg  # NOTE Attention: This field is written to twice.
+
         mg = DiscreteMassAxis(cfg)
         mc = mg.bin_centers
-        if W_ij is None:  # Define weights, if not received as argument.
-            kernel = Kernel(cfg)
-            K = kernel.K
+
+        # Define weights, if not received as argument.
+        if W_ij is None:  
+            K = Kernel(cfg).K
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # TODO Use quadratic addition instead? (+ sqrt afterwards)
-        self.cfg = cfg  # NOTE This field is written to twice.
 
         # assert (np.abs(N[N < 0]) <= 1e-16).all(), N  # TODO Uncomment this line.
         N_i = N[:, None] 
