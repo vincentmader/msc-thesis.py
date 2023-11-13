@@ -71,89 +71,124 @@ class Config():
         cfg_i = cfg["disk"]
         if stellar_mass is None:
             stellar_mass = M_sun * cfg_i["stellar_mass"]
+            assert stellar_mass is not None
         if stellar_luminosity is None:
             stellar_luminosity = L_sun * cfg_i["stellar_luminosity"]
+            assert stellar_luminosity is not None
         if disk_mass_ratio is None:
             disk_mass_ratio = cfg_i["disk_mass_ratio"]
+            assert disk_mass_ratio is not None
         disk_mass = stellar_mass * disk_mass_ratio
         if dust_to_gas_ratio is None:
             dust_to_gas_ratio = cfg_i["dust_to_gas_ratio"]
+            assert dust_to_gas_ratio is not None
         if distance_to_star is None:
             distance_to_star = AU * cfg_i["distance_to_star"]
+            assert distance_to_star is not None
         if flaring_angle is None:
             flaring_angle = cfg_i["flaring_angle"]
+            assert flaring_angle is not None
         if enable_physical_gas_density is None:
             enable_physical_gas_density = cfg_i["enable_physical_gas_density"]
+            assert enable_physical_gas_density is not None
         if enable_physical_collisions is None:
             enable_physical_collisions = cfg_i["enable_physical_collisions"]
+            assert enable_physical_collisions is not None
         if dust_particle_density is None:
             dust_particle_density = cfg_i["dust_particle_density"]
+            assert dust_particle_density is not None
         if viscosity_alpha is None:
             viscosity_alpha = cfg_i["viscosity_alpha"]
+            assert viscosity_alpha is not None
         if relative_velocity_components is None:
             relative_velocity_components = cfg_i["relative_velocity_components"]
+            assert relative_velocity_components is not None
         if fragmentation_variant is None:
             fragmentation_variant = cfg_i["fragmentation_variant"]
+            assert fragmentation_variant is not None
         if fragmentation_velocity is None:
             fragmentation_velocity = cfg_i["fragmentation_velocity"]
+            assert fragmentation_velocity is not None
         if collision_outcome_variant is None:
             collision_outcome_variant = cfg_i["collision_outcome_variant"]
+            assert collision_outcome_variant is not None
 
         cfg_i = cfg["radial_discretization"]
         if radial_min_value is None:
             radial_min_value = AU * cfg_i["radial_min_value"]
+            assert radial_min_value is not None
         if radial_max_value is None:
             radial_max_value = AU * cfg_i["radial_max_value"]
+            assert radial_max_value is not None
         if radial_resolution is None:
             radial_resolution = cfg_i["radial_resolution"]
+            assert radial_resolution is not None
         if radial_axis_scale is None:
             radial_axis_scale = cfg_i["radial_axis_scale"]
+            assert radial_axis_scale is not None
 
         cfg_i = cfg["mass_discretization"]
         if mass_min_value is None:
             mass_min_value = cfg_i["mass_min_value"]
+            assert mass_min_value is not None
         if mass_max_value is None:
             mass_max_value = cfg_i["mass_max_value"]
+            assert mass_max_value is not None
         if mass_resolution is None:
             mass_resolution = cfg_i["mass_resolution"]
+            assert mass_resolution is not None
         if mass_axis_scale is None:
             mass_axis_scale = cfg_i["mass_axis_scale"]
+            assert mass_axis_scale is not None
 
         cfg_i = cfg["time_discretization"]
         if time_min_value is None:
             time_min_value = cfg_i["time_min_value"]
+            assert time_min_value is not None
         if time_max_value is None:
             time_max_value = cfg_i["time_max_value"]
+            assert time_max_value is not None
         if time_resolution is None:
             time_resolution = cfg_i["time_resolution"]
+            assert time_resolution is not None
         if time_axis_scale is None:
             time_axis_scale = cfg_i["time_axis_scale"]
+            assert time_axis_scale is not None
 
         cfg_i = cfg["kernel"]
         if enable_coagulation is None:
             enable_coagulation = cfg_i["enable_coagulation"]
+            assert enable_coagulation is not None
         if enable_fragmentation is None:
             enable_fragmentation = cfg_i["enable_fragmentation"]
+            assert enable_fragmentation is not None
         if enable_cancellation_handling is None:
             enable_cancellation_handling = cfg_i["enable_cancellation_handling"]
+            assert enable_cancellation_handling is not None
         if enable_collision_sampling is None:
             enable_collision_sampling = cfg_i["enable_collision_sampling"]
+            assert enable_collision_sampling is not None
         if nr_of_samples is None:
             nr_of_samples = cfg_i["nr_of_samples"]
+            assert nr_of_samples is not None
 
         cfg_i = cfg["solver"]
         if solver_variant is None:
             solver_variant = cfg_i["solver_variant"]
+            assert solver_variant is not None
 
         cfg_i = cfg["plotting"]
         if mpl_dark_mode is None:
             mpl_dark_mode = cfg_i["mpl_dark_mode"]
+            assert mpl_dark_mode is not None
 
         cfg_i = cfg["initialization"]
         if initialization_variant is None:
             initialization_variant = cfg_i["initialization_variant"]
+            assert initialization_variant is not None
         if initial_mass_bin is None:
             initial_mass_bin = cfg_i["initial_mass_bin"]
+            assert initial_mass_bin is not None
 
         self.collision_outcome_variant    = collision_outcome_variant
         self.disk_mass                    = disk_mass
