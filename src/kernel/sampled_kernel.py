@@ -41,7 +41,7 @@ class SampledKernel(Kernel):
         m_j = mc[None, :]
 
         P_ij = W_ij * N_i * N_j * m_i * m_j
-        P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
+        # P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
         P_ij = P_ij / P_ij.sum()  # Normalize. 
         assert np.abs(P_ij.sum() - 1) <= 1e-6
 
@@ -60,7 +60,7 @@ class SampledKernel(Kernel):
         indices = range(N_i * N_j)
         P_ij = P_ij.reshape(N_i * N_j)
     
-        assert (P_ij != 0).all()
+        # assert (P_ij != 0).all()
 
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
