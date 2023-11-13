@@ -18,9 +18,9 @@ class SampledKernel(Kernel):
 
     def __init__(
         self, 
-        cfg: Config, 
-        N: np.ndarray, 
-        W_ij: Optional[np.ndarray] = None,
+        cfg:    Config, 
+        N:      np.ndarray, 
+        W_ij:   Optional[np.ndarray] = None,
         *args, **kwargs
     ):
         mg = DiscreteMassAxis(cfg)
