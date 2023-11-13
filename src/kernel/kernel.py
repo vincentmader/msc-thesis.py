@@ -13,7 +13,7 @@ from utils.functions import heaviside_theta
 
 class Kernel():
     __slots__ = [
-        "cfg", "mg", 
+        "cfg",    "mg", 
         "K",      "K_coag",      "K_frag", 
         "K_gain", "K_coag_gain", "K_frag_gain", 
         "K_loss", "K_coag_loss", "K_frag_loss",
