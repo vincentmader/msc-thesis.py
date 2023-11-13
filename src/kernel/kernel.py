@@ -4,8 +4,7 @@ from typing import Optional
 import numpy as np
 
 from axis import DiscreteMassAxis, DiscreteRadialAxis
-from collision import collision_outcome_probabilities
-from collision import collision_rate
+from collision import collision_outcome_probabilities, collision_rate
 from config import Config
 from disk import Disk, DiskRegion
 from dust.relative_velocity import relative_velocity
