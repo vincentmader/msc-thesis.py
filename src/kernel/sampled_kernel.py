@@ -32,8 +32,10 @@ class SampledKernel(Kernel):
             # TODO Use quadratic addition instead? (+ sqrt afterwards)
 
         # assert (np.abs(N[N < 0]) <= 1e-16).all(), N  # TODO Uncomment this line.
-        N_i = np.abs(N[:, None])  # TODO `N` can be less than 0. Can I fix this?
-        N_j = np.abs(N[None, :])
+        N_i = N[:, None] 
+        N_j = N[None, :]
+        N_i[N_i < 0] = 0  # NOTE: Why are there even cases where `N < 0` ?
+        N_j[N_j < 0] = 0
 
         m_i = mc[:, None]
         m_j = mc[None, :]
