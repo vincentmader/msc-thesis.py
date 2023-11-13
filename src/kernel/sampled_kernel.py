@@ -62,9 +62,11 @@ class SampledKernel(Kernel):
 
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
-        # N_relevant = np.sum(P_ij > ALMOST_BUT_NOT_QUITE_ZERO)
-        # N_sample = min(cfg.nr_of_samples, N_relevant)
-        N_sample = cfg.nr_of_samples
+        N_relevant = np.sum(P_ij > ALMOST_BUT_NOT_QUITE_ZERO)
+        N_relevant = np.sum(P_ij > 1e-20)
+        N_sample = min(cfg.nr_of_samples, N_relevant)
+        # print(N_relevant, N_sample)
+        # N_sample = cfg.nr_of_samples
         # TODO Correctly do this. Uncommenting the lines above leads to `K_sampled != K_unsampled`.
 
         sampled = np.random.choice(indices, p=P_ij, size=N_sample, replace=False)
