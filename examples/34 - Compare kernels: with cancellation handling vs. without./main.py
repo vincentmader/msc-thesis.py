@@ -26,6 +26,8 @@ mg = kernel_1.mg
 mc = mg.bin_centers
 ac = mg.particle_radii
 
+R_coll = np.ones(shape=[mg.N]*2)
+
 
 def plot_1():
 
@@ -33,14 +35,14 @@ def plot_1():
     GridspecPlot([
         KernelSubplot(
             cfg_1, mg, K_1,
-            title="kernel $K_{kij}^{canc}$",
+            title="$K_{kij}^{canc}$",
             axis_scales=("log", "log", "lin"),
             symmetrized=True,
             cmap="bwr",
         ),
         KernelSubplot(
             cfg_2, mg, K_2,
-            title="kernel $K_{kij}^{nocanc}$ with canc. handling",
+            title="$K_{kij}^{nocanc}$ with canc. handling",
             axis_scales=("log", "log", "lin"),
             symmetrized=True,
             cmap="bwr",
@@ -57,12 +59,14 @@ def plot_2():
 
     # Plot kernel errors of `K_canc` & `K_nocanc` side by side.
     s1 = KernelMassConservationSubplot(
-        cfg_1, mg, K_1, axis_label_variant=AxisLabelVariant.Radius,
-        title=r"kernel error $\Delta K^{canc}_{ij}=\sum_k m_k\cdot K_{kij}^{canc}$",
+        cfg_1, mg, K_1, R_coll,
+        axis_label_variant=AxisLabelVariant.Radius,
+        title=r"$\Delta K^{canc}_{ij}$",
     )
     s2 = KernelMassConservationSubplot(
-        cfg_2, mg, K_2, axis_label_variant=AxisLabelVariant.Radius,
-        title=r"kernel error $\Delta K^{nocanc}_{ij}=\sum_k m_k\cdot K_{kij}^{nocanc}$",
+        cfg_2, mg, K_2, R_coll,
+        axis_label_variant=AxisLabelVariant.Radius,
+        title=r"$\Delta K^{nocanc}_{ij}$",
     )
     GridspecPlot([s1, s2]).render()
 
@@ -104,7 +108,7 @@ def plot_3():
 
             GridspecPlot([
                 KernelMassConservationSubplot(
-                    cfg, mg, K,
+                    cfg, mg, K, R_coll,
                     title=title,
                 ),
             ]) .render(save_plot=True, path_to_outfile=path_to_outfile)
