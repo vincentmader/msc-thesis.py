@@ -1,10 +1,15 @@
+from typing import Optional
+
 import numpy as np
 
 from axis import KernelErrorVariant
 from utils.functions import is_cubic
 
 
-def test_mass_conservation(mg, K, R_coll, kernel_error_variant):  
+def test_mass_conservation(
+    mg, K, R_coll, 
+    kernel_error_variant: Optional[KernelErrorVariant] = KernelErrorVariant.PercentPerCollision,
+):  
     # TODO Turn this function into `Kernel` class method.
 
     # PERFORM ASSERTIONS.

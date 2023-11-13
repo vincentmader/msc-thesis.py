@@ -41,6 +41,7 @@ class Solver:
         kernel = Kernel(self.cfg)
         W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) 
         #    ^ NOTE Keep definition in sync with W_ij in `SampledKernel`
+        R_coll = kernel.R_coag + kernel.R_frag
 
         Ps, Ns, Ks = [], [], []
 
@@ -109,6 +110,6 @@ class Solver:
         if self.cfg.enable_collision_sampling:
             plot_sampling_probability_vs_time(self.cfg, mg, Ps)
             plot_sampling_count_vs_time(self.cfg, mg, Ns)
-            plot_kernel_mass_error_vs_time(self.cfg, mg, Ks)
+            plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
 
         return N_dust_store, f, m2f, dm2f

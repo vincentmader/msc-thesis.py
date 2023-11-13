@@ -28,8 +28,8 @@ def plot_sampling_count_vs_time(cfg, mg, Ns):
     ).render()
 
 
-def plot_kernel_mass_error_vs_time(cfg, mg, Ks):
-    Es = [test_mass_conservation(mg, K)[0] for K in Ks]
+def plot_kernel_mass_error_vs_time(cfg, mg, Ks, R_coll):
+    Es = [test_mass_conservation(mg, K, R_coll)[0] for K in Ks]
     GridspecPlot(
         [
             KernelSubplot(cfg, mg, np.array(Es), 
