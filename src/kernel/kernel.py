@@ -153,23 +153,16 @@ class Kernel():
 
             # Check whether one of the masses is in the upper-most bin.
             near_upper_bound = max(ii, jj) >= N_m - 1
+            if near_upper_bound:
+                continue
 
-            # Subtract "loss" term from kernel.
-            # ─────────────────────────────────────────────────────────────
-            if not near_upper_bound:
-                if handle_cancellation:
-                    K_loss[k_l, ii, jj] -= th * eps
-                else:  # Handle "trivial" (non-cancelling) case.
-                    K_loss[i, ii, jj] -= 1 if i < N_m - 1 else 0
-
-            # Add "gain" term to kernel.
-            # ─────────────────────────────────────────────────────────────
-            if not near_upper_bound:
-                if handle_cancellation:
-                    K_gain[k_h, ii, jj] += th * eps
-                else:  # Handle "trivial" (non-cancelling) case.
-                    K_gain[k_l, ii, jj] += th * (1 - eps)
-                    K_gain[k_h, ii, jj] += th * eps
+            if handle_cancellation:
+                K_gain[k_h, ii, jj] += th * eps
+                K_loss[k_l, ii, jj] -= th * eps
+            else:  # Handle "trivial" (non-cancelling) case.
+                K_gain[k_l, ii, jj] += th * (1 - eps)
+                K_gain[k_h, ii, jj] += th * eps
+                K_loss[  i, ii, jj] -= 1 if i < N_m - 1 else 0
 
         return K_gain, K_loss
 
