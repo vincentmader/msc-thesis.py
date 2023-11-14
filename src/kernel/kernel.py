@@ -145,16 +145,16 @@ class Kernel():
             might_cancel = (k_l == i)
             handle_cancellation = (self.cfg.enable_cancellation_handling and might_cancel)
 
+            # Check whether one of the masses is in the upper-most bin.
+            near_upper_bound = max(ii, jj) >= N_m - 1
+            if near_upper_bound:
+                continue
+
             # Calculate fraction of mass "overflowing" into bin `k_h`.
             if not handle_cancellation:
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
             else:  # Subtract analytically.
                 eps = m_j / (m_h - m_l)  
-
-            # Check whether one of the masses is in the upper-most bin.
-            near_upper_bound = max(ii, jj) >= N_m - 1
-            if near_upper_bound:
-                continue
 
             if handle_cancellation:
                 K_gain[k_h, ii, jj] += th * eps
