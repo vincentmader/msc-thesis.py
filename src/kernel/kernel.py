@@ -135,9 +135,9 @@ class Kernel():
             m_tot = m_i + m_j
             assert mg.x_min < m_tot < mg.x_max
 
-            # If a non-linear grid is used, the corresponding index will
-            # not necessarily be an integer. Therefore, the resulting mass
-            # has to be split onto the two neighboring bins, with indices:
+            # If we use a log. grid, the index corresponding to `m_tot` won't 
+            # necessarily be an integer. Then, the resulting mass has to be 
+            # split onto the two neighboring bins. Their indices are:
             k_l = mg.index_from_value(m_tot)  # := index of next-lower bin
             k_h = k_l + 1                   # := index of next-higher bin
             assert k_h < N_m
