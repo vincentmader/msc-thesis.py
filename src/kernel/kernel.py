@@ -109,6 +109,7 @@ class Kernel():
         # Loop over all mass pairs.
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
             ii, jj = (i, j) if i >= j else (j, i)
+            assert ii >= jj
             # NOTE: The variables `ii` or `jj` are used for the case where we
             #       have to flip indices, i.e. do `(i,j) -> (j,i)`. This "flip" 
             #       is needed to assure that the kernel lives entirely in the 
