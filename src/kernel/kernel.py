@@ -100,8 +100,9 @@ class Kernel():
 
     def _K_coag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
-        mc, N_m = mg.bin_centers, mg.N
+        mc = mg.bin_centers
         dm = mg.bin_widths
+        N_m = mg.N
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
@@ -165,8 +166,9 @@ class Kernel():
 
     def _K_frag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
-        mc, N_m = mg.bin_centers, mg.N
+        mc = mg.bin_centers
         dm = mg.bin_widths
+        N_m = mg.N
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
@@ -199,7 +201,8 @@ class Kernel():
                 m_tot = m_i + m_j
 
                 # Define mass range resulting from fragmentation event.
-                k_min, k_max = 0, mg.index_from_value(m_tot)
+                k_min = 0
+                k_max = mg.index_from_value(m_tot)
                 # ^ NOTE: This is a somewhat arbitrary choice: One could also choose
                 #   - e.g. `m_max = max(m_i, m_j)`, or
                 #   - something completely different, as long as mass is conserved.
