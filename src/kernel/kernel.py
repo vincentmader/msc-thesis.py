@@ -127,8 +127,11 @@ class Kernel():
 
             th = heaviside_theta(i - j)
 
+            # Load mass values for bins `i` and `j` from discretized mass axis.
+            m_i = mc[ii]
+            m_j = mc[jj]
+
             # Calculate combined mass after hit-and-stick collision.
-            m_i, m_j = mc[ii], mc[jj]
             m_tot = m_i + m_j
             assert mg.x_min < m_tot < mg.x_max
 
