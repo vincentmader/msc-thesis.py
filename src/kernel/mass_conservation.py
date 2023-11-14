@@ -37,7 +37,7 @@ def test_mass_conservation(
 
     # Calculate error for all collisions `(i, j)`.
     for i in range(N_m):
-        for j in range(N_m):  # <- TODO Use `i+1` as max.?
+        for j in range(N_m):
             m_tot = mc[i] + mc[j]
 
             E_ij = 0
