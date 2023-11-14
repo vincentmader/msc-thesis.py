@@ -152,10 +152,10 @@ class Kernel():
             handle_cancellation = (self.cfg.enable_cancellation_handling and might_cancel)
 
             # Calculate fraction of mass "overflowing" into bin `k_h`.
-            if not handle_cancellation:
-                eps = (m_i + m_j - m_l) / (m_h - m_l)
-            else:  # Subtract analytically.
+            if handle_cancellation:  # Subtract analytically.
                 eps = m_j / (m_h - m_l)  
+            else:  
+                eps = (m_i + m_j - m_l) / (m_h - m_l)
 
             if handle_cancellation:
                 K_gain[k_h, ii, jj] += th * eps
