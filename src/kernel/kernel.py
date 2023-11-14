@@ -62,6 +62,8 @@ class Kernel():
         if (R_coag is None and R_frag is not None) or (R_frag is None and R_coag is not None):
             raise Exception("Unhandled case: Either both `R_coag` & `R_frag` have to be given, or neither.")
         self.R_coag, self.R_frag = R_coag, R_frag
+        assert R_coag is not None
+        assert R_frag is not None
 
         # Initialize kernel matrices with zeros.
         zeros = np.zeros(shape=[mg.N] * 3)
