@@ -107,7 +107,7 @@ class Kernel():
         K_loss = np.zeros(shape=[N_m] * 3)
 
         # Loop over all mass pairs.
-        for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
+        for i, j in ijs:
 
             # Check whether one of the masses is in the upper-most bin.
             near_upper_bound = max(i, j) >= N_m - 1
