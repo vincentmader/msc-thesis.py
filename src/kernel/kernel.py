@@ -140,7 +140,8 @@ class Kernel():
             # split onto the two neighboring bins. Their indices are:
             k_l = mg.index_from_value(m_tot)  # := index of next-lower bin
             k_h = k_l + 1                     # := index of next-higher bin
-            assert k_h < N_m
+            if k_h >= N_m:
+                continue
 
             # Calculate masses corresponding to the two neighboring bins.
             m_l = mg.value_from_index(k_l)
