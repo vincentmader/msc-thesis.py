@@ -40,10 +40,8 @@ class Kernel():
         # If relevant particle pairs are not specified explicitly:
         # -> Assume all of them have to be taken into account.
         if ijs is None:
-            ijs = []
-            for i in range(mg.N):
-                for j in range(mg.N):
-                    ijs.append((i, j))
+            ijs = [(i, j) for i in range(mg.N) for j in range(mg.N)]
+        # Otherwise: Make sure that `(j, i)` is present for each `(i, j)`.
         else:
             for (i, j) in ijs:
                 if (j, i) not in ijs:
