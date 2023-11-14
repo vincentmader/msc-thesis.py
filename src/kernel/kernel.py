@@ -137,7 +137,8 @@ class Kernel():
                 continue
 
             # Calculate masses corresponding to the two neighboring bins.
-            m_l, m_h = mg.value_from_index(k_l), mg.value_from_index(k_h)
+            m_l = mg.value_from_index(k_l)
+            m_h = mg.value_from_index(k_h)
             assert (m_k >= m_l) and (m_k <= m_h)
 
             # Decide whether near-zero cancellation handling is required.
@@ -147,19 +148,17 @@ class Kernel():
             # Calculate fraction of mass "overflowing" into bin `k_h`.
             if not handle_cancellation:
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
-            else:
-                eps = m_j / (m_h - m_l)  # Subtract analytically.
+            else:  # Subtract analytically.
+                eps = m_j / (m_h - m_l)  
 
             # Check whether one of the masses is in the upper-most bin.
-            near_upper_bound = (i >= N_m - 1) or (j >= N_m - 1)
+            near_upper_bound = max(ii, jj) >= N_m - 1
 
             # Subtract "loss" term from kernel.
             # ─────────────────────────────────────────────────────────────
             if not near_upper_bound:
                 if handle_cancellation:
                     K_loss[k_l, ii, jj] -= th * eps
-                    # K_loss[k_l, ii, jj] -= th if i == j else 0
-                    # ^ TODO Why is this term here? (If removed, the solver crashes/crashed)
                 else:  # Handle "trivial" (non-cancelling) case.
                     K_loss[i, ii, jj] -= 1 if i < N_m - 1 else 0
 
