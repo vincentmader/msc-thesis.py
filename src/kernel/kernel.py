@@ -64,13 +64,14 @@ class Kernel():
         self.R_coag, self.R_frag = R_coag, R_frag
 
         # Initialize kernel matrices with zeros.
-        self.K_coag_gain = np.zeros(shape=[mg.N] * 3)
-        self.K_coag_loss = np.zeros(shape=[mg.N] * 3)
-        self.K_frag_gain = np.zeros(shape=[mg.N] * 3)
-        self.K_frag_loss = np.zeros(shape=[mg.N] * 3)
-        self.K_gain      = np.zeros(shape=[mg.N] * 3)
-        self.K_loss      = np.zeros(shape=[mg.N] * 3)
-        self.K           = np.zeros(shape=[mg.N] * 3)
+        zeros = np.zeros(shape=[mg.N] * 3)
+        self.K_coag_gain = zeros.copy()
+        self.K_coag_loss = zeros.copy()
+        self.K_frag_gain = zeros.copy()
+        self.K_frag_loss = zeros.copy()
+        self.K_gain      = zeros.copy()
+        self.K_loss      = zeros.copy()
+        self.K           = zeros.copy()
 
         # Define gain & loss kernel sub-components for...
         # ...stick-and-hit coagulation processes.
