@@ -130,14 +130,14 @@ class Kernel():
             # Calculate combined mass after hit-and-stick collision.
             m_i, m_j = mc[ii], mc[jj]
             m_k = m_i + m_j
+            assert mg.x_min < m_k < mg.x_max
 
             # If a non-linear grid is used, the corresponding index will
             # not necessarily be an integer. Therefore, the resulting mass
             # has to be split onto the two neighboring bins, with indices:
             k_l = mg.index_from_value(m_k)  # := index of next-lower bin
             k_h = k_l + 1                   # := index of next-higher bin
-            if k_h >= N_m:
-                continue
+            assert k_h < N_m
 
             # Calculate masses corresponding to the two neighboring bins.
             m_l = mg.value_from_index(k_l)
