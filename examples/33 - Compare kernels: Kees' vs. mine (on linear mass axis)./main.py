@@ -63,10 +63,10 @@ def plot_2(
     axis_label_variant = AxisLabelVariant.Bin if scale == "lin" else AxisLabelVariant.Radius
 
     s1 = KernelMassConservationSubplot(
-        cfg, mg, K_vinc, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"), 
+        cfg, mg, K_vinc, R_coll, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"), 
     )
     s2 = KernelMassConservationSubplot(
-        cfg, mg, K_kees, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"),
+        cfg, mg, K_kees, R_coll, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"),
     )
     p = GridspecPlot([s1, s2])
     p.render()
