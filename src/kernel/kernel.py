@@ -44,26 +44,30 @@ class Kernel():
             for i in range(mg.N):
                 for j in range(mg.N):
                     ijs.append((i, j))
-        for (i, j) in ijs:
-            if (j, i) not in ijs:
-                ijs.append((j, i))
+        else:
+            for (i, j) in ijs:
+                if (j, i) not in ijs:
+                    ijs.append((j, i))
 
-        if R_coag is R_frag is None:
+        if (R_coag is None) and (R_frag is None):
             # Define PPD, & radial position of interest in it.
-            disk = Disk(cfg, rg, mg) 
+            disk        = Disk(cfg, rg, mg) 
             disk_region = DiskRegion(cfg, disk)
             # Define relative dust particle velocities, & collision rates.
-            dv = relative_velocity(cfg, disk, disk_region)
-            R_coll = collision_rate(cfg, disk, disk_region)
+            dv          = relative_velocity(cfg, disk, disk_region)
+            R_coll      = collision_rate(cfg, disk, disk_region)
             # Define probabilities for coagulation & fragmentation events.
             P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
             # Define rate of coag./frag. events.
-            R_coag, R_frag = R_coll * P_coag, R_coll * P_frag
-        if (R_coag is None and R_frag is not None) or (R_frag is None and R_coag is not None):
-            raise Exception("Unhandled case: Either both `R_coag` & `R_frag` have to be given, or neither.")
-        self.R_coag, self.R_frag = R_coag, R_frag
-        assert R_coag is not None
-        assert R_frag is not None
+            self.R_coag = R_coll * P_coag
+            self.R_frag = R_coll * P_frag
+        elif (R_coag is not None) and (R_frag is not None):
+            self.R_coag = R_coag
+            self.R_frag = R_frag
+        else:
+            raise Exception("Either both `R_coag` & `R_frag` must be specified explicitly, or neither.")
+        assert self.R_coag is not None
+        assert self.R_frag is not None
 
         # Initialize kernel matrices with zeros.
         zeros = np.zeros(shape=[mg.N] * 3)
@@ -79,8 +83,8 @@ class Kernel():
         # ...stick-and-hit coagulation processes.
         if cfg.enable_coagulation:
             K_coag_gain, K_coag_loss = self._K_coag(ijs)  # TODO Rename: K -> X?
-            K_coag_gain      *= R_coag
-            K_coag_loss      *= R_coag
+            K_coag_gain      *= self.R_coag
+            K_coag_loss      *= self.R_coag
             self.K_coag_gain += K_coag_gain
             self.K_coag_loss += K_coag_loss
             self.K_gain      += K_coag_gain
@@ -88,8 +92,8 @@ class Kernel():
         # ...fragmentation processes.
         if cfg.enable_fragmentation:
             K_frag_gain, K_frag_loss = self._K_frag(ijs)
-            K_frag_gain      *= R_frag
-            K_frag_loss      *= R_frag
+            K_frag_gain      *= self.R_frag
+            K_frag_loss      *= self.R_frag
             self.K_frag_gain += K_frag_gain
             self.K_frag_loss += K_frag_loss
             self.K_gain      += K_frag_gain
