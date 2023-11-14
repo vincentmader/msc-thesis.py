@@ -117,7 +117,7 @@ class Kernel():
             #       collision "ij = ji"). When doing the flip, we cannot do a 
             #       simple tuple deconstruction like `(i,j) = (j, i)`, since the 
             #       indices are needed elsewhere in their "unflipped" initial state.
-            m_i, m_j = mc[i], mc[j]
+            m_i, m_j = mc[ii], mc[jj]
             # NOTE: Ignoring a possible index flip (like mentioned above) when defining
             #       the masses `m_i` and `m_i` is possible when they're only used for
             #       defining their sum `m_tot` (commutative/symmetric).
