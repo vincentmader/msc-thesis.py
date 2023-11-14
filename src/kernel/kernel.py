@@ -108,6 +108,12 @@ class Kernel():
 
         # Loop over all mass pairs.
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
+
+            # Check whether one of the masses is in the upper-most bin.
+            near_upper_bound = max(i, j) >= N_m - 1
+            if near_upper_bound:
+                continue
+
             ii, jj = (i, j) if i >= j else (j, i)
             assert ii >= jj
             # NOTE: The variables `ii` or `jj` are used for the case where we
@@ -117,6 +123,7 @@ class Kernel():
             #       collision "ij = ji"). When doing the flip, we cannot do a 
             #       simple tuple deconstruction like `(i,j) = (j, i)`, since the 
             #       indices are needed elsewhere in their "unflipped" initial state.
+
             m_i, m_j = mc[ii], mc[jj]
             # NOTE: Ignoring a possible index flip (like mentioned above) when defining
             #       the masses `m_i` and `m_i` is possible when they're only used for
@@ -144,11 +151,6 @@ class Kernel():
             # Decide whether near-zero cancellation handling is required.
             might_cancel = (k_l == i)
             handle_cancellation = (self.cfg.enable_cancellation_handling and might_cancel)
-
-            # Check whether one of the masses is in the upper-most bin.
-            near_upper_bound = max(ii, jj) >= N_m - 1
-            if near_upper_bound:
-                continue
 
             # Calculate fraction of mass "overflowing" into bin `k_h`.
             if not handle_cancellation:
