@@ -68,6 +68,18 @@ class Solver:
                 if False and itime % 20 == 0:
                     plot_kernel_gain_loss(self.cfg, mg, kernel, "log", (1e-20, 1.))
 
+                if False and itime == 160:
+                    path = "/Users/vinc/Desktop/K_kij_sampled.txt"
+                    np.savetxt(path, kernel.K.reshape(mg.N * mg.N * mg.N))
+                    path= "/Users/vinc/Desktop/K_kij_complete.txt"
+                    np.savetxt(path, Kernel(self.cfg).K.reshape(mg.N * mg.N * mg.N))
+                    path = "/Users/vinc/Desktop/m_k.txt"
+                    np.savetxt(path, mc)
+                    path = "/Users/vinc/Desktop/dm_k.txt"
+                    np.savetxt(path, dm)
+                    path = "/Users/vinc/Desktop/n_k.txt"
+                    np.savetxt(path, n_dust)
+
                 # Compare kernels: Is sampled with N=2500 same as unsampled?
                 if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
                     kernel_unsampled = Kernel(self.cfg)
@@ -84,17 +96,17 @@ class Solver:
 
             for _ in range(N_subst):
                 assert solver in SOLVERS, f"Unknown solver '{solver}'."
-                if solver == "explicit_euler":
+                if self.cfg.solver_variant == "explicit_euler":
                     N_1 = N_dust[None, :, None] # TODO better names than `N_1` and `N_2` ?
                     N_2 = N_dust[None, None, :]
                     dNdt = (K[:, :, :] * N_1 * N_2).sum(axis=2).sum(axis=1)
                     N_dust += dNdt * dt
-                if solver == "implicit_euler":
+                if self.cfg.solver_variant == "implicit_euler":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
                         dt=dt, niter=N_iter, method="backwardeuler"
                     )
-                if solver == "implicit_radau":
+                if self.cfg.solver_variant == "implicit_radau":
                     N_dust = solve_react_0d_equation(
                         N_dust, s, rmat=rmat, kmat=K,
                         dt=dt, niter=N_iter, method="radau"
