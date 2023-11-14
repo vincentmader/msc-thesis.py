@@ -86,7 +86,8 @@ class PcolorMatrixSubplot(GridspecSubplot):
     def update(self, k):
         self.k, z = k, self.z[k]
         self.im.set_array(z.ravel())
-        self.im.set_norm(self._pcolormesh_norm(z))
+        if not (z.all() == 0):
+            self.im.set_norm(self._pcolormesh_norm(z))
 
     def format_coord(self, x, y):
         return f"{x}, {y}"  # NOTE: Redefine this in child classes.
