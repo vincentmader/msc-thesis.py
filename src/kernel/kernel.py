@@ -162,7 +162,7 @@ class Kernel():
             else:  # Handle "trivial" (non-cancelling) case.
                 K_gain[k_l, ii, jj] += th * (1 - eps)
                 K_gain[k_h, ii, jj] += th * eps
-                K_loss[  i, ii, jj] -= 1 if i < N_m - 1 else 0
+                K_loss[  i, ii, jj] -= 1
 
         return K_gain, K_loss
 
