@@ -124,15 +124,10 @@ class Kernel():
             #       simple tuple deconstruction like `(i,j) = (j, i)`, since the 
             #       indices are needed elsewhere in their "unflipped" initial state.
 
-            m_i, m_j = mc[ii], mc[jj]
-            # NOTE: Ignoring a possible index flip (like mentioned above) when defining
-            #       the masses `m_i` and `m_i` is possible when they're only used for
-            #       defining their sum `m_tot` (commutative/symmetric).
-            #       In general, this is not necessarily the case, but here it's alright.
-
             th = heaviside_theta(i - j)
 
             # Calculate combined mass after hit-and-stick collision.
+            m_i, m_j = mc[ii], mc[jj]
             m_k = m_i + m_j
 
             # If a non-linear grid is used, the corresponding index will
