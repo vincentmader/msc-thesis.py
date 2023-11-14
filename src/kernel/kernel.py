@@ -99,7 +99,7 @@ class Kernel():
         # Define total coagulation & fragmentation sub-kernels.
         self.K_coag = self.K_coag_gain + self.K_coag_loss
         self.K_frag = self.K_frag_gain + self.K_frag_loss
-        # Define total kernel
+        # Define total kernel.
         self.K += self.K_coag
         self.K += self.K_frag
 
