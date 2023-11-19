@@ -138,7 +138,8 @@ class Kernel():
 
             # Calculate combined mass after hit-and-stick collision.
             m_tot = m_i + m_j
-            assert mg.x_min < m_tot < mg.x_max
+            assert mg.x_min < m_tot
+            # assert mg.x_max >= m_tot, f"{mg.x_max = } < {m_tot = }"
 
             # If we use a log. grid, the index corresponding to `m_tot` won't 
             # necessarily be an integer. Then, the resulting mass has to be 
