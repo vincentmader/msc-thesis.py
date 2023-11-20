@@ -11,6 +11,7 @@ def plot_sampling_probability_vs_time(cfg, mg, Ps):
             KernelSubplot(cfg, mg, np.array(Ps), 
                 cmap="Blues", z_limits=(1e-5, 1),
                 title="Collision Pair Sampling Probability $P_{ij}$",
+                symmetrized=True,
             ),
         ], add_slider=True, slider_label="$i_t$"
     ).render()
@@ -23,6 +24,7 @@ def plot_sampling_count_vs_time(cfg, mg, Ns):
                 z_limits=(0, np.max(Ns)),  # <- NOTE: Low upper boundary for better visibility.
                 axis_scales=("log", "log", "lin"), cmap="Blues", 
                 title=r"Collision Pair Sampling Count $N_{ij}$",
+                symmetrized=True,
             ),
         ], add_slider=True, slider_label="$i_t$"
     ).render()
@@ -36,6 +38,7 @@ def plot_kernel_mass_error_vs_time(cfg, mg, Ks, R_coll):
             #      since that class takes `K` as input, not `Es`...
             KernelSubplot(cfg, mg, np.array(Es), 
                 cmap="Reds", title=r"Kernel mass error $\Delta K_{ij}$",
+                symmetrized=True,
             ),
         ], add_slider=True, slider_label="$i_t$"
     ).render()
