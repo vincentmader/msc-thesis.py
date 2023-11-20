@@ -41,10 +41,14 @@ class SampledKernel(Kernel):
         N_i[N_i < 0] = 0  # NOTE: Why are there even cases where `N < 0` ?
         N_j[N_j < 0] = 0
 
+        # M_ij = [[(i, j) for j in range(mg.N + 1)] for i in range(mg.N + 1)]
+        # M_ij = np.array([[i-j for j in range(mg.N)] for i in range(mg.N)])
+
         P_ij = W_ij * N_i * N_j * m_i * m_j
         # If sampling over all collisions, make sure that probability is > 0 everywhere.
         if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
             P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
+        # P_ij[M_ij > 0] = 0
         # Normalize probability distribution.
         P_ij = P_ij / P_ij.sum()  
         assert np.abs(P_ij.sum() - 1) <= 1e-6
