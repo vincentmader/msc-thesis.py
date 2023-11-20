@@ -119,10 +119,10 @@ def plot_evolution(
     N: np.ndarray,
     f: np.ndarray,
     m2f: np.ndarray,
-    dm2f: np.ndarray,
+    dm2fdt: np.ndarray,
 ):
-    # TODO Fix y-limits
-    EvolutionPlot(kernel, N, f, m2f, dm2f).render()
+    # Fix y-limits?
+    EvolutionPlot(kernel, N, f, m2f, dm2fdt).render()
 
 
 def plot_surface(

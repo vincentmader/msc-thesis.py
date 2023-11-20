@@ -16,7 +16,7 @@ class EvolutionPlot(BasePlot):
         "lines_1", "lines_2", "lines_3", "lines_4", "lines_5",
         #  ^ y=M      ^ y=N      ^ y=n      ^ dy/dt    ^ -dy/dt
         "slider", "i_t", "t",
-        "kernel", "N", "f", "m2f", "dm2f"
+        "kernel", "N", "f", "m2f", "dm2fdt"
     ]
 
     def __init__(
@@ -25,7 +25,7 @@ class EvolutionPlot(BasePlot):
         N: np.ndarray,
         f: np.ndarray,
         m2f: np.ndarray,
-        dm2f: np.ndarray,
+        dm2fdt: np.ndarray,
         *args, **kwargs
     ):
         super().__init__(
@@ -34,7 +34,7 @@ class EvolutionPlot(BasePlot):
         )
 
         self.kernel = kernel
-        self.N, self.f, self.m2f, self.dm2f = N, f, m2f, dm2f
+        self.N, self.f, self.m2f, self.dm2fdt = N, f, m2f, dm2fdt
         self.i_t = 0
 
         tg = DiscreteTimeAxis(kernel.cfg)
@@ -64,7 +64,7 @@ class EvolutionPlot(BasePlot):
         mc = mg.bin_centers
         ac = mg.particle_radii
 
-        n, N, M, dM = self.f, self.N, self.m2f, self.dm2f
+        n, N, M, dM = self.f, self.N, self.m2f, self.dm2fdt
 
         self.lines_1, = self.ax_1.loglog(mc, M[self.i_t], label=r"$n_i\Delta m_im_i=\rho_i^s$")
         # self.lines_2, = self.ax_1.loglog(x, N[self.i_t], label=r"$n_i\Delta m_i=N_i$")
@@ -89,7 +89,8 @@ class EvolutionPlot(BasePlot):
         self.ax_2.set_ylim(1e-21, 1e-16)
         self.ax_2.grid(True)
         self.ax_2.set_xlabel("dust particle mass $m^c_i$ [kg]")
-        self.ax_2.set_ylabel(r"$\frac{d\rho_i^s}{dt}$ [kg m$^{-3}$s$^{-1}$]")
+        # self.ax_2.set_ylabel(r"$\frac{d\rho_i^s}{dt}$ [kg m$^{-3}$s$^{-1}$]")
+        self.ax_2.set_ylabel(r"d$\rho_i^s$ $/$ d$t$ [kg m$^{-3}$s$^{-1}$]")
         self.ax_2.legend()
 
     def update(self, i_t):
@@ -100,8 +101,8 @@ class EvolutionPlot(BasePlot):
         # self.lines_5.set_ydata(self.m2f[i_t])
         # self.lines_2.set_ydata(self.N[i_t])
         # self.lines_3.set_ydata(self.f[i_t])
-        self.lines_4.set_ydata(self.dm2f[i_t])
-        self.lines_5.set_ydata(-self.dm2f[i_t])
+        self.lines_4.set_ydata(self.dm2fdt[i_t])
+        self.lines_5.set_ydata(-self.dm2fdt[i_t])
 
 
 def format_time(t) -> str:
