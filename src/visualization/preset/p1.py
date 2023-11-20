@@ -105,7 +105,7 @@ def integrate(
     n0 = mass_distribution.dirac_delta(cfg)
     solver = Solver(cfg)
     N, f, m2f, dm2f = solver.run(n0, K)
-    M = [disk_mass_from_distribution(n, mc, dm) for n in f]
+    M = np.array([disk_mass_from_distribution(n, mc, dm) for n in f])
 
     return tc, f, N, m2f, dm2f, M
 
