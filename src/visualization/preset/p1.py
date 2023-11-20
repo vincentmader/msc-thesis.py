@@ -48,7 +48,7 @@ def plot_kernel_gain_loss(
     GridspecPlot([
         KernelSubplot(
             cfg, mg, kernel.K_gain, 
-            title="kernel gain contribution $G_{kij}$",
+            title=r"kernel gain contribution $G_{kij}$, $K_{kij}\cdot R_{ij}$ [$kg m^3 s^{-1}$]",
             axis_scales=(scale, scale, scale),
             z_limits=z_limits,
             symmetrized=False,
@@ -57,7 +57,7 @@ def plot_kernel_gain_loss(
         ),
         KernelSubplot(
             cfg, mg, -kernel.K_loss,
-            title="kernel loss contribution $L_{kij}$",
+            title=r"kernel loss contribution $L_{kij}$, $K_{kij}\cdot R_{ij}$ [$kg m^3 s^{-1}$]",
             axis_scales=(scale, scale, scale),
             z_limits=z_limits,
             ylabel="",
