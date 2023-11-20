@@ -115,10 +115,11 @@ class Solver:
 
         # Translate back to physical units
         f = N_dust_store / dm
-        m2f = f * mc**2  # TODO Why multiply with `mgrain`, instead of `dmgrain`?
+        # m2f = f * mc**2  # NOTE Why multiply with `mgrain`, instead of `dmgrain`?
+        m2f = f * mc * dm  
 
         dm2f = list(m2f[1:] - m2f[:-1])
-        dm2f.append(dm2f[-1])  # TODO Fix array shapes in a better way than this.
+        dm2f.append(dm2f[-1])  # todo Fix array shapes in a better way than this.
         dm2f = np.array(dm2f)
         dm2f = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)] # TODO Rename dm2f -> dm2fdt
         # TODO Do the above more elegantly. (Calculate temp. deriv.)
@@ -126,6 +127,6 @@ class Solver:
         if self.cfg.enable_collision_sampling:
             plot_sampling_probability_vs_time(self.cfg, mg, Ps)
             plot_sampling_count_vs_time(self.cfg, mg, Ns)
-            plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
+            # plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
 
         return N_dust_store, f, m2f, dm2f
