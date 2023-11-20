@@ -19,13 +19,13 @@ def plot_1(
     mg: DiscreteMassAxis,
     Ks: tuple[np.ndarray, np.ndarray, np.ndarray],
 ):
-    K_vinc, K_kees, K_compare = Ks
+    K_kees, K_vinc, K_compare = Ks
     axis_label_variant = AxisLabelVariant.Bin if scale == "lin" else AxisLabelVariant.Radius
 
     GridspecPlot([
         KernelSubplot(
-            cfg, mg, K_vinc,
-            title="$K_{kij}^{vinc}$",
+            cfg, mg, K_kees,
+            title="$K_{kij}^{kees}$",
             axis_label_variant=axis_label_variant,
             symmetrized=True,
             axis_scales=(scale, scale, "lin"),
@@ -33,8 +33,8 @@ def plot_1(
             cmap="bwr",
         ),
         KernelSubplot(
-            cfg, mg, K_kees,
-            title="$K_{kij}^{kees}$",
+            cfg, mg, K_vinc,
+            title="$K_{kij}^{vinc}$",
             axis_label_variant=axis_label_variant,
             symmetrized=True,
             axis_scales=(scale, scale, "lin"),
@@ -59,14 +59,16 @@ def plot_2(
     mg: DiscreteMassAxis,
     Ks: tuple[np.ndarray, np.ndarray],
 ):
-    K_vinc, K_kees = Ks
+    K_kees, K_vinc = Ks
     axis_label_variant = AxisLabelVariant.Bin if scale == "lin" else AxisLabelVariant.Radius
 
     s1 = KernelMassConservationSubplot(
-        cfg, mg, K_vinc, R_coll, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"), 
+        cfg, mg, K_kees, R_coll, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"), 
+        symmetrized=True, title="$K_{kees}$"
     )
     s2 = KernelMassConservationSubplot(
-        cfg, mg, K_kees, R_coll, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"),
+        cfg, mg, K_vinc, R_coll, axis_label_variant=axis_label_variant, axis_scales=(scale, scale, "log"),
+        symmetrized=True, title="$K_{vinc}$"
     )
     p = GridspecPlot([s1, s2])
     p.render()
@@ -99,5 +101,5 @@ if __name__ == "__main__":
         i = np.linspace(0, N_m, N_m)
         x, y = (i, i) if scale == "lin" else (ac, ac)
 
-        plot_1(cfg, scale, mg, (K_vinc, K_kees, K_diff))  # TODO Fix this!!!
-        plot_2(cfg, scale, mg, (K_vinc, K_kees))
+        plot_1(cfg, scale, mg, (K_kees, K_vinc, K_diff))  # TODO Fix this!!!
+        plot_2(cfg, scale, mg, (K_kees, K_vinc))
