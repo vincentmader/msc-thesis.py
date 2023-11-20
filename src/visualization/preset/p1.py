@@ -21,14 +21,14 @@ def plot_kernel(
     z_limits: tuple[float, float],
     axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
 ):
-    if kernel.K.all() >= 0: 
+    if not kernel.K.all() >= 0: 
         z_limits = (-z_limits[1], z_limits[1])
     GridspecPlot([
         KernelSubplot(
             cfg, mg, kernel.K,
             title="kernel $K_{kij}$",
             axis_scales=(scale, scale, "lin"),
-            z_limits=z_limits,
+            # z_limits=z_limits,
             symmetrized=True,
             axis_label_variant=axis_label_variant,
             cmap="bwr",
