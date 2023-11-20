@@ -1,3 +1,5 @@
+# ipympl
+# ipywidgets
 matplotlib
 numpy
 scipy
