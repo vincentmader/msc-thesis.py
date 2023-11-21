@@ -37,6 +37,8 @@ class Solver:
 
         # Convert `n -> N` (number of particles per mass bin per volume).
         N_dust = dm * n_dust
+        N_dust_store = np.zeros((N_t, N_m))
+        N_dust_store[0, :] = N_dust.copy()
         
         R_coag, R_frag = None, None
         kernel = Kernel(self.cfg)
@@ -46,8 +48,6 @@ class Solver:
 
         Ps, Ns, Ks = [], [], []
 
-        N_dust_store = np.zeros((N_t, N_m))
-        N_dust_store[0, :] = N_dust.copy()
         s = np.zeros((N_m))
         rmat = np.zeros((N_m, N_m))
         for itime in tqdm(range(1, N_t)):
