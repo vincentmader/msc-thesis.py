@@ -38,8 +38,6 @@ class Solver:
         self.kernels    = []
 
     def run(self, n_dust, K):
-        solver = self.cfg.solver_variant
-
         tg, mg = self.time_axis, self.mass_axis
         tc, mc = tg.bin_centers, mg.bin_centers
         N_t, N_m = tg.N, mg.N
@@ -105,7 +103,7 @@ class Solver:
                         plot_kernel_sampled_vs_unsampled(self.cfg, mg, kernel_unsampled, kernel)
 
             for _ in range(N_subst):
-                assert solver in SOLVERS, f"Unknown solver '{solver}'."
+                assert self.cfg.solver_variant in SOLVERS, f"{self.cfg.solver_variant} = "
                 if self.cfg.solver_variant == "explicit_euler":
                     N_1 = N_dust[None, :, None] # TODO better names than `N_1` and `N_2` ?
                     N_2 = N_dust[None, None, :]
