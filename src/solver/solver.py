@@ -1,9 +1,11 @@
+from dataclasses import dataclass
 import sys
 
 import numpy as np
 from tqdm import tqdm
 
 from axis import DiscreteTimeAxis, DiscreteMassAxis
+from config import Config
 from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel
 from visualization.preset.p1 import plot_kernel_gain_loss
@@ -20,9 +22,17 @@ N_subst = 1  # Nr of time substeps between storage of result
 N_iter  = 4  # Nr of iterations for implicit time step
 
 
+@dataclass
 class Solver:
+    cfg:            Config
+    time_axis:      DiscreteTimeAxis
+    mass_axis:      DiscreteMassAxis
+    N_dust:         np.ndarray
 
-    def __init__(self, cfg):
+    def __init__(
+        self, 
+        cfg: Config,
+    ):
         self.cfg = cfg
         self.time_axis = DiscreteTimeAxis(cfg)
         self.mass_axis = DiscreteMassAxis(cfg)
