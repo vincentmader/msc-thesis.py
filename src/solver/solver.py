@@ -125,8 +125,9 @@ class Solver:
         # TODO Do the above more elegantly. (Calculate temp. deriv.)
 
         if self.cfg.enable_collision_sampling:
-            plot_sampling_probability_vs_time(self.cfg, mg, Ps)
-            plot_sampling_count_vs_time(self.cfg, mg, Ns)
+            # plot_sampling_probability_vs_time(self.cfg, mg, Ps)
+            # plot_sampling_count_vs_time(self.cfg, mg, Ns)
             # plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
+            pass
 
         return N_dust_store, f, m2f, dm2fdt
