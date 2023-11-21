@@ -120,21 +120,11 @@ class Kernel():
             if near_upper_bound:
                 continue
 
-            ii, jj = (i, j) if i >= j else (j, i)
-            assert ii >= jj
-            # NOTE: The variables `ii` or `jj` are used for the case where we
-            #       have to flip indices, i.e. do `(i,j) -> (j,i)`. This "flip" 
-            #       is needed to assure that the kernel lives entirely in the 
-            #       top-left half of the matrix (due to symmetry of problem, 
-            #       collision "ij = ji"). When doing the flip, we cannot do a 
-            #       simple tuple deconstruction like `(i,j) = (j, i)`, since the 
-            #       indices are needed elsewhere in their "unflipped" initial state.
-
             th = heaviside_theta(i - j)
 
             # Load mass values for bins `i` and `j` from discretized mass axis.
-            m_i = mc[ii]
-            m_j = mc[jj]
+            m_i = mc[i]
+            m_j = mc[j]
 
             # Calculate combined mass after hit-and-stick collision.
             m_tot = m_i + m_j
@@ -163,6 +153,11 @@ class Kernel():
                 eps = m_j / (m_h - m_l)  
             else:  
                 eps = (m_i + m_j - m_l) / (m_h - m_l)
+
+            # Make sure that kernel lives entirely in top-left half of matrix.
+            # We can't do `(i,j) = (j, i)`, since original indices are still needed.
+            ii, jj = (i, j) if i >= j else (j, i)
+            assert ii >= jj
 
             if handle_cancellation:
                 K_gain[k_h, ii, jj] += th * eps
