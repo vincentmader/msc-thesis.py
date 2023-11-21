@@ -65,6 +65,7 @@ class EvolutionPlot(BasePlot):
         ac = mg.particle_radii
 
         n, N, M, dM = self.f, self.N, self.m2f, self.dm2fdt
+        assert M.all() >= 0, M
 
         self.lines_1, = self.ax_1.loglog(mc, M[self.i_t], label=r"$n_i\Delta m_im_i=\rho_i^s$")
         # self.lines_2, = self.ax_1.loglog(x, N[self.i_t], label=r"$n_i\Delta m_i=N_i$")
