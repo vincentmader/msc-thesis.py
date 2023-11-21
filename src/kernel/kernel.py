@@ -42,10 +42,10 @@ class Kernel():
         if ijs is None:
             ijs = [(i, j) for i in range(mg.N) for j in range(mg.N)]
         # Otherwise: Make sure that `(j, i)` is present for each `(i, j)`.
-        else:
-            for (i, j) in ijs:
-                if (j, i) not in ijs:
-                    ijs.append((j, i))
+        # else:
+        #     for (i, j) in ijs:
+        #         if (j, i) not in ijs:
+        #             ijs.append((j, i))
 
         if (R_coag is None) and (R_frag is None):
             # Define PPD, & radial position of interest in it.
