@@ -27,15 +27,15 @@ class Solver:
     cfg:            Config
     time_axis:      DiscreteTimeAxis
     mass_axis:      DiscreteMassAxis
-    N_dust:         np.ndarray
 
     def __init__(
         self, 
         cfg: Config,
     ):
-        self.cfg = cfg
-        self.time_axis = DiscreteTimeAxis(cfg)
-        self.mass_axis = DiscreteMassAxis(cfg)
+        self.cfg        = cfg
+        self.time_axis  = DiscreteTimeAxis(cfg)
+        self.mass_axis  = DiscreteMassAxis(cfg)
+        self.kernels    = []
 
     def run(self, n_dust, K):
         solver = self.cfg.solver_variant
