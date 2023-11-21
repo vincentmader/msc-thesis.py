@@ -28,16 +28,23 @@ class Solver:
     time_axis:      DiscreteTimeAxis
     mass_axis:      DiscreteMassAxis
 
+    # N_dust:         np.ndarray
+    # N_dust_vs_t:    np.ndarray
+
+    kernels:        list[SampledKernel] | list[Kernel] | list[np.ndarray]
+
     def __init__(
         self, 
         cfg: Config,
     ):
+
         self.cfg        = cfg
         self.time_axis  = DiscreteTimeAxis(cfg)
         self.mass_axis  = DiscreteMassAxis(cfg)
         self.kernels    = []
 
     def run(self, n_dust, K):
+
         tg, mg = self.time_axis, self.mass_axis
         tc, mc = tg.bin_centers, mg.bin_centers
         N_t, N_m = tg.N, mg.N
@@ -48,13 +55,10 @@ class Solver:
         N_dust_store = np.zeros((N_t, N_m))
         N_dust_store[0, :] = N_dust.copy()
         
-        R_coag, R_frag = None, None
         kernel = Kernel(self.cfg)
         W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)]) 
         #    ^ NOTE Keep definition in sync with W_ij in `SampledKernel`
         R_coll = kernel.R_coag + kernel.R_frag
-
-        Ps, Ns, Ks = [], [], []
 
         s = np.zeros((N_m))
         rmat = np.zeros((N_m, N_m))
@@ -62,16 +66,9 @@ class Solver:
             dt = (tc[itime] - tc[itime - 1]) / N_subst
 
             if self.cfg.enable_collision_sampling:
-                if itime == 0:
-                    kernel = SampledKernel(self.cfg, N_dust, W_ij=W_ij)
-                    R_coag, R_frag = kernel.R_coag, kernel.R_frag
-                else:
-                    kernel = SampledKernel(self.cfg, N_dust, R_coag=R_coag, R_frag=R_frag, W_ij=W_ij)
-                K, P, N = kernel.K, kernel.P_ij, kernel.N_ij
-                #    ^ TODO More consistent names, P vs. P_ij
-                Ps.append(P)
-                Ns.append(N)
-                Ks.append(K)
+                kernel = SampledKernel(self.cfg, N_dust, W_ij=W_ij)
+                self.kernels.append(kernel)
+                K = kernel.K
 
                 if False and itime % 20 == 0:
                     plot_kernel_gain_loss(self.cfg, mg, kernel, "log", (1e-20, 1.))
@@ -91,15 +88,9 @@ class Solver:
                 # Compare kernels: Is sampled with N=2500 same as unsampled?
                 if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
                     kernel_unsampled = Kernel(self.cfg)
-                    # Ku = kernel_unsampled.K
-                    # err = (K[Ku!=0] - Ku[Ku!=0]) / Ku[Ku!=0]
                     try:
-                        # assert (np.abs(err) < 1e-12).all()
                         assert (K == kernel_unsampled.K).all()
                     except AssertionError:
-                        # m = (Ku[K!=0] / K[K!=0]).max()
-                        # m = ((Ku[K!=0] - K[K!=0]) / K[K!=0]).max()
-                        # print(err.max(), err.min())
                         plot_kernel_sampled_vs_unsampled(self.cfg, mg, kernel_unsampled, kernel)
 
             for _ in range(N_subst):
@@ -121,21 +112,50 @@ class Solver:
                     )
                 N_dust_store[itime, :] = N_dust.copy()
 
-        # Translate back to physical units
-        f = N_dust_store / dm
-        # m2f = f * mc**2  # NOTE Why multiply with `mgrain`, instead of `dmgrain`?
-        m2f = f * mc * dm  
+            N_dust = fix_negative_densities(mc, N_dust)
 
-        dm2f = list(m2f[1:] - m2f[:-1])
-        dm2f.append(dm2f[-1])  # todo Fix array shapes in a better way than this.
-        dm2f = np.array(dm2f)
-        dm2fdt = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(dm2f)] # TODO Rename dm2f -> dm2fdt
-        # TODO Do the above more elegantly. (Calculate temp. deriv.)
+        # Translate back to physical units
+        f   = N_dust_store / dm
+        m2f = N_dust_store * mc
+        # m2f = f * mc**2  # NOTE Why multiply with `mgrain`, instead of `dmgrain`?
+
+        # Calculate temporal derivative.
+        dm2f_0 = np.zeros(shape=(mg.N))
+        dm2f = [dm2f_0] + [m2f[i] - m2f[i-1] for i in range(1, tg.N)]
+        dm2fdt  = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(tc)]
 
         if self.cfg.enable_collision_sampling:
-            # plot_sampling_probability_vs_time(self.cfg, mg, Ps)
-            # plot_sampling_count_vs_time(self.cfg, mg, Ns)
-            # plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
+            Ps = [kernel.P_ij for kernel in self.kernels]
+            plot_sampling_probability_vs_time(self.cfg, mg, Ps)
+            Ns = [kernel.N_ij for kernel in self.kernels]
+            plot_sampling_count_vs_time(self.cfg, mg, Ns)
+            Ks = [kernel.K for kernel in self.kernels]
+            plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
             pass
 
         return N_dust_store, f, m2f, dm2fdt
+
+def fix_negative_densities(
+    mc:     np.ndarray,
+    N_dust: np.ndarray,
+):
+    idx_i = np.where(N_dust < 0)
+    idx_k = np.where(N_dust >= 0)
+
+    M_i = np.sum(N_dust[idx_i] * mc[idx_i])
+    M_k = np.sum(N_dust[idx_k] * mc[idx_k])
+
+    fac = np.abs(M_i) / np.abs(M_k)
+
+    N_dust[idx_k] *= 1 - fac
+    N_dust[idx_i] = 0
+
+    return N_dust
+
+def deriv(
+    y: np.ndarray,
+    x: np.ndarray,
+):
+    dx = x[1:] - x[:-1]
+    dy = y[1:] - y[:-1]
+    return dy / dx
