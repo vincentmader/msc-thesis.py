@@ -3,8 +3,8 @@ from matplotlib.widgets import Slider
 import numpy as np
 
 from axis import DiscreteTimeAxis
-from constants import DAYS_PER_YEAR
 from kernel import Kernel
+from utils.functions import format_time_as_years
 from visualization.base import BasePlot
 
 
@@ -95,7 +95,7 @@ class EvolutionPlot(BasePlot):
 
     def update(self, i_t):
         self.i_t = i_t
-        text = format_time(self.t[i_t])
+        text = format_time_as_years(self.t[i_t])
         self.slider.label.set_text(f"t = {text}")
         self.lines_1.set_ydata(self.m2f[i_t])
         # self.lines_5.set_ydata(self.m2f[i_t])
@@ -103,27 +103,3 @@ class EvolutionPlot(BasePlot):
         # self.lines_3.set_ydata(self.f[i_t])
         self.lines_4.set_ydata(self.dm2fdt[i_t])
         self.lines_5.set_ydata(-self.dm2fdt[i_t])
-
-
-def format_time(t) -> str:
-
-    M = 60
-    H = 60*M
-    D = 24*H
-    Y = DAYS_PER_YEAR * D
-    KY = 1000 * Y
-    MY = 1000 * KY
-
-    if t >= MY:
-        return f"{round(t / MY)} My"
-    if t >= KY:
-        return f"{round(t / KY)} ky"
-    if t >= Y:
-        return f"{round(t / Y)} y"
-    if t >= D:
-        return f"{round(t / D)} d"
-    if t >= H:
-        return f"{round(t / H)} h"
-    if t >= M:
-        return f"{round(t / M)} min"
-    return f"{round(t)} s"
