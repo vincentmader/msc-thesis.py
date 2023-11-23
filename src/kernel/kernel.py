@@ -11,6 +11,9 @@ from dust.relative_velocity import relative_velocity
 from utils.functions import heaviside_theta
 
 
+SHOULD_ASSERT_SYMMETRIC_IJS = True
+
+
 class Kernel():
     __slots__ = [
         "cfg",    "mg", 
@@ -41,11 +44,6 @@ class Kernel():
         # -> Assume all of them have to be taken into account.
         if ijs is None:
             ijs = [(i, j) for i in range(mg.N) for j in range(mg.N)]
-        # Otherwise: Make sure that `(j, i)` is present for each `(i, j)`.
-        # else:
-        #     for (i, j) in ijs:
-        #         if (j, i) not in ijs:
-        #             ijs.append((j, i))
 
         if (R_coag is None) and (R_frag is None):
             # Define PPD, & radial position of interest in it.
@@ -112,7 +110,10 @@ class Kernel():
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        ijs = ijs + [(j, i) for i, j in ijs]
+        if SHOULD_ASSERT_SYMMETRIC_IJS:
+            for (i, j) in ijs:
+                if (j, i) not in ijs:
+                    ijs.append((j, i))
 
         # Loop over all mass pairs.
         for i, j in ijs:
@@ -121,6 +122,9 @@ class Kernel():
             near_upper_bound = max(i, j) >= N_m - 1
             if near_upper_bound:
                 continue
+
+            # if j > i:
+            #     i, j = j, i
 
             th = heaviside_theta(i - j)
 
@@ -180,7 +184,10 @@ class Kernel():
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
-        ijs = ijs + [(j, i) for i, j in ijs]
+        if SHOULD_ASSERT_SYMMETRIC_IJS:
+            for (i, j) in ijs:
+                if (j, i) not in ijs:
+                    ijs.append((j, i))
 
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
             ii,  jj  = (i, j) if i >= j else (j, i)
