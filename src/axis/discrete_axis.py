@@ -27,16 +27,17 @@ class DiscreteAxis:
         indices = np.arange(0, N + 1, 1)
         if self.scale == "lin":
             x = x_min + (x_max - x_min) * (indices / N)
-            assert x[0] == x_min and x[N] == x_max
-            return x
-        if self.scale == "log":
+        elif self.scale == "log":
             x = x_min * (x_max / x_min) ** (indices / N)
-            assert x[0] == x_min and x[N] == x_max
-            return x
-        raise Exception(f"Axis scale '{self.scale}' unknown.")
+        else:
+            raise Exception(f"Axis scale '{self.scale}' unknown.")
+        assert x[0] == x_min and x[N] == x_max
+        assert len(x) == self.N + 1
+        return x
 
     def _bin_centers(self) -> np.ndarray:
         xs = self.bin_boundaries
+        assert len(xs) == self.N + 1
         if self.scale == "lin":
             return (xs[:-1] + xs[1:]) / 2
         if self.scale == "log":
@@ -45,7 +46,9 @@ class DiscreteAxis:
 
     def _bin_widths(self) -> np.ndarray:
         bin_boundaries = self.bin_boundaries
-        return bin_boundaries[1:] - bin_boundaries[:-1]
+        bin_widths = bin_boundaries[1:] - bin_boundaries[:-1]
+        assert len(bin_widths) == self.N 
+        return bin_widths
 
     def index_from_value(self, x) -> int:
         xs = self.bin_centers
