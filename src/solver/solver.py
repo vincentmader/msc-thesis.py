@@ -69,7 +69,8 @@ class Solver:
                 kernel = SampledKernel(self.cfg, N_dust, W_ij=W_ij)
                 self.kernels.append(kernel)
                 K = kernel.K
-                K = [(K_k + K_k.T)/2 for K_k in K]
+                # K = [(K_k + K_k.T)/2 for K_k in K]
+                # TODO Find out: Do I HAVE to be symmetrize?
 
                 if False and itime % 20 == 0:
                     plot_kernel_gain_loss(self.cfg, mg, kernel, "log", (1e-20, 1.))
@@ -129,6 +130,12 @@ class Solver:
             Ps = [kernel.P_ij for kernel in self.kernels]
             plot_sampling_probability_vs_time(self.cfg, mg, Ps)
             Ns = [kernel.N_ij for kernel in self.kernels]
+            print("\nN_sample_tot / (N_t * N_m^2) * 2 =", np.sum(Ns) / tg.N / mg.N**2 * 100 * 2, "%\n")
+            # TODO Calculate: 
+            #      - nr. of kernel entries == 0
+            #      - nr. of kernel entries << 1
+            #      - nr. of kernel entriee ~~ 1
+            #      - nr. of kernel entries sampled
             plot_sampling_count_vs_time(self.cfg, mg, Ns)
             Ks = [kernel.K for kernel in self.kernels]
             plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
