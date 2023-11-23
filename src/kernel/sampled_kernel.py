@@ -21,34 +21,34 @@ class SampledKernel(Kernel):
         cfg:    Config, 
         N:      np.ndarray, 
         W_ij:   Optional[np.ndarray] = None,
-        *args, **kwargs
+        *args, 
+        **kwargs
     ):
-        self.cfg = cfg  # NOTE Attention: This field is written to twice.
-
+        # Define mass axis.
         mg = DiscreteMassAxis(cfg)
         mc = mg.bin_centers
+        m_i, m_j = mc[:, None], mc[None, :]
+
+        # Define nr. of particles per bin (& unit volume).
+        N_i, N_j =  N[:, None],  N[None, :]
+        assert N.all() >= 0
 
         # Define weights, if not received as argument.
         if W_ij is None:  
             K = Kernel(cfg).K
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
-            # TODO Use quadratic addition instead? (+ sqrt afterwards)
+            # W_ij = np.sum([mc[k] * K[k]**2 for k in range(mg.N)])**.5  # TODO Use lin. or quad. addition?
 
-        m_i, m_j = mc[:, None], mc[None, :]
-        N_i, N_j =  N[:, None],  N[None, :]
-
-        # assert (np.abs(N[N < 0]) <= 1e-16).all(), N  # TODO Uncomment this line.
-        N_i[N_i < 0] = 0  # NOTE: Why are there even cases where `N < 0` ?
-        N_j[N_j < 0] = 0
-
-        # M_ij = [[(i, j) for j in range(mg.N + 1)] for i in range(mg.N + 1)]
-        # M_ij = np.array([[i-j for j in range(mg.N)] for i in range(mg.N)])
-
+        # Define sampling probability distribution.
         P_ij = W_ij * N_i * N_j * m_i * m_j
-        # If sampling over all collisions, make sure that probability is > 0 everywhere.
-        if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
-            P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
-        # P_ij[M_ij > 0] = 0
+        # P_ij = W_ij * N_i**2 * N_j**2 * m_i * m_j
+
+        # Exclude the lower-right (here "upper"?) matrix half from sampling.
+        P_ij[np.triu_indices(mg.N, k=+1)] = 0
+
+        # If sampling over all collisions, make sure that `P_ij  > 0` for all `i,j`.
+        P_ij[P_ij == 0] = ALMOST_BUT_NOT_QUITE_ZERO
+
         # Normalize probability distribution.
         P_ij = P_ij / P_ij.sum()  
         assert np.abs(P_ij.sum() - 1) <= 1e-6
@@ -69,20 +69,22 @@ class SampledKernel(Kernel):
         P_ij = P_ij.reshape(N_i * N_j)
 
         # If sampling over all collisions, make sure that probability is > 0 everywhere.
-        if self.cfg.nr_of_samples == self.cfg.mass_resolution**2:
+        if cfg.nr_of_samples == cfg.mass_resolution**2:
             assert (P_ij != 0).all()
-            N_sample = self.cfg.nr_of_samples
+            N_sample = cfg.nr_of_samples
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
         else:
-            N_relevant = np.sum(P_ij > 1e-50)
+            N_relevant = np.sum(P_ij > 1e-16)
             N_sample = min(cfg.nr_of_samples, N_relevant)
 
+        assert P_ij.all() > 0
         sampled = np.random.choice(indices, p=P_ij, size=N_sample, replace=False)
     
         ijs = []
         for s in sampled:
-            i, j = s // N_i, s % N_i
+            i = s // N_i
+            j = s %  N_i
             ijs.append((i, j))
             self.N_ij[i, j] += 1
         return ijs
