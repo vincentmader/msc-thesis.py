@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -10,11 +11,10 @@ from kernel import Kernel
 ALMOST_BUT_NOT_QUITE_ZERO = 1e-100  # TODO Choose this value. 
 
 
+@dataclass
 class SampledKernel(Kernel):
-    __slots__ = [
-        "P_ij",  #  = Probability of randomly selecting a collision pair $(i,j)$.
-        "N_ij",  #  = Nr. of times that the collision $(i,j)$ was selected.
-    ]
+    P_ij: np.ndarray  #  = Probability of randomly selecting a collision pair $(i,j)$.
+    N_ij: np.ndarray  #  = Nr. of times that the collision $(i,j)$ was selected.
 
     def __init__(
         self, 
