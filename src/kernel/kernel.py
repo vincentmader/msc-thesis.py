@@ -112,6 +112,8 @@ class Kernel():
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
 
+        ijs = ijs + [(j, i) for i, j in ijs]
+
         # Loop over all mass pairs.
         for i, j in ijs:
 
@@ -177,6 +179,8 @@ class Kernel():
 
         K_gain = np.zeros(shape=[N_m] * 3)
         K_loss = np.zeros(shape=[N_m] * 3)
+
+        ijs = ijs + [(j, i) for i, j in ijs]
 
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
             ii,  jj  = (i, j) if i >= j else (j, i)
