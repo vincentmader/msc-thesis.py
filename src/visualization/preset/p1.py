@@ -20,6 +20,7 @@ def plot_kernel(
     scale: str,
     z_limits: tuple[float, float],
     axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
+    symmetrized=False,
 ):
     if not kernel.K.all() >= 0: 
         z_limits = (-z_limits[1], z_limits[1])
@@ -28,8 +29,8 @@ def plot_kernel(
             cfg, mg, kernel.K,
             title="kernel $K_{kij}$",
             axis_scales=(scale, scale, "lin"),
-            # z_limits=z_limits,
-            symmetrized=True,
+            z_limits=z_limits,
+            symmetrized=symmetrized,
             axis_label_variant=axis_label_variant,
             cmap="bwr",
         )
@@ -43,6 +44,7 @@ def plot_kernel_gain_loss(
     scale: str,
     z_limits: tuple[float, float],
     axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
+    symmetrized=False,
 ):
     cmap = "Reds" if scale == "log" else "bwr"
     GridspecPlot([
@@ -51,7 +53,7 @@ def plot_kernel_gain_loss(
             title=r"kernel gain $G_{kij}$, $K_{kij}\cdot R_{ij}$ [$kg m^3 s^{-1}$]",
             axis_scales=(scale, scale, scale),
             z_limits=z_limits,
-            symmetrized=False,
+            symmetrized=symmetrized,
             axis_label_variant=axis_label_variant,
             cmap=cmap,
         ),
@@ -61,7 +63,7 @@ def plot_kernel_gain_loss(
             axis_scales=(scale, scale, scale),
             z_limits=z_limits,
             ylabel="",
-            symmetrized=False,
+            symmetrized=symmetrized,
             axis_label_variant=axis_label_variant,
             cmap=cmap,
         ),
@@ -78,7 +80,7 @@ def plot_kernel_error(
     axis_label_variant: Optional[AxisLabelVariant] = AxisLabelVariant.Radius,
     symmetrized=False,
 ):
-    p = GridspecPlot([
+    GridspecPlot([
         KernelMassConservationSubplot(
             cfg, mg, kernel.K, R,
             axis_scales=(scale, scale, scale),
@@ -86,8 +88,7 @@ def plot_kernel_error(
             symmetrized=symmetrized,
             # z_limits=z_limits, # TODO
         ),
-    ])
-    p.render()
+    ]).render()
 
 
 def integrate(
@@ -104,10 +105,10 @@ def integrate(
 
     n0 = mass_distribution.dirac_delta(cfg)
     solver = Solver(cfg)
-    N, f, m2f, dm2f = solver.run(n0, K)
+    N, f, m2f, dm2fdt = solver.run(n0, K)
     M = np.array([disk_mass_from_distribution(n, mc, dm) for n in f])
 
-    return tc, f, N, m2f, dm2f, M
+    return tc, f, N, m2f, dm2fdt, M
 
 
 def plot_evolution(
@@ -121,7 +122,7 @@ def plot_evolution(
     m2f: np.ndarray,
     dm2fdt: np.ndarray,
 ):
-    # Fix y-limits?
+    # TODO Fix y-limits?
     EvolutionPlot(kernel, N, f, m2f, dm2fdt).render()
 
 
@@ -134,7 +135,7 @@ def plot_surface(
     N: np.ndarray,
     f: np.ndarray,
     m2f: np.ndarray,
-    dm2f: np.ndarray,
+    dm2fdt: np.ndarray,
 ):
     X, Y = mg.bin_centers, t
     X, Y = np.meshgrid(X, Y)
@@ -167,6 +168,7 @@ def main(cfg):
 
     # Plot total kernel     with lin. colorscale.
 #    plot_kernel(cfg, mg, kernel, scale, axis_label_variant, z_limits)
+
     # Plot K_gain & K_loss  with log. colorscale.
     plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant)
 
@@ -175,11 +177,11 @@ def main(cfg):
     plot_kernel_error(cfg, mg, kernel, R, scale, z_limits, axis_label_variant=axis_label_variant)
 
     # Integrate.
-    t, f, N, m2f, dm2f, M = integrate(cfg, kernel)
+    t, f, N, m2f, dm2fdt, M = integrate(cfg, kernel)
 
     # Plot evolution of mass distribution over time.
-    plot_evolution(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
-    # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
+    plot_evolution(cfg, mg, kernel, scale, t, f, N, m2f, dm2fdt)
+    # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2fdt)
 
     # Plot mass error over time.
     plot_error(cfg, mg, kernel, t, M)
