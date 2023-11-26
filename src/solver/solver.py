@@ -128,7 +128,7 @@ class Solver:
 
         if self.cfg.enable_collision_sampling:
             Ps = [kernel.P_ij for kernel in self.kernels]
-            plot_sampling_probability_vs_time(self.cfg, mg, Ps)
+            plot_sampling_probability_vs_time(self.cfg, mg, Ps, symmetrized=False)
             Ns = [kernel.N_ij for kernel in self.kernels]
             print("\nN_sample_tot / (N_t * N_m^2) * 2 =", np.sum(Ns) / tg.N / mg.N**2 * 100 * 2, "%\n")
             # TODO Calculate: 
