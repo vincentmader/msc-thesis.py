@@ -20,6 +20,7 @@ class BasePlot:
         self,
         show_plot=True,
         save_plot=False,
+        close_plot=True,
         path_to_outfile=None,
     ):
         if self.xlims is not None:
@@ -32,7 +33,8 @@ class BasePlot:
             plt.savefig(path_to_outfile)
         if show_plot:
             plt.show()
-        plt.close()
+        if close_plot:
+            plt.close()
 
     def draw(self):
         raise Exception("Not implemented.")
