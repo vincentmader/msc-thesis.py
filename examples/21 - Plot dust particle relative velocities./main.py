@@ -32,7 +32,7 @@ disk_region = DiskRegion(cfg, disk)
 
 # Calculate relative velocities.
 dv_br = dv_brownian_motion(cfg, disk, disk_region)
-dv_ds = dv_differential_settling(cfg, disk, disk_region)
+# dv_ds = dv_differential_settling(cfg, disk, disk_region)
 dv_rd = dv_radial_drift(cfg, disk, disk_region)
 dv_az = dv_azimuthal(cfg, disk, disk_region)
 dv_tu = dv_turbulence(cfg, disk, disk_region)

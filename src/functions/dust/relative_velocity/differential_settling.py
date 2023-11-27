@@ -7,7 +7,7 @@ def dv_differential_settling(cfg, disk, disk_region):
 
     rho_s = cfg.dust_particle_density
 
-    Omega_K = disk_region.Omega_K
+    Omega_K = disk_region.kepler_frequency
     stopping_times = disk_region.stopping_time(mc, rho_s)
     scale_heights = 1  # TODO
     settling_velocities = v_sett(stopping_times, Omega_K, scale_heights)
