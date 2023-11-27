@@ -7,10 +7,11 @@ from tqdm import tqdm
 from config import Config
 from config import PATH_TO_COAG, SOLVERS
 from functions.disk import mass_distribution
+from functions.plotting.preset.p1 import plot_error
+from functions.plotting.preset.p1 import plot_evolution
 from functions.plotting.preset.p2 import plot_kernel_mass_error_vs_time
-from functions.plotting.preset.p2 import plot_kernel_sampled_vs_unsampled
-from functions.plotting.preset.p2 import plot_sampling_probability_vs_time
 from functions.plotting.preset.p2 import plot_sampling_count_vs_time
+from functions.plotting.preset.p2 import plot_sampling_probability_vs_time
 from functions.solver import fix_negative_densities
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
 from models.disk import Disk, DiskRegion
@@ -132,10 +133,7 @@ class Solver():
 
 if __name__ == "__main__":
 
-    cfg     = Config(
-        enable_collision_sampling=True,
-        # nr_of_samples=150,
-    )
+    cfg     = Config()
     solver = Solver(cfg)
     solver.run()
     
@@ -143,27 +141,23 @@ if __name__ == "__main__":
     n       = solver.n_k_vs_t
     M       = solver.M_k_vs_t
     dMdt    = solver.dMdt_vs_t
-    
     tc      = solver.tg.bin_centers
     mg      = solver.mg
     dm      = mg.bin_widths
     
-    from functions.plotting.preset.p1 import plot_evolution
     plot_evolution(cfg, mg, "", tc, N, n, M, dMdt)
-    from functions.plotting.preset.p1 import plot_error
     plot_error(cfg, mg, tc, np.sum(M, axis=1))
 
     if cfg.enable_collision_sampling:
 
         P_ij_vs_t = solver.P_ij_vs_t
-        plot_sampling_probability_vs_time(cfg, mg, P_ij_vs_t, symmetrized=False)
-
         S_ij_vs_t = solver.S_ij_vs_t
-        plot_sampling_count_vs_time(cfg, mg, S_ij_vs_t, symmetrized=False)
-
         kernel = solver.kernels[0]
         R_coll = kernel.R_coag + kernel.R_frag
         K_kij_vs_t = [k.K for k in solver.kernels]
+
+        plot_sampling_probability_vs_time(cfg, mg, P_ij_vs_t, symmetrized=False)
+        plot_sampling_count_vs_time(cfg, mg, S_ij_vs_t, symmetrized=False)
         plot_kernel_mass_error_vs_time(cfg, mg, K_kij_vs_t, R_coll)
 
         # Ns = [kernel.N_ij for kernel in self.kernels]
