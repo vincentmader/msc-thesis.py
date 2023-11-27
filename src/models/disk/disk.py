@@ -2,7 +2,7 @@ from typing import Optional
 
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from config import Config
-from function.utils import physics
+from functions.utils import physics
 
 
 class Disk:
