@@ -4,10 +4,10 @@ from typing import Optional
 import numpy as np
 
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis
-from functions.physics.collision import collision_outcome_probabilities, collision_rate
 from config import Config
 from models.disk import Disk, DiskRegion
-from functions.physics.dust.relative_velocity import relative_velocity
+from functions.dust.collision import collision_outcome_probabilities, collision_rate
+from functions.dust.relative_velocity import relative_velocity
 from functions.utils.functions import heaviside_theta
 
 

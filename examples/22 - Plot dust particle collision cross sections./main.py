@@ -3,7 +3,7 @@ from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from models.axis import DiscreteMassAxis
-    from functions.physics.collision import collision_cross_section
+    from functions.dust.collision import collision_cross_section
     from config import Config, PATH_TO_FIGURES
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:

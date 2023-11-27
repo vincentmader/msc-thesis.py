@@ -4,7 +4,7 @@ from typing import Optional
 import numpy as np
 
 from models.axis import DiscreteMassAxis, AxisLabelVariant
-from functions.physics.dust import particle_mass_from_radius
+from functions.dust import particle_mass_from_radius
 from visualization.base import PcolorMatrixSubplot
 
 

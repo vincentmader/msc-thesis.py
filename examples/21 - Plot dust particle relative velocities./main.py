@@ -6,12 +6,12 @@ try:
     from config import Config
     from config import PATH_TO_FIGURES
     from models.disk import Disk, DiskRegion
-    from functions.physics.dust.relative_velocity import dv_azimuthal
-    from functions.physics.dust.relative_velocity import dv_brownian_motion
-    from functions.physics.dust.relative_velocity import dv_differential_settling
-    from functions.physics.dust.relative_velocity import dv_radial_drift
-    from functions.physics.dust.relative_velocity import dv_turbulence
-    from functions.physics.dust.relative_velocity import relative_velocity
+    from functions.dust.relative_velocity import dv_azimuthal
+    from functions.dust.relative_velocity import dv_brownian_motion
+    from functions.dust.relative_velocity import dv_differential_settling
+    from functions.dust.relative_velocity import dv_radial_drift
+    from functions.dust.relative_velocity import dv_turbulence
+    from functions.dust.relative_velocity import relative_velocity
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e

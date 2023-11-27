@@ -3,7 +3,7 @@ from typing import Optional
 import numpy as np
 
 from config import Config
-from functions.physics.dust import particle_mass_from_radius
+from functions.dust import particle_mass_from_radius
 from models.axis import DiscreteMassAxis, AxisLabelVariant, KernelErrorVariant
 from models.kernel.mass_conservation import test_mass_conservation
 from visualization.kernel import KernelSubplot
