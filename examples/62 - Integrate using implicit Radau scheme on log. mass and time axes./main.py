@@ -30,7 +30,7 @@ tg = DiscreteTimeAxis(cfg)
 # ─────────────────────────────────────────────────────────────────────────────
 # from disk.disk import Disk
 # from disk.disk_region import DiskRegion
-# from collision import collision_rate
+# from functions.physics.collision import collision_rate
 # from kees_kernel import create_coag_kernel
 # disk = Disk(cfg, rg, mg)
 # disk_region = DiskRegion(cfg, disk)

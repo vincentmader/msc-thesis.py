@@ -3,7 +3,7 @@ from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, AxisLabelVariant
-    from collision import collision_rate
+    from functions.physics.collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from visualization.base import GridspecPlot

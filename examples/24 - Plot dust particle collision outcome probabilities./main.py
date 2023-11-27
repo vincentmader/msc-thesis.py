@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
-    from collision import collision_outcome_probabilities_from_maxwell_boltzmann 
-    from collision import collision_outcome_probabilities_from_cutoff_velocity
+    from functions.physics.collision import collision_outcome_probabilities_from_maxwell_boltzmann 
+    from functions.physics.collision import collision_outcome_probabilities_from_cutoff_velocity
     from config import Config, PATH_TO_FIGURES
     from disk import Disk, DiskRegion
     from dust.relative_velocity import relative_velocity
