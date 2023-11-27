@@ -103,12 +103,12 @@ def create_figure(plotter_function):
 
 
 PLOTS = {
-    "gas_surface_density": plot_1,
+    "gas_surface_density":  plot_1,
     "midplane_temperature": plot_2,
-    "sound_speed": plot_3,
-    "gas_volume_density": plot_4,
-    "gas_pressure": plot_5,
-    "pressure_gradient": plot_6,
+    "sound_speed":          plot_3,
+    "gas_volume_density":   plot_4,
+    "gas_pressure":         plot_5,
+    "pressure_gradient":    plot_6,
 }
 
 
