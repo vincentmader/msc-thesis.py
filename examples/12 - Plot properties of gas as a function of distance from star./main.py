@@ -83,7 +83,7 @@ def plot_6():
     plt.ylabel(r"$\frac{\partial\log P_g}{\partial\log r}$")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$\frac{\partial\log P_g}{\partial\log r}$"
-    plt.semilogx(rc / AU, del_ln_P_g_del_ln_r, label=label)
+    plt.semilogx(rc[:-1] / AU, del_ln_P_g_del_ln_r, label=label) # TODO is `[:-1]` the correct slice?
     plt.legend()
 
 
