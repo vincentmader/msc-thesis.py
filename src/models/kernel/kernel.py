@@ -23,12 +23,14 @@ class Kernel():
     K_gain:             np.ndarray   # <- total kernel gain
     K_loss:             np.ndarray   # <- total kernel loss
 
+    R_coll:             np.ndarray   # <- collision rate
     R_coag:             np.ndarray   # <- coagulation rate
+    R_frag:             np.ndarray   # <- fragmentation rate
+
     K_coag:             np.ndarray   # <- coagulation kernel
     K_coag_gain:        np.ndarray   # <- coagulation kernel gain
     K_coag_loss:        np.ndarray   # <- coagulation kernel loss
 
-    R_frag:             np.ndarray   # <- fragmentation rate
     K_frag:             np.ndarray   # <- fragmentation kernel
     K_frag_gain:        np.ndarray   # <- fragmentation kernel gain
     K_frag_loss:        np.ndarray   # <- fragmentation kernel loss
@@ -68,8 +70,9 @@ class Kernel():
             R_frag = R_coll * P_frag
         assert R_coag is not None
         assert R_frag is not None
-        self.R_coag      = R_coag
-        self.R_frag      = R_frag
+        self.R_coag     = R_coag
+        self.R_frag     = R_frag
+        self.R_coll     = R_coag + R_frag
 
         # Initialize kernel matrices with zeros.
         zeros = np.zeros(shape=[mg.N] * 3)

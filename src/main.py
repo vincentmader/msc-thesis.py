@@ -193,15 +193,13 @@ if __name__ == "__main__":
 
     if cfg.enable_collision_sampling:
 
-        kernel = solver.kernels[0]
-        R_coll = kernel.R_coag + kernel.R_frag
         K_kij_vs_t = [k.K for k in solver.kernels]
         P_ij_vs_t = solver.P_ij_vs_t
         S_ij_vs_t = solver.S_ij_vs_t
 
         plot_sampling_probability_vs_time(cfg, mg, P_ij_vs_t, symmetrized=False)
         plot_sampling_count_vs_time(cfg, mg, S_ij_vs_t, symmetrized=False)
-        plot_kernel_mass_error_vs_time(cfg, mg, K_kij_vs_t, R_coll)
+        plot_kernel_mass_error_vs_time(cfg, mg, K_kij_vs_t, solver.kernels[0].R_coll)
 
         # Ns = [kernel.N_ij for kernel in self.kernels]
         print("\"Actual\" sampling density:")
