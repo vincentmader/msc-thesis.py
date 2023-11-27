@@ -35,7 +35,7 @@ class MassConservationPlot(BasePlot):
         plt.ylabel(r"mass error $\Delta\rho_t$ [%]")
         plt.grid()
 
-        rel_error = (M[-1]-M[0])/M[0]
+        rel_error = (M[-1] - M[0]) / M[0]
         rel_error_sign = f"+" if rel_error > 0 else ""
         title = r"mass error $\Delta\rho_t=(\rho_t-\rho_0)/\rho_0$ = " + rel_error_sign + f"{rel_error*100} %"
         plt.title(title)
