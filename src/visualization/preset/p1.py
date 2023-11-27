@@ -8,9 +8,9 @@ from models.axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
 from models.kernel import Kernel
 from models.plotting.base import GridspecPlot
 from models.plotting.evolution import EvolutionPlot, MassConservationPlot
+from models.plotting.kernel import KernelSubplot, KernelMassConservationSubplot
 from functions.disk import mass_distribution
 from functions.utils.physics import disk_mass_from_distribution  # TODO Remove
-from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 
 
 def plot_kernel(

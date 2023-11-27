@@ -6,7 +6,7 @@ from config import Config
 from functions.dust import particle_mass_from_radius
 from functions.kernel.mass_conservation import test_mass_conservation
 from models.axis import DiscreteMassAxis, AxisLabelVariant, KernelErrorVariant
-from visualization.kernel import KernelSubplot
+from models.plotting.kernel import KernelSubplot
 
 
 class KernelMassConservationSubplot(KernelSubplot):

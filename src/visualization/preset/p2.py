@@ -5,7 +5,7 @@ from models.axis import DiscreteMassAxis
 from models.kernel import Kernel
 from functions.kernel.mass_conservation import test_mass_conservation
 from models.plotting.base import GridspecPlot
-from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
+from models.plotting.kernel import KernelSubplot, KernelMassConservationSubplot
 
 
 def plot_sampling_probability_vs_time(

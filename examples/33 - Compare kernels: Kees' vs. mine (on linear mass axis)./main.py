@@ -9,7 +9,7 @@ try:
     from models.axis import DiscreteMassAxis, AxisLabelVariant
     from models.kernel import Kernel
     from models.plotting.base import GridspecPlot
-    from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
+    from models.plotting.kernel import KernelSubplot, KernelMassConservationSubplot
 except ModuleNotFoundError as e:
     raise e
 

@@ -7,7 +7,7 @@ try:
     from config import Config, PATH_TO_FIGURES
     from models.disk import Disk, DiskRegion
     from models.plotting.base import GridspecPlot
-    from visualization.kernel import KernelSubplot
+    from models.plotting.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
