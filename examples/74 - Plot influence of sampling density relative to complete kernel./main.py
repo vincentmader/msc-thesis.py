@@ -18,7 +18,7 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-Y_LIMITS = 1e-13, 1e-9
+Y_LIMITS = 1e-16, 1e5
 COLORS   = [
     "red",
     "orange",
@@ -77,11 +77,10 @@ class EvolutionMultiPlot(BasePlot):
 
         self.axes, self.lines = {}, {}
         self.gs = self.fig.add_gridspec(
-            nrows=2, height_ratios=[2, 1], hspace=0.2,
+            nrows=1, height_ratios=[2], hspace=0.2,
             ncols=2, width_ratios=[30, 1], wspace=0.1,
         )
         self.ax_1 = self.fig.add_subplot(self.gs[0:1, 0:1])
-        self.ax_2 = self.fig.add_subplot(self.gs[1:2, 0:1])
         self.ax_3 = self.fig.add_subplot(self.gs[0:2, 1:2])
         self.ax_1c = self.ax_1.twiny()
 
@@ -91,8 +90,11 @@ class EvolutionMultiPlot(BasePlot):
             valmin=0, valstep=1, valinit=self.i_t, valmax=tg.N-1, 
         )
         self.slider.on_changed(self.update)
+        # self.ax_1.set_ylabel(r"accuracy error $\frac{\rho_{sampled} - \rho_{complete}}{\rho_{complete}}$")
+        self.ax_1.set_ylabel(r"accuracy error $(\rho_{sampled} - \rho_{complete}) / \rho_{complete}$")
+        # self.ax_1.set_xlabel("time $t$")
+        self.ax_1.grid(True)
 
-        plt.grid(True)
         plt.legend(loc="best")
 
     def draw(self):
@@ -105,13 +107,16 @@ class EvolutionMultiPlot(BasePlot):
             m2f = m2fs[N_s][self.i_t]
             dm2fdt = dm2fdts[N_s][self.i_t]
 
+            m2f_complete = m2fs[int(mg.N**2 / 2)][self.i_t]
+            y = (m2f - m2f_complete) / m2f_complete
+
             self.lines[2*N_s], = self.ax_1.loglog(
-                mc, m2f, 
+                mc, y, 
                 label=r"$\rho_s=$" + f"{rho_s}",  # TODO
                 color=color,
             )
             self.lines[2*N_s+1], = self.ax_1.loglog(
-                mc, -m2f, "--", 
+                mc, -y, "--", 
                 color=color,
             )
             self.ax_1.set_xlim(mb[0], mb[-1])
@@ -119,29 +124,11 @@ class EvolutionMultiPlot(BasePlot):
             self.ax_1.legend(loc="upper right")
             self.ax_1.grid(True)
             self.ax_1.set_xlabel("dust particle mass $m_i$ [m]")
-            self.ax_1.set_ylabel(r"dust particle density $\rho_i^s=m_i n_i \Delta m_i$ [kg m$^{-3}$]")
 
             self.ax_1c.set_xscale("log")
             self.ax_1c.set_xlabel("dust particle radius $a_i$ [m]")
             self.ax_1c.xaxis.set_major_locator(ticker.LogLocator(base=10, numticks=15))
             self.ax_1c.set_xlim(ac[0], ac[-1])
-
-            self.lines[2*N_s+2], = self.ax_2.loglog(
-                mc, dm2fdt, 
-                label="> 0", color=color,
-            )
-            self.lines[2*N_s+3], = self.ax_2.loglog(
-                mc, -dm2fdt, "--",
-                label="< 0", color=color,
-            )
-            self.ax_2.set_xlim(mb[0], mb[-1])
-            self.ax_2.set_ylim(1e-38, 1e-14)
-            self.ax_2.set_ylabel(r"$\Delta\rho_i^s=m_i \Delta n_i \Delta m_i$ [kg s$^{-2}$]") # TODO Why is this not shown?
-            self.ax_2.grid(True)
-            # self.ax_2.set_xlabel("dust particle mass $m^c_i$ [kg]")
-            # # self.ax_2.set_ylabel(r"$\frac{d\rho_i^s}{dt}$ [kg m$^{-3}$s$^{-1}$]")
-            # self.ax_2.set_ylabel(r"d$\rho_i^s$ $/$ d$t$ [kg m$^{-3}$s$^{-1}$]")
-            # self.ax_2.legend()
 
     def update(self, i_t):
         self.i_t = i_t
@@ -150,15 +137,11 @@ class EvolutionMultiPlot(BasePlot):
         for idx, (rho_s, N_s) in enumerate(sampling_densities_and_numbers):
 
             m2f = m2fs[N_s][self.i_t]
-            self.lines[2*N_s].set_ydata(m2f)
-            self.lines[2*N_s+1].set_ydata(-m2f)
+            m2f_complete = m2fs[int(mg.N**2 / 2)][self.i_t]
+            y = (m2f - m2f_complete) / m2f_complete
 
-            self.lines[2*N_s+2].set_ydata(dm2fdts[N_s][i_t])
-            self.lines[2*N_s+3].set_ydata(-dm2fdts[N_s][i_t])
-            # self.lines[2*N_s+1].set_ydata(-m2fs[N_s][i_t])
-
+            self.lines[2*N_s].set_ydata(y)
+            self.lines[2*N_s+1].set_ydata(-y)
 
 p = EvolutionMultiPlot()
 p.render()
-# p.render(close_plot=False, show_plot=False)
-# plt.show()
