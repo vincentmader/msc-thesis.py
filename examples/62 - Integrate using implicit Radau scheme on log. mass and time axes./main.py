@@ -1,7 +1,7 @@
 import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
+    from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
     from disk import mass_distribution
     from utils.physics import disk_mass_from_distribution

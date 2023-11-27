@@ -5,7 +5,7 @@ try:
     sys.path.append(os.path.join("..", "..", "lib"))
     from coag_py.coag.coag import create_coag_kernel
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, AxisLabelVariant
+    from models.axis import DiscreteMassAxis, AxisLabelVariant
     from config import Config
     from kernel import Kernel
     from visualization.base import GridspecPlot

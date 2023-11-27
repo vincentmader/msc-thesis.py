@@ -2,7 +2,7 @@ import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, DiscreteRadialAxis
+    from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config
     from config import PATH_TO_FIGURES
     from disk import Disk, DiskRegion

@@ -3,7 +3,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-from axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
+from models.axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
 from config import Config, PATH_TO_DARKMODE
 from disk import mass_distribution
 from kernel import Kernel

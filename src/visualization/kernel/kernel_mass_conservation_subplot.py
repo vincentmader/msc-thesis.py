@@ -2,7 +2,7 @@ from typing import Optional
 
 import numpy as np
 
-from axis import DiscreteMassAxis, AxisLabelVariant, KernelErrorVariant
+from models.axis import DiscreteMassAxis, AxisLabelVariant, KernelErrorVariant
 from config import Config
 from dust import particle_mass_from_radius
 from kernel.mass_conservation import test_mass_conservation

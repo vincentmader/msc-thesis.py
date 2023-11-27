@@ -3,7 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, DiscreteRadialAxis
+    from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from collision import collision_outcome_probabilities_from_maxwell_boltzmann 
     from collision import collision_outcome_probabilities_from_cutoff_velocity
     from config import Config, PATH_TO_FIGURES

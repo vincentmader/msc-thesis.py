@@ -2,7 +2,7 @@ import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis, DiscreteRadialAxis
+    from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from collision import collision_rate
     from collision import collision_outcome_probabilities_from_cutoff_velocity
     from collision import collision_outcome_probabilities_from_maxwell_boltzmann

@@ -2,7 +2,7 @@ from typing import Optional
 
 import numpy as np
 
-from axis import KernelErrorVariant
+from models.axis import KernelErrorVariant
 from utils.functions import is_cubic
 
 

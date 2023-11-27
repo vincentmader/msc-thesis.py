@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from tqdm import tqdm
 
-from axis import DiscreteTimeAxis, DiscreteMassAxis
+from models.axis import DiscreteTimeAxis, DiscreteMassAxis
 from config import Config
 from config import PATH_TO_COAG
 from kernel import Kernel, SampledKernel

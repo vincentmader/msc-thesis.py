@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-from axis import DiscreteMassAxis, AxisLabelVariant
+from models.axis import DiscreteMassAxis, AxisLabelVariant
 from dust import particle_mass_from_radius
 from visualization.base import PcolorMatrixSubplot
 

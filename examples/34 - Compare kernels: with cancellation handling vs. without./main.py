@@ -3,7 +3,7 @@ import numpy as np
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import AxisLabelVariant
+    from models.axis import AxisLabelVariant
     from config import Config, PATH_TO_FIGURES
     from kernel import Kernel
     from visualization.base import GridspecPlot

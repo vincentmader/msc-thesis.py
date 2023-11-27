@@ -1,6 +1,6 @@
 from typing import Optional
 
-from axis import DiscreteMassAxis, DiscreteRadialAxis
+from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from config import Config
 from utils import physics
 

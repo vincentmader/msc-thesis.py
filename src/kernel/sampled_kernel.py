@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-from axis import DiscreteMassAxis
+from models.axis import DiscreteMassAxis
 from config import Config
 from kernel import Kernel
 

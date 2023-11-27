@@ -2,7 +2,7 @@ import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis
+    from models.axis import DiscreteMassAxis
     from collision import collision_cross_section
     from config import Config, PATH_TO_FIGURES
     from visualization.base import GridspecPlot, PcolorMatrixSubplot

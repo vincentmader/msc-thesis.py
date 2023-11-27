@@ -1,6 +1,6 @@
 import numpy as np
 
-from axis import DiscreteMassAxis, DiscreteRadialAxis
+from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from disk import Disk
 
 

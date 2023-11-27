@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-from axis import DiscreteMassAxis, DiscreteRadialAxis
+from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from collision import collision_outcome_probabilities, collision_rate
 from config import Config
 from disk import Disk, DiskRegion

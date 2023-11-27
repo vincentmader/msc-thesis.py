@@ -7,9 +7,9 @@ from matplotlib.widgets import Slider
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from axis import DiscreteMassAxis
-    from axis import DiscreteTimeAxis
-    from axis import AxisLabelVariant
+    from models.axis import DiscreteMassAxis
+    from models.axis import DiscreteTimeAxis
+    from models.axis import AxisLabelVariant
     from config import Config
     from kernel import Kernel
     from utils.functions import format_time_as_years
