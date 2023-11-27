@@ -127,19 +127,26 @@ class Solver:
         dm2fdt  = [dm2f[i] / tg.bin_widths[i] for i, _ in enumerate(tc)]
 
         if self.cfg.enable_collision_sampling:
-            Ps = [kernel.P_ij for kernel in self.kernels]
-            plot_sampling_probability_vs_time(self.cfg, mg, Ps, symmetrized=False)
-            Ns = [kernel.N_ij for kernel in self.kernels]
-            print("\nN_sample_tot / (N_t * N_m^2) * 2 =", np.sum(Ns) / tg.N / mg.N**2 * 100 * 2, "%\n")
-            # TODO Calculate: 
-            #      - nr. of kernel entries == 0
-            #      - nr. of kernel entries << 1
-            #      - nr. of kernel entriee ~~ 1
-            #      - nr. of kernel entries sampled
-            plot_sampling_count_vs_time(self.cfg, mg, Ns)
-            Ks = [kernel.K for kernel in self.kernels]
-            plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
-            pass
+            if False:
+                Ps = [kernel.P_ij for kernel in self.kernels]
+                plot_sampling_probability_vs_time(self.cfg, mg, Ps, symmetrized=False)
+
+            if True:
+                Ns = [kernel.N_ij for kernel in self.kernels]
+                print("\"Actual\" sampling density:")
+                print("N_sample_tot / (N_t * N_m^2) * 2 =", np.sum(Ns) / tg.N / mg.N**2 * 100 * 2, "%")
+                # TODO Calculate: 
+                #      - nr. of kernel entries == 0
+                #      - nr. of kernel entries << 1
+                #      - nr. of kernel entriee ~~ 1
+                #      - nr. of kernel entries sampled
+
+            if False:
+                plot_sampling_count_vs_time(self.cfg, mg, Ns)
+
+            if False:
+                Ks = [kernel.K for kernel in self.kernels]
+                plot_kernel_mass_error_vs_time(self.cfg, mg, Ks, R_coll)
 
         return N_dust_store, f, m2f, dm2fdt
 
