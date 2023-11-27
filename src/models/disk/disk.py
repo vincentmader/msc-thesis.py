@@ -1,22 +1,42 @@
+from dataclasses import dataclass
 from typing import Optional
+
+import numpy as np
 
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from config import Config
 from functions.utils import physics
 
 
+@dataclass
 class Disk:
+    dust_to_gas:                        float
+    stellar_luminosity:                 float
+    stellar_mass:                       float
+    disk_mass:                          float 
+    flaring_angle:                      float
+    midplane_temperature:               np.ndarray
+    sound_speed:                        np.ndarray
+    scale_height:                       np.ndarray
+    gas_surface_density:                np.ndarray
+    midplane_gas_pressure:              np.ndarray
+    midplane_gas_volume_density:        np.ndarray
+    midplane_gas_volume_number_density: np.ndarray
+    thermal_velocity:                   np.ndarray
+    mean_free_path:                     np.ndarray
+    viscosity:                          np.ndarray
+    del_ln_P_g_del_ln_r:                np.ndarray
+    delr_Sigma_g_nu_g_sqrt_r:           np.ndarray
 
-    def __init__(
-        self,
+    def __init__(self,
         cfg:    Config,
         rg:     Optional[DiscreteRadialAxis]    = None,
         mg:     Optional[DiscreteMassAxis]      = None,
     ):
 
-        self.mg = DiscreteMassAxis(cfg)     if mg is None else mg
-        self.rg = DiscreteRadialAxis(cfg)   if rg is None else rg
-        rc, rb = self.rg.bin_centers, self.rg.bin_boundaries
+        self.mg = DiscreteMassAxis(cfg)   if mg is None else mg
+        self.rg = DiscreteRadialAxis(cfg) if rg is None else rg
+        rc, rb  = self.rg.bin_centers, self.rg.bin_boundaries
 
         L_star      = cfg.stellar_luminosity
         M_star      = cfg.stellar_mass
@@ -32,8 +52,6 @@ class Disk:
         u_th        = physics.thermal_velocity(c_s)
         lambda_mfp  = physics.mean_free_path(N_g_mid)
         nu          = physics.viscosity(u_th, lambda_mfp)
-        del_ln_P_g_del_ln_r      = physics.del_ln_P_g_del_ln_r(rc, P_g_mid)
-        delr_Sigma_g_nu_g_sqrt_r = physics.delr_Sigma_g_nu_g_sqrt_r(rc, Sigma_g, nu)
 
         self.dust_to_gas                        = cfg.dust_to_gas_ratio
         self.stellar_luminosity                 = L_star
@@ -50,7 +68,7 @@ class Disk:
         self.thermal_velocity                   = u_th
         self.mean_free_path                     = lambda_mfp
         self.viscosity                          = nu
-        self.del_ln_P_g_del_ln_r                = del_ln_P_g_del_ln_r
-        self.delr_Sigma_g_nu_g_sqrt_r           = delr_Sigma_g_nu_g_sqrt_r
+        self.del_ln_P_g_del_ln_r                = physics.del_ln_P_g_del_ln_r(rc, P_g_mid)
+        self.delr_Sigma_g_nu_g_sqrt_r           = physics.delr_Sigma_g_nu_g_sqrt_r(rc, Sigma_g, nu)
 
-        self.mass_distribution = []  # TODO
+        self.mass_distribution                  = []  # TODO
