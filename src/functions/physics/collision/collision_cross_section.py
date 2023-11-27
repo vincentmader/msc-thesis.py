@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import pi as PI
 
-from dust import particle_radius_from_mass
+from functions.physics.dust import particle_radius_from_mass
 
 
 def collision_cross_section(cfg, mg):

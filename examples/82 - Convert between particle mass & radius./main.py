@@ -2,7 +2,8 @@ import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from dust import particle_mass_from_radius, particle_radius_from_mass
+    from functions.physics.dust import particle_radius_from_mass
+    from functions.physics.dust import particle_mass_from_radius
 except ModuleNotFoundError as e:
     raise e
 

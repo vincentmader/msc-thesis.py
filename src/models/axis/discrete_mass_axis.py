@@ -1,4 +1,4 @@
-from dust.dust_particle import particle_radius_from_mass
+from functions.physics.dust.dust_particle import particle_radius_from_mass
 
 from .discrete_axis import DiscreteAxis
 

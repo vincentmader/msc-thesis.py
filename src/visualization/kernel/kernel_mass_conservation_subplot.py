@@ -4,7 +4,7 @@ import numpy as np
 
 from models.axis import DiscreteMassAxis, AxisLabelVariant, KernelErrorVariant
 from config import Config
-from dust import particle_mass_from_radius
+from functions.physics.dust import particle_mass_from_radius
 from kernel.mass_conservation import test_mass_conservation
 from visualization.kernel import KernelSubplot
 

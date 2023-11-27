@@ -1,4 +1,4 @@
-from dust import particle_radius_from_mass
+from functions.physics.dust import particle_radius_from_mass
 from utils.physics import mean_free_path, kepler_frequency
 
 
