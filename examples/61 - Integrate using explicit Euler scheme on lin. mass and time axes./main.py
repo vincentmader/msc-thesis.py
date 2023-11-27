@@ -5,10 +5,10 @@ try:
     from config import Config
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from models.kernel import Kernel
+    from models.plotting.evolution import EvolutionPlot, MassConservationPlot
     from models.solver import Solver
     from functions.disk import mass_distribution
     from functions.utils.physics import disk_mass_from_distribution
-    from visualization.evolution import EvolutionPlot, MassConservationPlot
     from visualization.v1.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:
     raise e

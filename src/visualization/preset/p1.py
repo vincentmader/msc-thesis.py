@@ -6,10 +6,10 @@ import numpy as np
 from config import Config, PATH_TO_DARKMODE
 from models.axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
 from models.kernel import Kernel
+from models.plotting.base import GridspecPlot
+from models.plotting.evolution import EvolutionPlot, MassConservationPlot
 from functions.disk import mass_distribution
 from functions.utils.physics import disk_mass_from_distribution  # TODO Remove
-from models.plotting.base import GridspecPlot
-from visualization.evolution import EvolutionPlot, MassConservationPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 
 
