@@ -37,8 +37,8 @@ R = kernel.R_coag + kernel.R_frag
 scale = "log"
 z_limits = (1e-20, 1)
 
-from visualization.preset.p1 import plot_kernel_gain_loss
+from functions.plotting.preset.p1 import plot_kernel_gain_loss
 plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits)
 
-from visualization.preset.p1 import plot_kernel_error
+from functions.plotting.preset.p1 import plot_kernel_error
 plot_kernel_error(cfg, mg, kernel, R, scale, z_limits, symmetrized=False)

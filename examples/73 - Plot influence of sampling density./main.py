@@ -8,13 +8,13 @@ import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
+    from functions.plotting.preset import p1
+    from functions.utils.dates import format_seconds_as_years
     from models.axis import DiscreteMassAxis
     from models.axis import DiscreteTimeAxis
     from models.axis import AxisLabelVariant
     from models.kernel import Kernel
-    from functions.utils.dates import format_seconds_as_years
     from models.plotting.base import BasePlot
-    from visualization.preset import p1
 except ModuleNotFoundError as e:
     raise e
 

@@ -3,10 +3,10 @@ import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
+    from functions.plotting.preset import p1
     from models.axis import AxisLabelVariant
     from models.axis import DiscreteMassAxis
     from models.kernel import Kernel
-    from visualization.preset import p1
 except ModuleNotFoundError as e:
     raise e
 

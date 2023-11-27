@@ -6,13 +6,13 @@ from tqdm import tqdm
 
 from config import Config
 from config import PATH_TO_COAG
+from functions.plotting.preset.p1 import plot_kernel_gain_loss
+from functions.plotting.preset.p2 import plot_kernel_mass_error_vs_time
+from functions.plotting.preset.p2 import plot_kernel_sampled_vs_unsampled
+from functions.plotting.preset.p2 import plot_sampling_probability_vs_time
+from functions.plotting.preset.p2 import plot_sampling_count_vs_time
 from models.axis import DiscreteTimeAxis, DiscreteMassAxis
 from models.kernel import Kernel, SampledKernel
-from visualization.preset.p1 import plot_kernel_gain_loss
-from visualization.preset.p2 import plot_kernel_mass_error_vs_time
-from visualization.preset.p2 import plot_kernel_sampled_vs_unsampled
-from visualization.preset.p2 import plot_sampling_probability_vs_time
-from visualization.preset.p2 import plot_sampling_count_vs_time
 
 sys.path.append(PATH_TO_COAG)
 from coag.react_0d import solve_react_0d_equation
