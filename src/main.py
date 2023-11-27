@@ -7,6 +7,8 @@ from tqdm import tqdm
 from config import Config
 from config import PATH_TO_COAG, SOLVERS
 from functions.disk import mass_distribution
+from functions.dust.collision import collision_outcome_probabilities, collision_rate
+from functions.dust.relative_velocity import relative_velocity
 from functions.plotting.preset.p1 import plot_error
 from functions.plotting.preset.p1 import plot_evolution
 from functions.plotting.preset.p2 import plot_kernel_mass_error_vs_time
@@ -14,6 +16,7 @@ from functions.plotting.preset.p2 import plot_sampling_count_vs_time
 from functions.plotting.preset.p2 import plot_sampling_probability_vs_time
 from functions.solver import fix_negative_densities
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
+from models.disk import Disk, DiskRegion
 from models.disk import Disk, DiskRegion
 from models.kernel import Kernel, SampledKernel
 
@@ -33,6 +36,9 @@ class Solver():
     rg:                     DiscreteRadialAxis
     mg:                     DiscreteMassAxis
     tg:                     DiscreteTimeAxis
+    R_coag:                 np.ndarray
+    R_frag:                 np.ndarray
+    W_ij:                   np.ndarray
 
     N_k_vs_t:               np.ndarray 
     n_k_vs_t:               np.ndarray
@@ -43,7 +49,6 @@ class Solver():
     S_ij_vs_t:              np.ndarray
     dK_ij_vs_t:             np.ndarray
 
-    W_ij:                   np.ndarray
     kernels:                list[Kernel]    = field(default_factory=list)
     iteration_idx:          int             = 0
 
@@ -65,7 +70,19 @@ class Solver():
         self.S_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
         self.dK_ij_vs_t     = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
 
-        self.kernels        = [Kernel(cfg)]
+        # Define PPD, & radial position of interest in it.
+        disk        = Disk(cfg, self.rg, self.mg) 
+        disk_region = DiskRegion(cfg, disk)
+        # Define relative dust particle velocities, & collision rates.
+        dv          = relative_velocity(cfg, disk, disk_region)
+        R_coll      = collision_rate(cfg, disk, disk_region)
+        # Define probabilities for coagulation & fragmentation events.
+        P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
+        # Define rate of coag./frag. events.
+        self.R_coag = R_coll * P_coag
+        self.R_frag = R_coll * P_frag
+
+        self.kernels        = [Kernel(cfg, self.R_coag, self.R_frag)]
         self.W_ij           = weights(self.mg, self.kernels[0])
         self.N_k_vs_t[0, :] = mass_distribution.dirac_delta(cfg) * self.mg.bin_widths
 
@@ -127,7 +144,13 @@ class Solver():
     def sample(self):
 
         i_t = self.iteration_idx
-        sampled = SampledKernel(cfg, self.N_k_vs_t[i_t-1], W_ij=self.W_ij)
+        sampled = SampledKernel(
+            cfg, 
+            self.N_k_vs_t[i_t-1], 
+            self.R_coag, 
+            self.R_frag, 
+            W_ij=self.W_ij
+        )
         self.kernels.append(sampled)
         self.P_ij_vs_t[i_t] = sampled.P_ij
         self.S_ij_vs_t[i_t] = sampled.N_ij  # TODO Rename.
@@ -141,7 +164,7 @@ def weights(mg: DiscreteMassAxis, kernel: Kernel):
 
 if __name__ == "__main__":
 
-    cfg     = Config()
+    cfg     = Config(enable_collision_sampling=True)
     solver = Solver(cfg)
     solver.run()
     

@@ -21,6 +21,8 @@ class SampledKernel(Kernel):
         self, 
         cfg:    Config, 
         N:      np.ndarray, 
+        R_coag: Optional[np.ndarray] = None,
+        R_frag: Optional[np.ndarray] = None,
         W_ij:   Optional[np.ndarray] = None,
         *args, 
         **kwargs
@@ -36,7 +38,7 @@ class SampledKernel(Kernel):
 
         # Define weights, if not received as argument.
         if W_ij is None:  
-            K = Kernel(cfg).K
+            K = Kernel(cfg, R_coag=R_coag, R_frag=R_frag).K
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # W_ij = np.sum([mc[k] * K[k]**2 for k in range(mg.N)])**.5  # TODO Use lin. or quad. addition?
 
@@ -58,7 +60,7 @@ class SampledKernel(Kernel):
         self.N_ij = np.zeros(shape=[N.shape[0]]*2)
 
         ijs = self._sample_ijs(cfg)
-        super().__init__(cfg, ijs=ijs, *args, **kwargs)
+        super().__init__(cfg, R_coag, R_frag, ijs=ijs, *args, **kwargs)
 
     def _sample_ijs(self, cfg: Config) -> list[tuple[int, int]]:
         P_ij = self.P_ij

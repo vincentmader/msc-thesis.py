@@ -3,12 +3,12 @@ from typing import Optional
 
 import numpy as np
 
-from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from config import Config
-from models.disk import Disk, DiskRegion
 from functions.dust.collision import collision_outcome_probabilities, collision_rate
 from functions.dust.relative_velocity import relative_velocity
 from functions.utils.functions import heaviside_theta
+from models.axis import DiscreteMassAxis, DiscreteRadialAxis
+from models.disk import Disk, DiskRegion
 
 
 SHOULD_ASSERT_SYMMETRIC_IJS = True
@@ -34,16 +34,14 @@ class Kernel():
     K_frag_loss:        np.ndarray   # <- fragmentation kernel loss
 
     def __init__(self, 
-        cfg:    Config, 
-        ijs:    Optional[list[tuple[int, int]]] = None,
-        R_coag: Optional[np.ndarray]            = None,
-        R_frag: Optional[np.ndarray]            = None,
+        cfg:        Config, 
+        R_coag:     Optional[np.ndarray] = None,
+        R_frag:     Optional[np.ndarray] = None,
+        ijs:        Optional[list[tuple[int, int]]] = None,
     ):
         self.cfg = cfg
 
-        # Define discrete axes for...
-        rg = DiscreteRadialAxis(cfg) # ...distance from central star,
-        mg = DiscreteMassAxis(cfg)   # ...particle mass,
+        mg = DiscreteMassAxis(cfg)
         mc = mg.bin_centers
         self.mg = mg
 
@@ -53,9 +51,10 @@ class Kernel():
         # If relevant particle pairs are not specified explicitly:
         # -> Assume all of them have to be taken into account.
         if ijs is None:
-            ijs = [(i, j) for i in range(mg.N) for j in range(mg.N)]
+            ijs = [(i, j) for i in range(mg.N) for j in range(i+1)]
 
-        if (R_coag is None) and (R_frag is None):
+        if (R_coag is None) or (R_frag is None):
+            rg = DiscreteRadialAxis(cfg)
             # Define PPD, & radial position of interest in it.
             disk        = Disk(cfg, rg, mg) 
             disk_region = DiskRegion(cfg, disk)
@@ -65,15 +64,12 @@ class Kernel():
             # Define probabilities for coagulation & fragmentation events.
             P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
             # Define rate of coag./frag. events.
-            self.R_coag = R_coll * P_coag
-            self.R_frag = R_coll * P_frag
-        elif (R_coag is not None) and (R_frag is not None):
-            self.R_coag = R_coag
-            self.R_frag = R_frag
-        else:
-            raise Exception("Either both `R_coag` & `R_frag` must be specified explicitly, or neither.")
-        assert self.R_coag is not None
-        assert self.R_frag is not None
+            R_coag = R_coll * P_coag
+            R_frag = R_coll * P_frag
+        assert R_coag is not None
+        assert R_frag is not None
+        self.R_coag      = R_coag
+        self.R_frag      = R_frag
 
         # Initialize kernel matrices with zeros.
         zeros = np.zeros(shape=[mg.N] * 3)
