@@ -16,11 +16,12 @@ class PcolorMatrixSubplot(GridspecSubplot):
         "xticks", "yticks",
     ]
 
-    def __init__(
-        self, 
+    def __init__(self, 
+    # Required Arguments:
         x:              np.ndarray,
         y:              np.ndarray,
         z:              np.ndarray,
+    # Optional Arguments:
         xticks:         Optional[Any]                   = None,
         yticks:         Optional[Any]                   = None,
         z_limits:       Optional[tuple[float, float]]   = None,
