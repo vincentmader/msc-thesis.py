@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 
 from config import Config
-from config import PATH_TO_COAG
+from config import PATH_TO_COAG, SOLVERS
 from functions.plotting.preset.p1 import plot_kernel_gain_loss
 from functions.plotting.preset.p2 import plot_kernel_mass_error_vs_time
 from functions.plotting.preset.p2 import plot_kernel_sampled_vs_unsampled
@@ -18,7 +18,6 @@ from models.kernel import Kernel, SampledKernel
 sys.path.append(PATH_TO_COAG)
 from coag.react_0d import solve_react_0d_equation
 
-SOLVERS = ["explicit_euler", "implicit_euler", "implicit_radau"]
 N_subst = 1  # Nr of time substeps between storage of result
 N_iter  = 4  # Nr of iterations for implicit time step
 
