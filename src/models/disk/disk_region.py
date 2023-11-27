@@ -1,10 +1,43 @@
+from dataclasses import dataclass
+
+from config import Config
 from functions.dust import particle_radius_from_mass
 from functions.utils.physics import mean_free_path, kepler_frequency
+from models.axis import DiscreteMassAxis
+from models.axis import DiscreteRadialAxis
+from models.disk import Disk
+
+import numpy as np
 
 
+@dataclass
 class DiskRegion:
 
-    def __init__(self, cfg, disk):
+    mg:                                 DiscreteMassAxis
+    rg:                                 DiscreteRadialAxis
+    thermal_velocity:                   float
+    midplane_gas_volume_density:        float
+    kepler_velocity:                    float
+    gas_surface_density:                float
+    viscosity:                          float
+    midplane_temperature:               float
+    midplane_gas_volume_number_density: float
+    sound_speed:                        float
+    kepler_frequency:                   float
+    kepler_velocity:                    float
+    free_mean_path:                     float
+    scale_height:                       float
+    midplane_gas_pressure:              float
+    distance_to_star:                   float
+    gas_pressure_gradient:              float
+    delr_Sigma_g_nu_g_sqrt_r:           float
+    particle_radii:                     np.ndarray
+
+    def __init__(
+        self, 
+        cfg: Config, 
+        disk: Disk,
+    ):
         mg, rg = disk.mg, disk.rg
         mc, rc = mg.bin_centers, rg.bin_centers
 
