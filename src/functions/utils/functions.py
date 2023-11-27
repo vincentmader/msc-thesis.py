@@ -27,7 +27,7 @@ def is_cubic(matrix: np.ndarray):
     return True
 
 
-def format_time_as_years(
+def format_seconds_as_years(
     time_in_seconds: float | int | np.float64,
 ) -> str:
 

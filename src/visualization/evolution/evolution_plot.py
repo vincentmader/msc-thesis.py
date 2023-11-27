@@ -4,7 +4,7 @@ import numpy as np
 
 from models.axis import DiscreteTimeAxis
 from models.kernel import Kernel
-from functions.utils.functions import format_time_as_years
+from functions.utils.functions import format_seconds_as_years
 from visualization.base import BasePlot
 
 
@@ -96,7 +96,7 @@ class EvolutionPlot(BasePlot):
 
     def update(self, i_t):
         self.i_t = i_t
-        text = format_time_as_years(self.t[i_t])
+        text = format_seconds_as_years(self.t[i_t])
         self.slider.label.set_text(f"t = {text}")
         self.lines_1.set_ydata(self.m2f[i_t])
         # self.lines_5.set_ydata(self.m2f[i_t])

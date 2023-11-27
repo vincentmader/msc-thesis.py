@@ -12,7 +12,7 @@ try:
     from models.axis import DiscreteTimeAxis
     from models.axis import AxisLabelVariant
     from models.kernel import Kernel
-    from functions.utils.functions import format_time_as_years
+    from functions.utils.functions import format_seconds_as_years
     from visualization.base import BasePlot
     from visualization.preset import p1
 except ModuleNotFoundError as e:
@@ -132,7 +132,7 @@ class EvolutionMultiPlot(BasePlot):
 
     def update(self, i_t):
         self.i_t = i_t
-        text = format_time_as_years(tg.bin_centers[i_t])
+        text = format_seconds_as_years(tg.bin_centers[i_t])
         self.slider.label.set_text(f"t = {text}")
         for idx, (rho_s, N_s) in enumerate(sampling_densities_and_numbers):
 
