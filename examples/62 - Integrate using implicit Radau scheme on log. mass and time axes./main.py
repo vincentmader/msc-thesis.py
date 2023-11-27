@@ -3,9 +3,9 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
-    from models.disk import mass_distribution
     from models.kernel import Kernel
     from models.solver import Solver
+    from functions.disk import mass_distribution
     from functions.utils.physics import disk_mass_from_distribution
     from visualization.evolution import EvolutionPlot, MassConservationPlot
 except ModuleNotFoundError as e:
