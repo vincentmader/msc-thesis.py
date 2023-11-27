@@ -4,10 +4,10 @@ import sys
 import numpy as np
 from tqdm import tqdm
 
-from models.axis import DiscreteTimeAxis, DiscreteMassAxis
 from config import Config
 from config import PATH_TO_COAG
-from kernel import Kernel, SampledKernel
+from models.axis import DiscreteTimeAxis, DiscreteMassAxis
+from models.kernel import Kernel, SampledKernel
 from visualization.preset.p1 import plot_kernel_gain_loss
 from visualization.preset.p2 import plot_kernel_mass_error_vs_time
 from visualization.preset.p2 import plot_kernel_sampled_vs_unsampled

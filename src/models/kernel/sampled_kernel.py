@@ -3,9 +3,9 @@ from typing import Optional
 
 import numpy as np
 
-from models.axis import DiscreteMassAxis
 from config import Config
-from kernel import Kernel
+from models.axis import DiscreteMassAxis
+from models.kernel import Kernel
 
 
 ALMOST_BUT_NOT_QUITE_ZERO = 1e-100  # TODO Choose this value. 

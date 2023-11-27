@@ -3,7 +3,7 @@ from matplotlib.widgets import Slider
 import numpy as np
 
 from models.axis import DiscreteTimeAxis
-from kernel import Kernel
+from models.kernel import Kernel
 from utils.functions import format_time_as_years
 from visualization.base import BasePlot
 

@@ -2,9 +2,9 @@ import os, sys
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from models.axis import DiscreteMassAxis
     from config import Config
-    from kernel import Kernel, SampledKernel
+    from models.axis import DiscreteMassAxis
+    from models.kernel import Kernel, SampledKernel
     from visualization.preset.p1 import plot_kernel_gain_loss, plot_kernel_error
 except ModuleNotFoundError as e:
     raise e

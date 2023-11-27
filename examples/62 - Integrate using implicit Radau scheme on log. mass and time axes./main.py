@@ -1,12 +1,12 @@
 import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
+    from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from models.disk import mass_distribution
-    from utils.physics import disk_mass_from_distribution
-    from kernel import Kernel
+    from models.kernel import Kernel
     from solver import Solver
+    from utils.physics import disk_mass_from_distribution
     from visualization.evolution import EvolutionPlot, MassConservationPlot
 except ModuleNotFoundError as e:
     raise e

@@ -2,9 +2,9 @@
 import sys
 sys.path.append("../../src")
 import numpy as np
-from models.axis import DiscreteMassAxis
 from config import Config
-from kernel import Kernel
+from models.axis import DiscreteMassAxis
+from models.kernel import Kernel
 
 # ─────────────────────────────────────────────────────────────────────────────
 

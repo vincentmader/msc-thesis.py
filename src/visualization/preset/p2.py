@@ -1,11 +1,11 @@
 import numpy as np
 
-from models.axis import DiscreteMassAxis
 from config import Config
-from kernel import Kernel
+from models.axis import DiscreteMassAxis
+from models.kernel import Kernel
+from models.kernel.mass_conservation import test_mass_conservation
 from visualization.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
-from kernel.mass_conservation import test_mass_conservation
 
 
 def plot_sampling_probability_vs_time(

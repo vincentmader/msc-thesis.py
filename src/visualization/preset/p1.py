@@ -3,10 +3,10 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-from models.axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
 from config import Config, PATH_TO_DARKMODE
+from models.axis import DiscreteMassAxis, DiscreteTimeAxis, AxisLabelVariant
 from models.disk import mass_distribution
-from kernel import Kernel
+from models.kernel import Kernel
 from utils.physics import disk_mass_from_distribution  # TODO Remove
 from visualization.base import GridspecPlot
 from visualization.evolution import EvolutionPlot, MassConservationPlot

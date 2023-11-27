@@ -7,11 +7,11 @@ from matplotlib.widgets import Slider
 import numpy as np
 try:
     sys.path.append(os.path.join("..", "..", "src"))
+    from config import Config
     from models.axis import DiscreteMassAxis
     from models.axis import DiscreteTimeAxis
     from models.axis import AxisLabelVariant
-    from config import Config
-    from kernel import Kernel
+    from models.kernel import Kernel
     from utils.functions import format_time_as_years
     from visualization.base import BasePlot
     from visualization.preset import p1
