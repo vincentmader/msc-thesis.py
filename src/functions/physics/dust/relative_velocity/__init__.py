@@ -1,7 +1,7 @@
 import numpy as np
 
 from config import Config
-from disk import Disk, DiskRegion
+from models.disk import Disk, DiskRegion
 from utils.functions import root_mean_squared
 from .azimuthal import dv_azimuthal
 from .brownian_motion import dv_brownian_motion

@@ -5,7 +5,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
-    from disk import Disk, DiskRegion
+    from models.disk import Disk, DiskRegion
     from functions.physics.dust import particle_radius_from_mass
     from utils import physics
 except ModuleNotFoundError as e:

@@ -7,7 +7,7 @@ try:
     from functions.physics.collision import collision_outcome_probabilities_from_cutoff_velocity
     from functions.physics.collision import collision_outcome_probabilities_from_maxwell_boltzmann
     from config import Config, PATH_TO_FIGURES
-    from disk import Disk, DiskRegion
+    from models.disk import Disk, DiskRegion
     from functions.physics.dust.relative_velocity import relative_velocity
     from visualization.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:

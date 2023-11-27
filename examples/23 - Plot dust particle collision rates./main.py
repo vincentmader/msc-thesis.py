@@ -5,7 +5,7 @@ try:
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, AxisLabelVariant
     from functions.physics.collision import collision_rate
     from config import Config, PATH_TO_FIGURES
-    from disk import Disk, DiskRegion
+    from models.disk import Disk, DiskRegion
     from visualization.base import GridspecPlot
     from visualization.kernel import KernelSubplot
 except ModuleNotFoundError as e:

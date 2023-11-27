@@ -3,7 +3,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
-    from disk import mass_distribution
+    from models.disk import mass_distribution
     from utils.physics import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver
@@ -28,8 +28,8 @@ K = kernel.K
 tg = DiscreteTimeAxis(cfg)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# from disk.disk import Disk
-# from disk.disk_region import DiskRegion
+# from models.disk.disk import Disk
+# from models.disk.disk_region import DiskRegion
 # from functions.physics.collision import collision_rate
 # from kees_kernel import create_coag_kernel
 # disk = Disk(cfg, rg, mg)

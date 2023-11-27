@@ -4,7 +4,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from config import Config
-    from disk import mass_distribution
+    from models.disk import mass_distribution
     from utils.physics import disk_mass_from_distribution
     from kernel import Kernel
     from solver import Solver

@@ -5,7 +5,7 @@ try:
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from config import Config
     from config import PATH_TO_FIGURES
-    from disk import Disk, DiskRegion
+    from models.disk import Disk, DiskRegion
     from functions.physics.dust.relative_velocity import dv_azimuthal
     from functions.physics.dust.relative_velocity import dv_brownian_motion
     from functions.physics.dust.relative_velocity import dv_differential_settling

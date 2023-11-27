@@ -6,7 +6,7 @@ import numpy as np
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 from functions.physics.collision import collision_outcome_probabilities, collision_rate
 from config import Config
-from disk import Disk, DiskRegion
+from models.disk import Disk, DiskRegion
 from functions.physics.dust.relative_velocity import relative_velocity
 from utils.functions import heaviside_theta
 

@@ -1,7 +1,7 @@
 import numpy as np
 
 from models.axis import DiscreteMassAxis, DiscreteRadialAxis
-from disk import Disk
+from models.disk import Disk
 
 
 def dirac_delta(cfg):

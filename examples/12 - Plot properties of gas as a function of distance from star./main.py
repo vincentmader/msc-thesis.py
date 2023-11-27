@@ -5,7 +5,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from constants import AU
-    from disk import Disk
+    from models.disk import Disk
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 except ModuleNotFoundError as e:
     raise e
