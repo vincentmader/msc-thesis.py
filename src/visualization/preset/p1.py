@@ -95,7 +95,7 @@ def integrate(
     cfg: Config,
     kernel: Kernel,
 ):
-    from solver import Solver
+    from models.solver import Solver
 
     tg = DiscreteTimeAxis(cfg)
     tc = tg.bin_centers

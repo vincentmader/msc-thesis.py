@@ -5,7 +5,7 @@ try:
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from models.disk import mass_distribution
     from models.kernel import Kernel
-    from solver import Solver
+    from models.solver import Solver
     from utils.physics import disk_mass_from_distribution
     from visualization.evolution import EvolutionPlot, MassConservationPlot
 except ModuleNotFoundError as e:
