@@ -7,7 +7,7 @@ try:
     from models.disk import mass_distribution
     from models.kernel import Kernel
     from models.solver import Solver
-    from utils.physics import disk_mass_from_distribution
+    from functions.utils.physics import disk_mass_from_distribution
     from visualization.evolution import EvolutionPlot, MassConservationPlot
     from visualization.v1.slider_plot_2 import InteractiveSliderLinePlot
 except ModuleNotFoundError as e:

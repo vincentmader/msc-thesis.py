@@ -2,7 +2,7 @@ import numpy as np
 from numpy import pi as PI
 
 from constants import m_p, k_B
-from utils import physics
+from functions.utils import physics
 
 
 def dv_turbulence(cfg, disk, disk_region):

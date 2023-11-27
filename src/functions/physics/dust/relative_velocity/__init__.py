@@ -1,8 +1,8 @@
 import numpy as np
 
 from config import Config
+from functions.utils.functions import root_mean_squared
 from models.disk import Disk, DiskRegion
-from utils.functions import root_mean_squared
 from .azimuthal import dv_azimuthal
 from .brownian_motion import dv_brownian_motion
 from .differential_settling import dv_differential_settling

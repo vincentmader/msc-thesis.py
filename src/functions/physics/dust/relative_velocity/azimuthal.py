@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import physics
+from function.utils import physics
 
 
 E_d = 0.5  # 2010 Birnstiel, TODO

@@ -7,7 +7,7 @@ try:
     from constants import AU
     from models.disk import Disk
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
-    from utils.physics import kepler_frequency
+    from functions.utils.physics import kepler_frequency
 except ModuleNotFoundError as e:
     raise e
 

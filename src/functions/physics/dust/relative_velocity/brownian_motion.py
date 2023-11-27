@@ -2,7 +2,7 @@ import numpy as np
 from numpy import pi as PI
 
 from constants import k_B
-from utils.physics import reduced_mass
+from functions.utils.physics import reduced_mass
 
 
 def dv_brownian_motion(cfg, disk, disk_region):

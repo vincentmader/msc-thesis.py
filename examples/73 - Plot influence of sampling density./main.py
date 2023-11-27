@@ -12,7 +12,7 @@ try:
     from models.axis import DiscreteTimeAxis
     from models.axis import AxisLabelVariant
     from models.kernel import Kernel
-    from utils.functions import format_time_as_years
+    from functions.utils.functions import format_time_as_years
     from visualization.base import BasePlot
     from visualization.preset import p1
 except ModuleNotFoundError as e:

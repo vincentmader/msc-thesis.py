@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import physics 
+from functions.utils import physics 
 
 
 def dv_radial_drift(cfg, disk, disk_region):

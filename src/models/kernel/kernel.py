@@ -8,7 +8,7 @@ from functions.physics.collision import collision_outcome_probabilities, collisi
 from config import Config
 from models.disk import Disk, DiskRegion
 from functions.physics.dust.relative_velocity import relative_velocity
-from utils.functions import heaviside_theta
+from functions.utils.functions import heaviside_theta
 
 
 SHOULD_ASSERT_SYMMETRIC_IJS = True

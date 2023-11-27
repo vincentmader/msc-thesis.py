@@ -3,7 +3,7 @@ from typing import Optional
 import numpy as np
 
 from models.axis import KernelErrorVariant
-from utils.functions import is_cubic
+from functions.utils.functions import is_cubic
 
 
 def test_mass_conservation(
