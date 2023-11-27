@@ -10,11 +10,6 @@ VMIN, VMAX = 1e-20, 1e-7
 
 
 class PcolorMatrixSubplot(GridspecSubplot):
-    __slots__ = [
-        "x", "y", "z", "k", "im", 
-        "axis_scales", "cmap", "z_limits", "grid",
-        "xticks", "yticks",
-    ]
 
     def __init__(self, 
     # Required Arguments:
