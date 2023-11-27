@@ -28,8 +28,8 @@
 
 [mass_discretization]
     mass_min_value                  = 1e-15     # given in kg  (a=1e-4 cm -> m=10e-15 kg)
-    mass_max_value                  = 1         # given in kg  (a=1e+3 cm -> m=10e+6  kg)
-    mass_resolution                 = 50        # given as nr. of bins in mass grid
+    mass_max_value                  = 1e-8         # given in kg  (a=1e+3 cm -> m=10e+6  kg)
+    mass_resolution                 = 25        # given as nr. of bins in mass grid
     mass_axis_scale                 = "log"     # either "lin" or "log"
   # mass_min_value                  = 0.5       # given in kg  (a=1e-4 cm -> m=10e-15 kg)
   # mass_max_value                  = 50.5      # given in kg  (a=1e+3 cm -> m=10e+6  kg)
@@ -41,7 +41,7 @@
     enable_fragmentation            = true
     enable_cancellation_handling    = true
     enable_collision_sampling       = false
-    nr_of_samples                   = 500
+    nr_of_samples                   = 200
 
 [radial_discretization]
     radial_min_value                = 1e-2      # given in AUs
@@ -51,7 +51,7 @@
 
 [time_discretization]
     time_min_value                  = 1         # given in s
-    time_max_value                  = 3e+11     # given in s   (t=1 My -> t=3e+13 s)
+    time_max_value                  = 3e+10     # given in s   (t=1 My -> t=3e+13 s)
     time_resolution                 = 200       # given as nr. of bins in time grid
     time_axis_scale                 = "log"     # either "lin" or "log"
 
