@@ -149,7 +149,6 @@ def plot_surface(
 def plot_error(
     cfg: Config,
     mg: DiscreteMassAxis,
-    kernel: Kernel,
     t: np.ndarray,
     M: np.ndarray,
 ):
@@ -183,4 +182,4 @@ def main(cfg):
     # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2fdt)
 
     # Plot mass error over time.
-    plot_error(cfg, mg, kernel, t, M)
+    plot_error(cfg, mg, t, M)

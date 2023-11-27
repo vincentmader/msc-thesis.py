@@ -148,12 +148,10 @@ if __name__ == "__main__":
     mg      = solver.mg
     dm      = mg.bin_widths
     
-    kernel  = solver.kernels[-1]  # TODO
-    
     from functions.plotting.preset.p1 import plot_evolution
     plot_evolution(cfg, mg, "", tc, N, n, M, dMdt)
     from functions.plotting.preset.p1 import plot_error
-    plot_error(cfg, mg, kernel, tc, np.sum(M, axis=1))
+    plot_error(cfg, mg, tc, np.sum(M, axis=1))
 
     if cfg.enable_collision_sampling:
 

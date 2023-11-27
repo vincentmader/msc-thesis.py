@@ -41,11 +41,11 @@ def plot_kernel_error():
     p1.plot_kernel_error(cfg, mg, kernel, R, scale, z_limits, axis_label_variant=axis_label_variant)
 
 def plot_evolution():
-    p1.plot_evolution(cfg, mg, kernel, scale, t, N, f, m2f, dm2fdt)
+    p1.plot_evolution(cfg, mg, scale, t, N, f, m2f, dm2fdt)
     # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2f)
 
 def plot_error():
-    p1.plot_error(cfg, mg, kernel, t, M)
+    p1.plot_error(cfg, mg, t, M)
 
 def toggle_sampling():
     cfg.enable_collision_sampling = not cfg.enable_collision_sampling
