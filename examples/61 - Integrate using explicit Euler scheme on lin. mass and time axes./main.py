@@ -64,8 +64,8 @@ def plot_1(m, m2f, dm2f):
     plt.close()
 
 
-def plot_3(kernel, N, f, m2f, dm2f):
-    EvolutionPlot(kernel, N, f, m2f, dm2f).render()
+def plot_3(cfg, mg, N, f, m2f, dm2f):
+    EvolutionPlot(cfg, mg, N, f, m2f, dm2f).render()
 
 
 def plot_4(t, Ms):
@@ -86,5 +86,5 @@ if __name__ == "__main__":
 
     # Create plots.
     plot_1(mc, m2f, dm2f)
-    # plot_3(kernel, N, f, m2f, dm2f)  # TODO Use these instead? 
+    # plot_3(cfg, mg, N, f, m2f, dm2f)  # TODO Use these instead? 
     plot_4(t, Ms)

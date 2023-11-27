@@ -40,8 +40,8 @@ tg = DiscreteTimeAxis(cfg)
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-def plot_1(kernel, N, f, m2f, dm2f):
-    p = EvolutionPlot(kernel, N, f, m2f, dm2f)
+def plot_1(cfg, mg, N, f, m2f, dm2f):
+    p = EvolutionPlot(cfg, mg, N, f, m2f, dm2f)
     p.render()
 
 
@@ -66,5 +66,5 @@ if __name__ == "__main__":
     Ms = [disk_mass_from_distribution(n, mc, dm) for n in f]
 
     # Create plots.
-    plot_1(kernel, N, f, m2f, dm2f)
+    plot_1(cfg, mg, N, f, m2f, dm2f)
     plot_2(t, Ms)

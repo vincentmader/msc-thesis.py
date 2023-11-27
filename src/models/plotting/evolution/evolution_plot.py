@@ -2,8 +2,8 @@ import matplotlib.ticker as ticker
 from matplotlib.widgets import Slider
 import numpy as np
 
-from models.axis import DiscreteTimeAxis
-from models.kernel import Kernel
+from models.axis import DiscreteTimeAxis, DiscreteMassAxis
+from config import Config
 from functions.utils.dates import format_seconds_as_years
 from models.plotting.base import BasePlot
 
@@ -16,12 +16,13 @@ class EvolutionPlot(BasePlot):
         "lines_1", "lines_2", "lines_3", "lines_4", "lines_5",
         #  ^ y=M      ^ y=N      ^ y=n      ^ dy/dt    ^ -dy/dt
         "slider", "i_t", "t",
-        "kernel", "N", "f", "m2f", "dm2fdt"
+        "cfg", "mg", "N", "f", "m2f", "dm2fdt"
     ]
 
     def __init__(
         self, 
-        kernel: Kernel,
+        cfg: Config,
+        mg: DiscreteMassAxis,
         N: np.ndarray,
         f: np.ndarray,
         m2f: np.ndarray,
@@ -33,11 +34,12 @@ class EvolutionPlot(BasePlot):
             *args, **kwargs
         )
 
-        self.kernel = kernel
+        self.cfg = cfg
+        self.mg = mg
         self.N, self.f, self.m2f, self.dm2fdt = N, f, m2f, dm2fdt
         self.i_t = 0
 
-        tg = DiscreteTimeAxis(kernel.cfg)
+        tg = DiscreteTimeAxis(cfg)
         tc = tg.bin_centers
         self.t = tc
 
@@ -59,7 +61,7 @@ class EvolutionPlot(BasePlot):
     def draw(self):
         self.fig.canvas.draw_idle()
 
-        mg = self.kernel.mg
+        mg = self.mg
         mb = mg.bin_boundaries
         mc = mg.bin_centers
         ac = mg.particle_radii

@@ -114,7 +114,6 @@ def integrate(
 def plot_evolution(
     cfg: Config,
     mg: DiscreteMassAxis,
-    kernel: Kernel,
     scale: str,
     t: np.ndarray,
     N: np.ndarray,
@@ -123,7 +122,7 @@ def plot_evolution(
     dm2fdt: np.ndarray,
 ):
     # TODO Fix y-limits?
-    EvolutionPlot(kernel, N, f, m2f, dm2fdt).render()
+    EvolutionPlot(cfg, mg, N, f, m2f, dm2fdt).render()
 
 
 def plot_surface(
