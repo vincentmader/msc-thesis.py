@@ -43,28 +43,31 @@ class Solver():
     S_ij_vs_t:              np.ndarray
     dK_ij_vs_t:             np.ndarray
 
+    W_ij:                   np.ndarray
     kernels:                list[Kernel]    = field(default_factory=list)
     iteration_idx:          int             = 0
 
     def __init__(self, cfg: Config):
 
-        self.cfg        = cfg
-        self.disk       = Disk(cfg)
-        self.region     = DiskRegion(cfg, self.disk)
-        self.rg         = DiscreteRadialAxis(cfg)
-        self.mg         = DiscreteMassAxis(cfg)
-        self.tg         = DiscreteTimeAxis(cfg)
+        self.cfg            = cfg
+        self.disk           = Disk(cfg)
+        self.region         = DiskRegion(cfg, self.disk)
+        self.rg             = DiscreteRadialAxis(cfg)
+        self.mg             = DiscreteMassAxis(cfg)
+        self.tg             = DiscreteTimeAxis(cfg)
 
-        self.n_k_vs_t   = np.zeros(shape=(self.tg.N, self.mg.N))
-        self.N_k_vs_t   = np.zeros(shape=(self.tg.N, self.mg.N))
-        self.M_k_vs_t   = np.zeros(shape=(self.tg.N, self.mg.N))
-        self.dMdt_vs_t  = np.zeros(shape=(self.tg.N, self.mg.N))
+        self.n_k_vs_t       = np.zeros(shape=(self.tg.N, self.mg.N))
+        self.N_k_vs_t       = np.zeros(shape=(self.tg.N, self.mg.N))
+        self.M_k_vs_t       = np.zeros(shape=(self.tg.N, self.mg.N))
+        self.dMdt_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N))
 
-        self.P_ij_vs_t  = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
-        self.S_ij_vs_t  = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
-        self.dK_ij_vs_t = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
+        self.P_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
+        self.S_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
+        self.dK_ij_vs_t     = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
 
-        self.kernels    = [Kernel(cfg)]
+        self.kernels        = [Kernel(cfg)]
+        self.W_ij           = weights(self.mg, self.kernels[0])
+        self.N_k_vs_t[0, :] = mass_distribution.dirac_delta(cfg) * self.mg.bin_widths
 
     def run(self):
 
@@ -72,23 +75,10 @@ class Solver():
         mc,  tc     = self.mg.bin_centers,  self.tg.bin_centers
         dm          = self.mg.bin_widths
 
-        self.N_k_vs_t[0, :] = dm * mass_distribution.dirac_delta(cfg)
-
-        W_ij = np.sum([
-            mc[k] * np.abs(self.kernels[0].K[k]) for k in range(N_m)
-        ])
-
         s = np.zeros((N_m))
         rmat = np.zeros((N_m, N_m))
         for i_t in tqdm(range(1, N_t)):
             self.iteration_idx = i_t
-
-            if self.cfg.enable_collision_sampling:
-                sampled = SampledKernel(cfg, self.N_k_vs_t[i_t-1], W_ij=W_ij)
-                self.kernels.append(sampled)
-                self.P_ij_vs_t[i_t] = sampled.P_ij
-                self.S_ij_vs_t[i_t] = sampled.N_ij  # TODO Rename.
-
             self.step(rmat, s)
 
         n    = self.N_k_vs_t * dm
@@ -101,12 +91,16 @@ class Solver():
         self.dMdt_vs_t[1:]  = dMdt
 
     def step(self, rmat, s):
+
         i_t = self.iteration_idx
         tc = self.tg.bin_centers
         dt = (tc[i_t] - tc[i_t - 1]) / N_subst
-        K = self.kernels[-1].K
 
         N_dust = self.N_k_vs_t[i_t - 1]
+
+        if self.cfg.enable_collision_sampling:
+            self.sample()
+        K = self.kernels[-1].K
 
         for _ in range(N_subst):
             assert self.cfg.solver_variant in SOLVERS, f"{self.cfg.solver_variant} = "
@@ -129,6 +123,20 @@ class Solver():
 
         N_dust = fix_negative_densities(self.mg.bin_centers, N_dust)
         self.N_k_vs_t[i_t, :] = N_dust.copy()
+
+    def sample(self):
+
+        i_t = self.iteration_idx
+        sampled = SampledKernel(cfg, self.N_k_vs_t[i_t-1], W_ij=self.W_ij)
+        self.kernels.append(sampled)
+        self.P_ij_vs_t[i_t] = sampled.P_ij
+        self.S_ij_vs_t[i_t] = sampled.N_ij  # TODO Rename.
+
+
+def weights(mg: DiscreteMassAxis, kernel: Kernel):
+    return np.sum([
+        mg.bin_centers[k] * np.abs(kernel.K[k]) for k in range(mg.N)
+    ])
 
 
 if __name__ == "__main__":
