@@ -68,9 +68,7 @@ class Solver:
             if self.cfg.enable_collision_sampling:
                 kernel = SampledKernel(self.cfg, N_dust, W_ij=W_ij)
                 self.kernels.append(kernel)
-                K = kernel.K
-                # K = [(K_k + K_k.T)/2 for K_k in K]
-                # TODO Find out: Do I HAVE to be symmetrize?
+                K = kernel.K  # NOTE Do not symmetrize.
 
                 if False and itime % 20 == 0:
                     plot_kernel_gain_loss(self.cfg, mg, kernel, "log", (1e-20, 1.))
