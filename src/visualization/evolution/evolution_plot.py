@@ -4,7 +4,7 @@ import numpy as np
 
 from models.axis import DiscreteTimeAxis
 from models.kernel import Kernel
-from functions.utils.functions import format_seconds_as_years
+from functions.utils.dates import format_seconds_as_years
 from visualization.base import BasePlot
 
 
