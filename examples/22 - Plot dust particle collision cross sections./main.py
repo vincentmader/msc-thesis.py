@@ -5,7 +5,7 @@ try:
     from models.axis import DiscreteMassAxis
     from functions.dust.collision import collision_cross_section
     from config import Config, PATH_TO_FIGURES
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from models.plotting.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 

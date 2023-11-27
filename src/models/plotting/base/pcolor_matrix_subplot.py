@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
 
-from visualization.base import GridspecSubplot
+from models.plotting.base import GridspecSubplot
 
 VMIN, VMAX = 1e-20, 1e-7
 

@@ -4,7 +4,7 @@ from config import Config
 from models.axis import DiscreteMassAxis
 from models.kernel import Kernel
 from functions.kernel.mass_conservation import test_mass_conservation
-from visualization.base import GridspecPlot
+from models.plotting.base import GridspecPlot
 from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 
 

@@ -5,7 +5,7 @@ import numpy as np
 
 from models.axis import DiscreteMassAxis, AxisLabelVariant
 from functions.dust import particle_mass_from_radius
-from visualization.base import PcolorMatrixSubplot
+from models.plotting.base import PcolorMatrixSubplot
 
 
 class KernelSubplot(PcolorMatrixSubplot):

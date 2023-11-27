@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 from constants import SECONDS_PER_YEAR
-from visualization.base import BasePlot
+from models.plotting.base import BasePlot
 
 
 class MassConservationPlot(BasePlot):

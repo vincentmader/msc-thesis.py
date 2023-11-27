@@ -6,7 +6,7 @@ try:
     from functions.dust.collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from models.disk import Disk, DiskRegion
-    from visualization.base import GridspecPlot
+    from models.plotting.base import GridspecPlot
     from visualization.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e

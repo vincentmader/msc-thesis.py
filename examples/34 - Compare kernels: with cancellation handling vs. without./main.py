@@ -6,7 +6,7 @@ try:
     from config import Config, PATH_TO_FIGURES
     from models.axis import AxisLabelVariant
     from models.kernel import Kernel
-    from visualization.base import GridspecPlot
+    from models.plotting.base import GridspecPlot
     from visualization.kernel import KernelMassConservationSubplot, KernelSubplot
 except ModuleNotFoundError as e:
     raise e

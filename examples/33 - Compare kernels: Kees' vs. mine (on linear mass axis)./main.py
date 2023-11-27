@@ -8,7 +8,7 @@ try:
     from config import Config
     from models.axis import DiscreteMassAxis, AxisLabelVariant
     from models.kernel import Kernel
-    from visualization.base import GridspecPlot
+    from models.plotting.base import GridspecPlot
     from visualization.kernel import KernelSubplot, KernelMassConservationSubplot
 except ModuleNotFoundError as e:
     raise e

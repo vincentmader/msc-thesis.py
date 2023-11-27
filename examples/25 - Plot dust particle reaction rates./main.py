@@ -9,7 +9,7 @@ try:
     from functions.dust.relative_velocity import relative_velocity
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from models.disk import Disk, DiskRegion
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from models.plotting.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 

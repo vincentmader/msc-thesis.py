@@ -12,7 +12,7 @@ try:
     from functions.dust.relative_velocity import dv_radial_drift
     from functions.dust.relative_velocity import dv_turbulence
     from functions.dust.relative_velocity import relative_velocity
-    from visualization.base import GridspecPlot, PcolorMatrixSubplot
+    from models.plotting.base import GridspecPlot, PcolorMatrixSubplot
 except ModuleNotFoundError as e:
     raise e
 

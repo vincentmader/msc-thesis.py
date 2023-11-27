@@ -13,7 +13,7 @@ try:
     from models.axis import AxisLabelVariant
     from models.kernel import Kernel
     from functions.utils.dates import format_seconds_as_years
-    from visualization.base import BasePlot
+    from models.plotting.base import BasePlot
     from visualization.preset import p1
 except ModuleNotFoundError as e:
     raise e
