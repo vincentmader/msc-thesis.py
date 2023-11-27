@@ -13,6 +13,7 @@ ALMOST_BUT_NOT_QUITE_ZERO = 1e-100  # TODO Choose this value.
 
 @dataclass
 class SampledKernel(Kernel):
+
     P_ij: np.ndarray  #  = Probability of randomly selecting a collision pair $(i,j)$.
     N_ij: np.ndarray  #  = Nr. of times that the collision $(i,j)$ was selected.
 

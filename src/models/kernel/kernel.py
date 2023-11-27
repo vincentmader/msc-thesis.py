@@ -15,13 +15,23 @@ SHOULD_ASSERT_SYMMETRIC_IJS = True
 
 
 class Kernel():
-    __slots__ = [
-        "cfg",    "mg", 
-        "K",      "K_coag",      "K_frag", 
-        "K_gain", "K_coag_gain", "K_frag_gain", 
-        "K_loss", "K_coag_loss", "K_frag_loss",
-                  "R_coag",      "R_frag",
-    ]
+
+    cfg:                Config
+    mg:                 DiscreteMassAxis
+
+    K:                  np.ndarray   # <- total kernel
+    K_gain:             np.ndarray   # <- total kernel gain
+    K_loss:             np.ndarray   # <- total kernel loss
+
+    R_coag:             np.ndarray   # <- coagulation rate
+    K_coag:             np.ndarray   # <- coagulation kernel
+    K_coag_gain:        np.ndarray   # <- coagulation kernel gain
+    K_coag_loss:        np.ndarray   # <- coagulation kernel loss
+
+    R_frag:             np.ndarray   # <- fragmentation rate
+    K_frag:             np.ndarray   # <- fragmentation kernel
+    K_frag_gain:        np.ndarray   # <- fragmentation kernel gain
+    K_frag_loss:        np.ndarray   # <- fragmentation kernel loss
 
     def __init__(self, 
         cfg:    Config, 
@@ -31,9 +41,9 @@ class Kernel():
     ):
         self.cfg = cfg
 
-        # Define discrete axes...
-        rg = DiscreteRadialAxis(cfg) # ...for distance from central star,
-        mg = DiscreteMassAxis(cfg)   # ...for particle mass,
+        # Define discrete axes for...
+        rg = DiscreteRadialAxis(cfg) # ...distance from central star,
+        mg = DiscreteMassAxis(cfg)   # ...particle mass,
         mc = mg.bin_centers
         self.mg = mg
 
@@ -98,8 +108,7 @@ class Kernel():
         self.K_coag = self.K_coag_gain + self.K_coag_loss
         self.K_frag = self.K_frag_gain + self.K_frag_loss
         # Define total kernel.
-        self.K += self.K_coag
-        self.K += self.K_frag
+        self.K = self.K_coag + self.K_frag
 
     def _K_coag(self, ijs: list[tuple[int, int]]):
         mg = self.mg
