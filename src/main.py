@@ -61,11 +61,11 @@ class Solver():
         self.mg             = DiscreteMassAxis(cfg)
         self.tg             = DiscreteTimeAxis(cfg)
 
+        # Initialize result matrices with zeroes.
         self.n_k_vs_t       = np.zeros(shape=(self.tg.N, self.mg.N))
         self.N_k_vs_t       = np.zeros(shape=(self.tg.N, self.mg.N))
         self.M_k_vs_t       = np.zeros(shape=(self.tg.N, self.mg.N))
         self.dMdt_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N))
-
         self.P_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
         self.S_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
         self.dK_ij_vs_t     = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
@@ -73,31 +73,35 @@ class Solver():
         # Define PPD, & radial position of interest in it.
         disk        = Disk(cfg, self.rg, self.mg) 
         disk_region = DiskRegion(cfg, disk)
+
         # Define relative dust particle velocities, & collision rates.
         dv          = relative_velocity(cfg, disk, disk_region)
         R_coll      = collision_rate(cfg, disk, disk_region)
-        # Define probabilities for coagulation & fragmentation events.
+
+        # Define rate of coag. & frag. events.
         P_coag, P_frag = collision_outcome_probabilities(cfg, dv)
-        # Define rate of coag./frag. events.
         self.R_coag = R_coll * P_coag
         self.R_frag = R_coll * P_frag
 
+        # Define initial state, initial kernel, & sampling weights.
+        self.N_k_vs_t[0, :] = mass_distribution.dirac_delta(cfg) * self.mg.bin_widths
         self.kernels        = [Kernel(cfg, self.R_coag, self.R_frag)]
         self.W_ij           = weights(self.mg, self.kernels[0])
-        self.N_k_vs_t[0, :] = mass_distribution.dirac_delta(cfg) * self.mg.bin_widths
 
     def run(self):
 
-        N_m, N_t    = self.mg.N,            self.tg.N
-        mc,  tc     = self.mg.bin_centers,  self.tg.bin_centers
-        dm          = self.mg.bin_widths
+        # Read information about discrete axes from `self.`
+        N_m, mc, dm = self.mg.N, self.mg.bin_centers, self.mg.bin_widths
+        N_t, tc     = self.tg.N, self.tg.bin_centers
 
+        # Integrate the Smoluchowski equation.
         s = np.zeros((N_m))
         rmat = np.zeros((N_m, N_m))
         for i_t in tqdm(range(1, N_t)):
             self.iteration_idx = i_t
             self.step(rmat, s)
 
+        # Translate units and save results to `self`.
         n    = self.N_k_vs_t * dm
         M    = self.N_k_vs_t * mc
         dMdt = np.array([
@@ -109,35 +113,43 @@ class Solver():
 
     def step(self, rmat, s):
 
+        # Read information about discretized time axis from `self`.
         i_t = self.iteration_idx
         tc = self.tg.bin_centers
         dt = (tc[i_t] - tc[i_t - 1]) / N_subst
-
+        
+        # Read current particle density from `self`.
         N_dust = self.N_k_vs_t[i_t - 1]
 
+        # Read kernel from `self` (sample collisions, if enabled).
         if self.cfg.enable_collision_sampling:
             self.sample()
         K = self.kernels[-1].K
 
+        # Loop over substeps.
         for _ in range(N_subst):
             assert self.cfg.solver_variant in SOLVERS, f"{self.cfg.solver_variant} = "
 
+            # Apply explicit Euler scheme.
             if self.cfg.solver_variant == "explicit_euler":
                 N_i = N_dust[None, :, None]
                 N_j = N_dust[None, None, :]
                 dNdt = (K[:, :, :] * N_i * N_j).sum(axis=2).sum(axis=1)
                 N_dust += dNdt * dt
 
+            # Apply implicit Euler scheme.
             if self.cfg.solver_variant == "implicit_euler":
                 N_dust = solve_react_0d_equation(N_dust, s, 
                     rmat=rmat, kmat=K, dt=dt, niter=N_iter, method="backwardeuler"
                 )
 
+            # Apply implicit Radau scheme.
             if self.cfg.solver_variant == "implicit_radau":
                 N_dust = solve_react_0d_equation(N_dust, s, 
                     rmat=rmat, kmat=K, dt=dt, niter=N_iter, method="radau"
                 )
 
+        # Fix sub-zero densities, and save results to state-vector in `self`.
         N_dust = fix_negative_densities(self.mg.bin_centers, N_dust)
         self.N_k_vs_t[i_t, :] = N_dust.copy()
 
