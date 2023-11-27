@@ -15,6 +15,7 @@ cfg = Config(
     enable_coagulation=True,
     enable_fragmentation=True,
     initial_mass_bin=0,
+    # mass_resolution=100,
     # enable_physical_collisions=False,
 )
 
@@ -33,7 +34,8 @@ def plot_total_kernel():
 
 def plot_kernel_gain_loss():
     # Plot K_gain & K_loss  with log. colorscale.
-    p1.plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant)
+    p1.plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant, symmetrized=False)
+    p1.plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant, symmetrized=True)
 
 def plot_kernel_error():
     p1.plot_kernel_error(cfg, mg, kernel, R, scale, z_limits, axis_label_variant=axis_label_variant)
