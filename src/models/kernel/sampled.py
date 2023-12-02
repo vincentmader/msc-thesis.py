@@ -30,17 +30,17 @@ class SampledKernel(Kernel):
         # Define mass axis.
         mg = DiscreteMassAxis(cfg)
         mc = mg.bin_centers
-        m_i, m_j = mc[:, None], mc[None, :]
-
-        # Define nr. of particles per bin (& unit volume).
-        N_i, N_j =  N[:, None],  N[None, :]
-        assert N.all() >= 0
 
         # Define weights, if not received as argument.
         if W_ij is None:  
             K = Kernel(cfg, R_coag=R_coag, R_frag=R_frag).K
             W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # W_ij = np.sum([mc[k] * K[k]**2 for k in range(mg.N)])**.5  # TODO Use lin. or quad. addition?
+
+        # Define nr. of particles per bin (& unit volume).
+        m_i, m_j =  mc[:, None], mc[None, :]
+        N_i, N_j =  N[:, None],   N[None, :]
+        assert N.all() >= 0
 
         # Define sampling probability distribution.
         P_ij = W_ij * N_i * N_j * m_i * m_j
