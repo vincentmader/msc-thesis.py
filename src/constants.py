@@ -2,7 +2,7 @@
 G = 6.674e-11        # m^3 / (kg * s^2)
 
 # Boltzmann constant
-k_B = 1.38e-23       # [J/K]
+k_B = 1.38e-23       # J/K
 
 # Stefan-Boltzmann constant
 sigma_SB = 5.670e-8  # W / (m^2 K^4)
@@ -22,6 +22,5 @@ m_p = 1.673e-27      # kg
 # Collision Cross Section of Molecular Hydrogen
 sigma_H2 = 2e-19     # m^2
 
-# Nr. of Earth days per Earth year.
 DAYS_PER_YEAR = 365.2425
 SECONDS_PER_YEAR = DAYS_PER_YEAR * 24 * 60 * 60
