@@ -23,7 +23,7 @@ N_iter  = 4  # Nr of iterations for implicit time step
 
 
 @dataclass
-class Solver:
+class SolverV1:
     cfg:            Config
     time_axis:      DiscreteTimeAxis
     mass_axis:      DiscreteMassAxis

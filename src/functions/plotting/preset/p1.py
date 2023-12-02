@@ -95,7 +95,7 @@ def integrate(
     cfg: Config,
     kernel: Kernel,
 ):
-    from models.solver import Solver
+    from models.solver import SolverV1
 
     tg = DiscreteTimeAxis(cfg)
     tc = tg.bin_centers
@@ -104,7 +104,7 @@ def integrate(
     K = kernel.K
 
     n0 = mass_distribution.dirac_delta(cfg)
-    solver = Solver(cfg)
+    solver = SolverV1(cfg)
     N, f, m2f, dm2fdt = solver.run(n0, K)
     M = np.array([disk_mass_from_distribution(n, mc, dm) for n in f])
 

@@ -6,7 +6,7 @@ try:
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from models.kernel import Kernel
     from models.plotting.evolution import EvolutionPlot, MassConservationPlot
-    from models.solver import Solver
+    from models.solver import SolverV1
     from functions.disk import mass_distribution
     from functions.utils.physics import disk_mass_from_distribution
     from models.plotting.v1.slider_plot_2 import InteractiveSliderLinePlot
@@ -44,7 +44,7 @@ K = kernel.K
 
 # Define temporal domain & solver.
 tg = DiscreteTimeAxis(cfg)
-solver = Solver(cfg)
+solver = SolverV1(cfg)
 
 
 def plot_1(m, m2f, dm2f):

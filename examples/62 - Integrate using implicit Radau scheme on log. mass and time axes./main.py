@@ -5,7 +5,7 @@ try:
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis, DiscreteTimeAxis
     from models.kernel import Kernel
     from models.plotting.evolution import EvolutionPlot, MassConservationPlot
-    from models.solver import Solver
+    from models.solver import SolverV1
     from functions.disk import mass_distribution
     from functions.utils.physics import disk_mass_from_distribution
 except ModuleNotFoundError as e:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     n0 = mass_distribution.dirac_delta(cfg)
     # n0 = mass_distribution.mrn_distribution(cfg)
 
-    solver = Solver(cfg)
+    solver = SolverV1(cfg)
 
     # Run the solver.
     N, f, m2f, dm2f = solver.run(n0, K)
