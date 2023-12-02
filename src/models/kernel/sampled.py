@@ -16,6 +16,7 @@ class SampledKernel(Kernel):
 
     P_ij: np.ndarray  #  = Probability of randomly selecting a collision pair $(i,j)$.
     N_ij: np.ndarray  #  = Nr. of times that the collision $(i,j)$ was selected.
+    W_ij: np.ndarray
 
     def __init__(
         self, 
@@ -32,10 +33,12 @@ class SampledKernel(Kernel):
         mc = mg.bin_centers
 
         # Define weights, if not received as argument.
-        if W_ij is None:  
+        if W_ij is None:
             K = Kernel(cfg, R_coag=R_coag, R_frag=R_frag).K
-            W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
+            self.W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
             # W_ij = np.sum([mc[k] * K[k]**2 for k in range(mg.N)])**.5  # TODO Use lin. or quad. addition?
+        else:
+            self.W_ij = W_ij
 
         # Define nr. of particles per bin (& unit volume).
         m_i, m_j =  mc[:, None], mc[None, :]
@@ -43,7 +46,7 @@ class SampledKernel(Kernel):
         assert N.all() >= 0
 
         # Define sampling probability distribution.
-        P_ij = W_ij * N_i * N_j * m_i * m_j
+        P_ij = self.W_ij * N_i * N_j * m_i * m_j
         # P_ij = W_ij * N_i**2 * N_j**2 * m_i * m_j
 
         # Exclude the lower-right (here "upper"?) matrix half from sampling.
