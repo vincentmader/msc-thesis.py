@@ -14,17 +14,20 @@ ALMOST_BUT_NOT_QUITE_ZERO = 1e-100  # TODO Choose this value.
 @dataclass
 class SampledKernel(Kernel):
 
-    P_ij: np.ndarray  #  = Probability of randomly selecting a collision pair $(i,j)$.
-    N_ij: np.ndarray  #  = Nr. of times that the collision $(i,j)$ was selected.
+    P_ij: np.ndarray  # = probability of randomly selecting a collision pair $(i,j)$.
+    N_ij: np.ndarray  # = nr. of times that the collision $(i,j)$ was selected.
     W_ij: np.ndarray
+    N_sample: int     # = nr. of kernel entries to sample
+                      #   NOTE: This is NOT to be mistaken for `N_ij`.
 
     def __init__(
         self, 
-        cfg:    Config, 
-        N:      np.ndarray, 
-        R_coag: Optional[np.ndarray] = None,
-        R_frag: Optional[np.ndarray] = None,
-        W_ij:   Optional[np.ndarray] = None,
+        cfg:        Config, 
+        N:          np.ndarray, 
+        R_coag:     Optional[np.ndarray] = None,
+        R_frag:     Optional[np.ndarray] = None,
+        W_ij:       Optional[np.ndarray] = None,
+        N_sample:   Optional[int]        = None,
         *args, 
         **kwargs
     ):
@@ -61,6 +64,7 @@ class SampledKernel(Kernel):
 
         self.P_ij = P_ij
         self.N_ij = np.zeros(shape=[N.shape[0]]*2)
+        self.N_sample = cfg.nr_of_samples if N_sample is None else N_sample
 
         ijs = self._sample_ijs(cfg)
         super().__init__(cfg, R_coag, R_frag, ijs=ijs, *args, **kwargs)
@@ -75,17 +79,17 @@ class SampledKernel(Kernel):
         P_ij = P_ij.reshape(N_i * N_j)
 
         # If sampling over all collisions, make sure that probability is > 0 everywhere.
-        if cfg.nr_of_samples == cfg.mass_resolution**2:
+        if self.N_sample == cfg.mass_resolution**2:
             assert (P_ij != 0).all()
-            N_sample = cfg.nr_of_samples
+            self.N_sample = cfg.nr_of_samples
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
         else:
             N_relevant = np.sum(P_ij > 1e-16)
-            N_sample = min(cfg.nr_of_samples, N_relevant)
+            self.N_sample = min(cfg.nr_of_samples, N_relevant)
 
         assert P_ij.all() > 0
-        sampled = np.random.choice(indices, p=P_ij, size=N_sample, replace=False)
+        sampled = np.random.choice(indices, p=P_ij, size=self.N_sample, replace=False)
     
         ijs = []
         for s in sampled:
