@@ -86,7 +86,7 @@ class SampledKernel(Kernel):
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
         else:
             N_relevant = np.sum(P_ij > 1e-16)
-            self.N_sample = min(cfg.nr_of_samples, N_relevant)
+            self.N_sample = min(self.N_sample, N_relevant)
 
         assert P_ij.all() > 0
         sampled = np.random.choice(indices, p=P_ij, size=self.N_sample, replace=False)
