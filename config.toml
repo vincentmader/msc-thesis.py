@@ -40,7 +40,7 @@
     enable_coagulation              = true
     enable_fragmentation            = true
     enable_cancellation_handling    = true
-    enable_collision_sampling       = false
+    enable_collision_sampling       = true
     nr_of_samples                   = 200
 
 [radial_discretization]
