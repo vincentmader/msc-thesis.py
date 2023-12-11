@@ -85,7 +85,7 @@ class SolverV2():
 
     def run(self):
 
-        # Read information about discrete axes from `self.`
+        # Read information about discrete axes from `self`.
         N_m, mc, dm = self.mg.N, self.mg.bin_centers, self.mg.bin_widths
         N_t, tc     = self.tg.N, self.tg.bin_centers
 
