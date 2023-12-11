@@ -95,20 +95,23 @@ def integrate(
     cfg: Config,
     kernel: Kernel,
 ):
-    from models.solver import SolverV1
-
     tg = DiscreteTimeAxis(cfg)
     tc = tg.bin_centers
     mc = kernel.mg.bin_centers
     dm = kernel.mg.bin_widths
-    K = kernel.K
 
-    n0 = mass_distribution.dirac_delta(cfg)
-    solver = SolverV1(cfg)
-    N, f, m2f, dm2fdt = solver.run(n0, K)
-    M = np.array([disk_mass_from_distribution(n, mc, dm) for n in f])
+    from models.solver import SolverV2
+    solver = SolverV2(cfg)
+    solver.run()
 
-    return tc, f, N, m2f, dm2fdt, M
+    n_k_vs_t  = solver.n_k_vs_t
+    N_k_vs_t  = solver.N_k_vs_t
+    M_k_vs_t  = solver.M_k_vs_t
+    dMdt_vs_t = solver.dMdt_vs_t
+
+    M = np.array([disk_mass_from_distribution(n, mc, dm) for n in n_k_vs_t])
+
+    return tc, n_k_vs_t, N_k_vs_t, M_k_vs_t, dMdt_vs_t, M
 
 
 def plot_evolution(
