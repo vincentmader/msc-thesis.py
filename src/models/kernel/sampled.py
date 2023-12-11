@@ -38,7 +38,7 @@ class SampledKernel(Kernel):
         # Define weights, if not received as argument.
         if W_ij is None:
             K = Kernel(cfg, R_coag=R_coag, R_frag=R_frag).K
-            self.W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])  # TODO `sum` instead of `np.sum`?
+            self.W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)], axis=0)
             # W_ij = np.sum([mc[k] * K[k]**2 for k in range(mg.N)])**.5  # TODO Use lin. or quad. addition?
         else:
             self.W_ij = W_ij
