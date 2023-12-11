@@ -38,7 +38,7 @@ class SampledKernel(Kernel):
         # Define weights, if not received as argument.
         if W_ij is None:
             K = Kernel(cfg, R_coag=R_coag, R_frag=R_frag).K
-            self.W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])
+            self.W_ij = np.sum([mc[k] * np.abs(K[k]) for k in range(mg.N)])  # TODO `sum` instead of `np.sum`?
             # W_ij = np.sum([mc[k] * K[k]**2 for k in range(mg.N)])**.5  # TODO Use lin. or quad. addition?
         else:
             self.W_ij = W_ij
@@ -69,6 +69,11 @@ class SampledKernel(Kernel):
         ijs = self._sample_ijs(cfg)
         super().__init__(cfg, R_coag, R_frag, ijs=ijs, *args, **kwargs)
 
+        # for k in range(mg.N):
+        #     self.K[k][self.K[k] != 0] /= self.P_ij[self.K[k] != 0]
+
+        # self.display_sampling_probability(mc, P_ij)
+
     def _sample_ijs(self, cfg: Config) -> list[tuple[int, int]]:
         P_ij = self.P_ij
     
@@ -81,7 +86,7 @@ class SampledKernel(Kernel):
         # If sampling over all collisions, make sure that probability is > 0 everywhere.
         if self.N_sample == cfg.mass_resolution**2:
             assert (P_ij != 0).all()
-            self.N_sample = cfg.nr_of_samples
+            self.N_sample = cfg.nr_of_samples  # TODO Is this even needed?
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
         elif cfg.allow_duplicate_sampling:
@@ -90,7 +95,7 @@ class SampledKernel(Kernel):
             N_relevant = np.sum(P_ij > 1e-16)
             self.N_sample = min(self.N_sample, N_relevant)
 
-        assert P_ij.all() > 0
+        assert P_ij.all() > 0  # TODO Get rid of this?
         sampled = np.random.choice(indices, p=P_ij, size=self.N_sample, replace=False)
     
         ijs = []
@@ -100,3 +105,10 @@ class SampledKernel(Kernel):
             ijs.append((i, j))
             self.N_ij[i, j] += 1
         return ijs
+
+    def display_sampling_probability(self, mc, P_ij):
+        import matplotlib.pyplot as plt
+        plt.pcolormesh(mc, mc, P_ij)
+        plt.title("v1")
+        plt.show()
+        plt.close()
