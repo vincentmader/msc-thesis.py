@@ -25,7 +25,7 @@ class Config():
         "enable_coagulation", "enable_fragmentation", "enable_physical_gas_density",
         "enable_physical_collisions", "enable_cancellation_handling", "enable_collision_sampling",
         "relative_velocity_components", "fragmentation_variant", "fragmentation_velocity",
-        "collision_outcome_variant", "solver_variant", "mpl_dark_mode", 
+        "collision_outcome_variant", "solver_variant", "mpl_dark_mode", "allow_duplicate_sampling",
         "dust_particle_density", "viscosity_alpha", "nr_of_samples", "disk_mass",
         "initialization_variant", "initial_mass_bin",
     ]
@@ -67,6 +67,7 @@ class Config():
         nr_of_samples:                  Optional[int]       = None,
         initialization_variant:         Optional[str]       = None,
         initial_mass_bin:               Optional[int]       = None,
+        allow_duplicate_sampling:       Optional[bool]      = None,
     ):
         cfg = toml.load(PATH_TO_CFG_TOML)
 
@@ -173,6 +174,9 @@ class Config():
         if nr_of_samples is None:
             nr_of_samples = cfg_i["nr_of_samples"]
             assert nr_of_samples is not None
+        if allow_duplicate_sampling is None:
+            allow_duplicate_sampling = cfg_i["allow_duplicate_sampling"]
+            assert allow_duplicate_sampling is not None
 
         cfg_i = cfg["solver"]
         if solver_variant is None:
@@ -192,6 +196,7 @@ class Config():
             initial_mass_bin = cfg_i["initial_mass_bin"]
             assert initial_mass_bin is not None
 
+        self.allow_duplicate_sampling     = allow_duplicate_sampling
         self.collision_outcome_variant    = collision_outcome_variant
         self.disk_mass                    = disk_mass
         self.disk_mass_ratio              = disk_mass_ratio

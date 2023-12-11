@@ -42,6 +42,7 @@
     enable_cancellation_handling    = true
     enable_collision_sampling       = true
     nr_of_samples                   = 200
+    allow_duplicate_sampling        = false
 
 [radial_discretization]
     radial_min_value                = 1e-2      # given in AUs

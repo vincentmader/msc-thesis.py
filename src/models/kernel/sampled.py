@@ -84,6 +84,8 @@ class SampledKernel(Kernel):
             self.N_sample = cfg.nr_of_samples
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
+        elif cfg.allow_duplicate_sampling:
+            pass
         else:
             N_relevant = np.sum(P_ij > 1e-16)
             self.N_sample = min(self.N_sample, N_relevant)
