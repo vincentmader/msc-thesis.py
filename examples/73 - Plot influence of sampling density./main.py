@@ -1,3 +1,5 @@
+# TODO Fix definition of N_sample (top left + diagonal, not just "half")
+
 from dataclasses import dataclass
 import os, sys
 import matplotlib as mpl
