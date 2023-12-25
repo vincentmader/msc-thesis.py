@@ -43,7 +43,8 @@ def plot_2():
     plt.title("midplane temperature $T_{mid}$")
     plt.ylabel("$T_{mid}$ [K]")
     plt.xlabel("distance from star $r$ [AU]")
-    label = r"$T_{mid}=\frac{f}{2}\cdot L_{star}\cdot(4\pi\cdot r^2\cdot\sigma_{SB})^{-1/4}$"
+    label= "$T_{mid}$"
+    # label = r"$T_{mid}=(\frac{f}{2}\cdot L_{star}\cdot4\pi\cdot r^2\cdot\sigma_{SB})^{-1/4}$"
     plt.loglog(rc / AU, T_mid, label=label)
     plt.legend()
 
