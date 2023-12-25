@@ -25,7 +25,7 @@ if cfg.mpl_dark_mode:
 
 
 def assure_existence_of_figure_directory():
-    path_to_figures = Path(PATH_TO_FIGURES, "02")
+    path_to_figures = Path(PATH_TO_FIGURES, "12")
     os.makedirs(path_to_figures, exist_ok=True)
 
 
@@ -97,7 +97,7 @@ def create_figure(plotter_function):
     plt.xlim(rc[0] / AU, rc[-1] / AU)
     plt.grid()
 
-    path = os.path.join(PATH_TO_FIGURES, "02", f"{title}.pdf")
+    path = os.path.join(PATH_TO_FIGURES, "12", f"{title}.pdf")
     plt.savefig(path)
     plt.show()
     plt.close()
