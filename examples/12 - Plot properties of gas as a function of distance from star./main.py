@@ -5,6 +5,7 @@ try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config, PATH_TO_DARKMODE, PATH_TO_FIGURES
     from constants import AU
+    from functions.utils import physics
     from models.disk import Disk
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
 except ModuleNotFoundError as e:
@@ -18,8 +19,9 @@ rb = rg.bin_boundaries
 disk = Disk(cfg, rg, mg)
 Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass
+distance_to_star = cfg.distance_to_star
 
-FIGSIZE = (8, 4)
+FIGSIZE = (8, 3)
 if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
@@ -40,13 +42,22 @@ def plot_1():
 
 def plot_2():
     T_mid = disk.midplane_temperature
-    plt.title("midplane temperature $T_{mid}$")
-    plt.ylabel("$T_{mid}$ [K]")
+    plt.ylabel("midplane temperature $T_{mid}(r)$ [K]")
     plt.xlabel("distance from star $r$ [AU]")
-    label= "$T_{mid}$"
+
+    label= "midplane temperature"
     # label = r"$T_{mid}=(\frac{f}{2}\cdot L_{star}\cdot4\pi\cdot r^2\cdot\sigma_{SB})^{-1/4}$"
-    plt.loglog(rc / AU, T_mid, label=label)
+    plt.semilogx(rc / AU, T_mid, label=label)
+
+    r = distance_to_star
+    L_star = cfg.stellar_luminosity
+    phi_fl = cfg.flaring_angle
+    T_r = physics.midplane_temperature(r, L_star, phi_fl)
+    plt.scatter([r/AU], [T_r], marker="x", color="k", label="position in disk")
+
     plt.legend()
+    plt.grid(True)
+    plt.gca().set_ylim(bottom=0)
 
 
 def plot_3():
@@ -93,9 +104,10 @@ def create_figure(plotter_function):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
+    plt.grid()
     plotter_function()
     plt.xlim(rc[0] / AU, rc[-1] / AU)
-    plt.grid()
+    plt.tight_layout()
 
     path = os.path.join(PATH_TO_FIGURES, "12", f"{title}.pdf")
     plt.savefig(path)
