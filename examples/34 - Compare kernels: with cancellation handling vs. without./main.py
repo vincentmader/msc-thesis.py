@@ -11,9 +11,11 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
+m_max = 1e10
+N_m   = 100
 kwargs = {
-    "mass_max_value": 1e10, 
-    "mass_resolution": 100
+    "mass_max_value": m_max,
+    "mass_resolution": N_m,
 }
 cfg_1 = Config(enable_cancellation_handling=False, **kwargs)
 cfg_2 = Config(enable_cancellation_handling=True, **kwargs)
@@ -95,6 +97,8 @@ def plot_3():
                 enable_coagulation=enable_coagulation,
                 enable_fragmentation=enable_fragmentation,
                 enable_cancellation_handling=enable_cancellation_handling,
+                mass_max_value=m_max,
+                mass_resolution=N_m,
             )
             kernel = Kernel(cfg)
             mg, K = kernel.mg, kernel.K
@@ -110,8 +114,9 @@ def plot_3():
                 KernelMassConservationSubplot(
                     cfg, mg, K, R_coll,
                     title=title,
+                    z_limits=(1e-30, 1e-10),
                 ),
-            ]) .render(save_plot=True, path_to_outfile=path_to_outfile)
+            ]).render(save_plot=True, path_to_outfile=path_to_outfile)
 
 
 if __name__ == "__main__":
