@@ -2,7 +2,7 @@ import os, sys
 try:
     sys.path.append(os.path.join("..", "..", "src"))
     from config import Config
-    from functions.plotting.preset import p1
+    from functions.plotting.preset.p1 import main as p1
 except ModuleNotFoundError as e:
     raise e
 
@@ -20,6 +20,7 @@ cfg = Config(
     enable_cancellation_handling=False,
     enable_physical_collisions=False,
     relative_velocity_components=[],
+    enable_collision_sampling=False,
 )
 
 if __name__ == "__main__":

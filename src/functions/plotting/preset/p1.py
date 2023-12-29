@@ -181,7 +181,7 @@ def main(cfg):
     t, f, N, m2f, dm2fdt, M = integrate(cfg, kernel)
 
     # Plot evolution of mass distribution over time.
-    plot_evolution(cfg, mg, kernel, scale, t, f, N, m2f, dm2fdt)
+    plot_evolution(cfg, mg, scale, t, f, N, m2f, dm2fdt)
     # plot_surface(cfg, mg, kernel, scale, t, f, N, m2f, dm2fdt)
 
     # Plot mass error over time.
