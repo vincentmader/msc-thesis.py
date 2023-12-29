@@ -13,6 +13,7 @@ from functions.plotting.preset.p2 import plot_sampling_count_vs_time
 from functions.plotting.preset.p2 import plot_sampling_probability_vs_time
 from models.kernel import Kernel
 from models.kernel import SampledKernel
+# from models.kernel import SampledKernelV2
 from models.solver import SolverV2
 
 
@@ -78,7 +79,9 @@ if __name__ == "__main__":
 
     # Pre-calculate weights for later definition of sampling probability.
     cfg    = Config(enable_collision_sampling=True)
-    W_ij = SampledKernel(cfg, N_t).W_ij
+    W_ij = SampledKernel(cfg, N_t, N_sample=mg.N**2).W_ij
+    # W_ij = SampledKernelV2(cfg, N_t, N_sample=mg.N**2).W_ij
+    # assert W_ij_1.all() == W_ij.all()
 
     # Using complete kernel, forward the mass distribution one step.
     N_complete = solve_react_0d_equation(N_t.copy(), s, 
@@ -92,7 +95,7 @@ if __name__ == "__main__":
     # sampling_densities = [ 0.2, 0.4, 0.6, 0.8, 1.0 ]
     sampling_densities = [ 0.6, 0.8, 1.0 ]
     for i, sampling_density in enumerate(sampling_densities):
-        N_sample = int((sampling_density * (mg.N**2 - mg.N) / 2 + mg.N))
+        N_sample = int((sampling_density * (mg.N**2 - mg.N) / 2 + mg.N)) # TODO Fix parentheses
         # todo Define sampling density with or without 1/2 ?
 
         dN = []
@@ -101,13 +104,12 @@ if __name__ == "__main__":
             # Build sampled kernel.
             kernel = SampledKernel( cfg, N_t, N_sample=N_sample, W_ij=W_ij )
             K = kernel.K
-            K = [K_k / W_ij for K_k in kernel.K]
 
             # From kernel, calculate change in mass distribution.
             N_tp1 = solve_react_0d_equation(N_t.copy(), s, 
                 rmat=rmat, kmat=K, dt=dt/N_subst, niter=N_iter, method="backwardeuler"
             )
-            assert sum( (N_tp1 - N_t) * mc * dm ) < 1e-16
+            assert np.sum( (N_tp1 - N_t) * mc * dm, axis=0 ) < 1e-16
             dN.append(N_tp1 - N_t)  # Note: `tp1` = `t + 1`.
 
         # Plot.
@@ -122,8 +124,6 @@ if __name__ == "__main__":
             dN_avg = sum([dN for dN in dN[:batch_idx+1]]) / (batch_idx + 1)
             # y = (dN_avg*mc*dm - dN_complete*mc*dm) / (dN_complete*mc*dm)
             y = (dN_avg - dN_complete) / dN_complete
-            # y = dN_avg * mc * dm 
-            print(y)
             plt.semilogy(y,  f"{COLORS[plot_idx]}-", label=r"$\rho_s=$" + f"{sampling_density}, sampled {batch_idx+1} times")
             plt.semilogy(-y, f"{COLORS[plot_idx]}--")
             plot_idx += 1
