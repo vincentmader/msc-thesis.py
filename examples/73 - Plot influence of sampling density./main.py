@@ -30,6 +30,7 @@ COLORS   = [
     "black",
 ]
 sampling_densities = [0.4, 0.6, 0.8, 1.0]
+# sampling_densities = [0.8, 1.0]
 
 cfg = Config(
     enable_collision_sampling=True,
