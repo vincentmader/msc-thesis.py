@@ -20,7 +20,7 @@ disk = Disk(cfg, rg, mg)
 Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass
 
-FIGSIZE = (8, 4)
+FIGSIZE = (10, 4)
 if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 

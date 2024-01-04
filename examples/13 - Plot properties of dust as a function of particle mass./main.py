@@ -11,7 +11,7 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-FIGSIZE = (8, 4)
+FIGSIZE = (10, 4)
 
 cfg = Config()
 mg = DiscreteMassAxis(cfg)

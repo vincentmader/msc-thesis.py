@@ -21,7 +21,7 @@ Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass
 distance_to_star = cfg.distance_to_star
 
-FIGSIZE = (8, 3)
+FIGSIZE = (10, 4)
 if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
@@ -107,7 +107,6 @@ def create_figure(plotter_function):
     plt.grid()
     plotter_function()
     plt.xlim(rc[0] / AU, rc[-1] / AU)
-    plt.tight_layout()
 
     path = os.path.join(PATH_TO_FIGURES, "12", f"{title}.pdf")
     plt.savefig(path)
