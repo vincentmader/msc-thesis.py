@@ -97,7 +97,7 @@ class SolverV2():
             self.step(rmat, s)
 
         # Translate units and save results to `self`.
-        n    = self.N_k_vs_t * dm
+        n    = self.N_k_vs_t / dm
         M    = self.N_k_vs_t * mc
         dMdt = np.array([
             (M[i] - M[i-1]) / (tc[i] - tc[i-1]) for i in range(1, self.tg.N)
