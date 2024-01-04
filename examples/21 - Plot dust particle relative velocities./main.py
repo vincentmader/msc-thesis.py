@@ -39,17 +39,17 @@ dv_tu = dv_turbulence(cfg, disk, disk_region)
 dv = relative_velocity(cfg, disk, disk_region)
 
 plot_setups = [
-    (dv_br, "BR"),
-    (dv_az, "AZ"),
-    (dv_rd, "RD"),
-    (dv_tu, "TU"),
+    (dv_br, "BR",  (0, 1.4e-3)),
+    (dv_az, "AZ",  (0, 25)),
+    (dv_rd, "RD",  (0, 25)),
+    (dv_tu, "TU",  (0, 25)),
     # (dv_ds, "DS"),
-    (dv, "tot"),
+    (dv,    "tot", (0, 40)),
 ]
 
 
 if __name__ == "__main__":
-    for dv, dv_id in plot_setups:
+    for dv, dv_id, z_limits in plot_setups:
         path_to_outfiles = Path(PATH_TO_FIGURES, "21")
         os.makedirs(path_to_outfiles, exist_ok=True)
         filename = f"dv_{dv_id}.pdf"
@@ -63,6 +63,7 @@ if __name__ == "__main__":
             ylabel="particle radius $a_i$ [m]",
             axis_scales=("log", "log", "lin"),
             cmap="Reds",
+            z_limits=z_limits,
         )
     
         p = GridspecPlot([s1])
