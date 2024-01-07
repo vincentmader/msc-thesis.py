@@ -33,7 +33,7 @@ def assure_existence_of_figure_directory():
 
 def plot_1():
     plt.title("gas surface density $\Sigma_g$")
-    plt.ylabel("$\Sigma_g$ [kg/m$^2$]")
+    plt.ylabel(r"$\Sigma_g$ [kg/m$^2$]")
     plt.xlabel("distance from star $r$ [AU]")
     label = r"$\Sigma_g\sim\frac{1}{r}$"
     plt.loglog(rc / AU, Sigma_g, label=label)
@@ -99,6 +99,20 @@ def plot_6():
     plt.legend()
 
 
+def plot_7():
+    from models.disk import DiskRegion
+    disk_region = DiskRegion(cfg, disk)
+    delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
+    v_r = physics.u_g(
+        rc, Sigma_g, delr_Sigma_g_nu_g_sqrt_r
+    )
+
+    plt.title("Radial gas velocity [m/s]")
+    plt.xlabel("distance from star $r$ [AU]")
+    plt.ylabel(r"$u_g$")
+    plt.semilogx(rc / AU, v_r) 
+
+
 def create_figure(plotter_function):
     _, ax = plt.subplots(figsize=FIGSIZE)
     ax.spines['top'].set_visible(False)
@@ -121,6 +135,7 @@ PLOTS = {
     "gas_volume_density":   plot_4,
     "gas_pressure":         plot_5,
     "pressure_gradient":    plot_6,
+    "radial_gas_velocity":  plot_7,
 }
 
 
