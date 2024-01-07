@@ -113,6 +113,16 @@ def plot_7():
     plt.semilogx(rc / AU, v_r) 
 
 
+def plot_8():
+    T_mid = disk.midplane_temperature
+    c_s = physics.sound_speed(rc, T_mid)
+
+    plt.title("Thermal gas velocity [m/s]")
+    plt.xlabel("distance from star $r$ [AU]")
+    plt.ylabel(r"$c_s$")
+    plt.semilogx(rc / AU, c_s) 
+
+
 def create_figure(plotter_function):
     _, ax = plt.subplots(figsize=FIGSIZE)
     ax.spines['top'].set_visible(False)
@@ -136,6 +146,7 @@ PLOTS = {
     "gas_pressure":         plot_5,
     "pressure_gradient":    plot_6,
     "radial_gas_velocity":  plot_7,
+    "thermal_gas_velocity": plot_8,
 }
 
 
