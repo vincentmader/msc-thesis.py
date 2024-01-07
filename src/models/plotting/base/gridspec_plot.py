@@ -1,3 +1,5 @@
+from typing import Optional
+
 from matplotlib.widgets import Slider
 
 from .base_plot import BasePlot
@@ -12,8 +14,9 @@ class GridspecPlot(BasePlot):
         subplots: list[GridspecSubplot],
         add_slider: bool = False,
         slider_label: str = "k",
+        figsize: Optional[tuple[int, int]] = None,
     ):
-        figsize = self._choose_figsize(len(subplots))
+        figsize = self._choose_figsize(len(subplots)) if figsize is None else figsize
         super().__init__(figsize=figsize)
         self.subplots = subplots
         self.slider_label = slider_label
