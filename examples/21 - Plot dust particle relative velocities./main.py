@@ -66,7 +66,9 @@ if __name__ == "__main__":
             z_limits=z_limits,
         )
     
-        p = GridspecPlot([s1])
+        p = GridspecPlot([s1], 
+            # figsize=(10, 12) if dv_id == "tot" else None,
+        )
         p.render(
             save_plot=True,
             path_to_outfile=path_to_outfile,
