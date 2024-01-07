@@ -109,7 +109,7 @@ def plot_7():
 
     plt.title("Radial gas velocity [m/s]")
     plt.xlabel("distance from star $r$ [AU]")
-    plt.ylabel(r"$u_g$")
+    plt.ylabel(r"radial gas velocity $u_g$ [m/s]")
     plt.semilogx(rc / AU, v_r) 
 
 
@@ -119,7 +119,7 @@ def plot_8():
 
     plt.title("Thermal gas velocity [m/s]")
     plt.xlabel("distance from star $r$ [AU]")
-    plt.ylabel(r"$c_s$")
+    plt.ylabel(r"thermal gas velocity $u_{th}$ [m/s]")
     plt.semilogx(rc / AU, c_s) 
 
 
