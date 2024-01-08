@@ -33,9 +33,7 @@ def plot_total_kernel():
     p1.plot_kernel(cfg, mg, kernel, scale, z_limits, axis_label_variant)
 
 def plot_kernel_gain_loss():
-    # Plot K_gain & K_loss  with log. colorscale.
     p1.plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant, symmetrized=False)
-    p1.plot_kernel_gain_loss(cfg, mg, kernel, scale, z_limits, axis_label_variant=axis_label_variant, symmetrized=True)
 
 def plot_kernel_error():
     p1.plot_kernel_error(cfg, mg, kernel, R, scale, z_limits, axis_label_variant=axis_label_variant)
