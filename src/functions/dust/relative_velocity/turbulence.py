@@ -131,22 +131,20 @@ def ormelcuzzi(t1, t2, rho, tgas, vn, tn):
     mu = 2.3
     mp = 1.6726e-24
     kk = 1.3807e-16
-    cs = np.sqrt(kk * tgas / mu / mp)    # Isothermal sound speed
-    mmol = mu * mp                     # Mass of H2 molecule
-    nmol = rho / mmol                # Nr of H2 molecules / cm^3
-    sig = 2e-15                     # Cross section for H2-H2 collisions
-    lmfp = 1. / (nmol * sig)             # Mean free path
-    vth = np.sqrt(8 / np.pi) * cs     # Thermal velocity of gas particles
-    nu = vth * lmfp / 2.0          # Kinematic molecular viscosity
-    ln = vn * tn                     # Large eddy scale
-    Re = ln * vn / nu                  # Reynolds number
-    # Kolmogorov scale (In OC2007 this is called eta)
-    ls = Re**(-3. / 4.) * ln
-    # Kolmogorov time (In OC2007 this is called t_eta)
-    ts = Re**(-0.5) * tn
+    cs = np.sqrt(kk * tgas / mu / mp)   # Isothermal sound speed
+    mmol = mu * mp                      # Mass of H2 molecule
+    nmol = rho / mmol                   # Nr of H2 molecules / cm^3
+    sig = 2e-15                         # Cross section for H2-H2 collisions
+    lmfp = 1. / (nmol * sig)            # Mean free path
+    vth = np.sqrt(8 / np.pi) * cs       # Thermal velocity of gas particles
+    nu = vth * lmfp / 2.0               # Kinematic molecular viscosity
+    ln = vn * tn                        # Large eddy scale
+    Re = ln * vn / nu                   # Reynolds number
+    ls = Re**(-3. / 4.) * ln            # Kolmogorov scale (In OC2007 this is called eta)
+    ts = Re**(-0.5) * tn                # Kolmogorov time  (In OC2007 this is called t_eta)
     vs = ls / ts
-    st1 = max(t1, t2) / tn             # Stokes number of largest particle
-    tsm = st1 * tn                    # Stopping time of largest particle
+    st1 = max(t1, t2) / tn              # Stokes number of largest particle
+    tsm = st1 * tn                      # Stopping time of largest particle
     vg = vn * np.sqrt(1.5)   # see ormel paper vg <-> vn
     if (tsm <= ts):
         # Limit of tightly coupled particles (below the Kolmogorov scale)
@@ -155,8 +153,7 @@ def ormelcuzzi(t1, t2, rho, tgas, vn, tn):
         du2 = (t2 / tn)**2 / (t2 / tn + Re**(-0.5))
         dv = vg * np.sqrt((t1 - t2) / (t1 + t2) * (du1 - du2))
     else:
-        # At least one of the particles is not in the tightly
-        # coupled regime.
+        # At least one of the particles is not in the tightly coupled regime.
         if (tsm <= tn):
             # Both particles have St<1
             # Section 3.4.2 of OC2007, their Eq. 28
