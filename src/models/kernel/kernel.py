@@ -239,14 +239,20 @@ class Kernel():
                 assert m_min > mg.x_min
                 assert m_max < mg.x_max
 
+                # # Calculate normalization constant for MRN distribution.
+                # S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
+                # assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
+                # # Add mass to bins corresponding to newly created particles.
+                # for k in range(k_min, k_max):
+                #     K_gain[k, ii, jj] += m_tot * mc[k]**q / S * th * dm[k]
+
                 # Calculate normalization constant for MRN distribution.
-                S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
-                # TODO ^ Multiply with `dm[kk]` inside sum?
+                S = sum([ mc[kk]**q  for kk in range(k_min, k_max) ])
                 assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
                 
                 # Add mass to bins corresponding to newly created particles.
                 for k in range(k_min, k_max):
-                    K_gain[k, ii, jj] += m_tot * mc[k]**q / S * th * dm[k]
+                    K_gain[k, ii, jj] += m_tot / mc[k] * mc[k]**q / S * th
 
                 # Remove mass from bins corresponding to initial particles.
                 K_loss[i, ii, jj] -= 1
