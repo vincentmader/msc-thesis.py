@@ -119,7 +119,58 @@ def plot_3():
             ]).render(save_plot=True, path_to_outfile=path_to_outfile)
 
 
+def plot_4():
+    plots = {
+        r"$\Delta K^\text{coag}_\text{canc}$": ("K_coag_canc", Config(
+            enable_coagulation=True,
+            enable_fragmentation=False,
+            enable_collision_sampling=False,
+            enable_cancellation_handling=False,
+            mass_resolution=N_m,
+            mass_max_value=m_max,
+        )),
+        r"$\Delta K^\text{coag}_\text{nocanc}$": ("K_coag_nocanc", Config(
+            enable_coagulation=True,
+            enable_fragmentation=False,
+            enable_collision_sampling=False,
+            enable_cancellation_handling=True,
+            mass_resolution=N_m,
+            mass_max_value=m_max,
+        )),
+        r"$\Delta K^\text{frag}$": ("K_frag", Config(
+            enable_coagulation=False,
+            enable_fragmentation=True,
+            enable_collision_sampling=False,
+            mass_resolution=N_m,
+            mass_max_value=m_max,
+        )),
+        r"$\Delta K_\text{tot}$": ("K_tot", Config(
+            enable_coagulation=True,
+            enable_fragmentation=True,
+            enable_collision_sampling=False,
+            enable_cancellation_handling=True,
+            mass_resolution=N_m,
+            mass_max_value=m_max,
+        )),
+    }
+
+    for title, (filename, cfg) in plots.items():
+        kernel = Kernel(cfg)
+        K = kernel.K
+
+        path_to_outfile = Path(PATH_TO_FIGURES, "34", f"error_{filename}.pdf")
+
+        GridspecPlot([
+            KernelMassConservationSubplot(
+                cfg, mg, K, R_coll,
+                title=title,
+                z_limits=(1e-30, 1e-10),
+            ),
+        ]).render(save_plot=True, path_to_outfile=path_to_outfile)
+
+
 if __name__ == "__main__":
-    plot_1()
-    plot_2()
-    plot_3()
+    # plot_1()
+    # plot_2()
+    # plot_3()
+    plot_4()

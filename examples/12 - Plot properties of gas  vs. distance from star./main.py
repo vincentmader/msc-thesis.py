@@ -25,15 +25,16 @@ T_mid   = disk.midplane_temperature
 c_s     = disk.sound_speed
 rho_g   = disk.midplane_gas_volume_density
 P       = disk.midplane_gas_pressure
+u_th    = disk.thermal_velocity
 del_ln_P_g_del_ln_r = disk.del_ln_P_g_del_ln_r
 
 disk_region = DiskRegion(cfg, disk)
 delr_Sigma_g_nu_g_sqrt_r = disk_region.delr_Sigma_g_nu_g_sqrt_r
-v_r = physics.u_g(
+u_g = physics.u_g(
     rc, Sigma_g, delr_Sigma_g_nu_g_sqrt_r
 )
 
-FIGSIZE = (10, 4)
+FIGSIZE = (11, 4)
 if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
@@ -71,7 +72,7 @@ def plot_3(show_legend=False):
     plt.ylabel("sound speed $c_s$ [m/s]")
 
     label = r"$c_s=\sqrt{\frac{k_BT}{2.3\cdot m_p}}$"
-    plt.loglog(rc / AU, c_s, label=label)
+    plt.semilogx(rc / AU, c_s, label=label)
 
     if show_legend:
         plt.legend()
@@ -111,7 +112,7 @@ def plot_7(show_legend=False):
     plt.ylabel(r"radial gas velocity $u_g$ [m/s]")
 
     label = "TODO"
-    plt.semilogx(rc / AU, v_r, label=label) 
+    plt.semilogx(rc / AU, u_g, label=label) 
 
     if show_legend:
         plt.legend()
@@ -121,7 +122,7 @@ def plot_8(show_legend=False):
     plt.ylabel(r"thermal gas velocity $u_{th}$ [m/s]")
 
     label = "TODO"
-    plt.semilogx(rc / AU, c_s, label=label) 
+    plt.semilogx(rc / AU, u_th, label=label) 
 
     if show_legend:
         plt.legend()

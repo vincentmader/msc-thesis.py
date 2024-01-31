@@ -92,8 +92,6 @@ class Kernel():
             K_coag_loss      *= self.R_coag
             self.K_coag_gain += K_coag_gain
             self.K_coag_loss += K_coag_loss
-            self.K_gain      += K_coag_gain
-            self.K_loss      += K_coag_loss
         # ...fragmentation processes.
         if cfg.enable_fragmentation:
             K_frag_gain, K_frag_loss = self._K_frag(ijs)
@@ -101,11 +99,11 @@ class Kernel():
             K_frag_loss      *= self.R_frag
             self.K_frag_gain += K_frag_gain
             self.K_frag_loss += K_frag_loss
-            self.K_gain      += K_frag_gain
-            self.K_loss      += K_frag_loss
         # Define total coagulation & fragmentation sub-kernels.
         self.K_coag = self.K_coag_gain + self.K_coag_loss
         self.K_frag = self.K_frag_gain + self.K_frag_loss
+        self.K_gain = self.K_coag_gain + self.K_frag_gain
+        self.K_loss = self.K_coag_loss + self.K_frag_loss
         # Define total kernel.
         self.K = self.K_coag + self.K_frag
 
@@ -135,6 +133,7 @@ class Kernel():
             #     i, j = j, i
 
             th = heaviside_theta(i - j)
+            # th = (lambda x: 1/2 if x == 0 else 1)(i - j)
 
             # Load mass values for bins `i` and `j` from discretized mass axis.
             m_i = mc[i]
@@ -200,6 +199,7 @@ class Kernel():
         for i, j in ijs:  # TODO Handle cases where i < j. (lower right of kernel = 0!)
             ii,  jj  = (i, j) if i >= j else (j, i)
             m_i, m_j = mc[i], mc[j]
+            # th = (lambda x: 1/2 if x == 0 else 1)(i - j)
             th = heaviside_theta(i - j)
 
             # 1. Most basic/naive fragmentation implementation: "Pulverization"
@@ -240,19 +240,19 @@ class Kernel():
                 assert m_max < mg.x_max
 
                 # # Calculate normalization constant for MRN distribution.
-                # S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
+                S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
                 # assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
                 # # Add mass to bins corresponding to newly created particles.
                 # for k in range(k_min, k_max):
                 #     K_gain[k, ii, jj] += m_tot * mc[k]**q / S * th * dm[k]
 
-                # Calculate normalization constant for MRN distribution.
-                S = sum([ mc[kk]**q  for kk in range(k_min, k_max) ])
-                assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
-                
-                # Add mass to bins corresponding to newly created particles.
+                # S = sum([ mc[kk]**q * dm[kk] for kk in range(k_min, k_max) ])
+                # for k in range(k_min, k_max):
+                #     K_gain[k, ii, jj] += m_tot * mc[k]**(q-1) / S * th * dm[k]
+
+                S = sum([ mc[kk]**q for kk in range(k_min, k_max) ])
                 for k in range(k_min, k_max):
-                    K_gain[k, ii, jj] += m_tot / mc[k] * mc[k]**q / S * th
+                    K_gain[k, ii, jj] += m_tot * mc[k]**(q-1) / S * th
 
                 # Remove mass from bins corresponding to initial particles.
                 K_loss[i, ii, jj] -= 1

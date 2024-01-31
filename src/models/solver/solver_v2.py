@@ -1,11 +1,15 @@
+from datetime import datetime as dt
 from dataclasses import field
+from pathlib import Path
 import sys
+import os
 
 import numpy as np
 from tqdm import tqdm
 
 from config import Config
 from config import PATH_TO_COAG, SOLVERS
+from config import PATH_TO_OUTFILES
 from functions.disk import mass_distribution
 from functions.dust.collision import collision_outcome_probabilities, collision_rate
 from functions.dust.relative_velocity import relative_velocity
@@ -44,6 +48,8 @@ class SolverV2():
     S_ij_vs_t:              np.ndarray
     dK_ij_vs_t:             np.ndarray
 
+    X_ij_vs_t:              np.ndarray  
+
     kernels:                list[Kernel]    = field(default_factory=list)
     iteration_idx:          int             = 0
 
@@ -64,6 +70,7 @@ class SolverV2():
         self.P_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
         self.S_ij_vs_t      = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
         self.dK_ij_vs_t     = np.zeros(shape=(self.tg.N, self.mg.N, self.mg.N))
+        self.X_ij_vs_t      = np.zeros(shape=(self.tg.N))
 
         # Define PPD, & radial position of interest in it.
         disk        = Disk(cfg, self.rg, self.mg) 
@@ -120,6 +127,8 @@ class SolverV2():
         if self.cfg.enable_collision_sampling:
             self.sample()
         K = self.kernels[-1].K
+        if not self.cfg.enable_collision_sampling and True: # TODO
+            self.X_ij_vs_t[i_t] = np.count_nonzero(K) / self.mg.N**3
 
         # Loop over substeps.
         for _ in range(N_subst):
@@ -158,9 +167,57 @@ class SolverV2():
             self.R_frag, 
             W_ij=self.W_ij
         )
+
+        N_m = self.cfg.mass_resolution
+
         self.kernels.append(sampled)
         self.P_ij_vs_t[i_t] = sampled.P_ij
         self.S_ij_vs_t[i_t] = sampled.N_ij  # TODO Rename.
+        self.X_ij_vs_t[i_t] = np.count_nonzero(sampled.K) / N_m**3
+
+    def save(self, path: Path, exports=[],):
+        for export_id in exports:
+            if export_id == "n_k":
+                foo(path, export_id, self.n_k_vs_t)
+            if export_id == "N_k":
+                foo(path, export_id, self.N_k_vs_t)
+            if export_id == "M_k":
+                foo(path, export_id, self.M_k_vs_t)
+
+            elif export_id == "mb_k":
+                foo(path, export_id, self.mg.bin_boundaries)
+            elif export_id == "mc_k":
+                foo(path, export_id, self.mg.bin_centers)
+            elif export_id == "dm_k":
+                foo(path, export_id, self.mg.bin_widths)
+            elif export_id == "dMdt_k":
+                foo(path, export_id, self.dMdt_vs_t)
+            elif export_id == "tc":
+                foo(path, export_id, self.tg.bin_centers)
+
+            elif export_id == "P_ij":
+                foo(path, export_id, self.P_ij_vs_t)
+            elif export_id == "S_ij":
+                foo(path, export_id, self.S_ij_vs_t)
+
+            elif export_id == "X_ij":
+                foo(path, export_id, self.X_ij_vs_t)
+
+
+def foo(path: Path, export_id: str, x: np.ndarray):
+
+    dim = len(x.shape) 
+    if dim == 1:
+        pass
+    elif dim == 2:
+        pass
+    elif dim == 3:
+        x = x.flatten()
+
+    data = x
+    os.makedirs(path, exist_ok=True)
+    path = Path(path, f"{export_id}.txt")
+    np.savetxt(path, data)
 
 
 def weights(mg: DiscreteMassAxis, kernel: Kernel):

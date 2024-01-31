@@ -1,0 +1,42 @@
+KERNEL
+
+  4x2 - K_kij
+        + K_coag
+        + K_frag
+        + K_full
+
+INTEGRATION
+
+X 1x1 - n*m*dm | m | t 
+        + coag
+        + frag
+        + coag + frag
+X 1x1 - (rho_t-rho_0) / rho_0 | t 
+X 1x1 - sum_i dn_i/dt * m*dm | t 
+
+SAMPLING
+
+X 4x2 - P_sample_ij
+X       + K_coag
+X       + K_full
+
+X 4x2 - n*m*dm | m | t | p_sample
+
+  1x1 - Err(sample-complete) of integration -> sum? | nr. of sampling "runs"
+  XxX - Err(sample-complete) of integration | time | sampling density
+
+  XxX - Nr of relevant ijs during sampling | sampling density
+        + (coag & full)?
+  XxX - Nr of relevant ijs during sampling | mass resolution
+        + (coag & full)?
+
+  XxX - Accuracy 
+
+
+
+
+
+
+
+
+

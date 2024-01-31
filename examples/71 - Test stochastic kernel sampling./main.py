@@ -15,7 +15,8 @@ cfg = Config(
     enable_coagulation=True,
     enable_fragmentation=True,
     initial_mass_bin=0,
-    # mass_resolution=100,
+    mass_resolution=50,
+    nr_of_samples=50,
     # enable_physical_collisions=False,
 )
 

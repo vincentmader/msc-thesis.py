@@ -15,12 +15,13 @@ class GridspecPlot(BasePlot):
         add_slider: bool = False,
         slider_label: str = "k",
         figsize: Optional[tuple[int, int]] = None,
+        gridspec_dimensions: Optional[tuple[int, int]] = None,
     ):
         figsize = self._choose_figsize(len(subplots)) if figsize is None else figsize
         super().__init__(figsize=figsize)
         self.subplots = subplots
         self.slider_label = slider_label
-        self._setup_axes(subplots, add_slider)
+        self._setup_axes(subplots, add_slider, gridspec_dimensions)
 
     def draw(self):
         self.fig.canvas.draw_idle()
@@ -44,29 +45,48 @@ class GridspecPlot(BasePlot):
         self, 
         subplots: list[GridspecSubplot], 
         add_slider: bool,
+        gridspec_dimensions: Optional[bool],
     ):
-        nr_of_rows = 2
-        nr_of_cols = len(subplots) + 1 if add_slider else len(subplots)
-        gs_dimensions = (nr_of_rows, nr_of_cols)
+        hspace=0.0
+        wspace=0.3
 
-        gs_row_sizes = [1, 20]
-        gs_col_sizes = [20] * len(subplots)
-        gs_col_sizes += [1] if add_slider else []
+        if gridspec_dimensions == (2, 2):
+            gs_dimensions = (4, 2)
+            gs_row_sizes = [1, 20, 1, 20]
+            gs_col_sizes = [20, 20]
+            gs_col_sizes += [1] if add_slider else []
+            gs_locations = []
+            for idx, subplot in enumerate(subplots):
+                gs_location = 2*(idx//2)+0, 2*(idx//2)+1, idx%2, idx%2+1
+                # gs_location = ((2*idx)//2 + 0, idx//2 + 1, (2*idx)%2, (2*idx)%2+1)
+                gs_locations.append(gs_location)
+                gs_location = 2*(idx//2)+1, 2*(idx//2)+2, idx%2, idx%2+1
+                # gs_location = ((2*idx)//2 + 1, idx//2 + 2, (2*idx)%2, (2*idx)%2+1)
+                gs_locations.append(gs_location)
+            hspace=0.25
+            wspace=0.3
 
-        gs_locations = []
-        for idx, subplot in enumerate(subplots):
-            gs_location = (0, 1, idx, idx+1)
-            gs_locations.append(gs_location)
-            gs_location = (1, 2, idx, idx+1)
-            gs_locations.append(gs_location)
+        else:
+            nr_of_rows =  2
+            nr_of_cols = len(subplots) + 1 if add_slider else len(subplots)
+            gs_dimensions = (nr_of_rows, nr_of_cols)
+            gs_row_sizes = [1, 20]
+            gs_col_sizes = [20] * len(subplots)
+            gs_col_sizes += [1] if add_slider else []
+            gs_locations = []
+            for idx, subplot in enumerate(subplots):
+                gs_location = (0, 1, idx, idx+1)
+                gs_locations.append(gs_location)
+                gs_location = (1, 2, idx, idx+1)
+                gs_locations.append(gs_location)
 
         self.gs = self.fig.add_gridspec(
             nrows=gs_dimensions[0], 
             ncols=gs_dimensions[1],
             width_ratios=gs_col_sizes,
             height_ratios=gs_row_sizes,
-            hspace=0.0,
-            wspace=0.3,
+            hspace=hspace,
+            wspace=wspace,
         )
 
         self.axes = []

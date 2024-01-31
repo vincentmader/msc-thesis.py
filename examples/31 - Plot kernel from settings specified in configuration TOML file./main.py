@@ -6,9 +6,19 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
+rho_sample = 0.2
+
 cfg = Config(
     # initial_mass_bin=40,
+    # mass_resolution=100,
+    mass_resolution=50,
+    # enable_collision_sampling=False,
+    # enable_collision_sampling=False,
+    # mass_resolution=100,
 )
+N_m = cfg.mass_resolution
+nr_of_samples = int((N_m**2 + N_m) / 2 * rho_sample)
+cfg.nr_of_samples = nr_of_samples
 
 
 if __name__ == "__main__":

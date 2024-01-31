@@ -90,7 +90,7 @@ class SampledKernel(Kernel):
             N_relevant = np.sum(P_ij > 1e-16)
             self.N_sample = min(self.N_sample, N_relevant)
 
-        assert P_ij.all() > 0  # TODO Get rid of this?
+        # assert P_ij.all() > 0  # TODO Get rid of this?
         replace = cfg.allow_duplicate_sampling
         sampled = np.random.choice(indices, p=P_ij, size=self.N_sample, replace=replace)
     

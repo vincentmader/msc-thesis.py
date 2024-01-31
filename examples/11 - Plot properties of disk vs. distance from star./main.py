@@ -20,7 +20,7 @@ disk = Disk(cfg, rg, mg)
 Sigma_g = disk.gas_surface_density
 M_star = cfg.stellar_mass
 
-FIGSIZE = (10, 4)
+FIGSIZE = (11, 4)
 if cfg.mpl_dark_mode:
     plt.style.use(PATH_TO_DARKMODE)
 
@@ -49,7 +49,7 @@ PLOTS = {
 
 
 if __name__ == "__main__":
-    os.makedirs(Path(PATH_TO_FIGURES, "02"), exist_ok=True)
+    os.makedirs(Path(PATH_TO_FIGURES, "11"), exist_ok=True)
 
     for title, plot in PLOTS.items():
         _, ax = plt.subplots(figsize=FIGSIZE)
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
         plot()
 
-        path = os.path.join(PATH_TO_FIGURES, "02", f"{title}.pdf")
+        path = os.path.join(PATH_TO_FIGURES, "11", f"{title}.pdf")
         plt.savefig(path)
         plt.show()
         plt.close()

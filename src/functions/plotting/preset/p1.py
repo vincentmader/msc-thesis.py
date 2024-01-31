@@ -119,13 +119,13 @@ def plot_evolution(
     mg: DiscreteMassAxis,
     scale: str,
     t: np.ndarray,
-    N: np.ndarray,
     f: np.ndarray,
+    N: np.ndarray,
     m2f: np.ndarray,
     dm2fdt: np.ndarray,
 ):
     # TODO Fix y-limits?
-    EvolutionPlot(cfg, mg, N, f, m2f, dm2fdt).render()
+    EvolutionPlot(cfg, mg, N=N, f=f, m2f=m2f, dm2fdt=dm2fdt).render()
 
 
 def plot_surface(
