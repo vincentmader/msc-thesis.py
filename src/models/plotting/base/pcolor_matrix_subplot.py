@@ -25,6 +25,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         symmetrized:    bool                            = False,
         cmap:           str                             = "Reds",
         axis_scales:    tuple[str, str, str]            = ("log", "log", "log"),
+        tight_layout:   bool                            = False,
         *args, **kwargs,
     ):
         # Assert valid scale specifications, & valid (cubic) matrix shape.
@@ -43,6 +44,7 @@ class PcolorMatrixSubplot(GridspecSubplot):
         self.cmap, self.grid = cmap, grid
         self.xticks, self.yticks = xticks, yticks
         self.axis_scales, self.z_limits = axis_scales, z_limits
+        self.tight_layout = tight_layout
 
         # Symmetrize 3D matrix "layers".
         if symmetrized and (len(z.shape) == 2):
@@ -73,6 +75,8 @@ class PcolorMatrixSubplot(GridspecSubplot):
         ax.set_ylabel(self.ylabel)
         ax.format_coord = self.format_coord
         ax.grid(self.grid)
+        if self.tight_layout:
+            plt.tight_layout()
 
         ax = axes[0]
         plt.sca(ax)
