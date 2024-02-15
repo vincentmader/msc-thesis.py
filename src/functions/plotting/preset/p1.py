@@ -144,7 +144,7 @@ def plot_surface(
     Z = m2f
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
     surf = ax.plot_surface(np.log10(X), np.log10(Y), np.log10(Z))
-    ax.set_zlim(-40, -8)
+    ax.set_zlim(-20, -8)
     plt.show()
     plt.close()
 

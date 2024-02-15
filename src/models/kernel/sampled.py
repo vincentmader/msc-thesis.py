@@ -87,7 +87,7 @@ class SampledKernel(Kernel):
         # If not sampling over all collisions, exclude "irrelevant" collisions $(i,j)$.
         # The "relevant" collisions are those with a probability significantly higher than 1e-100.
         else:
-            N_relevant = np.sum(P_ij > 1e-16)
+            N_relevant = np.sum(P_ij > 1e-9)
             self.N_sample = min(self.N_sample, N_relevant)
 
         # assert P_ij.all() > 0  # TODO Get rid of this?

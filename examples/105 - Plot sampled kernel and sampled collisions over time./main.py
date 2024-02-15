@@ -25,6 +25,9 @@ def main(cfg: Config, title: str, should_show_plot=False):
     mg = DiscreteMassAxis(cfg)
     ac = mg.particle_radii
 
+    N_m = cfg.mass_resolution
+    N_t = cfg.time_resolution
+
     path = Path(path_to_outfiles, title)
     if not os.path.exists(path):
         solver = SolverV2(cfg)
@@ -53,8 +56,6 @@ def main(cfg: Config, title: str, should_show_plot=False):
         P_ij   = np.loadtxt(Path(path_to_outfiles, title, "P_ij.txt"))
         S_ij   = np.loadtxt(Path(path_to_outfiles, title, "S_ij.txt"))
 
-        N_m = cfg.mass_resolution
-        N_t = cfg.time_resolution
         P_ij = P_ij.reshape([N_t, N_m, N_m])
         S_ij = S_ij.reshape([N_t, N_m, N_m])
 
@@ -73,29 +74,45 @@ def main(cfg: Config, title: str, should_show_plot=False):
         fig = plt.figure(figsize=(10, 11))
 
         for subplot_idx, i_t in enumerate(times_of_interest):
+            Z_t = Z[i_t]
+            for i in range(N_m):
+                for j in range(N_m):
+                    if i < j:
+                        Z_t[i, j] = Z_t[j, i]
+            # Z_t = 0.5 * (Z_t + Z_t.T)
 
             ax = plt.subplot(4, 3, subplot_idx + 1)
 
-            im = plt.pcolormesh(ac, ac, Z[i_t], cmap=cmap, norm=norm, rasterized=True)
+            im = plt.pcolormesh(ac, ac, Z_t, cmap=cmap, norm=norm, rasterized=True)
             ax.set_xscale("log")
             ax.set_yscale("log")
             plt.axis("scaled")
-            plt.tight_layout()
 
             t = format_seconds_as_years(tc[i_t])
             plt.title("$t = " + f"{t}" + "$")
             if subplot_idx + 3 >= len(times_of_interest):
-                plt.xlabel("particle radius $a_j$ [m]")
+                plt.xlabel("Particle Radius $a_j$ [m]")
             if subplot_idx % 3 == 0:
-                plt.ylabel("particle radius $a_i$ [m]")
+                plt.ylabel("Particle Radius $a_i$ [m]")
 
             ax.set_xscale("log")
             ax.set_yscale("log")
             plt.axis("scaled")
             plt.tight_layout()
 
-        cax = fig.add_axes([0.93, 0.2, 0.013, 0.6])
-        plt.colorbar(cax=cax, orientation="vertical")
+        if symbol == "P_ij":
+            label = "$P_{ij}^{sample}$"
+        elif symbol == "S_ij":
+            label = "$N_{ij}^{sample}$"
+        else:
+            raise Exception("")
+
+        plt.subplots_adjust(top=0.9)
+        # cax = fig.add_axes([0.93, 0.2, 0.013, 0.6])
+        cax = fig.add_axes([0.1, 0.95, 0.8, 0.02])
+        # plt.colorbar(cax=cax, orientation="vertical")
+        cb = plt.colorbar(cax=cax, orientation="horizontal")
+        cb.ax.set_title(label)
 
         plt.savefig(Path(path_to_figures, f"{title} {symbol}.pdf"))
         if should_show_plot:
@@ -111,7 +128,7 @@ if __name__ == "__main__":
 
     cfgs, titles = [], []
     for rho_sample in SAMPLING_DENSITIES:
-        for (enable_coagulation, enable_fragmentation) in [(True, True), (True, False), (False, True)]:
+        for (enable_coagulation, enable_fragmentation) in [(True, True), (True, False)]: # (False, True)
             nr_of_samples = int((N_m**2 + N_m) / 2 * rho_sample)
             cfg = Config(
                 mass_resolution=N_m,

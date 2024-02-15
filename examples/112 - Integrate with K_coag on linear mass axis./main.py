@@ -29,7 +29,7 @@ cfg = Config(
     enable_collision_sampling = False, # note: `True` can not be use in the context of this module file.
 )
 
-kernel = Kernel(cfg)
+kernel = Kernel(cfg, R_coag=np.ones([N_m]*2))
 K = kernel.K
 mg = kernel.mg
 mc = mg.bin_centers
@@ -64,11 +64,12 @@ for p, t in enumerate(RELEVANT_TIMES):
     N_dust = N_dust_vs_t[t]
     plt.loglog(mc, mc * N_dust, color=colors[p], label=f"t={t_str}")
 
+plt.grid(True)
 plt.ylim(1e-5, 10)
 # plt.gca().set_ylim(bottom=1e-10)
 plt.legend(loc="best")
-plt.xlabel("dust particle mass $m_i^c$ [kg]")
-plt.ylabel(r"dust density $\rho_i^d$ [kg m$^{-3}$]")
+plt.xlabel("Dust Particle Mass $m_i^c$ [kg]")
+plt.ylabel(r"Dust Density $\rho_i^d$ [kg m$^{-3}$]")
 plt.savefig(Path(path_to_figures, "euler_explicit_integration_on_linear_mass_axis.pdf"))
 
 plt.show()

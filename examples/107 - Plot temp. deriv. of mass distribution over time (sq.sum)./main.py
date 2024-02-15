@@ -68,16 +68,17 @@ def main(should_show=False):
                 enable_coagulation=enable_coagulation,
                 enable_fragmentation=enable_fragmentation,
                 nr_of_samples=nr_of_samples,
+                time_max_value=3e13,
             )
             title = f"coag={enable_coagulation} frag={enable_fragmentation} {rho_sample=}"
             label = r"$\rho_{sample} = $" + f"{rho_sample}"
             foo(cfg, title, color=color, label=label)
 
         plt.grid()
-        plt.xlabel("time $t$ [y]")
-        plt.ylabel(r"temporal derivative $\sqrt{\sum_i \left(\frac{\Delta \rho_i}{\Delta t}\right)^2}$")
+        plt.xlabel("Time $t$ [y]")
+        plt.ylabel(r"Temporal Derivative $\sqrt{\sum_i \left(\frac{\Delta \rho_i}{\Delta t}\right)^2}$")
         plt.legend(loc="lower left")
-        plt.title(TITLES[i])
+        # plt.title(TITLES[i])
 
         plt.savefig(Path(path_to_figures, f"dMdt vs t vs rho_sample, coag={enable_coagulation}, frag={enable_fragmentation}.pdf"))
         if should_show:

@@ -10,6 +10,7 @@ try:
     from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from models.disk import Disk, DiskRegion
     from models.plotting.base import GridspecPlot, PcolorMatrixSubplot
+    from models.plotting.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
@@ -38,19 +39,15 @@ outcome_probabilities = {
 
 
 def plot_together(title, P_coag, P_frag):
-    s1 = PcolorMatrixSubplot(
-        ac, ac, P_coag,
-        title="dust particle coagulation probability $P_{coag}$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+    s1 = KernelSubplot(
+        cfg, mg, P_coag,
+        title="Dust Particle Sticking Probability $P_{coag}$",
         axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )
-    s2 = PcolorMatrixSubplot(
-        ac, ac, P_frag,
-        title="dust particle fragmentation probability $P_{frag}$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+    s2 = KernelSubplot(
+        cfg, mg, P_frag,
+        title="Dust Particle Fragmentation Probability $P_{frag}$",
         axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )
@@ -67,12 +64,10 @@ def plot_together(title, P_coag, P_frag):
     )
 
 def plot_separately(title, P_coag, P_frag):
-    s = PcolorMatrixSubplot(
-        ac, ac, P_coag,
-        title="dust particle coagulation probability $P_{coag}$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
-        axis_scales=("log", "log", "lin"),
+    s = KernelSubplot(
+        cfg, mg, P_coag,
+        title="Dust Particle Sticking Probability $P_{coag}$",
+        axis_scales=("log", "log", "log"),
         cmap="Blues",
     ) 
     
@@ -87,11 +82,9 @@ def plot_separately(title, P_coag, P_frag):
         path_to_outfile=path_to_outfile
     )
 
-    s = PcolorMatrixSubplot(
-        ac, ac, P_frag,
-        title="dust particle fragmentation probability $P_{frag}$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+    s = KernelSubplot(
+        cfg, mg, P_frag,
+        title="Dust Particle Fragmentation Probability $P_{frag}$",
         axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )

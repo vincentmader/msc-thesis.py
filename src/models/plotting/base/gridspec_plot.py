@@ -16,9 +16,10 @@ class GridspecPlot(BasePlot):
         slider_label: str = "k",
         figsize: Optional[tuple[int, int]] = None,
         gridspec_dimensions: Optional[tuple[int, int]] = None,
+        *args, **kwargs
     ):
         figsize = self._choose_figsize(len(subplots)) if figsize is None else figsize
-        super().__init__(figsize=figsize)
+        super().__init__(figsize=figsize, *args, **kwargs)
         self.subplots = subplots
         self.slider_label = slider_label
         self._setup_axes(subplots, add_slider, gridspec_dimensions)

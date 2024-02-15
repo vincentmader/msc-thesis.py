@@ -2,7 +2,7 @@ import os, sys
 from pathlib import Path
 try:
     sys.path.append(os.path.join("..", "..", "src"))
-    from models.axis import DiscreteMassAxis, DiscreteRadialAxis, AxisLabelVariant
+    from models.axis import DiscreteMassAxis, DiscreteRadialAxis
     from functions.dust.collision import collision_rate
     from config import Config, PATH_TO_FIGURES
     from models.disk import Disk, DiskRegion
@@ -26,14 +26,12 @@ R_coll = collision_rate(cfg, disk, disk_region)
 
 path_to_figures = Path(PATH_TO_FIGURES, "23")
 os.makedirs(path_to_figures, exist_ok=True)
-path_to_outfile = Path(path_to_figures, "collision_rate.pdf")
+path_to_outfile = Path(path_to_figures, "collision_rate_coefficient.pdf")
 
 p = GridspecPlot([
     KernelSubplot(
         cfg, mg, R_coll,
-        title="collision rate $R_{coll}$",
-        # ^ TODO Add units.
-        axis_label_variant=AxisLabelVariant.Radius,
+        title="Collision Rate Coefficient $R^{coll}_{ij}$ [m$^3$ s$^{-1}$]",
         # axis_scales=("log", "log", "lin"),
         cmap="Blues",
     )

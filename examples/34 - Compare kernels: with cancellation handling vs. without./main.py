@@ -121,7 +121,7 @@ def plot_3():
 
 def plot_4():
     plots = {
-        r"$\Delta K^\text{coag}_\text{canc}$": ("K_coag_canc", Config(
+        r"$\Delta X^\text{coag}_{ij}$ without cancellation handling": ("K_coag_canc", Config(
             enable_coagulation=True,
             enable_fragmentation=False,
             enable_collision_sampling=False,
@@ -129,7 +129,7 @@ def plot_4():
             mass_resolution=N_m,
             mass_max_value=m_max,
         )),
-        r"$\Delta K^\text{coag}_\text{nocanc}$": ("K_coag_nocanc", Config(
+        r"$\Delta X^\text{coag}_{ij}$ with cancellation handling": ("K_coag_nocanc", Config(
             enable_coagulation=True,
             enable_fragmentation=False,
             enable_collision_sampling=False,
@@ -137,14 +137,14 @@ def plot_4():
             mass_resolution=N_m,
             mass_max_value=m_max,
         )),
-        r"$\Delta K^\text{frag}$": ("K_frag", Config(
+        r"$\Delta X^\text{frag}_{ij}$": ("K_frag", Config(
             enable_coagulation=False,
             enable_fragmentation=True,
             enable_collision_sampling=False,
             mass_resolution=N_m,
             mass_max_value=m_max,
         )),
-        r"$\Delta K_\text{tot}$": ("K_tot", Config(
+        r"$\Delta X^\text{tot}_{ij}$": ("K_tot", Config(
             enable_coagulation=True,
             enable_fragmentation=True,
             enable_collision_sampling=False,
@@ -165,6 +165,7 @@ def plot_4():
                 cfg, mg, K, R_coll,
                 title=title,
                 z_limits=(1e-30, 1e-10),
+                symmetrized=True,
             ),
         ]).render(save_plot=True, path_to_outfile=path_to_outfile)
 

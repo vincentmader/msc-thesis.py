@@ -1,5 +1,6 @@
 import os, sys
 from pathlib import Path
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.colors import TwoSlopeNorm
 import numpy as np
@@ -16,15 +17,19 @@ path_to_outfiles = Path(PATH_TO_OUTFILES, "data", "103")
 os.makedirs(path_to_figures, exist_ok=True)
 
 exports = ["tc", "mb_k", "mc_k", "dm_k", "n_k", "N_k", "M_k", "dMdt_k"]
-times_of_interest = list(range(46, 190, 1))
-# times_of_interest = [0, 49, 99, 149, 159, 169, 179, 189, 199]
 N_m = 50
 
 
-def plot_mass_distribution_vs_m_vs_t(title, mb_k, mc_k, M_k, should_show_plot=False):
+def plot_mass_distribution_vs_m_vs_t(title, tc, mb_k, mc_k, M_k, should_show_plot=False, enable_coagulation=None, enable_fragmentation=None):
+    if enable_coagulation is False and enable_fragmentation is True:
+        times_of_interest = [0] + list(range(50, 190, 5))
+        # times_of_interest = list(range(150, 190, 2))
+        # times_of_interest = [0, 49, 99, 149, 159, 169, 179, 189, 199]
+    else:
+        times_of_interest = [0] + list(range(100, 190, 5))
 
-    plt.figure(figsize=(11, 7))
-    colors = plt.cm.Blues(np.linspace(-0.1, 1.1, len(times_of_interest)))
+    fig = plt.figure(figsize=(10, 5))
+    colors = plt.cm.YlGnBu(np.linspace(0, 1, len(times_of_interest)))
     x = mc_k
 
     for ii, i_t in enumerate(times_of_interest):
@@ -34,10 +39,25 @@ def plot_mass_distribution_vs_m_vs_t(title, mb_k, mc_k, M_k, should_show_plot=Fa
             color=colors[ii]
         )
 
-    plt.title(title)
+    # plt.title(title)
     plt.xlim(mb_k[0], mb_k[-1])
-    plt.ylim(1e-20, 1e-5)
+    plt.ylim(1e-16, 1e-8)
+    plt.xlabel("Dust Particle Mass $m_i$ [kg]")
+    plt.ylabel(r"Dust Density $\rho^d_i$ [kg m$^{-3}$]")
     plt.grid(True)
+
+    plt.subplots_adjust(top=0.85)
+    # cax = plt.axes([0.91, 0.1, 0.021, 0.78])
+    cax = fig.add_axes([0.125, 0.9, 0.775, 0.05])
+    cb = mpl.colorbar.ColorbarBase(cax, 
+        orientation="horizontal", 
+        cmap="YlGnBu",
+        norm=mpl.colors.LogNorm(
+            tc[times_of_interest[0]] / SECONDS_PER_YEAR, 
+            tc[times_of_interest[-1]] / SECONDS_PER_YEAR,
+        ),
+    )
+    cb.ax.set_title("Time $t$ [y]")
 
     name = f"mass_distr {title}.pdf"
     path = Path(path_to_figures, name)
@@ -47,19 +67,19 @@ def plot_mass_distribution_vs_m_vs_t(title, mb_k, mc_k, M_k, should_show_plot=Fa
     plt.close()
 
 def plot_mass_error_vs_t(title, tc, M_k, should_show_plot=False):
-    plt.figure(figsize=(11, 4))
+    plt.figure(figsize=(10, 4))
 
     M_t = np.sum(M_k, axis=1)
     M_0 = M_t[0]
 
     x = tc / SECONDS_PER_YEAR
     y = np.array([(M_t - M_0) / M_0 for M_t in M_t])
-    plt.loglog(x, y, color="red", label=r"$\Delta\rho^{rel}_d > 0$")
-    plt.loglog(x, -y, color="blue", label=r"$\Delta\rho^{rel}_d < 0$")
+    plt.loglog(x, y, color="red", label=r"$\Delta_{stab} > 0$")
+    plt.loglog(x, -y, color="blue", label=r"$\Delta_{stab} < 0$")
 
-    plt.ylim(1e-16, 1e-12)
-    plt.xlabel("time [y]")
-    plt.ylabel(r"relative density error $\frac{ \rho_d(t) - \rho_d(t=0) }{ \rho_d(t=0) }$")
+    plt.ylim(1e-17, 1e-7)
+    plt.xlabel("Time [y]")
+    plt.ylabel(r"Dimensionless Mass Error $\Delta_{stab}(t)$")
     plt.grid(True)
 
     plt.legend(loc="upper left")
@@ -73,7 +93,7 @@ def plot_mass_error_vs_t(title, tc, M_k, should_show_plot=False):
 
 
 def plot_rms_mass_deriv_vs_t(title, tc, dMdt_k, should_show_plot=False):
-    plt.figure(figsize=(11, 4))
+    plt.figure(figsize=(10, 4))
 
     # M_t = np.sum(M_k, axis=1)
     # M_0 = M_t[0]
@@ -82,10 +102,14 @@ def plot_rms_mass_deriv_vs_t(title, tc, dMdt_k, should_show_plot=False):
 
     x = tc / SECONDS_PER_YEAR
     # y = np.array([(M_t - M_0) / M_0 for M_t in M_t])
-    plt.loglog(x, y, color="red", label=r"$\sqrt{ \sum_i \left( \frac{\Delta n_i}{\Delta t}\cdot m_i\cdot \Delta m_i \right)^2 }$")
+    plt.loglog(
+        x, y, color="red", 
+        label=r"$\left(\frac{\partial \rho}{\partial t}\right)_{RMS} = \sqrt{ \sum_i \left( \frac{\Delta n_i}{\Delta t}\cdot m_i\cdot \Delta m_i \right)^2 }$"
+    )
 
     plt.ylim(1e-32, 1e-12)
-    plt.xlabel("time [y]")
+    plt.xlabel("Time [y]")
+    plt.ylabel("RMS of Temporal Density Derivative [kg m$^{-3}$ s$^{-1}$]")
     # plt.ylabel(r"relative density error $\frac{ \rho_d(t) - \rho_d(t=0) }{ \rho_d(t=0) }$")
     plt.grid(True)
 
@@ -99,7 +123,7 @@ def plot_rms_mass_deriv_vs_t(title, tc, dMdt_k, should_show_plot=False):
     plt.close()
     
 
-def foo(cfg, title, should_show_plot=False):
+def foo(cfg, title, should_show_plot=False, enable_coagulation=None, enable_fragmentation=None):
     path = Path(path_to_outfiles, title)
     if not os.path.exists(path):
         solver = SolverV2(cfg)
@@ -123,7 +147,8 @@ def foo(cfg, title, should_show_plot=False):
         M_k    = np.loadtxt(Path(path_to_outfiles, title, "M_k.txt"))
         dMdt_k = np.loadtxt(Path(path_to_outfiles, title, "dMdt_k.txt"))
 
-    plot_mass_distribution_vs_m_vs_t(title, mb_k, mc_k, M_k, should_show_plot=should_show_plot)
+    plot_mass_distribution_vs_m_vs_t(title, tc, mb_k, mc_k, M_k, should_show_plot=should_show_plot,
+                                     enable_coagulation=enable_coagulation, enable_fragmentation=enable_fragmentation)
     plot_mass_error_vs_t(title, tc, M_k, should_show_plot=should_show_plot)
     plot_rms_mass_deriv_vs_t(title, tc, dMdt_k, should_show_plot=should_show_plot)
 
@@ -148,9 +173,10 @@ def main(
     for cfg in cfgs:
         m_0 = cfg.initial_mass_bin
         title = f"coag={cfg.enable_coagulation} frag={cfg.enable_fragmentation} m0={m_0}"
-        foo(cfg, title, should_show_plot=should_show_plot)
+        foo(cfg, title, should_show_plot=should_show_plot, 
+            enable_coagulation=cfg.enable_coagulation, enable_fragmentation=cfg.enable_fragmentation)
 
 if __name__ == "__main__":
     main(
-        should_show_plot=True,
+        should_show_plot=False,
     )

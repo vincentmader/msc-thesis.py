@@ -1,14 +1,19 @@
 import os, sys
 from pathlib import Path
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 sys.path.append(os.path.join("..", "..", "src"))
 from config import Config
 from config import PATH_TO_FIGURES, PATH_TO_OUTFILES
 from models.solver import SolverV2
+from constants import SECONDS_PER_YEAR
 
 path_to_outfiles = Path(PATH_TO_OUTFILES, "data", "104")
 path_to_figures  = Path(PATH_TO_FIGURES, "104")
+
+# TS = list(range(155, 190, 1))
+TS = list(range(150, 190, 2))
 
 
 def integrate(
@@ -82,29 +87,43 @@ def main(should_show_plot=False):
                         dMdt_k = np.loadtxt(Path(path_to_outfiles, title, "dMdt_k.txt"))
                         options = [tc, mb_k, mc_k, dm_k, n_k, N_k, M_k, dMdt_k]
 
-                    plt.subplot(4, 2, subplot_idx+1)
+                    ax = plt.subplot(4, 2, subplot_idx+1)
                     tc, mb_k, mc_k, dm_k, n_k, N_k, M_k, dMdt_k = options
-                    TS = list(range(155, 190, 1))
-                    M_k = N_k * mc_k * dm_k
 
-                    colors = plt.cm.Blues(np.linspace(0, 1, len(TS)))
+                    colors = plt.cm.YlGnBu(np.linspace(0, 0.9, len(TS)))
                     for ii, i_t in enumerate(TS):
                         t = i_t # TODO
                         from functions.utils.dates import format_seconds_as_years
                         t = format_seconds_as_years(tc[i_t])
                         plt.loglog(mc_k, M_k[i_t], label=f"t={t}", color=colors[ii])
                         plt.title(r"$\rho_{sample}=$" + f"{rho_sample}")
-                        plt.ylim(1e-28, 1e-18)
+                        # plt.ylim(1e-27, 1e-19)
+                        plt.ylim(1e-17, 1e-7)
                     if subplot_idx % 2 != 0:
-                        plt.yticks([])
+                        # plt.yticks([])
+                        pass
                     else:
-                        plt.ylabel(r"$n_k \cdot m_k \cdot \Delta m_k$")
+                        plt.ylabel(r"Dust Density $\rho_i^d$ [kg m$^{-3}$]")
                     if subplot_idx < len(sampling_densities) - 2:
-                        plt.xticks([])
+                        ax.set_xticklabels([])
                     else:
-                        plt.xlabel("dust particle mass $m^c_i$ [kg]")
+                        plt.xlabel("Dust Particle Mass $m^c_i$ [kg]")
+                    plt.xlim(mb_k[0], mb_k[-1])
+                    plt.grid(True)
 
-                plt.tight_layout()
+                # plt.tight_layout()
+
+                cax = plt.axes([0.13, 0.95, 0.77, 0.02])
+                cb = mpl.colorbar.ColorbarBase(cax, 
+                    orientation="horizontal", 
+                    cmap="YlGnBu",
+                    norm=mpl.colors.LogNorm(
+                        tc[TS[0]] / SECONDS_PER_YEAR, 
+                        tc[TS[-1]] / SECONDS_PER_YEAR,
+                    ),
+                )
+                cb.ax.set_title("Time $t$ [y]")
+
                 os.makedirs(path_to_figures, exist_ok=True)
                 name = f"3x2 rho_d vs. m, t, rho_sample, {N_m=}, coag={enable_coagulation}, frag={enable_fragmentation}.pdf"
                 plt.savefig(Path(path_to_figures, name))
@@ -113,4 +132,4 @@ def main(should_show_plot=False):
                 plt.close()
 
 if __name__ == "__main__":
-    main(should_show_plot=True)
+    main(should_show_plot=False)

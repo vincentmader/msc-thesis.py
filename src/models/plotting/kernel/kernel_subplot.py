@@ -24,28 +24,28 @@ class KernelSubplot(PcolorMatrixSubplot):
         if axis_label_variant is AxisLabelVariant.Radius:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
-                else "particle radius $a_j$ [m]"
+                else "Dust Particle Radius $a_j$ [m]"
             kwargs["ylabel"] = kwargs["ylabel"]\
                 if "ylabel" in kwargs.keys()\
-                else "particle radius $a_i$ [m]"
+                else "Dust Particle Radius $a_i$ [m]"
             ac = mg.particle_radii
             x, y = ac, ac
         elif axis_label_variant is AxisLabelVariant.Mass:
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
-                else "particle mass $a_j$ [kg]"
+                else "Dust Particle Mass $m_j$ [kg]"
             kwargs["ylabel"] = kwargs["ylabel"]\
                 if "ylabel" in kwargs.keys()\
-                else "particle mass $a_i$ [kg]"
+                else "Dust Particle Mass $m_i$ [kg]"
             mc = mg.bin_centers
             x, y = mc, mc
         else:  # -> `AxisLabelVariant.Bin`
             kwargs["xlabel"] = kwargs["xlabel"]\
                 if "xlabel" in kwargs.keys()\
-                else "bin index $j$"
+                else "Bin Index $j$"
             kwargs["ylabel"] = kwargs["ylabel"]\
                 if "ylabel" in kwargs.keys()\
-                else "bin index $i$"
+                else "Bin Index $i$"
             i = np.linspace(0, mg.N, mg.N)
             x, y = i, i
 

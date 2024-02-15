@@ -6,7 +6,7 @@ try:
 except ModuleNotFoundError as e:
     raise e
 
-rho_sample = 0.2
+rho_sample = 0.5
 
 cfg = Config(
     # initial_mass_bin=40,

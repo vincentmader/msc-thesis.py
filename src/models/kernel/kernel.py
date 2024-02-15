@@ -240,7 +240,7 @@ class Kernel():
                 assert m_max < mg.x_max
 
                 # # Calculate normalization constant for MRN distribution.
-                S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
+                # S = sum([ mc[kk]**(q+1) * dm[kk] for kk in range(k_min, k_max) ])
                 # assert S != 0  # TODO Really needed? Can `S==0`? Can I skip if it does?
                 # # Add mass to bins corresponding to newly created particles.
                 # for k in range(k_min, k_max):

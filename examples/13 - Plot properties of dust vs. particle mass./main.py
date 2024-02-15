@@ -37,7 +37,7 @@ if cfg.mpl_dark_mode:
 
 
 def plot_1(show_legend=False):
-    plt.ylabel(r"Stokes number $St$")
+    plt.ylabel(r"Stokes Number $St$")
 
     label = r"$St=\frac{\pi}{2}\cdot\frac{\rho_s\cdot a}{\Sigma_g}$"
     plt.loglog(mc, St, label=label)
@@ -47,7 +47,7 @@ def plot_1(show_legend=False):
 
 
 def plot_2(show_legend=False):
-    plt.ylabel(r"Reynolds number $Re$")
+    plt.ylabel(r"Reynolds Number $Re$")
 
     label = r"$Re=\frac{2au}{\nu_{mol}}$"
     plt.loglog(mc, Re, label=label)  # TODO Specify 'u'.
@@ -57,7 +57,7 @@ def plot_2(show_legend=False):
 
 
 def plot_3(show_legend=False):
-    plt.ylabel(r"stopping time $\tau_{stop}$ [s]")
+    plt.ylabel(r"Stopping Time $\tau_{stop}$ [s]")
 
     label = r"$\tau_{stop}=\frac{\rho_s\cdot a}{\rho_g\cdot u_{th}}$ (Epstein regime)"
     plt.loglog(mc, t_stop, label=label)
@@ -77,8 +77,8 @@ if __name__ == "__main__":
 
     for plot_id, plot in PLOTS.items():
         _, ax = plt.subplots(figsize=FIGSIZE)
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
 
         plt.xlabel(r"dust particle mass $m$ [kg]")
         plt.xlim(mc[0], mc[-1])

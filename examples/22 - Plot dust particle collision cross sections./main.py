@@ -5,7 +5,8 @@ try:
     from models.axis import DiscreteMassAxis
     from functions.dust.collision import collision_cross_section
     from config import Config, PATH_TO_FIGURES
-    from models.plotting.base import GridspecPlot, PcolorMatrixSubplot
+    from models.plotting.base import GridspecPlot
+    from models.plotting.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
@@ -20,11 +21,9 @@ ac = mg.particle_radii
 
 R_coll = collision_cross_section(cfg, mg)
 
-s1 = PcolorMatrixSubplot(
-    ac, ac, R_coll,
-    title=r"collision cross section $\sigma_{ij}$ [m$^2$]",
-    xlabel="particle radius $a_j$ [m]",
-    ylabel="particle radius $a_i$ [m]",
+s = KernelSubplot(
+    cfg, mg, R_coll,
+    title=r"Collision Cross Section $\sigma^{coll}_{ij}$ [m$^2$]",
     # axis_scales=("log", "log", "lin"),
     cmap="Blues",
 )
@@ -33,7 +32,7 @@ path_to_figures = Path(PATH_TO_FIGURES, "22")
 os.makedirs(path_to_figures, exist_ok=True)
 path_to_outfile = Path(path_to_figures, "collision_cross_section.pdf")
 
-p = GridspecPlot([s1])
+p = GridspecPlot([s])
 p.render(
     save_plot=True,
     path_to_outfile=path_to_outfile

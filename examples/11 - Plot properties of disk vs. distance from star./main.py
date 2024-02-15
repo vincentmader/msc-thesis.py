@@ -27,7 +27,7 @@ if cfg.mpl_dark_mode:
 
 def plot_1(show_legend=False):
     H_p = disk.scale_height
-    plt.title("disk scale height $H_p$")
+    plt.title("Disk Scale Height $H_p$")
     plt.ylabel("$H_p$ [AU]")
     plt.loglog(rc / AU, H_p / AU, label=r"$H_p=\frac{c_s}{\Omega_K}$")
     plt.legend()
@@ -35,8 +35,8 @@ def plot_1(show_legend=False):
 
 def plot_2(show_legend=False):
     Omega_K = kepler_frequency(rc, M_star)
-    plt.title("Kepler frequency $\Omega_K$")
-    plt.ylabel("$\Omega_K$ [1/s]")
+    plt.title(r"Kepler Frequency $\Omega_K$")
+    plt.ylabel(r"$\Omega_K$ [1/s]")
     label = r"$\Omega_K=\sqrt{\frac{G\cdot M_{star}}{r^3}}$"
     plt.loglog(rc / AU, Omega_K, label=label)
     plt.legend()
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
 
-        plt.xlabel("distance from star $r$ [AU]")
+        plt.xlabel("Distance from Star $r$ [au]")
         plt.xlim(rc[0] / AU, rc[-1] / AU)
         plt.grid()
 

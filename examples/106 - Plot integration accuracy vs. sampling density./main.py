@@ -72,28 +72,42 @@ if __name__ == "__main__":
         title = titles[subplot_idx]
         tc, mb_k, mc_k, dm_k, n_k, N_k, M_k, dMdt_k, P_ij, S_ij = integrate(cfg, title)
         M_k_complete = np.loadtxt(Path(path_to_outfiles, "rho_sample=1.0", "M_k.txt"))
+
+        X_MIN = tc[0] / SECONDS_PER_YEAR
+        X_MAX = tc[-1] / SECONDS_PER_YEAR
         
         err = (M_k.sum(axis=1) - M_k[0].sum(axis=0)) / M_k[0].sum(axis=0)
         plt.loglog(tc / SECONDS_PER_YEAR, err, 'g', 
-            label=r"$\Delta_{stab}(t)=\sum_i \frac{\rho^d_i(t) - \rho^d_i(t=0)}{\rho^d_i(t=0)}$")
+            # label=r"$\Delta_{stab}(t)=\sum_i \frac{\rho^d_i(t) - \rho^d_i(t=0)}{\rho^d_i(t=0)}$")
+            label=r"$\Delta_{stab}(t)$")
         plt.loglog(tc / SECONDS_PER_YEAR, -err, 'g--')
 
         if rho_sample != 1.0:
             # err = (((M_k - M_k_complete) / M_k_complete)**2).sum(axis=1)**.5
-            err = ((M_k - M_k_complete) / M_k_complete).sum(axis=1)
+            err = (((M_k - M_k_complete) / M_k_complete)**2).sum(axis=1)**.5
+            # err = np.array([np.correlate(M_k, M_k_complete) for M_k, M_k_complete in zip(M_k, M_k_complete)])
+
+            # a = err[err.nan()]
+            for i in err:
+                print(i)
+
             plt.loglog(tc / SECONDS_PER_YEAR, err, 'b', 
-                label=r"$\Delta_{acc}(t)=\sum_i \frac{\rho^d_i(t) - \rho^c_i(t)}{\rho^c_i(t)}$")
+                label=r"$\Delta_{acc}(t)$")
             plt.loglog(tc / SECONDS_PER_YEAR, -err, 'b--')
 
         plt.title(r"$\rho_{sample} = "+ f"{rho_sample}" + "$")
         if subplot_idx + 2 >= len(SAMPLING_DENSITIES):
-            plt.xlabel("time $t$ [y]")
+            plt.xlabel("Time $t$ [y]")
         if subplot_idx % 2 == 0:
-            plt.ylabel(r"error $\Delta_{acc}$ and $\Delta_{stab}$")
+            # plt.ylabel(r"error $\Delta_{acc}$ and $\Delta_{stab}$")
+            plt.ylabel("Error (Dimensionless)")
+
+        # plt.plot([X_MIN, X_MAX], [1, 1], color="black", label="1")
 
         if subplot_idx == 0:
             plt.legend(loc="upper left")
-        plt.ylim(1e-20, 1e20)
+        plt.xlim(X_MIN, X_MAX)
+        plt.ylim(1e-17, 1e14)
         plt.grid(True)
         plt.tight_layout()
 

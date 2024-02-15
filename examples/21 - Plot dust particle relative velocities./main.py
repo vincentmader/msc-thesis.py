@@ -16,6 +16,7 @@ try:
     from functions.dust.relative_velocity import dv_turbulence
     from functions.dust.relative_velocity import relative_velocity
     from models.plotting.base import GridspecPlot, PcolorMatrixSubplot
+    from models.plotting.kernel import KernelSubplot
 except ModuleNotFoundError as e:
     raise e
 
@@ -47,7 +48,7 @@ plot_setups = [
     (dv_rd, "RD",  (0, 25)),
     (dv_tu, "TU",  (0, 25)),
     # (dv_ds, "DS"),
-    (dv,    "tot", (0, 40)),
+    (dv,    "",    (0, 40)),
 ]
 
 
@@ -58,12 +59,13 @@ def v1():
         filename = f"dv_{dv_id}.pdf"
         path_to_outfile = Path(path_to_outfiles, filename)
 
-        title = r"relative velocity $\Delta v_{ij}^{" + dv_id + "}$ [m/s]"
-        s1 = PcolorMatrixSubplot(
-            ac, ac, dv,
+        title = r"Relative Velocity $\Delta v_{ij}^{" + dv_id + "}$ [m/s]"
+        s1 = KernelSubplot(
+            cfg, mg, dv,
+            # ac, ac, dv,
             title=title,
-            xlabel="particle radius $a_j$ [m]",
-            ylabel="particle radius $a_i$ [m]",
+            # xlabel="particle radius $a_j$ [m]",
+            # ylabel="particle radius $a_i$ [m]",
             axis_scales=("log", "log", "lin"),
             cmap="Reds",
             z_limits=z_limits,
@@ -83,21 +85,23 @@ def v2():
     filename = f"dv_tot_lin+log.pdf"
     path_to_outfile = Path(path_to_outfiles, filename)
 
-    s1 = PcolorMatrixSubplot(
-        ac, ac, dv,
+    s1 = KernelSubplot(
+        cfg, mg, dv,
+        # ac, ac, dv,
         title=r"$\Delta v_{ij}^{tot}$ [m/s]",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+        # xlabel="particle radius $a_j$ [m]",
+        # ylabel="particle radius $a_i$ [m]",
         axis_scales=("log", "log", "lin"),
         cmap="Reds",
         z_limits=(0, 40),
         tight_layout=True,
     )
-    s2 = PcolorMatrixSubplot(
-        ac, ac, dv,
+    s2 = KernelSubplot(
+        # ac, ac, dv,
+        cfg, mg, dv,
         title=r"$\log\left(\Delta v_{ij}^{tot}\ /\ \frac{m}{s}\right)$",
-        xlabel="particle radius $a_j$ [m]",
-        ylabel="particle radius $a_i$ [m]",
+        # xlabel="particle radius $a_j$ [m]",
+        # ylabel="particle radius $a_i$ [m]",
         axis_scales=("log", "log", "log"),
         cmap="Reds",
         z_limits=(5e-3, 4e1),
@@ -123,11 +127,9 @@ def v3():
     for idx, (dv, dv_id, z_limits) in enumerate(plot_setups[:-1]):
 
         title = r"$\Delta v_{ij}^{" + dv_id + "}$ [m/s]"
-        s = PcolorMatrixSubplot(
-            ac, ac, dv,
+        s = KernelSubplot(
+            cfg, mg, dv,
             title=title,
-            xlabel="particle radius $a_j$ [m]" if idx > len(plot_setups)-4 else "",
-            ylabel="particle radius $a_i$ [m]" if idx % 2 == 0 else "",
             axis_scales=("log", "log", "lin"),
             cmap="Reds",
             z_limits=z_limits,
@@ -161,9 +163,9 @@ def v4():
         ax.set_xscale("log")
         ax.set_yscale("log")
         # if idx % 2 == 0:
-        plt.ylabel("particle radius $a_i$")
+        plt.ylabel("Dust Particle Radius $a_i$")
         # if idx + 3 > len(plot_setups[:-1]):
-        plt.xlabel("particle radius $a_j$")
+        plt.xlabel("Dust Particle Radius $a_j$")
         plt.colorbar(im, fraction=0.046, pad=0.04)
 
     plt.tight_layout()
@@ -175,8 +177,43 @@ def v4():
     plt.show()
     plt.close()
 
+
+def v5():
+    path_to_outfiles = Path(PATH_TO_FIGURES, "21")
+    os.makedirs(path_to_outfiles, exist_ok=True)
+
+    for scale in ["lin", "log"]:
+        filename = f"dv_tot_{scale}.pdf"
+        path_to_outfile = Path(path_to_outfiles, filename)
+
+        if scale == "lin":
+            title = r"Total Relative Velocity $\Delta v_{ij}^{tot}$ [m/s]"
+            z_limits = (0, 40)
+        else:
+            title = r"Total Relative Velocity $\log\left(\Delta v_{ij}^{tot}\ /\ \frac{m}{s}\right)$"
+            z_limits = (5e-3, 4e1)
+
+        s = KernelSubplot(
+            cfg, mg, dv,
+            # figsize=
+            title=title,
+            axis_scales=("log", "log", scale),
+            cmap="Reds",
+            z_limits=z_limits,
+            tight_layout=True,
+        )
+
+        p = GridspecPlot([s],
+            # figsize=(10, 12) if dv_id == "tot" else None,
+        )
+        p.render(
+            save_plot=True,
+            path_to_outfile=path_to_outfile,
+        )
+
 if __name__ == "__main__":
-    # v1()
+    v1()
     # v2()
     # v3()
-    v4()
+    # v4()
+    v5()

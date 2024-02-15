@@ -14,6 +14,7 @@ os.makedirs(path_to_figures, exist_ok=True)
 
 N_m = 100
 ks = [8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96]
+# ks = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 
 vmin = -0.5
 vmax = +0.5
@@ -43,15 +44,25 @@ def create_4x3_plot(
 
         plt.title("$"+ f"{k=}" + "$")
         if subplot_idx + 3 >= len(ks):
-            plt.xlabel("particle mass $m_j$ [kg]")
+            plt.xlabel("Particle Mass $m_j$ [kg]")
         if subplot_idx % 3 == 0:
-            plt.ylabel("particle mass $m_i$ [kg]")
+            plt.ylabel("Particle Mass $m_i$ [kg]")
 
         plt.axis("scaled")
         plt.tight_layout()
 
-    cax = fig.add_axes([0.93, 0.2, 0.013, 0.6])
-    plt.colorbar(cax=cax, orientation="vertical")
+    # cax = fig.add_axes([0.93, 0.2, 0.013, 0.6])
+    # cbar = plt.colorbar(cax=cax, orientation="vertical", norm=norm)
+    # cbar.set_ticks([-0.5, -0.25, 0, 0.25, 0.5])
+    # cbar.set_ticklabels([mn,md,mx])
+
+    label = "$K_{kij}^{coag}$ [m$^3$ s$^{-1}$]"
+    plt.subplots_adjust(top=0.9)
+    # cax = fig.add_axes([0.93, 0.2, 0.013, 0.6])
+    cax = fig.add_axes([0.1, 0.95, 0.8, 0.02])
+    cb = plt.colorbar(cax=cax, orientation="horizontal", norm=norm)
+    cb.set_ticks([-0.5, -0.25, 0, 0.25, 0.5])
+    cb.ax.set_title(label)
 
     name = f"Kkij vs k, coag={cfg.enable_coagulation}, frag={cfg.enable_fragmentation}.pdf"
     plt.savefig(Path(path_to_figures, name))

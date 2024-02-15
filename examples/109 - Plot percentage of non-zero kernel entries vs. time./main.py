@@ -40,6 +40,7 @@ def foo(cfg: Config, title: str, label: str, color=None):
     x = tc / SECONDS_PER_YEAR
     y = X_ij
     # plt.semilogx(x, y, label=label, color=color)
+    # plt.ylim(0, max(y))
     plt.loglog(x, y, label=label, color=color)
 
 
@@ -49,11 +50,11 @@ def main(should_show=False):
     SAMPLING_DENSITIES = [0.2, 0.4, 0.6, 0.8, 1.0]
     # colors = ["cyan", "green", "orange", "red", "black"]
     TITLES = [
-        "full model",
-        "pure coagulation",
-        "only fragmentation",
+        "Full model",
+        "Pure coagulation",
+        "Pure fragmentation",
     ]
-    N_m = 100
+    N_m = 50
 
     for i, (enable_coagulation, enable_fragmentation) in enumerate([(True, True), (True, False), (False, True)]):
 
@@ -75,8 +76,8 @@ def main(should_show=False):
             foo(cfg, title, color=color, label=label)
 
         plt.grid()
-        plt.xlabel("time $t$ [y]")
-        plt.ylabel("share of non-zero kernel entries")
+        plt.xlabel("Time $t$ [y]")
+        plt.ylabel("Share of Non-Zero Kernel Entries")
         plt.ylim(1e-6, 1)
 #         plt.ylabel(r"temporal derivative $\sqrt{\sum_i \left(\frac{\Delta \rho_i}{\Delta t}\right)^2}$")
         plt.legend(loc="lower left")

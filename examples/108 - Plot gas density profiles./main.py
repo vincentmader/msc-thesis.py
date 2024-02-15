@@ -36,7 +36,7 @@ if __name__ == "__main__":
     r_0         = disk_region.distance_to_star
     i_0         = disk.rg.index_from_value(r_0)
 
-    z           = np.linspace(-AU, AU)
+    z           = np.linspace(-1.5*AU, 1.5*AU)
 
     x           = rc / AU
 
@@ -44,36 +44,55 @@ if __name__ == "__main__":
     plt.figure(figsize=(10, 11))
 
     plt.subplot(2, 2, 1)
-    label = r"gas surface density $\Sigma_g(r)$  [kg m$^{-2}$]"
-    plt.loglog(x, Sigma_g)
-    plt.xlabel("distance from star $r$ [AU]")
-    plt.ylabel(label)
+    ylabel = r"Gas Surface Density $\Sigma_g(r)$  [kg m$^{-2}$]"
+    label = r"Gas Surface Density $\Sigma_g(r)$"
+    plt.loglog(x, Sigma_g, label=label)
+    plt.scatter([r_0/AU], [Sigma_g[i_0]], marker="x", color="k", label="Distance from Star $r_0$", zorder=2)
+    plt.xlabel("Distance from Star $r$ [AU]")
+    plt.ylabel(ylabel)
+    plt.xlim(x[0], x[-1])
+    plt.ylim(1e1, 1e5)
     # plt.title(label)
+    plt.legend(loc="upper right")
     plt.grid()
 
     plt.subplot(2, 2, 2)
-    label = r"gas midplane volume density $\rho_g^\text{mid}(r)$  [kg m$^{-3}$]"
-    plt.loglog(x, rho_g_mid)
-    plt.xlabel("distance from star $r$ [AU]")
-    plt.ylabel(label)
+    ylabel = r"Midplane Gas Volume Density $\rho_g^\text{mid}(r)$  [kg m$^{-3}$]"
+    label = r"Midplane Gas Volume Density $\rho_g^\text{mid}(r)$"
+    plt.loglog(x, rho_g_mid, label=label)
+    plt.scatter([r_0/AU], [rho_g_mid[i_0]], marker="x", color="k", label="Distance from Star $r_0$", zorder=2)
+    plt.xlabel("Distance from Star $r$ [AU]")
+    plt.ylabel(ylabel)
+    plt.xlim(x[0], x[-1])
+    plt.ylim(1e-12, 1e-2)
     # plt.title(label)
+    plt.legend(loc="upper right")
     plt.grid()
 
     plt.subplot(2, 2, 3)
-    label = r"gas midplane number density $N_g^\text{mid}(r)$  [m$^{-3}$]"
-    plt.loglog(x, N_g_mid)
-    plt.xlabel("distance from star $r$ [AU]")
-    plt.ylabel(label)
+    ylabel = r"Midplane Gas Number Density $N_g^\text{mid}(r)$  [m$^{-3}$]"
+    label = r"Midplane Gas Number Density $N_g^\text{mid}(r)$"
+    plt.loglog(x, N_g_mid, label=label)
+    plt.scatter([r_0/AU], [N_g_mid[i_0]], marker="x", color="k", label="Distance from Star $r_0$", zorder=2)
+    plt.xlabel("Distance from Star $r$ [AU]")
+    plt.ylabel(ylabel)
+    plt.xlim(x[0], x[-1])
+    plt.ylim(1e15, 1e24)
     # plt.title(label)
+    plt.legend(loc="upper right")
     plt.grid()
 
     plt.subplot(2, 2, 4)
-    label = r"gas volume density $N_g(r_0, z)$  [kg m$^{-3}$]"
+    ylabel = r"Gas Volume Density $\rho_g(r_0, z)$  [kg m$^{-3}$]"
+    label = r"Gas Volume Density $\rho_g(r_0, z)$"
     x = z / AU
     y = rho_g(r_0, z, rho_g_mid[i_0], H_p[i_0])
-    plt.plot(x, y)
-    plt.xlabel("height above/below midplane $z$ [AU]")
+    plt.plot(x, y, label=label)
+    plt.xlabel("Height above Midplane $z$ [AU]")
     plt.ylabel(label)
+    plt.xlim(x[0], x[-1])
+    plt.ylim(0, 8e-10)
+    plt.legend(loc="upper right")
     # plt.title(label)
     plt.grid()
 
