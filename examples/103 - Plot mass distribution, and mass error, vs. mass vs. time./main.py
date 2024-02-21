@@ -123,7 +123,13 @@ def plot_rms_mass_deriv_vs_t(title, tc, dMdt_k, should_show_plot=False):
     plt.close()
     
 
-def foo(cfg, title, should_show_plot=False, enable_coagulation=None, enable_fragmentation=None):
+def foo(
+    cfg, title, 
+    should_show_plot=False, 
+    enable_coagulation=None, 
+    enable_fragmentation=None,
+    show_only_last_time_step=False,
+):
     path = Path(path_to_outfiles, title)
     if not os.path.exists(path):
         solver = SolverV2(cfg)
@@ -147,8 +153,11 @@ def foo(cfg, title, should_show_plot=False, enable_coagulation=None, enable_frag
         M_k    = np.loadtxt(Path(path_to_outfiles, title, "M_k.txt"))
         dMdt_k = np.loadtxt(Path(path_to_outfiles, title, "dMdt_k.txt"))
 
-    plot_mass_distribution_vs_m_vs_t(title, tc, mb_k, mc_k, M_k, should_show_plot=should_show_plot,
-                                     enable_coagulation=enable_coagulation, enable_fragmentation=enable_fragmentation)
+    plot_mass_distribution_vs_m_vs_t(
+        title, tc, mb_k, mc_k, M_k, 
+        should_show_plot=should_show_plot,
+        enable_coagulation=enable_coagulation, enable_fragmentation=enable_fragmentation
+    )
     plot_mass_error_vs_t(title, tc, M_k, should_show_plot=should_show_plot)
     plot_rms_mass_deriv_vs_t(title, tc, dMdt_k, should_show_plot=should_show_plot)
 
@@ -172,9 +181,14 @@ def main(
 
     for cfg in cfgs:
         m_0 = cfg.initial_mass_bin
-        title = f"coag={cfg.enable_coagulation} frag={cfg.enable_fragmentation} m0={m_0}"
-        foo(cfg, title, should_show_plot=should_show_plot, 
-            enable_coagulation=cfg.enable_coagulation, enable_fragmentation=cfg.enable_fragmentation)
+        for show_only_last_time_step in [True, False]:
+            title = f"coag={cfg.enable_coagulation} frag={cfg.enable_fragmentation} m0={m_0} show_only_last_time_step={show_only_last_time_step}"
+            foo(
+                cfg, title, should_show_plot=should_show_plot, 
+                enable_coagulation=cfg.enable_coagulation, 
+                enable_fragmentation=cfg.enable_fragmentation,
+                show_only_last_time_step=show_only_last_time_step,
+            )
 
 if __name__ == "__main__":
     main(

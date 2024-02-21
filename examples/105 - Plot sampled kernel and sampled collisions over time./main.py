@@ -18,6 +18,7 @@ os.makedirs(path_to_figures, exist_ok=True)
 exports = ["tc", "mb_k", "mc_k", "dm_k", "n_k", "N_k", "M_k", "dMdt_k", "S_ij", "P_ij"]
 times_of_interest = [int(i_t) for i_t in np.linspace(0, 199, 12)]
 times_of_interest = [1, 109, 129, 149, 159, 169, 174, 179, 184, 189, 194, 199]
+times_of_interest = [1, 129, 149, 154, 159, 164, 169, 174, 179, 184, 189, 194]
 
 
 def main(cfg: Config, title: str, should_show_plot=False):

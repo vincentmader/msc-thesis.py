@@ -48,9 +48,9 @@ def main(should_show=False):
 
     SAMPLING_DENSITIES = [0.2, 0.4, 0.6, 0.8, 1.0]
     TITLES = [
-        "full model",
-        "pure coagulation",
-        "only fragmentation",
+        "Full model",
+        "Pure coagulation",
+        "Only fragmentation",
     ]
     N_m = 50
 
@@ -78,7 +78,7 @@ def main(should_show=False):
         plt.xlabel("Time $t$ [y]")
         plt.ylabel(r"Temporal Derivative $\sqrt{\sum_i \left(\frac{\Delta \rho_i}{\Delta t}\right)^2}$")
         plt.legend(loc="lower left")
-        # plt.title(TITLES[i])
+        plt.title(TITLES[i])
 
         plt.savefig(Path(path_to_figures, f"dMdt vs t vs rho_sample, coag={enable_coagulation}, frag={enable_fragmentation}.pdf"))
         if should_show:
